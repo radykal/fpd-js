@@ -1,0 +1,138 @@
+ /* COLOR SCHEME - here you can define your own color scheme */
+
+@primaryColor: #1a1a1a;
+@secondaryColor: #27AE60;
+@mainTextColor: rgba(0,0,0, 0.8);
+@mainBorderColor: rgba(0, 0, 0, 0.1);
+@snapLineColor: #00b5ad;
+@secondaryModuleColor: #ecf0f1;
+@secondaryModuleTextColor: #7f8c8d;
+@secondaryBtnColor: #E0E1E2;
+@darkBtnColor: rgba(0,0,0, 0.6);
+@tooltipBgColor : rgba(0, 0, 0, 0.85);
+@errorBgColor: rgba(189, 8, 28, 0.05);
+@errorBorderColor: rgba(189, 8, 28, 0.2);
+@errorColor: rgba(189, 8, 28, 1);
+@backgroundCanvas: #f9f9f9;
+
+:root {
+	--fpd-primary-color: @primaryColor;
+	--fpd-secondary-color: @secondaryColor;
+}
+
+
+/* Primary Color */
+.fpd-container .fpd-primary-bg-color,
+.fpd-actions-wrapper > .fpd-action-btn:hover,
+.fpd-actions-wrapper > .fpd-action-btn.fpd-active,
+.fpd-thumbnail-preview > .fpd-preview-price,
+.fpd-image-editor-container .fpd-image-editor-menu {
+	background-color: var(--fpd-primary-color);
+}
+
+.fpd-container .fpd-primary-text-color,
+.fpd-navigation > div.fpd-active,
+.fpd-navigation > div.fpd-active .fpd-nav-icon:before,
+.fpd-bottom-nav > div.fpd-active,
+.fpd-image-editor-menu > span.fpd-active {
+	color: var(--fpd-primary-color);
+}
+
+.fpd-navigation > div.fpd-active svg * {
+	fill: var(--fpd-primary-color);
+}
+
+/* Secondary Color */
+.fpd-container .fpd-secondary-bg-color,
+.fpd-container .fpd-btn,
+.fpd-modal-wrapper .fpd-modal-content .fpd-btn,
+.fpd-switch-container.fpd-enabled .fpd-switch-toggle,
+.fpd-switch-container.fpd-enabled .fpd-switch-bar,
+.fpd-modal-product-designer.fpd-modal-overlay .fpd-done,
+.fpd-range-slider__handle:after,
+.fpd-range-slider--horizontal .fpd-range-slider__fill {
+	background-color: var(--fpd-secondary-color);
+}
+
+.fpd-container .fpd-btn:hover,
+body .fpd-modal-wrapper .fpd-btn:hover {
+	opacity: 0.90;
+}
+
+.fpd-container .fpd-btn.fpd-secondary,
+body .fpd-modal-wrapper .fpd-btn.fpd-secondary {
+	background: @secondaryBtnColor;
+}
+
+.fpd-container .fpd-btn.fpd-secondary:hover,
+body .fpd-modal-wrapper .fpd-btn.fpd-secondary:hover {
+	background: lighten(@secondaryBtnColor, 3%);
+}
+
+.fpd-container .fpd-btn.fpd-dark {
+	background: @darkBtnColor;
+}
+
+.fpd-container .fpd-btn.fpd-dark:hover {
+	background: lighten(@darkBtnColor, 10%);
+}
+
+.fpd-toggle.fpd-enabled,
+.fpd-product-stage.fpd-drag ~ .fpd-action-context-zoom .fpd-stage-pan,
+:not(.fpd-ui-theme-doyle).fpd-device-smartphone .fpd-actions-container .fpd-active,
+.fpd-element-toolbar-smart > div [class^="fpd-tool-"]:hover,
+.fpd-element-toolbar-smart .sp-clear-display {
+	color: var(--fpd-secondary-color) !important;
+}
+
+/* Main Text Color */
+.fpd-container,
+.fpd-container textarea,
+.fpd-sub-tooltip-theme .tooltipster-content,
+.fpd-modal-wrapper > .fpd-modal-close {
+	color: @mainTextColor;
+}
+
+/* Main Border Color */
+.fpd-actions-wrapper > .fpd-action-btn,
+.fpd-list > .fpd-list-row,
+.fpd-container.fpd-sidebar > .fpd-mainbar,
+.fpd-container textarea,
+.fpd-container.fpd-sidebar.fpd-sidebar-right > .fpd-mainbar,
+.fpd-container.fpd-main-bar-container .fpd-mainbar,
+.fpd-container .fpd-module input,
+.fpd-thumbnail-preview,
+.fpd-container .fpd-stage-off-canvas,
+.fpd-manage-layers-panel .fpd-sortable-placeholder,
+.fpd-container .fpd-close-off-canvas,
+.fpd-topbar[class*="fpd-off-canvas-"] .fpd-mainbar .fpd-content,
+.fpd-container input[type="text"],
+.fpd-text-layers-panel .fpd-list > div  {
+	border-color: @mainBorderColor !important;
+}
+
+.fpd-container textarea:focus,
+.fpd-element-toolbar textarea:focus {
+	border: 1px solid darken(@mainBorderColor, 20%);
+}
+
+/* Doyle */
+
+.fpd-element-toolbar-side {
+
+	.fpd-tools-nav {
+
+		> div:hover,
+		.fpd-active {
+			color: var(--fpd-secondary-color);
+		}
+
+	}
+
+	.fpd-panel-tabs > .fpd-active,
+	.fpd-tools-group > *:hover,
+	.fpd-fonts-list .fpd-item.fpd-active  {
+		color: var(--fpd-secondary-color) !important;
+	}
+
+}

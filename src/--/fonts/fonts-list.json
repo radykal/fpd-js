@@ -1,0 +1,39 @@
+/**
+  * Fonts List.
+  * Fonts should be placed in thefollowing order:
+  * - fallbacks for different languages
+  * - standart fonts (supported by most OS)
+  * - custom fonts ( is not supported by defaullt in the browsers)
+  *  more instruction in fonts/custom/readme.md
+  * Format:
+  * "FontFamillyName": FabricFontNotation
+ **/
+{
+  /*** Fallbacks fonts **************************************************************************************************/
+  "Times New Roman": "standart/times*.ttf",  //Latin and Cyrillic serif font
+
+  /*** Indic fonts ******************************************************************************************************/
+  "Kartika": "indic/kartika*.ttf", //malayalam
+  "kokila": "indic/kokila*.ttf", //Devanagiri
+  "Latha": "indic/latha*.ttf", //Tamil
+  "Raavi": "indic/raavi*.ttf", //Gurmukhi
+  "Shonar": "indic/Shonar*.ttf",//bengali
+  "Shruti": "indic/shruti*.ttf", //Gujarathi
+  "Tunga": "indic/tunga*.ttf", //Kannada
+  "Vani": "indic/vani*.ttf", //Telugu
+
+  /*** Standart Latin/Cyrillic fonts ************************************************************************************/
+  "Arial": "standart/arial*.ttf",
+  "Arial Black": "standart/ariblk.ttf",
+  "Georgia": "standart/georgia*.ttf",
+  "Courier New": "standart/cour*.ttf",
+  "Comic Sans MS": "standart/comic*.ttf",
+  "Tahoma": "standart/tahoma*.ttf",
+  "Lucida Console": "standart/lucon*.ttf",
+  "Impact": "standart/impact.ttf",
+
+  /*** Custom Fonts *****************************************************************************************************/
+  "Kedage":   "custom/Kedage.ttf",  //Custom Kannada font
+  "Rachana":  "custom/Rachana.ttf", //Custom Malayalam font
+  "Papyrus":  "custom/Papyrus.ttf" //Custom Latin font
+}

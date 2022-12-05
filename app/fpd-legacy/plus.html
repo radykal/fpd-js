@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fancy Product Designer</title>
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
+    <script src="./../../dist/jquery.min.js"></script>
+    <script src="./../../dist/jquery-ui.min.js"></script>
+    <script src="./../../dist/fabric300.js"></script>
+    <script src="./js/plugins/less.js"></script>
+    <script src="./js/plugins/jquery.mCustomScrollbar.js"></script>
+    <script src="./js/plugins/rangeslider.js"></script>
+    <script src="./js/plugins/jquery.tooltipster.min.js"></script>
+    <script src="./js/plugins/spectrum.js"></script>
+    <script type="module" defer>
+        import FancyProductDesigner from './js/FancyProductDesigner.js'
+        import FancyProductDesignerPlus from './js/FancyProductDesignerPlus.js'
+
+        let designer = new FancyProductDesigner('clothing-designer', {
+            productsJSON: 'json/products.json',
+            stageWidth: 1200,
+            editorMode: false,
+            fonts: [
+                {name: 'Helvetica'},
+                {name: 'Times New Roman'},
+                {name: 'Pacifico', url: 'Enter_URL_To_Pacifico'},
+                {name: 'Arial'},
+                {name: 'Lobster', url: 'google'}
+            ],
+            customTextParameters: {
+                colors: false,
+                removable: true,
+                resizable: true,
+                draggable: true,
+                rotatable: true,
+                autoCenter: true,
+                boundingBox: "Base"
+            },
+            customImageParameters: {
+                draggable: true,
+                removable: true,
+                resizable: true,
+                rotatable: true,
+                colors: '#000',
+                autoCenter: true,
+                boundingBox: "Base"
+            },
+            actions:  {
+                'top': ['download','print', 'snap', 'preview-lightbox'],
+                'right': ['magnify-glass', 'zoom', 'reset-product', 'qr-code', 'ruler'],
+                'bottom': ['undo','redo'],
+                'left': ['manage-layers','info','save','load']
+            },
+            mainBarModules: ['names-numbers', 'drawing', 'products'],
+            colorSelectionPlacement: 'inside-br',
+            namesNumbersDropdown: ['S', 'M', 'L', 'XL'],
+            namesNumbersEntryPrice: 10,
+            bulkVariationsPlacement: '#my-variations',
+            bulkVariations: {'Size': ['XL', 'L', 'M', 'S'], 'Color': ['Red', 'Blue']}
+        })
+
+        //event handler when the price is changing
+        designer.on('priceChange', (evt, price, currentPrice) => {
+            $('#thsirt-price').text(currentPrice);
+        })
+
+    </script>
+    </head>
+
+    <body>
+    	<div id="main-container">
+          	<h3 id="clothing">Clothing Designer</h3>
+          	<div id="clothing-designer" class="fpd-container fpd-shadow-2 fpd-sidebar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left"></div>
+		  	<br/><br/>
+		  	<div class="fpd-right">
+			  	<span class="price badge badge-inverse"><span id="thsirt-price"></span> $</span>
+		  	</div>
+		  	<div id="my-variations"></div>
+    	</div>
+    </body>
+</html>

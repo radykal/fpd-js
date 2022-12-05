@@ -1,0 +1,5892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>FancyProductDesigner - Fancy Product Designer - jQuery plugin | Documentation</title>
+    <meta name="description" content="The HTML5 Product Designer plugin.">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="stylesheet" href="../assets/css/custom.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="../assets/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../assets/css/theme.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" href="../assets/img/favicon.ico" />
+    
+</head>
+<body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a href="../" class="navbar-brand">
+            <img src="../assets/img/ember-logo.png" alt="">
+            <span>Fancy Product Designer - jQuery plugin | Documentation</span>
+          </a>
+        </div>
+
+		<div class="collapse navbar-collapse">
+	        <div class="navbar-text navbar-right">
+	          <strong>Version 5.2.9</strong>
+	        </div>
+		</div>
+
+      </div>
+    </nav>
+    <div id="main-wrapper" class="row">
+        <div id="content-wrapper">
+	        
+	        
+	        <ol class="panel-group" id="sidebar" role="tablist" aria-multiselectable="true">
+	            <li class="panel panel-default">
+	                <div class="panel-heading" role="tab" id="sidebar-search-heading">
+	                    <h4 class="panel-title">
+	                  <a role="button" data-toggle="collapse" href="#sidebar-search" aria-expanded="true" aria-controls="collapseOne">
+	                    Search
+	                  </a>
+	                </h4>
+	                </div>
+	                <div id="sidebar-search" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="sidebar-search-heading">
+	                    <div class="panel-body">
+	                        <div id="api-tabview-filter">
+	                            <input type="search" id="api-filter" placeholder="Search...">
+	                        </div>
+	                    </div>
+	                </div>
+	            </li>
+	        
+	            <li class="panel panel-default">
+	                <div class="panel-heading" role="tab" id="sidebar-classes-heading">
+	                    <h4 class="panel-title">
+	                  <a role="button" data-toggle="collapse" href="#sidebar-classes" aria-expanded="true" aria-controls="collapseOne">
+	                    Classes
+	                  </a>
+	                </h4>
+	                </div>
+	                <div id="sidebar-classes" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="sidebar-classes-heading">
+	                    <div class="panel-body">
+	                        <ol>
+	                                <li>
+	                                    <a href="../classes/FancyProductDesigner.html">FancyProductDesigner</a>
+	                                </li>
+	                                <li>
+	                                    <a href="../classes/FancyProductDesignerView.html">FancyProductDesignerView</a>
+	                                </li>
+	                                <li>
+	                                    <a href="../classes/FPDBulkVariations.html">FPDBulkVariations</a>
+	                                </li>
+	                                <li>
+	                                    <a href="../classes/FPDUtil.html">FPDUtil</a>
+	                                </li>
+	                        </ol>
+	                    </div>
+	                </div>
+	            </li>
+	        
+	            <li class="panel panel-default">
+	                <div class="panel-heading" role="tab" id="sidebar-options-heading">
+	                    <h4 class="panel-title">
+	                  <a role="button" data-toggle="collapse" href="#sidebar-options" aria-expanded="true" aria-controls="collapseOne">
+	                    Options
+	                  </a>
+	                </h4>
+	                </div>
+	                <div id="sidebar-options" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="sidebar-options-heading">
+	                    <div class="panel-body">
+	                        <ol>
+	                                <li>
+	                                    <a href="../classes/Options.html">Options</a>
+	                                </li>
+	                                <li>
+	                                    <a href="../classes/Options.defaults.html">.defaults</a>
+	                                </li>
+	                                <li>
+	                                    <a href="../classes/Options.defaults.customAdds.html">.defaults.customAdds</a>
+	                                </li>
+	                                <li>
+	                                    <a href="../classes/Options.defaults.customImageAjaxSettings.html">.defaults.customImageAjaxSettings</a>
+	                                </li>
+	                                <li>
+	                                    <a href="../classes/Options.defaults.customImageParameters.html">.defaults.customImageParameters</a>
+	                                </li>
+	                                <li>
+	                                    <a href="../classes/Options.defaults.dynamicViewsOptions.html">.defaults.dynamicViewsOptions</a>
+	                                </li>
+	                                <li>
+	                                    <a href="../classes/Options.defaults.elementParameters.html">.defaults.elementParameters</a>
+	                                </li>
+	                                <li>
+	                                    <a href="../classes/Options.defaults.imageEditorSettings.html">.defaults.imageEditorSettings</a>
+	                                </li>
+	                                <li>
+	                                    <a href="../classes/Options.defaults.imageParameters.html">.defaults.imageParameters</a>
+	                                </li>
+	                                <li>
+	                                    <a href="../classes/Options.defaults.qrCodeProps.html">.defaults.qrCodeProps</a>
+	                                </li>
+	                                <li>
+	                                    <a href="../classes/Options.defaults.textParameters.html">.defaults.textParameters</a>
+	                                </li>
+	                        </ol>
+	                    </div>
+	                </div>
+	            </li>
+	        
+	        </ol>
+            <div class="content-container">
+                <div class="apidocs">
+                    <div id="docs-main">
+                        <div class="content">
+<div class="page-header">
+    <h1> <i class="fa fa-bookmark-o" aria-hidden="true"></i> FancyProductDesigner Class
+    </h1>
+</div>
+
+
+<div class="content-meta">
+
+
+
+
+</div>
+
+
+  <div class="class-description">
+  <p>This is the main entry point to access FPD via the API. FancyProductDesigner class contains the instances of <a href="../classes/FancyProductDesignerView.html" class="crosslink">FancyProductDesignerView</a> class.</p>
+<p><h5>Example</h5>
+Best practice to use the API is to wait for the ready event, then the UI and all products/designs has been set (not loaded).<pre>var fpd = new FancyProductDesigner($fpd, options);
+$fpd.on('ready', function() { <a href="//use">//use</a> api methods in here })</pre></p>
+
+  </div>
+
+    <div class="constructor">
+        <h2>Constructor</h2>
+<div id="method_FancyProductDesigner" class="method item">
+	<span class="method-signature">
+	<span class="name anchorable-toc">
+		<a class="fa fa-link toc-anchor" href="#method_FancyProductDesigner"></a>
+		FancyProductDesigner
+	</span>
+
+		<div class="args">
+			<span class="paren">(</span><ul class="args-list inline commas">
+				<li class="arg">
+						<code>elem</code>
+				</li>
+				<li class="arg">
+						<code class="optional">opts</code>
+				</li>
+			</ul><span class="paren">)</span>
+		</div>
+	</span>
+
+
+
+
+
+
+
+	<div class="meta">
+				<p>
+		</p>
+
+
+
+	</div>
+
+
+		<div class="params">
+			<h4>Parameters:</h4>
+
+			<ul class="params-list">
+				<li class="param">
+						<code class="param-name">elem</code>
+						<span class="type">HTMLElement  |  jQuery</span>
+
+
+					<div class="param-description"><ul>
+<li>A HTML element with an unique ID.</li>
+</ul>
+</div>
+
+				</li>
+				<li class="param">
+						<code class="param-name optional">[opts]</code>
+						<span class="type">Object</span>
+						<span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+					<div class="param-description"><ul>
+<li>See <a href="../classes/Options.defaults.html" class="crosslink">Options.defaults</a>.</li>
+</ul>
+</div>
+
+				</li>
+			</ul>
+		</div>
+
+
+</div>
+    </div>
+
+<div>
+    <div class="page-section">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active"><a href="#tab_index" aria-controls="tab_index" role="tab" data-toggle="tab">Index</a></li>
+            <li role="presentation"><a href="#tab_methods" aria-controls="tab_methods" role="tab" data-toggle="tab">Methods</a></li>
+
+            <li role="presentation"><a href="#tab_properties" aria-controls="tab_properties" role="tab" data-toggle="tab">Properties</a></li>
+
+
+            <li role="presentation"><a href="#tab_events" aria-controls="tab_events" role="tab" data-toggle="tab">Events</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+
+              <form id="options-form" class="form-inline">
+                  Show:
+                  <label for="api-show-inherited" class="checkbox">
+                      <input type="checkbox" id="api-show-inherited" checked>
+                      Inherited
+                  </label>
+          
+                  <label for="api-show-protected" class="checkbox">
+                      <input type="checkbox" id="api-show-protected">
+                      Protected
+                  </label>
+          
+                  <label for="api-show-private" class="checkbox">
+                      <input type="checkbox" id="api-show-private">
+                      Private
+                  </label>
+                  <label for="api-show-deprecated" class="checkbox">
+                      <input type="checkbox" id="api-show-deprecated">
+                      Deprecated
+                  </label>
+          
+              </form>
+
+          <div id="tab_index" role="tabpanel" class="tab-pane active" >
+                  <div class="index-section methods">
+                      <h3>Methods</h3>
+
+                      <ul class="index-list methods">
+                              <li class="index-item method">
+                                  <a href="#method_addCustomImage">addCustomImage</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_addElement">addElement</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_addProduct">addProduct</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_addView">addView</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_calculatePrice">calculatePrice</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_createImage">createImage</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_deselectElement">deselectElement</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_formatPrice">formatPrice</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_getCustomElements">getCustomElements</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_getDepositPhotos">getDepositPhotos</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_getDepositPhotosPurchaseMedia">getDepositPhotosPurchaseMedia</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_getElementByID">getElementByID</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_getElementByTitle">getElementByTitle</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_getElements">getElements</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_getFixedElements">getFixedElements</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_getOrder">getOrder</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_getPrintOrderData">getPrintOrderData</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_getProduct">getProduct</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_getProductDataURL">getProductDataURL</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_getTranslation">getTranslation</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_getUsedColors">getUsedColors</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_getUsedFonts">getUsedFonts</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_getViewsDataURL">getViewsDataURL</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_getViewsSVG">getViewsSVG</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_loadFonts">loadFonts</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_loadProduct">loadProduct</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_print">print</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_removeView">removeView</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_reset">reset</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_resetZoom">resetZoom</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_selectProduct">selectProduct</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_selectView">selectView</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_setDimensions">setDimensions</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_setElementParameters">setElementParameters</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_setOrderQuantity">setOrderQuantity</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_setupDesigns">setupDesigns</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_setupProducts">setupProducts</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_setZoom">setZoom</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_toggleResponsive">toggleResponsive</a>
+
+                              </li>
+                              <li class="index-item method">
+                                  <a href="#method_toggleSpinner">toggleSpinner</a>
+
+                              </li>
+                      </ul>
+                  </div>
+
+                  <div class="index-section properties">
+                      <h3>Properties</h3>
+
+                      <ul class="index-list properties">
+                              <li class="index-item property">
+                                  <a href="#property_$elementTooltip">$elementTooltip</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_$modalContainer">$modalContainer</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_$productStage">$productStage</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_bulkVariations">bulkVariations</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_colorLinkGroups">colorLinkGroups</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_currentCategoryIndex">currentCategoryIndex</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_currentElement">currentElement</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_currentPrice">currentPrice</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_currentProductIndex">currentProductIndex</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_currentViewIndex">currentViewIndex</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_currentViewInstance">currentViewInstance</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_currentViews">currentViews</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_designs">designs</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_doUnsavedAlert">doUnsavedAlert</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_fixedElements">fixedElements</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_globalCustomElements">globalCustomElements</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_langJson">langJson</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_mainOptions">mainOptions</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_mouseOverCanvas">mouseOverCanvas</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_orderQuantity">orderQuantity</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_pricingRulesPrice">pricingRulesPrice</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_productCreated">productCreated</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_products">products</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_singleProductPrice">singleProductPrice</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_viewInstances">viewInstances</a>
+
+                              </li>
+                              <li class="index-item property">
+                                  <a href="#property_watermarkImg">watermarkImg</a>
+
+                              </li>
+                      </ul>
+                  </div>
+
+
+                  <div class="index-section events">
+                      <h3>Events</h3>
+
+                      <ul class="index-list events">
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#boundingBoxToggle">FancyProductDesigner#boundingBoxToggle</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#canvasFail">FancyProductDesigner#canvasFail</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#canvasFail">FancyProductDesigner#canvasFail</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#clear">FancyProductDesigner#clear</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#designsSet">FancyProductDesigner#designsSet</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#elementAdd">FancyProductDesigner#elementAdd</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#elementChange">FancyProductDesigner#elementChange</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#elementColorChange">FancyProductDesigner#elementColorChange</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#elementModify">FancyProductDesigner#elementModify</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#elementRemove">FancyProductDesigner#elementRemove</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#elementSelect">FancyProductDesigner#elementSelect</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#langJSONLoad">FancyProductDesigner#langJSONLoad</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#layersListUpdate">FancyProductDesigner#layersListUpdate</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#modalDesignerClose">FancyProductDesigner#modalDesignerClose</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#modalDesignerOpen">FancyProductDesigner#modalDesignerOpen</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#priceChange">FancyProductDesigner#priceChange</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#priceChange">FancyProductDesigner#priceChange</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#productAdd">FancyProductDesigner#productAdd</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#productAdd">FancyProductDesigner#productAdd</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#productCreate">FancyProductDesigner#productCreate</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#productSelect">FancyProductDesigner#productSelect</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#productsSet">FancyProductDesigner#productsSet</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#ready">FancyProductDesigner#ready</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#templateLoad">FancyProductDesigner#templateLoad</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#uiSet">FancyProductDesigner#uiSet</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#undoRedoSet">FancyProductDesigner#undoRedoSet</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#viewCanvasUpdate">FancyProductDesigner#viewCanvasUpdate</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#viewCreate">FancyProductDesigner#viewCreate</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#viewRemove">FancyProductDesigner#viewRemove</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#viewSelect">FancyProductDesigner#viewSelect</a>
+
+                              </li>
+                              <li class="index-item event">
+                                  <a href="#event_FancyProductDesigner#viewSizeChange">FancyProductDesigner#viewSizeChange</a>
+
+                              </li>
+                      </ul>
+                  </div>
+          </div>
+
+              <div id="tab_methods" role="tabpanel" class="tab-pane">
+                  <div class="item-list">
+  <div id="method_addCustomImage" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_addCustomImage"></a>
+  		addCustomImage
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code>source</code>
+  				</li>
+  				<li class="arg">
+  						<code>title</code>
+  				</li>
+  				<li class="arg">
+  						<code>options</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">viewIndex</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Adds a new custom image to the product stage. This method should be used if you are using an own image uploader for the product designer. The customImageParameters option will be applied on the images that are added via this method.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name">source</code>
+  						<span class="type">String</span>
+  
+  
+  					<div class="param-description"><p>The URL of the image.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name">title</code>
+  						<span class="type">String</span>
+  
+  
+  					<div class="param-description"><p>The title for the design.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name">options</code>
+  						<span class="type">Object</span>
+  
+  
+  					<div class="param-description"><p>Additional options.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[viewIndex]</code>
+  						<span class="type">Number</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>The index of the view where the element needs to be added to. If no index is set, it will be added to current showing view.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  
+  </div>
+  <div id="method_addElement" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_addElement"></a>
+  		addElement
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code>type</code>
+  				</li>
+  				<li class="arg">
+  						<code>source</code>
+  				</li>
+  				<li class="arg">
+  						<code>title</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">parameters={}</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">viewIndex</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Adds a new element to the product designer.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name">type</code>
+  						<span class="type">String</span>
+  
+  
+  					<div class="param-description"><p>The type of an element you would like to add, 'image' or 'text'.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name">source</code>
+  						<span class="type">String</span>
+  
+  
+  					<div class="param-description"><p>For image the URL to the image and for text elements the default text.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name">title</code>
+  						<span class="type">String</span>
+  
+  
+  					<div class="param-description"><p>Only required for image elements.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[parameters={}]</code>
+  						<span class="type">Object</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>An object with the parameters, you would like to apply on the element.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[viewIndex]</code>
+  						<span class="type">Number</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>The index of the view where the element needs to be added to. If no index is set, it will be added to current showing view.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  
+  </div>
+  <div id="method_addProduct" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_addProduct"></a>
+  		addProduct
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code>views</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">category</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Adds a new product to the product designer.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name">views</code>
+  						<span class="type">Array</span>
+  
+  
+  					<div class="param-description"><p>An array containing the views for a product. A view is an object with a title, thumbnail and elements property. The elements property is an array containing one or more objects with source, title, parameters and type.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[category]</code>
+  						<span class="type">String</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>If categories are used, you need to define the category title.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  
+  </div>
+  <div id="method_addView" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_addView"></a>
+  		addView
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code>view</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Adds a view to the current visible product.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name">view</code>
+  						<span class="type">Object</span>
+  
+  
+  					<div class="param-description"><p>An object with title, thumbnail and elements properties.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  
+  </div>
+  <div id="method_calculatePrice" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_calculatePrice"></a>
+  		calculatePrice
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code class="optional">considerQuantity=true</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  		<span class="returns-inline">
+  			<span class="type">Number</span>
+  		</span>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Calculates the total price considering the elements price in all views and pricing rules.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name optional">[considerQuantity=true]</code>
+  						<span class="type">Boolean</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>Calculate with or without quantity.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  		<div class="returns">
+  			<h4>Returns:</h4>
+  
+  			<div class="returns-description">
+  						<span class="type">Number</span>:
+  					<p>The calculated price.</p>
+  
+  			</div>
+  		</div>
+  
+  </div>
+  <div id="method_createImage" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_createImage"></a>
+  		createImage
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code class="optional">openInBlankPage= true</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">forceDownload=false</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">backgroundColor=transparent</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">options</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">onlyCurrentView</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Creates an image of the current showing product.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name optional">[openInBlankPage= true]</code>
+  						<span class="type">Boolean</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>Opens the image in a Pop-up window.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[forceDownload=false]</code>
+  						<span class="type">Boolean</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>Downloads the image to the user's computer.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[backgroundColor=transparent]</code>
+  						<span class="type">String</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>The background color as hexadecimal value. For 'png' you can also use 'transparent'.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[options]</code>
+  						<span class="type">String</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>See fabricjs documentation <a href="http://fabricjs.com/docs/fabric.Canvas.html#toDataURL">http://fabricjs.com/docs/fabric.Canvas.html#toDataURL</a>.</p>
+  </div>
+  
+  						<ul class="params-list">
+  							<li class="param">
+  									<code class="param-name optional">[onlyExportable=false]</code>
+  									<span class="type">Boolean</span>
+  									<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  								<div class="param-description"><p>If true elements with excludeFromExport=true are not exported in the image.</p>
+  </div>
+  
+  							</li>
+  						</ul>
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[onlyCurrentView]</code>
+  						<span class="type">Boolean</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>If true only the curent showing view will be exported.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  
+  </div>
+  <div id="method_deselectElement" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_deselectElement"></a>
+  		deselectElement
+  	</span>
+  
+  		<span class="paren">()</span>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Deselects the selected element of the current showing view.</p>
+  </div>
+  
+  
+  
+  </div>
+  <div id="method_formatPrice" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_formatPrice"></a>
+  		formatPrice
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code class="optional">price</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  		<span class="returns-inline">
+  			<span class="type">String</span>
+  		</span>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Formats the price to a string with the currency and the decimal as well as the thousand separator.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name optional">[price]</code>
+  						<span class="type">Number</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>The price thats gonna be formatted.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  		<div class="returns">
+  			<h4>Returns:</h4>
+  
+  			<div class="returns-description">
+  						<span class="type">String</span>:
+  					<p>The formatted price string.</p>
+  
+  			</div>
+  		</div>
+  
+  </div>
+  <div id="method_getCustomElements" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_getCustomElements"></a>
+  		getCustomElements
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code class="optional">type=&#x27;all&#x27;</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">viewIndex=-1</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">deselectElement=true</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  		<span class="returns-inline">
+  			<span class="type">Array</span>
+  		</span>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Returns an array with all custom added elements.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name optional">[type=&#x27;all&#x27;]</code>
+  						<span class="type">String</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>The type of elements. Possible values: 'all', 'image', 'text'.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[viewIndex=-1]</code>
+  						<span class="type">Number</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>The index of the target view. By default all views are target.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[deselectElement=true]</code>
+  						<span class="type">String</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>Deselect current selected element.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  		<div class="returns">
+  			<h4>Returns:</h4>
+  
+  			<div class="returns-description">
+  						<span class="type">Array</span>:
+  					<p>An array with objects with the fabric object and the view index.</p>
+  
+  			</div>
+  		</div>
+  
+  </div>
+  <div id="method_getDepositPhotos" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_getDepositPhotos"></a>
+  		getDepositPhotos
+  	</span>
+  
+  		<span class="paren">()</span>
+  		<span class="returns-inline">
+  			<span class="type">Array</span>
+  		</span>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Get an array with image objects from <a href="http://depositphotos.com">depositphotos.com</a> that are used in the current showing product.</p>
+  </div>
+  
+  
+  		<div class="returns">
+  			<h4>Returns:</h4>
+  
+  			<div class="returns-description">
+  						<span class="type">Array</span>:
+  					<p>An array containing objects. The object contains the depositphotos media ID and the URL to the image that has been uploaded to the server.</p>
+  
+  			</div>
+  		</div>
+  
+  </div>
+  <div id="method_getDepositPhotosPurchaseMedia" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_getDepositPhotosPurchaseMedia"></a>
+  		getDepositPhotosPurchaseMedia
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code>callback</code>
+  				</li>
+  				<li class="arg">
+  						<code>mediaID</code>
+  				</li>
+  				<li class="arg">
+  						<code>username</code>
+  				</li>
+  				<li class="arg">
+  						<code>password</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">size=s</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">license=standard</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">purchaseCurrency=credits</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Get an object containing the download link for a media. Whenever you call this method, credits will be taken from your depositphotos account to purchase a media. You can find more infos about the Depositphotos API here: <a href="http://api.depositphotos.com/doc/classes/API.Purchase.html">http://api.depositphotos.com/doc/classes/API.Purchase.html</a></p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name">callback</code>
+  						<span class="type">Function</span>
+  
+  
+  					<div class="param-description"><p>A function that will be called with JSON data has been loaded. Will also be executed on failure.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name">mediaID</code>
+  						<span class="type">String</span>
+  
+  
+  					<div class="param-description"><p>A Depositphotos media ID.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name">username</code>
+  						<span class="type">String</span>
+  
+  
+  					<div class="param-description"><p>Your Depositphotos username.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name">password</code>
+  						<span class="type">String</span>
+  
+  
+  					<div class="param-description"><p>Your Depositphotos password.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[size=s]</code>
+  						<span class="type">String</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>Possible values: s/m/l/xl/vect/el0.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[license=standard]</code>
+  						<span class="type">String</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>Possible values: standard or extended.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[purchaseCurrency=credits]</code>
+  						<span class="type">String</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>The license. Possible values: 'credits' | 'subscription' | 'bonus' | 'ondemand'.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  
+  		<div class="example">
+  			<h4>Example:</h4>
+  
+  			<pre class="example-content">
+  				<p>fpd.getDepositPhotosPurchaseMedia(function(data) {
+  }, '12345', 'username', 'password', 'm')</p>
+  
+  			</pre>
+  		</div>
+  </div>
+  <div id="method_getElementByID" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_getElementByID"></a>
+  		getElementByID
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code>id</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">viewIndex</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Get an elment by ID.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name">id</code>
+  						<span class="type">Number</span>
+  
+  
+  					<div class="param-description"><p>The id of an element.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[viewIndex]</code>
+  						<span class="type">Number</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>The view index you want to search in. If no index is set, it will use the current showing view.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  
+  </div>
+  <div id="method_getElementByTitle" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_getElementByTitle"></a>
+  		getElementByTitle
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code>title</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">viewIndex=-1</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  		<span class="returns-inline">
+  			<span class="type">fabric.Object</span>
+  		</span>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Returns an fabric object by title.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name">title</code>
+  						<span class="type">String</span>
+  
+  
+  					<div class="param-description"><p>The title of an element.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[viewIndex=-1]</code>
+  						<span class="type">Number</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>The index of the target view. By default all views are scanned.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  		<div class="returns">
+  			<h4>Returns:</h4>
+  
+  			<div class="returns-description">
+  						<span class="type">fabric.Object</span>:
+  					<p>FabricJS Object.</p>
+  
+  			</div>
+  		</div>
+  
+  </div>
+  <div id="method_getElements" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_getElements"></a>
+  		getElements
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code class="optional">viewIndex=-1</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">elementType=&#x27;all&#x27;</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">deselectElement=true</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  		<span class="returns-inline">
+  			<span class="type">Array</span>
+  		</span>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Returns an array with fabricjs objects.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name optional">[viewIndex=-1]</code>
+  						<span class="type">Number</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>The index of the target view. By default all views are target.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[elementType=&#x27;all&#x27;]</code>
+  						<span class="type">String</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>The type of elements to return. By default all types are returned. Possible values: text, image.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[deselectElement=true]</code>
+  						<span class="type">String</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>Deselect current selected element.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  		<div class="returns">
+  			<h4>Returns:</h4>
+  
+  			<div class="returns-description">
+  						<span class="type">Array</span>:
+  					<p>An array containg the elements.</p>
+  
+  			</div>
+  		</div>
+  
+  </div>
+  <div id="method_getFixedElements" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_getFixedElements"></a>
+  		getFixedElements
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code class="optional">type=&#x27;all&#x27;</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">viewIndex=-1</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">deselectElement=true</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  		<span class="returns-inline">
+  			<span class="type">Array</span>
+  		</span>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Returns an array with all fixed elements.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name optional">[type=&#x27;all&#x27;]</code>
+  						<span class="type">String</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>The type of elements. Possible values: 'all', 'image', 'text'.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[viewIndex=-1]</code>
+  						<span class="type">Number</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>The index of the target view. By default all views are target.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[deselectElement=true]</code>
+  						<span class="type">String</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>Deselect current selected element.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  		<div class="returns">
+  			<h4>Returns:</h4>
+  
+  			<div class="returns-description">
+  						<span class="type">Array</span>:
+  					<p>An array with objects with the fabric object and the view index.</p>
+  
+  			</div>
+  		</div>
+  
+  </div>
+  <div id="method_getOrder" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_getOrder"></a>
+  		getOrder
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code class="optional">options={}</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  		<span class="returns-inline">
+  			<span class="type">Object</span>
+  		</span>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Returns an order object containing the product from the getProduct() method. If using plus add-on and bulk variations, the variations will be added into the object.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name optional">[options={}]</code>
+  						<span class="type">Object</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>Options for the methods that are called inside this mehtod, e.g. getProduct() can receive two parameters.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  		<div class="returns">
+  			<h4>Returns:</h4>
+  
+  			<div class="returns-description">
+  						<span class="type">Object</span>:
+  					<p>An object containing different objects representing important order data.</p>
+  
+  			</div>
+  		</div>
+  
+  		<div class="example">
+  			<h4>Example:</h4>
+  
+  			<pre class="example-content">
+  				<p>// includes only editable elements and the user needs to customize the initial product
+  fpd.getOrder( {onlyEditableElements: true, customizationRequired: true} );</p>
+  
+  			</pre>
+  		</div>
+  </div>
+  <div id="method_getPrintOrderData" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_getPrintOrderData"></a>
+  		getPrintOrderData
+  	</span>
+  
+  		<span class="paren">()</span>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Generates an object that will be used for the print-ready export. This objects includes the used fonts and the SVG data strings to generate the PDF.</p>
+  </div>
+  
+  
+  
+  </div>
+  <div id="method_getProduct" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_getProduct"></a>
+  		getProduct
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code class="optional">onlyEditableElements=false</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">customizationRequired=false</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  		<span class="returns-inline">
+  			<span class="type">Array</span>
+  		</span>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Returns the current showing product with all views and elements in the views.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name optional">[onlyEditableElements=false]</code>
+  						<span class="type">Boolean</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>If true, only the editable elements will be returned.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[customizationRequired=false]</code>
+  						<span class="type">Boolean</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>To receive the product the user needs to customize the initial elements.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  		<div class="returns">
+  			<h4>Returns:</h4>
+  
+  			<div class="returns-description">
+  						<span class="type">Array</span>:
+  					<p>An array with all views. A view is an object containing the title, thumbnail, custom options and elements. An element object contains the title, source, parameters and type.</p>
+  
+  			</div>
+  		</div>
+  
+  </div>
+  <div id="method_getProductDataURL" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_getProductDataURL"></a>
+  		getProductDataURL
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code>callback</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">backgroundColor=transparent</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">options={}</code>
+  				</li>
+  				<li class="arg">
+  						<code>viewRange</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Creates all views in one data URL. The different views will be positioned below each other.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name">callback</code>
+  						<span class="type">Function</span>
+  
+  
+  					<div class="param-description"><p>A function that will be called when the data URL is created. The function receives the data URL.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[backgroundColor=transparent]</code>
+  						<span class="type">String</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>The background color as hexadecimal value. For 'png' you can also use 'transparent'.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[options={}]</code>
+  						<span class="type">Object</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>See fabricjs documentation <a href="http://fabricjs.com/docs/fabric.Canvas.html#toDataURL">http://fabricjs.com/docs/fabric.Canvas.html#toDataURL</a>.</p>
+  </div>
+  
+  						<ul class="params-list">
+  							<li class="param">
+  									<code class="param-name optional">[onlyExportable=false]</code>
+  									<span class="type">Boolean</span>
+  									<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  								<div class="param-description"><p>If true elements with excludeFromExport=true are not exported in the image.</p>
+  </div>
+  
+  							</li>
+  						</ul>
+  				</li>
+  				<li class="param">
+  						<code class="param-name">viewRange</code>
+  						<span class="type">Array</span>
+  
+  
+  					<div class="param-description"><p>An array defining the start and the end indexes of the exported views.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  
+  		<div class="example">
+  			<h4>Example:</h4>
+  
+  			<pre class="example-content">
+  				<p>fpd.getProductDataURL( function(dataURL){} );</p>
+  
+  			</pre>
+  		</div>
+  </div>
+  <div id="method_getTranslation" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_getTranslation"></a>
+  		getTranslation
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code>section</code>
+  				</li>
+  				<li class="arg">
+  						<code>label</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Get the translation of a label.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name">section</code>
+  						<span class="type">String</span>
+  
+  
+  					<div class="param-description"><p>The section key you want - toolbar, actions, modules or misc.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name">label</code>
+  						<span class="type">String</span>
+  
+  
+  					<div class="param-description"><p>The label key.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  
+  </div>
+  <div id="method_getUsedColors" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_getUsedColors"></a>
+  		getUsedColors
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code class="optional">viewIndex=-1</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  		<span class="returns-inline">
+  			<span class="type">Array</span>
+  		</span>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Get all used colors from a single or all views.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name optional">[viewIndex=-1]</code>
+  						<span class="type">Number</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>The index of the target view. By default all views are target.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  		<div class="returns">
+  			<h4>Returns:</h4>
+  
+  			<div class="returns-description">
+  						<span class="type">Array</span>:
+  					<p>An array with hexdecimal color values.</p>
+  
+  			</div>
+  		</div>
+  
+  </div>
+  <div id="method_getUsedFonts" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_getUsedFonts"></a>
+  		getUsedFonts
+  	</span>
+  
+  		<span class="paren">()</span>
+  		<span class="returns-inline">
+  			<span class="type">Array</span>
+  		</span>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Get all fonts used in the product.</p>
+  </div>
+  
+  
+  		<div class="returns">
+  			<h4>Returns:</h4>
+  
+  			<div class="returns-description">
+  						<span class="type">Array</span>:
+  					<p>An array with objects containing the font name and optional the URL to the font.</p>
+  
+  			</div>
+  		</div>
+  
+  </div>
+  <div id="method_getViewsDataURL" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_getViewsDataURL"></a>
+  		getViewsDataURL
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code>callback</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">backgroundColor=transparent</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">options={}</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  		<span class="returns-inline">
+  			<span class="type">Array</span>
+  		</span>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Gets the views as data URL.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name">callback</code>
+  						<span class="type">Function</span>
+  
+  
+  					<div class="param-description"><p>A function that will be called when the data URL is created. The function receives the data URL.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[backgroundColor=transparent]</code>
+  						<span class="type">String</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>The background color as hexadecimal value. For 'png' you can also use 'transparent'.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[options={}]</code>
+  						<span class="type">String</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>See fabricjs documentation <a href="http://fabricjs.com/docs/fabric.Canvas.html#toDataURL">http://fabricjs.com/docs/fabric.Canvas.html#toDataURL</a>.</p>
+  </div>
+  
+  						<ul class="params-list">
+  							<li class="param">
+  									<code class="param-name optional">[onlyExportable=false]</code>
+  									<span class="type">Boolean</span>
+  									<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  								<div class="param-description"><p>If true elements with excludeFromExport=true are not exported in the image.</p>
+  </div>
+  
+  							</li>
+  						</ul>
+  				</li>
+  			</ul>
+  		</div>
+  
+  		<div class="returns">
+  			<h4>Returns:</h4>
+  
+  			<div class="returns-description">
+  						<span class="type">Array</span>:
+  					<p>An array with all views as data URLs.</p>
+  
+  			</div>
+  		</div>
+  
+  </div>
+  <div id="method_getViewsSVG" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_getViewsSVG"></a>
+  		getViewsSVG
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code>options</code>
+  				</li>
+  				<li class="arg">
+  						<code>reviver</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  		<span class="returns-inline">
+  			<span class="type">Array</span>
+  		</span>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Returns the views as SVG.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name">options</code>
+  						<span class="type">Object</span>
+  
+  
+  					<div class="param-description"><p>See <a href="http://fabricjs.com/docs/fabric.StaticCanvas.html#toSVG">http://fabricjs.com/docs/fabric.StaticCanvas.html#toSVG</a>.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name">reviver</code>
+  						<span class="type">Function</span>
+  
+  
+  					<div class="param-description"><p>See <a href="http://fabricjs.com/docs/fabric.StaticCanvas.html#toSVG">http://fabricjs.com/docs/fabric.StaticCanvas.html#toSVG</a>.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  		<div class="returns">
+  			<h4>Returns:</h4>
+  
+  			<div class="returns-description">
+  						<span class="type">Array</span>:
+  					<p>An array with all views as SVG.</p>
+  
+  			</div>
+  		</div>
+  
+  </div>
+  <div id="method_loadFonts" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_loadFonts"></a>
+  		loadFonts
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code>fonts</code>
+  				</li>
+  				<li class="arg">
+  						<code>callback</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Load custom fonts or from Google webfonts  used in the product designer.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name">fonts</code>
+  						<span class="type">Array</span>
+  
+  
+  					<div class="param-description"><p>An array containing objects with name and URL to the font file.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name">callback</code>
+  						<span class="type">Function</span>
+  
+  
+  					<div class="param-description"><p>A function that will be called when all fonts have been loaded.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  
+  </div>
+  <div id="method_loadProduct" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_loadProduct"></a>
+  		loadProduct
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code>views</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">onlyReplaceInitialElements=false</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">mergeMainOptions=false</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Loads a new product to the product designer.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name">views</code>
+  						<span class="type">Array</span>
+  
+  
+  					<div class="param-description"><p>An array containing the views for the product.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[onlyReplaceInitialElements=false]</code>
+  						<span class="type">Boolean</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>If true, the initial elements will be replaced. Custom added elements will stay on the canvas.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[mergeMainOptions=false]</code>
+  						<span class="type">Boolean</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>Merges the main options into every view options.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  
+  </div>
+  <div id="method_print" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_print"></a>
+  		print
+  	</span>
+  
+  		<span class="paren">()</span>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Opens the current showing product in a Pop-up window and shows the print dialog.</p>
+  </div>
+  
+  
+  
+  </div>
+  <div id="method_removeView" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_removeView"></a>
+  		removeView
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code class="optional">viewIndex=0</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Removes a view by its index value.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name optional">[viewIndex=0]</code>
+  						<span class="type">Number</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>The index of the target view.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  
+  </div>
+  <div id="method_reset" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_reset"></a>
+  		reset
+  	</span>
+  
+  		<span class="paren">()</span>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Clears the product stage and resets everything.</p>
+  </div>
+  
+  
+  
+  </div>
+  <div id="method_resetZoom" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_resetZoom"></a>
+  		resetZoom
+  	</span>
+  
+  		<span class="paren">()</span>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Resets the zoom.</p>
+  </div>
+  
+  
+  
+  </div>
+  <div id="method_selectProduct" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_selectProduct"></a>
+  		selectProduct
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code>index</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">categoryIndex</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Selects a product by index and category index.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name">index</code>
+  						<span class="type">Number</span>
+  
+  
+  					<div class="param-description"><p>The requested product by an index value. 0 will load the first product.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[categoryIndex]</code>
+  						<span class="type">Number</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>The requested category by an index value. 0 will load the first category.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  
+  		<div class="example">
+  			<h4>Example:</h4>
+  
+  			<pre class="example-content">
+  				<p>fpd.selectProduct( 1, 2 ); <a href="//will">//will</a> load the second product from the third category</p>
+  
+  			</pre>
+  		</div>
+  </div>
+  <div id="method_selectView" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_selectView"></a>
+  		selectView
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code>index</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Selects a view from the current visible views.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name">index</code>
+  						<span class="type">Number</span>
+  
+  
+  					<div class="param-description"><p>The requested view by an index value. 0 will load the first view.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  
+  </div>
+  <div id="method_setDimensions" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_setDimensions"></a>
+  		setDimensions
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code>width</code>
+  				</li>
+  				<li class="arg">
+  						<code>height</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">viewIndex=-1</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Sets the dimensions of all views.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name">width</code>
+  						<span class="type">Number</span>
+  
+  
+  					<div class="param-description"><p>The width in pixel.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name">height</code>
+  						<span class="type">Number</span>
+  
+  
+  					<div class="param-description"><p>The height in pixel.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[viewIndex=-1]</code>
+  						<span class="type">Number</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>The target views. -1 targets all views.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  
+  </div>
+  <div id="method_setElementParameters" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_setElementParameters"></a>
+  		setElementParameters
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code>parameters</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">element</code>
+  				</li>
+  				<li class="arg">
+  						<code class="optional">viewIndex</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Sets the parameters for a specified element.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name">parameters</code>
+  						<span class="type">Object</span>
+  
+  
+  					<div class="param-description"><p>An object with the parameters that should be applied to the element.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[element]</code>
+  						<span class="type">fabric.Object  |  string</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>A fabric object or the title of an element. If not set, the current selected element is used.</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name optional">[viewIndex]</code>
+  						<span class="type">Number</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>The index of the view you would like target. If not set, the current showing view will be used.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  
+  </div>
+  <div id="method_setOrderQuantity" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_setOrderQuantity"></a>
+  		setOrderQuantity
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code>quantity</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Sets the order quantity.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name">quantity</code>
+  						<span class="type">Number</span>
+  
+  
+  					<div class="param-description"><p>The width in pixel.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  
+  </div>
+  <div id="method_setupDesigns" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_setupDesigns"></a>
+  		setupDesigns
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code>designs</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Set up the designs with a JSON.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name">designs</code>
+  						<span class="type">Array</span>
+  
+  
+  					<div class="param-description"><p>An array containg the categories with designs.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  
+  		<div class="example">
+  			<h4>Example:</h4>
+  
+  			<pre class="example-content">
+  				<p>[{
+  "title": "Category Title", "thumbnail": "Thumbnail of Category", "designs": [ARRAY OF ELEMENTS]},
+  {"title": "Category Title", "thumbnail": "Thumbnail of Category", "category": [
+  {"title": "Category Child", "thumbnail": "Thumbnail of Category", "designs": [ARRAY OF ELEMENTS]}
+  ]}
+  ]</p>
+  
+  			</pre>
+  		</div>
+  </div>
+  <div id="method_setupProducts" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_setupProducts"></a>
+  		setupProducts
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code>products</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Set up the products with a JSON.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name">products</code>
+  						<span class="type">Array</span>
+  
+  
+  					<div class="param-description"><p>An array containg the products or categories with products.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  
+  		<div class="example">
+  			<h4>Example:</h4>
+  
+  			<pre class="example-content">
+  				<p>[{
+  "category": "Category Title", "products":
+  [{"productTitle": "TITLE OF PRODUCT", "productThumbnail": "THUMBNAIL OF PRODUCT" "title": "TITLE OF VIEW", "thumbnail": "THUMBNAIL OF VIEW", "OPTIONS": {OBJECT VIEW OPTIONS}, "ELEMENTS": [ARRAY OF ELEMENTS]
+  ...
+  ]}</p>
+  
+  			</pre>
+  		</div>
+  </div>
+  <div id="method_setZoom" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_setZoom"></a>
+  		setZoom
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code>value</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Sets the zoom of the stage. 1 is equal to no zoom.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name">value</code>
+  						<span class="type">Number</span>
+  
+  
+  					<div class="param-description"><p>The zoom value.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  
+  </div>
+  <div id="method_toggleResponsive" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_toggleResponsive"></a>
+  		toggleResponsive
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code class="optional">toggle</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  		<span class="returns-inline">
+  			<span class="type">Boolean</span>
+  		</span>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Toggle the responsive behavior.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name optional">[toggle]</code>
+  						<span class="type">Boolean</span>
+  						<span class="flag optional" title="This parameter is optional.">optional</span>
+  
+  
+  					<div class="param-description"><p>True or false.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  		<div class="returns">
+  			<h4>Returns:</h4>
+  
+  			<div class="returns-description">
+  						<span class="type">Boolean</span>:
+  					<p>Returns true or false.</p>
+  
+  			</div>
+  		</div>
+  
+  </div>
+  <div id="method_toggleSpinner" class="method item">
+  	<span class="method-signature">
+  	<span class="name anchorable-toc">
+  		<a class="fa fa-link toc-anchor" href="#method_toggleSpinner"></a>
+  		toggleSpinner
+  	</span>
+  
+  		<div class="args">
+  			<span class="paren">(</span><ul class="args-list inline commas">
+  				<li class="arg">
+  						<code>state</code>
+  				</li>
+  				<li class="arg">
+  						<code>msg</code>
+  				</li>
+  			</ul><span class="paren">)</span>
+  		</div>
+  		<span class="returns-inline">
+  			<span class="type">JQuery</span>
+  		</span>
+  	</span>
+  
+  
+  
+  
+  
+  
+  
+  	<div class="meta">
+  				<p>
+  		</p>
+  
+  
+  
+  	</div>
+  
+  	<div class="description"><p>Shows or hides the spinner with an optional message.</p>
+  </div>
+  
+  		<div class="params">
+  			<h4>Parameters:</h4>
+  
+  			<ul class="params-list">
+  				<li class="param">
+  						<code class="param-name">state</code>
+  						<span class="type">String</span>
+  
+  
+  					<div class="param-description"><p>The state can be "show" or "hide".</p>
+  </div>
+  
+  				</li>
+  				<li class="param">
+  						<code class="param-name">msg</code>
+  						<span class="type">Boolean</span>
+  
+  
+  					<div class="param-description"><p>The message that will be displayed underneath the spinner.</p>
+  </div>
+  
+  				</li>
+  			</ul>
+  		</div>
+  
+  		<div class="returns">
+  			<h4>Returns:</h4>
+  
+  			<div class="returns-description">
+  						<span class="type">JQuery</span>:
+  					<p>$stageLoader jQuery object containing the stage loader.</p>
+  
+  			</div>
+  		</div>
+  
+  </div>
+                  </div>
+              </div>
+
+              <div id="tab_properties" role="tabpanel" class="tab-pane">
+                  <div class="item-list">
+  <div id="property_$elementTooltip" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_$elementTooltip"></a>
+          $elementTooltip
+      </h3>
+      <span class="type">JQuery</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>jQuery object pointing on the tooltip for the current selected element.</p>
+  
+      </div>
+  
+  
+  
+  </div>
+  <div id="property_$modalContainer" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_$modalContainer"></a>
+          $modalContainer
+      </h3>
+      <span class="type">JQuery</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>The container for internal modals.</p>
+  
+      </div>
+  
+          <p><br><strong>Default:</strong> 0</p>
+  
+  
+  </div>
+  <div id="property_$productStage" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_$productStage"></a>
+          $productStage
+      </h3>
+      <span class="type">JQuery</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>jQuery object pointing on the product stage.</p>
+  
+      </div>
+  
+  
+  
+  </div>
+  <div id="property_bulkVariations" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_bulkVariations"></a>
+          bulkVariations
+      </h3>
+      <span class="type"><a href="../classes/FPDBulkVariations.html" class="crosslink">FPDBulkVariations</a></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>If FPDBulkVariations is used with the product designer, this is the instance to the FPDBulkVariations class.</p>
+  
+      </div>
+  
+          <p><br><strong>Default:</strong> null</p>
+  
+  
+  </div>
+  <div id="property_colorLinkGroups" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_colorLinkGroups"></a>
+          colorLinkGroups
+      </h3>
+      <span class="type">Object</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Object containing all color link groups.</p>
+  
+      </div>
+  
+          <p><br><strong>Default:</strong> {}</p>
+  
+  
+  </div>
+  <div id="property_currentCategoryIndex" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_currentCategoryIndex"></a>
+          currentCategoryIndex
+      </h3>
+      <span class="type">Number</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>The current selected product category index.</p>
+  
+      </div>
+  
+          <p><br><strong>Default:</strong> 0</p>
+  
+  
+  </div>
+  <div id="property_currentElement" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_currentElement"></a>
+          currentElement
+      </h3>
+      <span class="type">fabric.Object</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>The current selected element.</p>
+  
+      </div>
+  
+          <p><br><strong>Default:</strong> null</p>
+  
+  
+  </div>
+  <div id="property_currentPrice" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_currentPrice"></a>
+          currentPrice
+      </h3>
+      <span class="type">Number</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>The price considering the elements price in all views with order quantity.</p>
+  
+      </div>
+  
+          <p><br><strong>Default:</strong> 0</p>
+  
+  
+  </div>
+  <div id="property_currentProductIndex" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_currentProductIndex"></a>
+          currentProductIndex
+      </h3>
+      <span class="type">Number</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>The current selected product index.</p>
+  
+      </div>
+  
+          <p><br><strong>Default:</strong> 0</p>
+  
+  
+  </div>
+  <div id="property_currentViewIndex" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_currentViewIndex"></a>
+          currentViewIndex
+      </h3>
+      <span class="type">Number</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>The current selected view index.</p>
+  
+      </div>
+  
+          <p><br><strong>Default:</strong> 0</p>
+  
+  
+  </div>
+  <div id="property_currentViewInstance" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_currentViewInstance"></a>
+          currentViewInstance
+      </h3>
+      <span class="type"><a href="../classes/FancyProductDesignerView.html" class="crosslink">FancyProductDesignerView</a></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>The current view instance.</p>
+  
+      </div>
+  
+          <p><br><strong>Default:</strong> null</p>
+  
+  
+  </div>
+  <div id="property_currentViews" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_currentViews"></a>
+          currentViews
+      </h3>
+      <span class="type">Array</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>The current views.</p>
+  
+      </div>
+  
+          <p><br><strong>Default:</strong> null</p>
+  
+  
+  </div>
+  <div id="property_designs" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_designs"></a>
+          designs
+      </h3>
+      <span class="type">Array</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Array containing all added designs.</p>
+  
+      </div>
+  
+  
+  
+  </div>
+  <div id="property_doUnsavedAlert" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_doUnsavedAlert"></a>
+          doUnsavedAlert
+      </h3>
+      <span class="type">Boolean</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Indicates if the product was saved.</p>
+  
+      </div>
+  
+          <p><br><strong>Default:</strong> false</p>
+  
+  
+  </div>
+  <div id="property_fixedElements" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_fixedElements"></a>
+          fixedElements
+      </h3>
+      <span class="type">Array</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Array will all fixed elements.</p>
+  
+      </div>
+  
+          <p><br><strong>Default:</strong> []</p>
+  
+  
+  </div>
+  <div id="property_globalCustomElements" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_globalCustomElements"></a>
+          globalCustomElements
+      </h3>
+      <span class="type">Array</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Array will all added custom elements.</p>
+  
+      </div>
+  
+          <p><br><strong>Default:</strong> []</p>
+  
+  
+  </div>
+  <div id="property_langJson" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_langJson"></a>
+          langJson
+      </h3>
+      <span class="type">Object</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>JSON Object containing all translations.</p>
+  
+      </div>
+  
+          <p><br><strong>Default:</strong> null</p>
+  
+  
+  </div>
+  <div id="property_mainOptions" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_mainOptions"></a>
+          mainOptions
+      </h3>
+      <span class="type">Object</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>The main options set for this Product Designer.</p>
+  
+      </div>
+  
+  
+  
+  </div>
+  <div id="property_mouseOverCanvas" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_mouseOverCanvas"></a>
+          mouseOverCanvas
+      </h3>
+      <span class="type">Boolean</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Returns if mouse is over a fabricJS canvas and in which case the fabricJS object.</p>
+  
+      </div>
+  
+          <p><br><strong>Default:</strong> false</p>
+  
+  
+  </div>
+  <div id="property_orderQuantity" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_orderQuantity"></a>
+          orderQuantity
+      </h3>
+      <span class="type">Number</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>The order quantity.</p>
+  
+      </div>
+  
+          <p><br><strong>Default:</strong> 1</p>
+  
+  
+  </div>
+  <div id="property_pricingRulesPrice" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_pricingRulesPrice"></a>
+          pricingRulesPrice
+      </h3>
+      <span class="type">Number</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>The calculated price for the pricing rules.</p>
+  
+      </div>
+  
+          <p><br><strong>Default:</strong> 0</p>
+  
+  
+  </div>
+  <div id="property_productCreated" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_productCreated"></a>
+          productCreated
+      </h3>
+      <span class="type">Boolean</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Indicates if the product is created or not.</p>
+  
+      </div>
+  
+          <p><br><strong>Default:</strong> false</p>
+  
+  
+  </div>
+  <div id="property_products" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_products"></a>
+          products
+      </h3>
+      <span class="type">Array</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Array containing all added products categorized.</p>
+  
+      </div>
+  
+  
+  
+  </div>
+  <div id="property_singleProductPrice" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_singleProductPrice"></a>
+          singleProductPrice
+      </h3>
+      <span class="type">Number</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>The price considering the elements price in all views without order quantity.</p>
+  
+      </div>
+  
+          <p><br><strong>Default:</strong> 0</p>
+  
+  
+  </div>
+  <div id="property_viewInstances" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_viewInstances"></a>
+          viewInstances
+      </h3>
+      <span class="type">Array</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Array containing all FancyProductDesignerView instances of the current showing product.</p>
+  
+      </div>
+  
+          <p><br><strong>Default:</strong> []</p>
+  
+  
+  </div>
+  <div id="property_watermarkImg" class="property item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#property_watermarkImg"></a>
+          watermarkImg
+      </h3>
+      <span class="type">String</span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>URL to the watermark image if one is set via options.</p>
+  
+      </div>
+  
+          <p><br><strong>Default:</strong> null</p>
+  
+  
+  </div>
+                  </div>
+              </div>
+
+
+              <div id="tab_events" role="tabpanel" class="tab-pane">
+                  <div class="item-list">
+  <div id="event_FancyProductDesigner#boundingBoxToggle" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#boundingBoxToggle"></a>
+          FancyProductDesigner#boundingBoxToggle
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired as soon as the bounding box is added to or removed from the stage.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">currentBoundingObject</code>
+                          <span class="type">fabric.Object</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>A fabricJS rectangle representing the bounding box.</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">addRemove</code>
+                          <span class="type">Boolean</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>True=added, false=removed.</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#canvasFail" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#canvasFail"></a>
+          FancyProductDesigner#canvasFail
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired when the browser does not support HTML5 canvas.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#canvasFail" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#canvasFail"></a>
+          FancyProductDesigner#canvasFail
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired as soon as the screen size has changed. Breakpoints: Smartphone Width &lt; 568, Tablet Width &gt; 568 and &lt; 768, Desktop Width &gt; 768.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">device</code>
+                          <span class="type">String</span>
+  
+  
+                      <div class="param-description">
+                          <p>Possible values: desktop, tablet, smartphone.</p>
+  
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#clear" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#clear"></a>
+          FancyProductDesigner#clear
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired as soon as the stage has been cleared.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#designsSet" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#designsSet"></a>
+          FancyProductDesigner#designsSet
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired as soon as designs are set either from the HTML or added as JSON.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">designs</code>
+                          <span class="type">Array</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>An array containing the designs.</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#elementAdd" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#elementAdd"></a>
+          FancyProductDesigner#elementAdd
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired when an element is added.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">element</code>
+                          <span class="type">fabric.Object</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#elementChange" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#elementChange"></a>
+          FancyProductDesigner#elementChange
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired when an element is changed.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">element</code>
+                          <span class="type">fabric.Object</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#elementColorChange" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#elementColorChange"></a>
+          FancyProductDesigner#elementColorChange
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired when the color of an element is changed.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">element</code>
+                          <span class="type">fabric.Object</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">hex</code>
+                          <span class="type">String</span>
+  
+  
+                      <div class="param-description">
+                          <p>Hexadecimal color string.</p>
+  
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">colorLinking</code>
+                          <span class="type">Boolean</span>
+  
+  
+                      <div class="param-description">
+                          <p>Color of element is linked to other colors.</p>
+  
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#elementModify" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#elementModify"></a>
+          FancyProductDesigner#elementModify
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired when an element is modified.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">element</code>
+                          <span class="type">fabric.Object</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">parameters</code>
+                          <span class="type">Object</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#elementRemove" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#elementRemove"></a>
+          FancyProductDesigner#elementRemove
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired as soon as an element has been removed.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">element</code>
+                          <span class="type">fabric.Object</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>The fabric object that has been removed.</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#elementSelect" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#elementSelect"></a>
+          FancyProductDesigner#elementSelect
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired when an element is selected.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">element</code>
+                          <span class="type">fabric.Object</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#langJSONLoad" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#langJSONLoad"></a>
+          FancyProductDesigner#langJSONLoad
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired when the language JSON is loaded.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">langJSON</code>
+                          <span class="type">Object</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>A JSON containing the translation.</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#layersListUpdate" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#layersListUpdate"></a>
+          FancyProductDesigner#layersListUpdate
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired as soon as the list with the layers has been updated. Is fired when a view is selected or an object has been added/removed.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#modalDesignerClose" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#modalDesignerClose"></a>
+          FancyProductDesigner#modalDesignerClose
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired when the modal with the product designer closes.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#modalDesignerOpen" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#modalDesignerOpen"></a>
+          FancyProductDesigner#modalDesignerOpen
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired when the modal with the product designer opens.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#priceChange" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#priceChange"></a>
+          FancyProductDesigner#priceChange
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired as soon as the price changes in a view.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">elementPrice</code>
+                          <span class="type">Number</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>The price of the element.</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">totalPrice</code>
+                          <span class="type">Number</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>The true price of all views with quantity.</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">singleProductPrice</code>
+                          <span class="type">Number</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>The true price of all views without quantity.</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#priceChange" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#priceChange"></a>
+          FancyProductDesigner#priceChange
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired as soon as the price changes in a view.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">elementPrice</code>
+                          <span class="type">Number</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>The price of the element.</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">totalPrice</code>
+                          <span class="type">Number</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>The true price of all views with quantity.</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">singleProductPrice</code>
+                          <span class="type">Number</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>The true price of all views without quantity.</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#productAdd" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#productAdd"></a>
+          FancyProductDesigner#productAdd
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired when a all elements of layout are added.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">elements</code>
+                          <span class="type">Array</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>Added elements.</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#productAdd" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#productAdd"></a>
+          FancyProductDesigner#productAdd
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired when a product is added.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">views</code>
+                          <span class="type">Array</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>The product views.</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">category</code>
+                          <span class="type">String</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>The category title.</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">catIndex</code>
+                          <span class="type">Number</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>The index of the category.</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#productCreate" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#productCreate"></a>
+          FancyProductDesigner#productCreate
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired as soon as a product has been fully added to the designer.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">currentViews</code>
+                          <span class="type">Array</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>An array containing all views of the product.</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#productSelect" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#productSelect"></a>
+          FancyProductDesigner#productSelect
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired when a product is selected.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">index</code>
+                          <span class="type">Number</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>The index of the product in the category.</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">categoryIndex</code>
+                          <span class="type">Number</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>The index of the category.</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">product</code>
+                          <span class="type">Object</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>An object containing the product (views).</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#productsSet" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#productsSet"></a>
+          FancyProductDesigner#productsSet
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired as soon as products are set either from the HTML or added as JSON.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">products</code>
+                          <span class="type">Array</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>An array containing the products.</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#ready" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#ready"></a>
+          FancyProductDesigner#ready
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired as soon as the product designer is ready to receive API calls.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#templateLoad" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#templateLoad"></a>
+          FancyProductDesigner#templateLoad
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired as soon as a template has been loaded.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">URL</code>
+                          <span class="type">String</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>The URL of the loaded template.</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#uiSet" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#uiSet"></a>
+          FancyProductDesigner#uiSet
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired as soon as the user interface with all modules, actions is set and translated.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#undoRedoSet" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#undoRedoSet"></a>
+          FancyProductDesigner#undoRedoSet
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired when an undo or redo state is set.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">undos</code>
+                          <span class="type">Array</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>Array containing all undo objects.</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">redos</code>
+                          <span class="type">Array</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>Array containing all redo objects.</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#viewCanvasUpdate" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#viewCanvasUpdate"></a>
+          FancyProductDesigner#viewCanvasUpdate
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired when an element is modified.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">viewInstance</code>
+                          <span class="type"><a href="../classes/FancyProductDesignerView.html" class="crosslink">FancyProductDesignerView</a></span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#viewCreate" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#viewCreate"></a>
+          FancyProductDesigner#viewCreate
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired when a view is created.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">viewInstance</code>
+                          <span class="type"><a href="../classes/FancyProductDesignerView.html" class="crosslink">FancyProductDesignerView</a></span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#viewRemove" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#viewRemove"></a>
+          FancyProductDesigner#viewRemove
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired when a view is removed.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">viewIndex</code>
+                          <span class="type">Number</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#viewSelect" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#viewSelect"></a>
+          FancyProductDesigner#viewSelect
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired as soon as a view has been selected.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">viewIndex</code>
+                          <span class="type">Number</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">viewInstance</code>
+                          <span class="type">Object</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+  <div id="event_FancyProductDesigner#viewSizeChange" class="events item">
+      <h3 class="name anchorable-toc">
+          <a class="fa fa-link toc-anchor" href="#event_FancyProductDesigner#viewSizeChange"></a>
+          FancyProductDesigner#viewSizeChange
+      </h3>
+      <span class="type"></span>
+  
+  
+  
+  
+  
+      <div class="meta">
+                  <p>
+          </p>
+  
+  
+      </div>
+  
+      <div class="description">
+          <p>Gets fired when the size of a view is changed via the Dynamic Views module.</p>
+  
+      </div>
+  
+          <div class="params">
+              <h4>Event Payload:</h4>
+  
+              <ul class="params-list">
+                  <li class="param">
+                          <code class="param-name">event</code>
+                          <span class="type">Event</span>
+  
+  
+                      <div class="param-description">
+                           
+                      </div>
+  
+                  </li>
+                  <li class="param">
+                          <code class="param-name">currentViewInstance</code>
+                          <span class="type">String</span>
+  
+  
+                      <div class="param-description">
+                          <ul>
+  <li>The current view instance.</li>
+  </ul>
+  
+                      </div>
+  
+                  </li>
+              </ul>
+          </div>
+  
+  
+  </div>
+                  </div>
+              </div>
+      </div>
+    </div>
+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script src="../assets/vendor/prettify/prettify-min.js"></script>
+    <script>prettyPrint();</script>
+    <script src="../assets/vendor/jquery/jquery.min.js"></script>
+    <script src="../assets/vendor/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../assets/vendor/bootstrap/js/bootstrap.js"></script>
+    <script src="../assets/vendor/github-slugger/slugger.js"></script>
+    <script src="../assets/js/yuidoc-bootstrap.js"></script>
+</body>
+</html>

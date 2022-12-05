@@ -1,0 +1,127 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fancy Product Designer</title>
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
+    <link rel="stylesheet" type="text/css" href="styles/custom-fonts.css">
+    <script src="./../../dist/jquery.min.js"></script>
+    <script src="./../../dist/jquery-ui.min.js"></script>
+    <script src="./../../dist/fabric300.js"></script>
+    <script src="./js/plugins/jquery.mCustomScrollbar.js"></script>
+    <script src="./js/plugins/rangeslider.js"></script>
+    <script src="./js/plugins/jquery.tooltipster.min.js"></script>
+    <script src="./js/plugins/spectrum.js"></script> 
+    <script type="module" defer>
+        import FancyProductDesigner from './js/FancyProductDesigner.js'
+
+        let designer = new FancyProductDesigner('clothing-designer', {
+            productsJSON: 'json/products_categories.json', //see JSON folder for products sorted in categories
+            designsJSON: 'json/designs.json', //see JSON folder for designs sorted in categories
+            stageWidth: 1200,
+            editorMode: false,
+            smartGuides: true,
+            //uiTheme: 'doyle',
+            fonts: [
+                {name: 'Helvetica'},
+                {name: 'Times New Roman'},
+                {name: 'Pacifico', url: 'assets/fonts/Pacifico.ttf'},
+                {name: 'Arial'},
+                {name: 'Lobster', url: 'google'}
+            ],
+            customTextParameters: {
+                colors: false,
+                removable: true,
+                resizable: true,
+                draggable: true,
+                rotatable: true,
+                autoCenter: true,
+                boundingBox: "Base",
+                curvable: true
+            },
+            customImageParameters: {
+                draggable: true,
+                removable: true,
+                resizable: true,
+                rotatable: true,
+                colors: '#000',
+                autoCenter: true,
+                boundingBox: "Base"
+            },
+            actions: {
+                'top': ['download', 'print', 'snap', 'preview-lightbox'],
+                'right': ['magnify-glass', 'zoom', 'reset-product', 'qr-code', 'ruler'],
+                'bottom': ['undo', 'redo'],
+                'left': ['manage-layers', 'info', 'save', 'load']
+            },
+            events: {
+                priceChange(evt, price, currentPrice) {
+                    $('#thsirt-price').text(currentPrice);
+                }
+            }
+        });
+
+        //event handler when the price is changing
+        designer.on('priceChange', (evt, price, currentPrice) => {
+            $('#thsirt-price').text(currentPrice);
+        });
+
+        //print button
+        $('#print-button').click(() => {
+            designer.print();
+        });
+
+        //create an image
+        $('#image-button').click(() => {
+            console.log(designer.createImage());
+        });
+
+        //checkout button with getProduct()
+        $('#checkout-button').click(() => {
+            console.log(designer.getProduct());
+        });
+
+        //save image on webserver
+        $('#save-image-php').click(() => {
+            designer.getProductDataURL(async dataURL => {
+                await fetch('/php/save_image.php', {method: 'POST', body: JSON.stringify({base64_image: dataURL})})
+            })
+        });
+
+        //send image via mail
+        $('#send-image-mail-php').click(() => {
+            designer.getProductDataURL(async dataURL => {
+                await fetch('/php/send_image_via_mail.php', {method: 'POST', body: JSON.stringify({base64_image: dataURL})})
+            });
+        });
+    </script>
+</head>
+
+<body>
+<div id="main-container">
+    <h3 id="clothing">Clothing Designer</h3>
+    <div id="clothing-designer"
+         class="fpd-container fpd-shadow-2 fpd-topbar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left"></div>
+    <br/>
+
+    <div class="fpd-clearfix" style="margin-top: 30px;">
+        <div class="api-buttons fpd-container fpd-left">
+            <a href="#" id="print-button" class="fpd-btn">Print</a>
+            <a href="#" id="image-button" class="fpd-btn">Create Image</a>
+            <a href="#" id="checkout-button" class="fpd-btn">Checkout</a>
+            <a href="#" id="recreation-button" class="fpd-btn">Recreate product</a>
+        </div>
+        <div class="fpd-right">
+            <span class="price badge badge-inverse"><span id="thsirt-price"></span> $</span>
+        </div>
+    </div>
+
+    <p class="fpd-container">
+        Only working on a webserver:<br/>
+        <span class="fpd-btn" id="save-image-php">Save image with php</span>
+        <span class="fpd-btn" id="send-image-mail-php">Send image to mail</span>
+    </p>
+</div>
+</body>
+</html>

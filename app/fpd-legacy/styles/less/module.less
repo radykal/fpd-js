@@ -1,0 +1,99 @@
+.fpd-container .fpd-module {
+	height: 100%;
+	position: relative;
+}
+
+.fpd-module > :first-child {
+	margin-top: 0;
+}
+
+/* Tabs */
+
+.fpd-container .fpd-module-tabs {
+	display: flex;
+	background: @secondaryModuleColor;
+	color: @secondaryModuleTextColor;
+}
+
+.fpd-module-tabs > div {
+	flex: 1;
+	text-align: center;
+	cursor: pointer;
+	padding: 8px 0;
+	font-size: 20px;
+}
+
+.fpd-module-tabs > div:hover {
+	background: rgba(0, 0, 0, 0.05);
+}
+
+.fpd-module-tabs > div.fpd-active {
+	background: rgba(0, 0, 0, 0.1);
+}
+
+.fpd-module-tabs-content {
+	height: 100%;
+}
+
+.fpd-module-tabs-content > div {
+	display: none;
+	height: 100%;
+}
+
+.fpd-sidebar .fpd-module-tabs {
+	top: 50px;
+}
+
+/* Inputs */
+
+.fpd-container .fpd-module input {
+	border-width: 1px;
+	border-style: solid;
+	border-radius: 0;
+}
+
+/* Dropdowns */
+
+.fpd-module .fpd-dropdown {
+	height: 30px;
+}
+
+.fpd-module .fpd-dropdown input {
+	height: 100%;
+}
+
+.fpd-module .fpd-dropdown > .fpd-dropdown-arrow {
+	top: 5px;
+}
+
+.fpd-module .fpd-label {
+	color: rgba(0,0,0, 0.6);
+	font-size: 11px;
+}
+
+
+/* Section Title & Description */
+
+.fpd-module .fpd-section-desc,
+.fpd-module .fpd-section-title {
+	display: block;
+	font-size: 12px;
+	line-height: 18px;
+	opacity: 0.6;
+	margin: 10px 0 5px;
+}
+
+.fpd-module .fpd-section-title {
+	text-transform: uppercase;
+}
+
+@import "modules/text";
+@import "modules/images";
+@import "modules/designs";
+@import "modules/products";
+@import "modules/manage-layers";
+@import "modules/names-numbers";
+@import "modules/drawing";
+@import "modules/text-layers";
+@import "modules/dynamic-views";
+@import "modules/layouts";

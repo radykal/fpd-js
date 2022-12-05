@@ -1,0 +1,222 @@
+@actionOffset: 15px;
+
+.fpd-actions-container {
+	height: 100%;
+	width: 100%;
+	z-index: 10;
+	position: absolute;
+	top: 0;
+	left: 0;
+	pointer-events: none;
+}
+
+.fpd-actions-container * {
+	pointer-events: auto;
+}
+
+.fpd-actions-container > .fpd-actions-wrapper {
+	position: absolute;
+}
+
+.fpd-actions-wrapper > .fpd-action-btn {
+	background: #fff;
+	border-width: 1px;
+	border-style: solid;
+	display: inline-block;
+	padding: 5px;
+	width: 35px;
+	height: 35px;
+	cursor: pointer;
+	text-align: center;
+	font-size: 18px;
+	box-shadow: 0 1px 1px rgba(90, 90, 90, 0.1);
+	border-radius: 1px;
+	margin-right: 10px;
+	transition: all 100ms ease-out;
+}
+
+.fpd-actions-wrapper > .fpd-action-btn:last-child {
+	margin: 0;
+}
+
+.fpd-actions-wrapper > .fpd-action-btn:hover,
+.fpd-actions-wrapper > .fpd-action-btn.fpd-active {
+	color: #fff;
+}
+
+.fpd-actions-wrapper > .fpd-action-btn > span {
+	line-height: 24px;
+}
+
+.fpd-actions-wrapper > .fpd-action-btn.fpd-disabled {
+	opacity: 1 !important;
+	color: rgba(0,0,0, 0.3);
+}
+
+
+/* Top */
+
+.fpd-actions-wrapper.fpd-pos-top {
+	top: @actionOffset;
+	left: @actionOffset;
+}
+
+/* Bottom */
+
+.fpd-actions-wrapper.fpd-pos-bottom {
+	bottom: @actionOffset;
+	left: @actionOffset;
+}
+
+.fpd-top-actions-centered .fpd-actions-wrapper.fpd-pos-top,
+.fpd-bottom-actions-centered .fpd-actions-wrapper.fpd-pos-bottom {
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+/* Right */
+
+.fpd-actions-wrapper.fpd-pos-right {
+	top: @actionOffset;
+	right: @actionOffset;
+}
+
+/* Left */
+
+.fpd-actions-wrapper.fpd-pos-left {
+	left: @actionOffset;
+	top: @actionOffset;
+}
+
+.fpd-actions-wrapper.fpd-pos-right > .fpd-action-btn,
+.fpd-actions-wrapper.fpd-pos-left > .fpd-action-btn {
+	display: block;
+	margin: 0 0 10px;
+}
+
+.fpd-left-actions-centered .fpd-actions-wrapper.fpd-pos-left,
+.fpd-right-actions-centered .fpd-actions-wrapper.fpd-pos-right {
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+/* Download */
+
+.fpd-modal-content > .fpd-modal-download {
+	text-align: center;
+}
+
+.fpd-modal-download > span {
+	font-size: 60px;
+	cursor: pointer;
+}
+
+/* QR-Code */
+
+.fpd-modal-qrcode > input {
+	width: 100%;
+	margin-bottom: 20px;
+}
+
+.fpd-modal-qrcode {
+	text-align: center;
+}
+
+.fpd-qrcode-colors {
+	margin-bottom: 30px;
+}
+
+.fpd-qrcode-colors .fpd-spectrum-replacer {
+	background: @secondaryModuleColor;
+	border: none;
+	padding: 4px;
+}
+
+.fpd-qrcode-colors .fpd-spectrum-replacer .sp-preview {
+	margin: 0;
+}
+
+.fpd-qrcode-colors .fpd-spectrum-replacer .sp-dd {
+	display: none;
+}
+
+/* Zoom */
+.fpd-action-context-zoom .fpd-range-slider {
+	width: 85%;
+}
+
+.fpd-action-context-zoom .fpd-stage-pan {
+	font-size: 16px;
+	cursor: pointer;
+	position: absolute;
+	top: 50%;
+	right: 10px;
+	transform: translateY(-50%);
+}
+
+
+/* Misc */
+
+.fpd-action-btn .fpd-info-content,
+.fpd-action-btn .fpd-modal-context,
+.fpd-action-btn > .fpd-action-context {
+	display: none;
+}
+
+/* Action Context */
+
+.fpd-main-wrapper > .fpd-action-context {
+	position: absolute;
+	bottom: 60px;
+	left: 50%;
+	background: #fff;
+	width: 200px;
+	height: 35px;
+	padding: 7px;
+	transform: translateX(-50%);
+	box-shadow: 0 0px 3px rgba(90, 90, 90, 0.2);
+}
+
+
+/* Responsive */
+
+:not(.fpd-ui-theme-doyle).fpd-device-smartphone .fpd-actions-container {
+	background: @secondaryModuleColor;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: auto;
+	white-space: nowrap;
+	overflow-x: auto;
+	position: static;
+	pointer-events: auto !important;
+	flex: none !important;
+	min-width: auto !important;
+
+	> .fpd-actions-wrapper {
+		position: static;
+		display: inline-block;
+		transform: none !important;
+		padding: 5px 0;
+
+		> .fpd-action-btn {
+			display: inline-block !important;
+			margin: 0 10px 0 0 !important;
+			box-shadow: none !important;
+			border: none;
+			background: transparent !important;
+
+			&:hover {
+				color: var(--fpd-primary-color);
+				opacity: 0.8;
+			}
+
+		}
+
+	}
+
+}
+
+.fpd-device-smartphone .fpd-main-wrapper > .fpd-action-context {
+	bottom: 10px;
+}
