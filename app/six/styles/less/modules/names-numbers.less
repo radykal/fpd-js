@@ -1,0 +1,129 @@
+.fpd-module .fpd-names-numbers-panel {
+	height: 100%;
+}
+
+.fpd-names-numbers-panel .fpd-scroll-area {
+	height: ~"calc(100% - 35px)" !important;
+}
+
+.fpd-module .fpd-names-numbers-panel .fpd-list {
+	overflow-x: hidden !important;
+}
+
+.fpd-names-numbers-panel .fpd-btn {
+	margin-left: 5px;
+}
+
+.fpd-names-numbers-panel .fpd-list > .fpd-row {
+	transition: background 300ms ease-out;
+}
+
+.fpd-names-numbers-panel .fpd-list > .fpd-row:hover {
+	background: @listBackgroundHover;
+}
+
+.fpd-names-numbers-panel .fpd-row {
+	border-bottom: 1px solid @mainBorderColor;
+	padding: 19px 5px 19px 5px;
+	display: flex;
+}
+
+.fpd-names-numbers-panel .fpd-row:first-child {
+	border-top: 1px solid @mainBorderColor;
+}
+
+.fpd-names-numbers-panel .fpd-row > div {
+	line-height: 32px;
+	height: 32px;
+}
+
+.fpd-names-numbers-panel .fpd-row > .fpd-number-col {
+	width: 50px;
+	flex-shrink: 0;
+}
+
+.fpd-names-numbers-panel .fpd-row > .fpd-number-col > input {
+	border-top-left-radius: 2px;
+	border-bottom-left-radius: 2px;
+	border-right: none;
+	vertical-align: top;
+}
+
+.fpd-names-numbers-panel .fpd-row > .fpd-name-col {
+	width: 100%;
+}
+
+.fpd-names-numbers-panel .fpd-row > .fpd-select-col {
+	flex-shrink: 0;
+}
+
+.fpd-names-numbers-panel .fpd-row > .fpd-select-col > label {
+	display: block;
+	width: 100%;
+	height: 100%;
+	vertical-align: top;
+	line-height: 30px;
+	padding: 0 0 0 5px;
+	border-top-right-radius: 2px;
+	border-bottom-right-radius: 2px;
+	border-left: none !important;
+	background: transparent;
+	position: relative;
+	border: 1px solid @mainBorderColor;
+	background: rgba(147, 128, 108, 0.1);
+}
+
+.fpd-names-numbers-panel .fpd-row > .fpd-select-col > label:after {
+	content: "\e90e";
+	font-family: 'FontFPD' !important;
+	position: absolute;
+	top: 0;
+	right: 0;
+	pointer-events: none;
+}
+
+.fpd-names-numbers-panel .fpd-row > .fpd-select-col select {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	border: none;
+	background: transparent;
+	display: block;
+	height: auto;
+	height: 100%;
+	padding: 0 12px 0 0;
+}
+
+.fpd-names-numbers-panel .fpd-row > .fpd-remove-col {
+	width: 35px;
+	flex-shrink: 0;
+	line-height: 32px;
+	cursor: pointer;
+	margin-left: auto;
+	padding-top: 2px;
+	padding-right: 4px;
+	text-align: right;
+	font-size: 18px;
+}
+
+.fpd-names-numbers-panel .fpd-row > .fpd-name-col input {
+	width: 100%;
+}
+
+.fpd-names-numbers-panel .fpd-row input {
+	padding: 5px;
+	height: 32px;
+	width: 100%;
+}
+
+.fpd-names-numbers-panel .fpd-row select {
+	outline: none !important;
+}
+
+.fpd-names-numbers-panel .fpd-row select::-ms-expand {
+    display: none;
+}
+
+.fpd-names-numbers-panel .fpd-row:first-child .fpd-remove-col {
+	display: none;
+}

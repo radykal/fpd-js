@@ -1,0 +1,109 @@
+/* Tablets ----------- */
+@media (max-width : 767px) {
+
+	.fpd-hidden-tablets .fpd-container,
+	.fpd-hidden-tablets .fpd-done {
+		display: none !important;
+	}
+
+	.fpd-hidden-tablets .fpd-device-info {
+		display: block !important;
+	}
+
+	.fpd-action-btn[data-action="magnify-glass"] {
+		display: none !important;
+	}
+
+	.fpd-container,
+	[class^="fpd-element-toolbar"] {
+
+		input {
+			font-size: 16px !important;
+		}
+
+	}
+
+}
+
+/* Smartphones  ----------- */
+@media (max-width : 568px) {
+
+	.fpd-topbar .fpd-navigation > div > span {
+		display: block;
+		line-height: 1;
+		padding-top: 12px;
+	}
+
+	.fpd-container.fpd-topbar .fpd-main-wrapper > .fpd-product-stage {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+
+	.fpd-topbar .fpd-navigation .fpd-label {
+		font-size: 10px !important;
+		padding-top: 5px;
+	}
+
+	.fpd-grid > .fpd-item {
+		height: 100px;
+	}
+
+	.fpd-draggable-dialog {
+		left: 0 !important;
+		margin-top: -1px;
+		width: ~"calc(100% - 2em)";
+		margin-left: 1em;
+		margin-right: 1em;
+		background: rgba(255,255,255, 0.95);
+	}
+
+	.fpd-draggable-dialog .fpd-icon-drag {
+		display: none;
+	}
+
+	.fpd-views-selection .fpd-item {
+		height: 40px;
+		padding: 4px;
+		width: 30px;
+	}
+
+	.fpd-container.fpd-views-outside ~ .fpd-views-selection> div,
+	.fpd-container.fpd-device-smartphone ~ .fpd-views-selection> div  {
+		width: 50px;
+		height: 60px;
+	}
+
+	.fpd-modal-product-designer.fpd-modal-overlay > .fpd-modal-wrapper {
+		padding: 60px 20px 20px;
+	}
+
+	.fpd-modal-product-designer.fpd-modal-overlay .fpd-done {
+		left: 20px;
+	}
+
+	.fpd-hidden-smartphones .fpd-container,
+	.fpd-hidden-smartphones .fpd-done,
+	.fpd-thumbnail-preview {
+		display: none !important;
+	}
+
+	.fpd-hidden-smartphones .fpd-device-info {
+		display: block !important;
+	}
+
+	.fpd-topbar[class*="fpd-off-canvas-"] .fpd-mainbar > .fpd-content,
+	.fpd-topbar[class*="fpd-off-canvas-"] .fpd-mainbar > .fpd-close-off-canvas {
+		top: 110px !important;
+	}
+
+}
+
+/* Portrait */
+@media only screen
+  and (min-width: 320px)
+  and (max-width: 480px)
+  and (orientation: portrait) {
+
+
+}

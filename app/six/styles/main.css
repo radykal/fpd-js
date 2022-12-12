@@ -1,0 +1,106 @@
+@import "./fpd/image-editor.css";
+@import "./fpd/prettify.css";
+@import "./fpd/preview.css";
+@import "./fpd/font-fpd.css";
+
+@import  './plugins/jquery-ui.css';
+@import  './plugins/jquery.mCustomScrollbar.css';
+@import  './plugins/spectrum.css';
+@import  './plugins/tooltipster.css';
+@import  './less/FancyProductDesigner.css';
+
+body {
+	font-family: 'Lato',serif;
+	margin: 0;
+}
+
+#main-container {
+	margin: 0;
+	width: 1200px;
+	max-width: 100%;
+	min-height: 100vh;
+}
+
+#main-container-legacy {
+	/*margin: 40px auto;*/
+	width: 1200px;
+	max-width: 100%;
+	min-height: 100vh;
+}
+
+.api-buttons > a {
+	margin: 0 5px 0 0 !important;
+	text-decoration: none !important;
+}
+.price {
+	font-size: 25px !important;
+	line-height: 26px !important;
+}
+
+html, body {
+}
+
+#fpd-designer {
+    margin: 0;
+    clear: both;
+}
+
+.price {
+	float: right;
+	margin-bottom: 20px !important;
+}
+
+#api-form .button {
+	margin-bottom: 10px;
+}
+
+.output {
+	height: 200px;
+	background: #fff;
+	border: 1px solid #e6e6e6;
+	overflow: auto;
+	padding: 0 10px;
+}
+
+.output-params {
+	font-size: 12px;
+}
+
+.output p {
+	padding-left: 10px;
+	margin: 0;
+}
+
+pre {
+	font-size: 10px;
+	margin-bottom: 20px !important;
+	background: #f4f4f4;
+	border: 1px solid #ccc;
+	max-height: 500px;
+	min-height: 50px;
+}
+
+#main-bar-container {
+	margin-bottom: 20px;
+}
+
+
+.float-right {
+	float: right;
+}
+
+.float-left {
+	float: left;
+}
+
+.clear {
+	clear: both;
+}
+
+.item.disabled {
+	pointer-events: none;
+}
+
+.clearfix:before, .clearfix:after { content: "\0020"; display: block; height: 0; overflow: hidden; }
+.clearfix:after { clear: both; }
+.clearfix { zoom: 1; }

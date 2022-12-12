@@ -416,7 +416,6 @@ export default function FancyProductDesignerView ($productStage, view, callback,
 		return coords;
 	};
 
-
 	/**
 	* Sets the coordinates of the draggable boxes in the corners of
 	* the image used to scale/rotate it.
@@ -462,7 +461,6 @@ export default function FancyProductDesignerView ($productStage, view, callback,
 		  };
 		}
 	};
-
 
 	var _getRotatedCornerCursor = function (corner, target, e) {
 	  var n = Math.round(target.angle % 360 / 45);
@@ -1514,9 +1512,7 @@ export default function FancyProductDesignerView ($productStage, view, callback,
 	};
 
 	var _maxTextboxLines = function(textbox, text) {
-
 		textbox.set('text', text); //render text
-
 		//loop: remove chars as long as lineHeights = maxLines
 		while(textbox.__lineHeights.length > textbox.maxLines) {
 			text = textbox.text;
@@ -1527,14 +1523,11 @@ export default function FancyProductDesignerView ($productStage, view, callback,
 				textbox.exitEditing();
 			}
 		}
-
 		return text;
-
 	};
 
 	//return an element by ID
 	this.getElementByID = function(id) {
-
 		var objects = instance.stage.getObjects();
 		for(var i=0; i < objects.length; ++i) {
 			if(objects[i].id === id) {
@@ -1542,9 +1535,7 @@ export default function FancyProductDesignerView ($productStage, view, callback,
 				break;
 			}
 		}
-
 		return false;
-
 	};
 
 	/**
@@ -2920,7 +2911,6 @@ export default function FancyProductDesignerView ($productStage, view, callback,
 	 * @method undo
 	 */
 	this.undo = function() {
-
 		if(instance.undos.length > 0) {
 
 			var last = instance.undos.pop();
@@ -2960,9 +2950,7 @@ export default function FancyProductDesignerView ($productStage, view, callback,
 			_elementHasUploadZone(last.element);
 
 		}
-
 		return instance.undos;
-
 	};
 
 	/**

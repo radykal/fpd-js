@@ -1,0 +1,460 @@
+@listBackgroundHover: rgba(0,0,0, 0.03);
+@buttonTextColor: #fff;
+@subPanelBoxShadow: 0 2px 0 1px rgba(64, 87, 109, 0.07), 0 2px 12px rgba(53, 71, 90, 0.2);
+
+/* LIST */
+
+.fpd-container .fpd-list,
+.fpd-context-dialog .fpd-list {
+	width: 100%;
+	overflow: auto;
+}
+
+.fpd-list > .fpd-list-row {
+	display: flex;
+	font-size: 15px;
+	overflow: hidden;
+	border-top-width: 1px;
+	border-top-style: solid;
+	cursor: pointer;
+	transition: background 300ms ease-out;
+}
+
+.fpd-list > .fpd-list-row:hover {
+	background: @listBackgroundHover;
+}
+
+.fpd-list > .fpd-list-row:first-child {
+	border-top: none;
+}
+
+.fpd-list-row > .fpd-cell-full {
+	flex: 1 100%;
+}
+
+.fpd-list-row > div {
+	line-height: 1;
+	padding: 22px 0;
+	flex: 1;
+}
+
+.fpd-list-row span {
+	font-size: 18px;
+}
+
+/* SNACKBAR */
+
+.fpd-snackbar-wrapper {
+	position: fixed;
+	left: 12px;
+	bottom: 0;
+	z-index: 100000;
+}
+
+.fpd-snackbar {
+	background: #323232;
+	margin-bottom: 10px;
+	color: #fff;
+	line-height: 18px;
+	font-size: 14px;
+	min-width: 288px;
+	max-width: 568px;
+	opacity: 0;
+	max-height: 0;
+	overflow-y: hidden;
+	border-radius: 2px;
+	-webkit-transition: all 300ms ease-out;
+	transition: all 300ms ease-out;
+}
+
+.fpd-snackbar p {
+	margin: 0;
+	padding: 16px 24px;
+}
+
+.fpd-snackbar.fpd-show-up {
+	max-height: 300px;
+}
+
+/* BUTTONS */
+
+.fpd-container .fpd-btn,
+.fpd-modal-wrapper .fpd-btn {
+	cursor: pointer;
+	color: @buttonTextColor;
+	display: inline-block;
+	padding: 5px 15px;
+	font-size: 14px;
+	line-height: 24px;
+	margin: 10px 0;
+	text-transform: uppercase;
+	border-radius: 2px;
+	transition: all 200ms ease-out;
+}
+
+.fpd-btn.fpd-secondary {
+
+}
+
+
+/* TEXTAREA */
+
+.fpd-container textarea {
+	display: block;
+	width: 100%;
+	min-height: 100px;
+	border-width: 1px;
+	border-style: solid;
+	padding: 10px;
+	resize: none;
+	font-size: 16px;
+}
+
+.fpd-container textarea:focus,
+.fpd-element-toolbar textarea:focus {
+	outline: none;
+}
+
+/* INPUT:TEXT */
+
+.fpd-container input[type="text"] {
+	display: block;
+	width: 100%;
+	border-width: 1px;
+	border-style: solid;
+	padding: 8px 5px;
+	font-size: 12px;
+}
+
+.fpd-container input[type="text"]:focus {
+	outline: none;
+}
+
+/* INPUT SEARCH */
+
+.fpd-input-search {
+	position: relative;
+}
+
+.fpd-input-search > input {
+	padding-right: 25px !important;
+	height: 38px !important;
+	margin: 0 !important;
+}
+
+.fpd-input-search > span {
+	color: @secondaryModuleTextColor;
+	font-size: 18px;
+	position: absolute;
+	right: 5px;
+	top: 50%;
+	pointer-events: none;
+	transform: translateY(-50%);
+}
+
+/* SWITCH */
+
+.fpd-switch-container {
+	height: 14px;
+	position: relative;
+	width: 36px;
+	cursor: pointer;
+}
+
+.fpd-switch-container .fpd-switch-bar {
+	border-radius: 8px;
+	height: 100%;
+	background: #000;
+	opacity: 0.26;
+	width: 100%;
+	-webkit-transition: all 100ms linear;
+	transition: all 100ms linear;
+}
+
+.fpd-switch-container .fpd-switch-toggle {
+	background: #fff !important;
+	border-radius: 50%;
+	height: 10px;
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	width: 10px;
+	transition: all 200ms linear;
+}
+
+.fpd-switch-container.fpd-enabled .fpd-switch-toggle {
+    left: ~"calc(100% - 12px)";
+}
+
+.fpd-switch-container.fpd-enabled .fpd-switch-bar {
+	opacity: 1 !important;
+}
+
+/* INPUT BACK SEARCH */
+
+fpd-container .fpd-input-back-search {
+	width: 100%;
+}
+
+.fpd-input-back-search > .fpd-back {
+	display: inline-block;
+	width: 32px;
+	height: 38px;
+	text-align: center;
+	padding: 7px 0 0 !important;
+	border: 1px solid @mainBorderColor !important;
+	border-right: none !important;
+	background: rgba(0,0,0, 0.03) !important;
+	color: @secondaryModuleTextColor;
+	float: left;
+	margin: 0 !important;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.fpd-input-back-search > .fpd-input-search {
+	float: left;
+	width: ~"calc(100% - 32px)";
+}
+
+
+/* Toggles */
+
+.fpd-toggle.fpd-enabled {
+	opacity: 1;
+}
+
+/* Inside Positions */
+
+@insidePosOffset: 15px;
+
+.fpd-main-wrapper [class^="fpd-inside-t"],
+.fpd-main-wrapper [class*="fpd-inside-t"] {
+	top: @insidePosOffset;
+}
+
+.fpd-main-wrapper [class^="fpd-inside-b"],
+.fpd-main-wrapper [class*="fpd-inside-b"] {
+	bottom: @insidePosOffset;
+}
+
+.fpd-main-wrapper .fpd-inside-tl,
+.fpd-main-wrapper .fpd-inside-bl {
+	left: @insidePosOffset;
+}
+
+.fpd-main-wrapper .fpd-inside-tc,
+.fpd-main-wrapper .fpd-inside-bc {
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.fpd-main-wrapper .fpd-inside-tr,
+.fpd-main-wrapper .fpd-inside-br {
+	right: @insidePosOffset;
+}
+
+/* Dividers */
+.fpd-container .fpd-h-line {
+	width: 100%;
+	height: 1px;
+	background: @mainBorderColor;
+	clear: both;
+	margin: 10px 0;
+}
+
+/* Color Picker */
+
+.fpd-container .sp-replacer,
+.fpd-container .sp-preview {
+	border: none;
+}
+
+.fpd-container .sp-dd {
+	display: none;
+}
+
+/* Input:range */
+
+@track-color: #D3D3D3;
+@thumb-color: rgba(66, 66, 66, 1);
+
+@thumb-radius: 8px;
+@thumb-height: 15px;
+@thumb-width: 15px;
+
+@track-width: 100%;
+@track-height: 5px;
+@track-border-width: 0;
+@track-border-color: black;
+@track-radius: 2px;
+@contrast: 5%;
+
+.track() {
+  width: @track-width;
+  height: @track-height;
+  cursor: pointer;
+  animate: 0.2s;
+}
+
+.thumb() {
+  height: @thumb-height;
+  width: @thumb-width;
+  border-radius: @thumb-radius;
+  background: @thumb-color;
+  cursor: pointer;
+}
+
+input[type=range].fpd-input-range {
+
+	-webkit-appearance: none;
+	margin: 5px 0;
+	width: @track-width;
+	position: relative;
+	vertical-align: top;
+
+	&:focus {
+		outline: none;
+	}
+
+	&::-webkit-slider-runnable-track {
+	.track();
+	background: @track-color;
+	border-radius: @track-radius;
+	border: @track-border-width solid @track-border-color;
+	}
+
+	&::-webkit-slider-thumb {
+	.thumb();
+	-webkit-appearance: none;
+	margin-top: ((-@track-border-width * 2 + @track-height) / 2) - (@thumb-height / 2);
+	}
+
+	&:focus::-webkit-slider-runnable-track {
+	background: lighten(@track-color, @contrast);
+	}
+
+	&::-moz-range-track {
+	.track();
+	background: @track-color;
+	border-radius: @track-radius;
+	 border: @track-border-width solid @track-border-color;
+	}
+	&::-moz-range-thumb {
+	 .thumb();
+	}
+
+	&::-ms-track {
+	.track();
+	background: transparent;
+	border-color: transparent;
+	border-width: @thumb-width 0;
+	color: transparent;
+	}
+
+	&::-ms-fill-lower {
+	background: darken(@track-color, @contrast);
+	border: @track-border-width solid @track-border-color;
+	border-radius: @track-radius*2;
+	}
+	&::-ms-fill-upper {
+	background: @track-color;
+	border: @track-border-width solid @track-border-color;
+	border-radius: @track-radius*2;
+	}
+	&::-ms-thumb {
+	.thumb();
+	}
+	&:focus::-ms-fill-lower {
+	background: @track-color;
+	}
+	&:focus::-ms-fill-upper {
+	background: lighten(@track-color, @contrast);
+	}
+}
+
+
+/* Checkbox */
+
+.fpd-checkbox:hover > label:before {
+	box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.15);
+}
+
+.fpd-checkbox > label {
+	position: relative;
+	padding-left: 25px;
+	cursor: pointer;
+	display: inline-block;
+	line-height: 22px;
+	color: @mainTextColor;
+}
+
+.fpd-checkbox > label:before {
+	background: transparent;
+	border: 1px solid @mainBorderColor;
+	content: '';
+    width: 20px;
+	height: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 2px;
+    transition: all 200ms ease-in-out;
+}
+
+.fpd-checkbox > label:after {
+	background: grey;
+	content: '';
+    width: 9px;
+	height: 5px;
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    border: 1px solid #000;
+    border-top: none;
+    border-right: none;
+    background: transparent;
+    opacity: 0;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+.fpd-checkbox > input[type="checkbox"] {
+	display: none;
+}
+
+.fpd-checkbox > input[type="checkbox"]:checked + label:after {
+    opacity: 1;
+}
+
+/* Drag Image */
+.fpd-dragged-image {
+
+	position: absolute;
+	width: 200px;
+	height: 200px;
+	background: rgba(255,255,255,0.6);
+	top: 0;
+	left: 0;
+	cursor: move;
+	transition: transform 100ms ease-in-out;
+	transform-origin: center center;
+	transform: scale(0);
+	z-index: 100000000000;
+	pointer-events: none;
+	box-shadow: 0 0 0 1px rgba(64,87,109,.07), 0 2px 12px rgba(53,71,90,.2);
+
+	> picture {
+		display: block;
+		width: 100%;
+		height: 100%;
+		background-size: contain;
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+
+	&.fpd-animate {
+		transform: scale(1);
+	}
+
+}

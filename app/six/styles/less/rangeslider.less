@@ -1,0 +1,145 @@
+body .fpd-range-slider {
+
+	position: relative;
+	height: 4px;
+	top: 50%;
+
+	&.fpd-range-slider--disabled {
+	  opacity: 0.4;
+	}
+
+	&.fpd-range-slider--horizontal .fpd-range-slider__fill {
+	  top: 0;
+	  height: 100%;
+	}
+
+	&.fpd-range-slider--vertical .fpd-range-slider__fill {
+	  bottom: 0;
+	  width: 100%;
+	}
+
+	&.fpd-range-slider__handle:active {
+	  opacity: 0.8;
+	}
+
+	&.fpd-range-slider--horizontal .fpd-range-slider__handle {
+	  touch-action: pan-y;
+	  -ms-touch-action: pan-y;
+	}
+
+	&.fpd-range-slider--vertical .fpd-range-slider__handle {
+	  touch-action: pan-x;
+	  -ms-touch-action: pan-x;
+	}
+
+	&:before {
+		background: darken(@smartToolbarBG, 10%);
+		content: '';
+		position: absolute;
+		top: 50%;
+		left: 0;
+		width: 100%;
+		height: 3px;
+		transform: translateY(-50%);
+	}
+
+	.fpd-range-slider__fill {
+		max-width: 100%;
+		position: absolute;
+	}
+
+	.fpd-range-slider__handle {
+		background: @smartToolbarBG;
+		position: absolute;
+		cursor: pointer;
+		border-radius: 50%;
+		width: 22px;
+		height: 22px;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+
+	.fpd-range-slider__handle:after {
+		content: '';
+		position: absolute;
+		top: 3px;
+		left: 3px;
+		border-radius: 50%;
+		width: 16px;
+		height: 16px;
+	}
+
+	input[type="range"]:focus + .fpd-range-slider .fpd-range-slider__handle {
+	  -moz-box-shadow: 0 0 8px rgba(255, 0, 255, 0.9);
+	  -webkit-box-shadow: 0 0 8px rgba(255, 0, 255, 0.9);
+	  box-shadow: 0 0 8px rgba(255, 0, 255, 0.9);
+	}
+
+}
+
+
+/* Slider Group */
+
+body .fpd-slider-group {
+
+	&.fpd-hidden {
+		display: none !important;
+	}
+
+	display: flex !important;
+	height: auto;
+	background: none !important;
+	border: none !important;
+	border-radius: 0;
+	position: inherit;
+	padding: 0 !important;
+	flex-wrap: wrap;
+
+	> * {
+		flex: 1;
+	}
+
+	> span {
+		width: auto;
+		font-size: 12px;
+		max-width: 90px;
+		word-wrap: break-word;
+		line-height: 14px;
+
+		&[class^="fpd-icon-"] {
+			flex: 0;
+			font-size: 20px;
+			text-align: center;
+			min-width: 35px;
+			padding: 12px 16px 0 0;
+
+			+ .fpd-range-wrapper {
+				flex: 1;
+			}
+		}
+
+		&.fpd-label {
+			flex: 0 0 100%;
+		}
+
+	}
+
+	> .fpd-range-wrapper {
+		flex: 0 0 calc(100% - 70px);
+	}
+
+	> input {
+		border: 1px solid @mainBorderColor;
+		flex: 0 0 40px;
+		margin-left: 16px !important;
+		line-height: 20px;
+		text-align: center;
+		font-size: 11px;
+	}
+
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+	}
+
+}

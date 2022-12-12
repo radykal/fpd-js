@@ -1,0 +1,129 @@
+/* Manage Layers */
+
+.fpd-container .fpd-manage-layers-panel {
+	height: 100%;
+}
+
+.fpd-manage-layers-panel .fpd-list-row {
+	flex-wrap: wrap;
+}
+
+.fpd-manage-layers-panel .fpd-list-row input {
+	visibility: hidden !important;
+}
+
+.fpd-manage-layers-panel .fpd-list-row > div {
+	padding-left: 10px;
+	padding-right: 10px;
+	line-height: 20px;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.fpd-manage-layers-panel .fpd-list-row > div.fpd-cell-0 {
+	width: 40px;
+	flex: none;
+	text-align: center;
+}
+
+.fpd-manage-layers-panel .fpd-list-row > div.fpd-cell-0 > .fpd-current-color {
+	cursor: pointer;
+	width: 100%;
+	height: 20px;
+	display: block;
+	border-radius: 2px;
+}
+
+.fpd-manage-layers-panel .fpd-list-row > div.fpd-cell-1 {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.fpd-manage-layers-panel .fpd-list-row > div.fpd-cell-1 textarea {
+	min-height: auto;
+	max-height: 30px;
+	width: 100%;
+	padding: 3px 5px !important;
+	font-size: 12px;
+}
+
+.fpd-manage-layers-panel .fpd-list-row > div.fpd-cell-2 {
+	width: 95px;
+	flex: none;
+	text-align: right;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.fpd-manage-layers-panel .fpd-list-row > div.fpd-cell-2 > span {
+	padding-left: 10px;
+	font-size: 21px;
+	opacity: 0.7;
+	transition: opacity 300ms ease-out;
+	flex: 1;
+	flex-grow: 0;
+}
+
+.fpd-manage-layers-panel .fpd-list-row > div.fpd-cell-2 > span.fpd-icon-reorder {
+	cursor: move;
+}
+
+.fpd-manage-layers-panel .fpd-list-row > div.fpd-cell-2 > span:first-child {
+	padding: 0;
+}
+
+.fpd-manage-layers-panel .fpd-list-row > div.fpd-cell-2 > span:hover {
+	opacity: 1;
+}
+
+.fpd-manage-layers-panel .fpd-list-row.fpd-locked > div:nth-child(-n+2) {
+	opacity: 0.2;
+	pointer-events: none;
+}
+
+.fpd-manage-layers-panel .fpd-list-row .fpd-scroll-area {
+	display: none;
+	max-height: 100px;
+	overflow: auto;
+	flex: 0 1 100%;
+	line-height: inherit;
+	padding: 0;
+	margin-bottom: 5px;
+}
+
+.fpd-manage-layers-panel .fpd-list-row .fpd-color-palette {
+	padding: 0px 10px;
+}
+
+.fpd-manage-layers-panel .fpd-list-row .fpd-color-palette .fpd-item,
+.fpd-manage-layers-panel .fpd-list-row .fpd-color-palette .sp-replacer {
+    width: 25px;
+    height: 25px;
+    margin: 0 5px 4px 0;
+    min-height: inherit;
+    border-radius: 2px;
+    float: left;
+}
+
+.fpd-manage-layers-panel .fpd-list-row .fpd-color-palette .sp-preview {
+	height: 100%;
+	width: 100%;
+}
+
+.fpd-manage-layers-panel .fpd-list-row .sp-replacer,
+.fpd-manage-layers-panel .fpd-list-row .sp-preview {
+	border: none !important;
+	border-radius: 2px;
+}
+
+.fpd-manage-layers-panel .sp-dd {
+	display: none !important;
+}
+
+
+.fpd-manage-layers-panel .fpd-sortable-placeholder {
+	background: rgba(0,0,0, 0.05);
+	border-width: 2px;
+	border-style: dotted;
+	height: 65px;
+}

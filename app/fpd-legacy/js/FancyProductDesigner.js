@@ -14,8 +14,8 @@
 
 // export default function
 import FPDPricingRules from './addons/FPDPricingRules.js'
-import FPDBulkVariations from './addons/plus/BulkVariations.js'
-import {FPDNamesNumbersModule} from './addons/plus/NamesNumbersModule.js'
+import FPDBulkVariations from './modules/BulkVariations.js'
+import {FPDNamesNumbersModule} from './modules/NamesNumbersModule.js'
 import FancyProductDesignerOptions from './Options.js'
 import FPDActions from './ui/Actions.js'
 import FPDMainBar from './ui/MainBar.js'
@@ -3322,10 +3322,7 @@ export default function FancyProductDesigner(elem, opts) {
 			if(value == 1) {
 				instance.resetZoom();
 			}
-
 		}
-
-
 	};
 
 	/**

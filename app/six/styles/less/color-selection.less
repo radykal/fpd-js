@@ -1,0 +1,170 @@
+/* Inside */
+
+.fpd-color-selection.fpd-inside-main {
+	position: absolute;
+	z-index: 10;
+}
+
+.fpd-color-selection.fpd-inside-main .fpd-label,
+.fpd-color-selection.fpd-inside-main .fpd-cs-item > .fpd-title {
+	display: none;
+}
+
+.fpd-color-selection.fpd-inside-main .fpd-colors > .fpd-item  {
+	width: 30px;
+	height: 30px;
+	float: left;
+	margin-right: 5px;
+	cursor: pointer;
+	border: 1px solid @mainBorderColor;
+	transition: all 200ms ease-out;
+}
+
+.fpd-main-wrapper > .fpd-color-selection.fpd-inside-main .fpd-colors > .fpd-item:last-child {
+	margin-right: 0;
+}
+
+.fpd-main-wrapper > .fpd-color-selection.fpd-inside-main .fpd-colors > .fpd-item:hover {
+	transform: scale(1.1);
+}
+
+
+/* Custom Position */
+
+.fpd-color-selection.fpd-custom-pos {
+	margin: 20px 0;
+}
+
+.fpd-color-selection.fpd-custom-pos .fpd-title {
+	font-size: 14px;
+	font-weight: 300;
+	margin-bottom: 5px;
+	border-bottom: 1px solid @mainBorderColor;
+}
+
+.fpd-color-selection.fpd-custom-pos .fpd-colors > .fpd-item,
+.fpd-color-selection.fpd-custom-pos .fpd-colors .sp-replacer {
+	display: inline-block;
+	width: 45px;
+	height: 45px;
+	position: relative;
+	box-shadow: 0px 1px 2px rgba(0,0,0,0.1);
+	border-radius: 2px;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	border: none;
+	cursor: pointer;
+}
+
+.fpd-color-selection.fpd-custom-pos .fpd-colors > .fpd-item > .fpd-label {
+	display: block !important;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background: #fff;
+	padding: 4px 2px;
+	font-weight: 100;
+	font-size: 10px;
+	text-transform: uppercase;
+	line-height: 1;
+	color: rgba(0,0,0, 0.6);
+}
+
+/* Dropdown */
+
+.fpd-color-selection .fpd-dropdown {
+	width: 200px;
+	position: relative;
+	box-sizing: border-box;
+}
+
+.fpd-color-selection .fpd-dropdown > .fpd-title {
+	width: 100%;
+	background: @secondaryModuleColor;
+	color: @secondaryModuleTextColor;
+	padding: 12px 6px;
+	border: none;
+	cursor: pointer;
+	border-radius: 2px;
+	font-weight: 400;
+	 line-height: 1;
+}
+
+.fpd-color-selection .fpd-dropdown > .fpd-title > .fpd-icon-arrow-dropdown {
+	float: right;
+	margin-top: 1px;
+    font-size: 22px;
+    line-height: 1;
+    margin-top: -5px;
+}
+
+.fpd-color-selection .fpd-dropdown > .fpd-colors {
+	background: #fff;
+	display: none;
+	position: absolute;
+	width: 100%;
+	left: 0;
+	box-shadow: 0px 0px 6px rgba(0,0,0,0.3);
+	z-index: 10000;
+	max-height: 100px;
+	overflow: auto;
+}
+
+.fpd-color-selection .fpd-dropdown > .fpd-colors.fpd-active {
+	display: block;
+}
+
+.fpd-color-selection .fpd-dropdown > .fpd-colors > .fpd-item {
+	width: 100%;
+	height: 32px;
+	margin: 0;
+	display: block;
+	padding: 0;
+	box-shadow: none;
+	border-radius: 0;
+}
+
+.fpd-color-selection .fpd-dropdown > .fpd-colors > .fpd-item.fpd-active > .fpd-label {
+	font-weight: bold;
+}
+
+.fpd-color-selection .fpd-dropdown > .fpd-colors > .fpd-item:after {
+	content: " ";
+	position: absolute;
+	width: 100%;
+	height: 1px;
+	background: @mainBorderColor;
+	left: 0;
+	bottom: 0;
+	z-index: 5;
+}
+
+.fpd-color-selection .fpd-dropdown > .fpd-colors > .fpd-item .fpd-label {
+	height: 100%;
+	width: 80%;
+	left: auto;
+	right: 0;
+	font-size: 12px;
+	padding-top: 9px;
+	padding-left: 5px;
+	white-space: nowrap;
+}
+
+
+/* Common */
+
+.fpd-color-selection .sp-replacer {
+	border: none;
+	padding: 0;
+}
+
+.fpd-color-selection .sp-preview {
+	width: 100%;
+	height: 100%;
+	border: none;
+}
+
+.fpd-color-selection .sp-dd {
+	display: none !important;
+}

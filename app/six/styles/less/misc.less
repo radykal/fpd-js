@@ -1,0 +1,236 @@
+/* Tooltip */
+
+.fpd-tooltip {
+	cursor: pointer;
+}
+
+.fpd-tooltip .fpd-tooltip-content {
+	display: none;
+}
+
+.fpd-tooltip-theme,
+.fpd-sub-tooltip-theme,
+.fpd-main-wrapper .fpd-element-tooltip,
+.fpd-container.fpd-gt-step {
+	background: @tooltipBgColor;
+	border-radius: 2px;
+	box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.3);
+	z-index: 1000000000000;
+}
+
+.fpd-tooltip-theme .tooltipster-content {
+	font-size: 10px;
+	line-height: 12px;
+	padding: 8px 7px 6px;
+	color: #fff;
+	white-space: nowrap;
+	text-transform: uppercase;
+}
+
+.fpd-main-wrapper .fpd-element-tooltip {
+	display: none;
+	font-size: 12px;
+	position: absolute;
+	color: #fff;
+	font-weight: 400;
+	max-width: 250px;
+	padding: 5px 7px;
+	top: 0;
+	z-index: 900;
+	white-space: nowrap;
+	transform: translate(-50%, -100%);
+	transform-origin: bottom;
+}
+
+.fpd-tooltip-theme .tooltipster-arrow {
+	display: none !important;
+}
+
+.fpd-sub-tooltip-theme {
+	background: #f5f5f5 !important;
+	pointer-events: all !important;
+}
+
+.fpd-sub-tooltip-theme .tooltipster-content {
+	font-size: 30px;
+	padding: 8px 7px 6px;
+	white-space: nowrap;
+}
+
+.fpd-sub-tooltip-theme .tooltipster-content .fpd-item {
+	text-align: center;
+	cursor: pointer;
+	opacity: 0.6;
+}
+
+.fpd-sub-tooltip-theme .tooltipster-content .fpd-item:hover {
+	opacity: 1;
+}
+
+
+/* Scrollbar */
+
+.mCSB_outside+.mCSB_scrollTools {
+	right: -2px;
+	margin: 15px 0;
+}
+
+
+/* Browser Alert */
+
+.fpd-browser-alert {
+	padding: 10px !important;
+}
+
+.fpd-browser-alert > p {
+	font-size: 14px;
+}
+
+.fpd-browser-alert a {
+	margin-right: 20px;
+	text-decoration: underline;
+	color: white !important;
+}
+
+.fpd-browser-alert {
+	border: 1px solid #E74C3C;
+	background: #E74C3C;
+	color: #fff;
+}
+
+
+/* Editor Box */
+
+.fpd-editor-box {
+	width: 100%;
+	max-width: 100%;
+	padding: 10px;
+	margin: 40px 0;
+	background: #F5F5F5;
+	border: 1px solid #EEEEEE;
+	color: rgba(0,0,0,0.8);
+}
+
+.fpd-editor-box > div > p {
+	float: left;
+	width: 23%;
+	margin-right: 2%;
+}
+
+.fpd-editor-box i {
+	font-size: 0.9em;
+	font-style: normal;
+	text-transform: uppercase;
+}
+
+.fpd-editor-box > div > p > input {
+	border: 1px solid #ccc;
+	padding: 5px;
+	width: 100%;
+	background: rgba(255,255,255, 0.7);
+}
+
+
+/* Zoom Lens */
+
+.fpd-modal-product-designer .zoomContainer {
+	top: 0 !important;
+	left: 0 !important;
+}
+
+.zoomContainer .zoomLens {
+	background-color: #fff;
+}
+
+/* Device Info */
+
+.fpd-device-info {
+	display: none;
+	padding: 10px;
+	margin: 20px 0;
+	font-size: 16px;
+	line-height: 24px;
+	background: rgba(0,0,0, 0.03);
+}
+
+
+/* Visibility */
+
+.fpd-visibility {
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 200ms, opacity 200ms ease-out;
+}
+
+.fpd-visibility.fpd-show {
+	visibility: visible;
+	opacity: 1;
+}
+
+
+/* Blurred Background */
+
+.fpd-blurred-background {
+	position: absolute;
+	top: -50px;
+	left: -50px;
+	width: 200%;
+	height: 200%;
+	max-width: none !important;
+	z-index: 99;
+	background-color: rgba(0,0,0,0.7);
+	-webkit-filter: blur(20px);
+	filter: blur(10px);
+}
+
+/* FIX: Prevent zoom-in on mobile */
+textarea[data-fabric-hiddentextarea] {
+	font-size: 16px !important;
+	transform: translateY(-20px);
+	caret-color: transparent;
+}
+
+
+/* Helpers */
+
+.fpd-container .fpd-disabled,
+.fpd-element-toolbar .fpd-disabled,
+.fpd-disabled {
+	opacity: 0.2 !important;
+	cursor: default !important;
+	pointer-events: none;
+}
+.fpd-clearfix:before, .fpd-clearfix:after { content: "\0020"; display: block; height: 0; overflow: hidden; }
+.fpd-clearfix:after { clear: both; }
+.fpd-clearfix { zoom: 1; }
+.fpd-clear {clear: both;}
+.fpd-left {float: left;}
+.fpd-right {float: right;}
+body .fpd-hidden {display: none !important;}
+.fpd-overflow-hidden {overflow: hidden !important;}
+.fpd-no-padding{padding: 0 !important;}
+.fpd-fullwidth {width: 100%;}
+.fpd-help-icon {cursor: help;}
+.fpd-container .fpd-drag,
+.fpd-context-dialog .fpd-drag {
+	cursor: -webkit-grab !important;
+	cursor: grab !important;
+}
+.fpd-container .fpd-drag:active { cursor: grabbing !important; }
+.fpd-show-up {opacity:  1 !important;}
+.fpd-hidden-canvas {
+	position: absolute !important;
+	left: -9999999px;
+}
+
+[class^="fpd-icon-"]:before {
+	color: inherit !important;
+}
+
+.fpd-flex {
+	display: flex;
+	justify-content: space-around;
+}
+.fpd-flex > * {
+	flex: 1 1 auto;
+}
