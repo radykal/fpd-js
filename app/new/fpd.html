@@ -6,15 +6,16 @@
     <title>Fancy Product Designer</title>
     <link rel="stylesheet" type="text/css" href="styles/main.css">
     <link rel="stylesheet" type="text/css" href="styles/custom-fonts.css">
+    <script src="./../../dist/fabric410.js"></script>
     <script src="./../../dist/jquery.min.js"></script>
     <script src="./../../dist/jquery-ui.min.js"></script>
-    <script src="./../../dist/fabric300.js"></script>
-    <script src="./js/plugins/jquery.mCustomScrollbar.js"></script>
-    <script src="./js/plugins/rangeslider.js"></script>
-    <script src="./js/plugins/jquery.tooltipster.min.js"></script>
-    <script src="./js/plugins/spectrum.js"></script> 
-    <script type="module" defer>
-        import FancyProductDesigner from './js/FancyProductDesigner.js'
+<!--    <script src="./js/plugins/jquery.mCustomScrollbar.js"></script>-->
+<!--    <script src="./js/plugins/rangeslider.js"></script>-->
+<!--    <script src="./js/plugins/jquery.tooltipster.min.js"></script>-->
+<!--    <script src="./js/plugins/spectrum.js"></script> -->
+    <script  defer>
+
+        // import FancyProductDesigner from './js/FancyProductDesigner.js'
 
         let designer = new FancyProductDesigner('clothing-designer', {
             productsJSON: 'json/products_categories.json', //see JSON folder for products sorted in categories
@@ -100,28 +101,24 @@
 
 <body>
 <div id="main-container">
-    <h3 id="clothing">Clothing Designer</h3>
-    <div id="clothing-designer"
-         class="fpd-container fpd-shadow-2 fpd-topbar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left"></div>
-    <br/>
 
-    <div class="fpd-clearfix" style="margin-top: 30px;">
-        <div class="api-buttons fpd-container fpd-left">
-            <a href="#" id="print-button" class="fpd-btn">Print</a>
-            <a href="#" id="image-button" class="fpd-btn">Create Image</a>
-            <a href="#" id="checkout-button" class="fpd-btn">Checkout</a>
-            <a href="#" id="recreation-button" class="fpd-btn">Recreate product</a>
+    <div id="clothing-designer" class="" style="width: 800px; height: auto;">
+        <div class="fpd-mainbar fpd-clearfix">
+            <div class="fpd-navigation fpd-primary-bg-color"></div>
+            <div class="fpd-close-off-canvas">
+                <span class="fpd-icon-close"></span>
+            </div>
         </div>
-        <div class="fpd-right">
-            <span class="price badge badge-inverse"><span id="thsirt-price"></span> $</span>
-        </div>
+        <div class="fpd-loader-wrapper" style="display: none;"></div>
+        <div class="fpd-main-wrapper" style="min-height: 600px;"></div>
     </div>
 
-    <p class="fpd-container">
-        Only working on a webserver:<br/>
-        <span class="fpd-btn" id="save-image-php">Save image with php</span>
-        <span class="fpd-btn" id="send-image-mail-php">Send image to mail</span>
-    </p>
+
+
+    <div id="clothing-designer"
+         class="fpd-container fpd-shadow-2 fpd-topbar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left"></div>
+
+
 </div>
 </body>
 </html>
