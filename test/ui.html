@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Framework | Testing all web components</title>
+    <script src='js/FancyProductDesigner.js'></script>
+</head>
+<body>
+    <div id="fpd-target"></div>
+    <script>
+        
+        const appOptions = {
+            templatesDirectory: './dist/html/'
+        }
+            
+        const fpd = new FancyProductDesigner(document.getElementById('fpd-target'), appOptions);
+        //console.log(fpd.options);
+        
+    </script>
+</body>
+</html>

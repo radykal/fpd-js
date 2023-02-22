@@ -8,10 +8,12 @@ module.exports = (env, argv) => {
     
     return {
         mode: 'development',
+        devtool: isProduction ? 'source-map' : 'inline-source-map',
         entry: './src/index.js',
         output: {
             filename: 'js/FancyProductDesigner.js',
-            path: path.resolve(__dirname, 'dist'),
+            path: path.resolve(__dirname, 'test'),
+            publicPath: '',
         },
         devServer: {
             static:  [
@@ -21,7 +23,7 @@ module.exports = (env, argv) => {
                 },
                 { 
                     directory: path.join(__dirname, 'test'),
-                    publicPath: '/test',
+                    publicPath: '/',
                 }
             ]     
         },

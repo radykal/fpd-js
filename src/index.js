@@ -1,4 +1,2 @@
 import './ui/less/main.less';
-
-console.log("blaaaa hello");
-
+import './classes/FancyProductDesigner.js';
