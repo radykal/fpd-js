@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Framework | Testing all web components</title>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src='js/FancyProductDesigner.js'></script>
+    <link href="./dist/css/vendor.css" rel="stylesheet" type="text/css">
+    <style>
+        
+        body {
+            font-family: "Lato", sans-serif;
+        }
+        
+        .container {
+            width: 1200px;
+            margin: auto;
+            max-width: 100%;
+        }
+        
+        #fpd-target {
+            margin: 20px;
+            margin-top: 80px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- <div id="fpd-target" class="fpd-sidebar fpd-shadow-1"></div> -->
+        <!-- <div id="fpd-target" class="fpd-off-canvas fpd-shadow-1"></div> -->
+        <div id="fpd-target" class="fpd-topbar fpd-shadow-1"></div>
+        
+        <div id="ui-form">
+            
+            <select id="main-layout">
+                <option value="sidebar">Sidebar</option>
+                <option value="topbar">Topbar</option>
+                <option value="off-canvas">Off-Canvas</option>
+            </select>
+            
+        </div>
+        
+        <script>
+            
+            const appOptions = {
+                langJson: 'http://localhost:8080/data/langs/default.json',
+                responsiveBreakpoints: {
+                },
+                mainBarModules: [
+                    'products',
+                    'images',
+                    'text',
+                    'designs',
+                    'manage-layers',
+                    'text-layers',
+                    'layouts',
+                    'manage-layers',
+                    'text-layers',
+                    'layouts',
+                ]
+            }
+                
+            const fpd = new FancyProductDesigner(document.getElementById('fpd-target'), appOptions);
+            
+            const updateMainLayout = (layout='sidebar') => {
+                
+                fpd.container.classList.remove('fpd-topbar');
+                fpd.container.classList.remove('fpd-sidebar');
+                fpd.container.classList.remove('fpd-off-canvas');
+                
+                fpd.container.classList.add('fpd-'+layout);
+                fpd.mainbar.updateContentWrapper();
+                
+            }
+            
+            fpd.addEventListener('ready', () => {
+                
+                $('#main-layout').change((evt) => {
+                    updateMainLayout(evt.currentTarget.value);
+                })
+                
+            })
+                        
+            jQuery(document).ready(($) => {
+                
+                
+                
+            })
+            
+        </script>
+    </div>
+</body>
+</html>

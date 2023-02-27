@@ -4,6 +4,7 @@ const uglify = require('gulp-uglify');
 const less = require('gulp-less');
 const concat = require('gulp-concat');
 const cleanCSS = require('gulp-clean-css');
+const sourcemaps = require('gulp-sourcemaps');
 
 function buildVendorJS() {
     
@@ -17,7 +18,9 @@ function buildVendorJS() {
 function buildJS() {
     
     return src('./src/classes/FancyProductDesigner.js')
+        .pipe(sourcemaps.init())
         .pipe(babel())
+        .pipe(sourcemaps.write('./'))
         .pipe(dest('dist/js/'));
         
 }
@@ -31,11 +34,20 @@ function minifyJS() {
         
 }
 
+function buildVendorCSS() {
+    
+    return src(['./src/vendor/FontFPD/style.css'])
+        .pipe(cleanCSS())
+        .pipe(concat('vendor.css'))
+        .pipe(dest('dist/css/'));
+        
+}
+
 function buildCSS() {
     
     return src('./src/ui/less/main.less')
         .pipe(less())
-        .pipe(cleanCSS({compatibility: 'ie8'}))
+        .pipe(cleanCSS())
         .pipe(concat('FancyProductDesigner.css'))
         .pipe(dest('./dist/css/'));
         
@@ -44,5 +56,5 @@ function buildCSS() {
 exports.buildJS = buildJS;
 exports.minifyJS = minifyJS;
 exports.buildCSS = buildCSS;
-exports.buildVendors = series(buildVendorJS);
+exports.buildVendors = series(buildVendorJS, buildVendorCSS);
 exports.default = series(buildVendorJS, buildJS, minifyJS, buildCSS);

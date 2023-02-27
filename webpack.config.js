@@ -1,5 +1,4 @@
 const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = (env, argv) => {
     
@@ -8,7 +7,7 @@ module.exports = (env, argv) => {
     
     return {
         mode: 'development',
-        devtool: isProduction ? 'source-map' : 'inline-source-map',
+        devtool: 'inline-source-map',
         entry: './src/index.js',
         output: {
             filename: 'js/FancyProductDesigner.js',
@@ -22,32 +21,33 @@ module.exports = (env, argv) => {
                     publicPath: '/dist',
                 },
                 { 
-                    directory: path.join(__dirname, 'test'),
+                    directory: path.join(__dirname, 'tests'),
                     publicPath: '/',
+                },
+                { 
+                    directory: path.join(__dirname, 'data'),
+                    publicPath: '/data',
                 }
+                
             ]     
         },
         module: {
            rules:[
-              {
-                 test: /\.less$/,
-                 use:[
-                    isProduction ? MiniCssExtractPlugin.loader : "style-loader", 
-                    "css-loader",
-                    "less-loader"
-                 ]
-              }
+                {
+                    test: /\.less$/,
+                    use:[
+                        "style-loader", 
+                        "css-loader",
+                        "less-loader"
+                    ]
+                },
+                {
+                    test: /\.html$/i,
+                    loader: "html-loader",
+                },
            ]
         },
-        plugins: isProduction ? [
-            new MiniCssExtractPlugin({
-                    filename: "css/[name].css",
-            })
-        ] 
-            : 
-        [
-            
-        ]
+        plugins: []
     }
     
 };

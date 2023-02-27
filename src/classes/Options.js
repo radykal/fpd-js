@@ -730,33 +730,6 @@ export default class Options {
 		*/
 		imageSizeTooltip: false,
 		/**
-		* To add photos from DepositPhotos, you have to set an <a href="https://pixabay.com/api/docs/" target="_blank">Pixabay API key</a>.
-		*
-		* @property depositphotosApiKey
-		* @for Options.defaults
-		* @type {String}
-		* @default ''
-		*/
-		depositphotosApiKey: '',
-		/**
-		* The language shortcut that defines the language for the category titles. Available language shortcuts: en,de,fr,sp,ru,it,pt,es,pl,nl,jp,cz,se,zh,tr,mx,gr,ko,br,hu,uk,ro,id,th.
-		*
-		* @property depositphotosLang
-		* @for Options.defaults
-		* @type {String}
-		* @default 'en'
-		*/
-		depositphotosLang: 'en',
-		/**
-		* The price that is charged when adding an image from depositphotos.com.
-		*
-		* @property depositphotosPrice
-		* @for Options.defaults
-		* @type {Number}
-		* @default 0
-		*/
-		depositphotosPrice: 0,
-		/**
 		* Highlight objects (editable texts and upload zones) with a dashed border. To enable this just define a hexadecimal color value.
 		*
 		* @property highlightEditableObjects
@@ -1098,6 +1071,19 @@ export default class Options {
 		* @version 5.2.7
 		*/
 		dragDropImagesToUploadZones: false,
+        /**
+        * Controls the breakpoints for a responsive layout. You can define small and medium breakpoints. As soon as the window width will be under one of these values, it will change to small (smartphone) or medium (tablet) layout, otherwise it uses the standard layout for large screens (desktop).
+        *
+        * @property responsiveBreakpoints
+        * @for Options.defaults
+        * @type {Object}
+        * @default {small: 768, medium: 1024}
+        * @version 6.0.0
+        */
+        responsiveBreakpoints: {
+            small: 768,
+            medium: 1024
+        },
 		/**
 		* An object containing the default element parameters in addition to the <a href="http://fabricjs.com/docs/fabric.Object.html" target="_blank">default Fabric Object properties</a>. See <a href="./Options.defaults.elementParameters.html">Options.defaults.elementParameters</a>.
 		*
@@ -1825,18 +1811,6 @@ export default class Options {
         
         //todo: do deep merge here instead of multiple extends
 		var options = deepMerge(defaults, merge);
-		// options.elementParameters = jQuery.extend({}, defaults.elementParameters, options.elementParameters);
-		// options.textParameters = jQuery.extend({}, defaults.textParameters, options.textParameters);
-		// options.imageParameters = jQuery.extend({}, defaults.imageParameters, options.imageParameters);
-		// options.customTextParameters = jQuery.extend({}, defaults.customTextParameters, options.customTextParameters);
-		// options.customImageParameters = jQuery.extend({}, defaults.customImageParameters, options.customImageParameters);
-		// options.customAdds = jQuery.extend({}, defaults.customAdds, options.customAdds);
-		// options.customImageAjaxSettings = jQuery.extend({}, defaults.customImageAjaxSettings, options.customImageAjaxSettings);
-		// options.qrCodeProps = jQuery.extend({}, defaults.qrCodeProps, options.qrCodeProps);
-		// options.imageEditorSettings = jQuery.extend({}, defaults.imageEditorSettings, options.imageEditorSettings);
-		// options.dynamicViewsOptions = jQuery.extend({}, defaults.dynamicViewsOptions, options.dynamicViewsOptions);
-		// options.priceFormat = jQuery.extend({}, defaults.priceFormat, options.priceFormat);
-		// options.printingBox = jQuery.extend({}, defaults.printingBox, options.printingBox);
 
 		return options;
 

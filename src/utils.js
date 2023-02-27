@@ -11,7 +11,7 @@ const deepMerge = (obj1, obj2) => {
         // Loop through the properties of the merged object
         for (const key of Object.keys(merged)) {
             // Check if the property is an object
-            if (typeof merged[key] === 'object' && merged[key] !== null) {
+            if (typeof merged[key] === 'object' && !(merged[key] instanceof Array) && merged[key] !== null) {
                 // If the property is an object, recursively merge the objects
                 if(obj2[key]) {
                     merged[key] = deepMerge(obj1[key], obj2[key]);
@@ -26,3 +26,18 @@ const deepMerge = (obj1, obj2) => {
 }
 
 export { deepMerge };
+
+const addEventList = (elem, eventType, listener) => {
+    
+    if(eventType == 'click') {
+        elem.addEventListener('click', listener);
+        elem.addEventListener('touchstart', listener);
+    }
+    else {
+        elem.addEventListener(eventType, listener);
+    }
+    
+    
+}
+
+export { addEventList };

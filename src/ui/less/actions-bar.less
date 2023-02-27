@@ -1,0 +1,24 @@
+fpd-actions-bar {
+    background: var(--fpd-actions-bar-bg-color);
+    height: var(--fpd-actions-bar-height);
+    flex: 1 100%;
+}
+
+.fpd-topbar,
+.fpd-off-canvas {
+    
+    fpd-actions-bar {
+        background: rgba(0,0,0,0.8);
+        order: 2;
+        display: flex;
+    }
+    
+}
+
+.fpd-off-canvas {
+    
+    fpd-actions-bar {
+        order: 1 !important;
+    }
+    
+}

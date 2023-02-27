@@ -1,106 +1,72 @@
+import MainLoaderHTML from './html/main-loader.html';
 import Mainbar from './controller/Mainbar.js';
+import MainWrapper from './controller/MainWrapper.js';
+import ActionsBar from './controller/ActionsBar.js';
 
-export default class UIManager {
+export default class UIManager extends EventTarget {
     
-    constructor(fpdInstance, events={}) {
+    #currentWindowWidth = 0;
+    
+    constructor(fpdInstance) {
+        
+        super();
         
         this.fpdInstance = fpdInstance;
-        this.events = events;
-        this.#loadTemplate();
-        
+                        
     }
     
-    #loadTemplate() {
+    init() {
         
-        fetch(this.fpdInstance.mainOptions.templatesDirectory+'productdesigner.html')
-        .then(stream => stream.text())
-        .then(text => {
-            
-            const templateWrapper = document.createElement('div');
-            templateWrapper.innerHTML = text.trim();
-            
-            this.fpdInstance.container.appendChild(templateWrapper);
-                
-            this.#templateLoaded();
+        this.fpdInstance.container.classList.add('fpd-container');
+        this.fpdInstance.container.classList.add('fpd-wrapper');
         
-        })
+        const loaderElem = document.createElement('div');
+        loaderElem.innerHTML = MainLoaderHTML;
         
-    }
-    
-    #templateLoaded() {
+        //this.fpdInstance.container.appendChild(loaderElem.firstChild.cloneNode(true));
         
+        this.fpdInstance.actions = new ActionsBar(this.fpdInstance);
         this.fpdInstance.mainbar = new Mainbar(this.fpdInstance);
         
-        //todo: translate labels
-        // Array.from(this.fpdInstance.container.querySelectorAll('[data-defaulttext]'))
-        // .forEach(item => {
-        //     console.log(item);
-        // })
+        this.fpdInstance.mainWrapper = new MainWrapper(this.fpdInstance);
         
-        if(this.events.onUiReady) {
-            this.events.onUiReady.call();
-        }
+        Array.from(this.fpdInstance.container.querySelectorAll('[data-defaulttext]'))
+        .forEach(item => {
+            this.fpdInstance.translator.translateElement(item, this.fpdInstance.mainOptions.langJson);
+        })
+        
+        this.dispatchEvent(
+            new CustomEvent('ready')
+        );
+        
+        window.addEventListener("resize", this.#updateResponsive.bind(this));
+        
+        this.#updateResponsive();
         
     }
     
-    //translates a HTML element
-    translateElement(htmlElem) {
-    
-        let label = '';
-        if(this.fpdInstance.mainOptions.langJson) {
-    
-            let objString = '';
-    
-            if(htmlElem.getAttribute('placeholder')) {
-                objString = htmlElem.getAttribute('placeholder');
-            }
-            else if(htmlElem.getAttribute('title')) {
-                objString = htmlElem.getAttribute('title');
-            }
-            else if(htmlElem.dataset.title) {
-                objString = htmlElem.dataset.title;
-            }
-            else {
-                objString = htmlElem.innerText;
-            }
-    
-            var keys = objString.split('.'),
-                firstObject = this.fpdInstance.mainOptions.langJson[keys[0]];
-    
-            if(firstObject) { //check if object exists
-    
-                label = firstObject[keys[1]];
-    
-                if(label === undefined) { //if label does not exist in JSON, take default text
-                    label = htmlElem.dataset.defaulttext;
-                }
-    
-            }
-            else {
-                label = htmlElem.dataset.defaulttext;
-            }
-    
+    #updateResponsive() {
+        
+        const breakpoints = this.fpdInstance.mainOptions.responsiveBreakpoints;
+        
+        this.#currentWindowWidth = window.innerWidth;
+        
+        if(this.#currentWindowWidth < breakpoints.small) {
+            this.fpdInstance.container.classList.remove('fpd-layout-medium');
+            this.fpdInstance.container.classList.remove('fpd-layout-large');
+            this.fpdInstance.container.classList.add('fpd-layout-small');
+        }
+        else if(this.#currentWindowWidth < breakpoints.medium) {
+            this.fpdInstance.container.classList.remove('fpd-layout-small');
+            this.fpdInstance.container.classList.remove('fpd-layout-large');
+            this.fpdInstance.container.classList.add('fpd-layout-medium');
         }
         else {
-            label = htmlElem.dataset.defaulttext;
+            this.fpdInstance.container.classList.remove('fpd-layout-medium');
+            this.fpdInstance.container.classList.remove('fpd-layout-small');
+            this.fpdInstance.container.classList.add('fpd-layout-large');
         }
-    
-        if(htmlElem.getAttribute('placeholder')) {
-            htmlElem.setAttribute('placeholder', label);
-            htmlElem.innerText = '';
-        }
-        else if(htmlElem.getAttribute('title')) {
-            htmlElem.setAttribute('title', label);
-        }
-        else if(htmlElem.dataset.title) {
-            htmlElem.dataset.title = label;
-        }
-        else {
-            htmlElem.innerText = label;
-        }
-    
-        return label;
-    
-    };
+        
+    }
     
 }

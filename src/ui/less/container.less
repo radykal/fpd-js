@@ -1,0 +1,196 @@
+.fpd-wrapper {
+    display: flex;
+    flex-flow: row wrap;
+    max-width: 100%;
+    position: relative;
+    
+    &.fpd-off-canvas {
+        overflow: hidden;
+    }
+    
+}
+
+.fpd-container.fpd-not-responsive,
+.fpd-container.fpd-not-responsive * {
+	max-width: none !important;
+}
+
+.fpd-disable-touch-scrolling canvas {
+	touch-action: none !important;
+}
+
+.fpd-container .fpd-scroll-area {
+	height: 100%;
+}
+
+
+/* LOADER */
+
+.fpd-container .fpd-loader-wrapper {
+	background: rgba(255,255,255,0.9);
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 100;
+}
+
+.fpd-loader-wrapper > .fpd-loader {
+	position: absolute;
+	text-align: center;
+	width: 100%;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%,-50%);
+}
+
+.fpd-loader > .fpd-loader-text {
+	position: absolute;
+	width: 100%;
+	display: block;
+	font-size: 14px;
+	padding: 20px 0;
+	color: rgba(0, 0, 0, 0.5);
+	text-transform: uppercase;
+	font-weight: lighter;
+	letter-spacing: 1.5px;
+	-webkit-filter: blur(0);
+}
+
+.fpd-loader > .fpd-loader-circle {
+	margin: 0 auto;
+	width: 40px;
+	height: 40px;
+	border: 3px solid rgba(0, 0, 0, 0.2);
+	border-left: 3px solid #000;
+	transform: translateZ(0);
+	animation: fpd-loader-animation 1.1s infinite linear;
+}
+
+.fpd-loader > .fpd-loader-circle,
+.fpd-loader > .fpd-loader-circle:after {
+	border-radius: 50%;
+}
+
+@-webkit-keyframes fpd-loader-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fpd-loader-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* Snap Lines */
+
+fpd-main-wrapper > .fpd-snap-line-h,
+fpd-main-wrapper > .fpd-snap-line-v {
+	position: absolute;
+	z-index: 100;
+	display: none;
+	pointer-events: none;
+}
+
+fpd-main-wrapper > .fpd-snap-line-h {
+	border-top: 1px dashed @snapLineColor;
+	width: 100%;
+	height: 2px;
+	top: 10px;
+	left: 0;
+}
+
+fpd-main-wrapper > .fpd-snap-line-v {
+	border-left: 1px dashed @snapLineColor;
+	width: 2px;
+	height: 100%;
+	top: 0;
+	left: 10px;
+}
+
+.fpd-view-stage textarea {
+	left: -10000px !important;
+	top: 50% !important;
+}
+
+
+/* View Modal Lock */
+
+fpd-main-wrapper > .fpd-modal-lock {
+	display: none;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(255,255,255, 0.8);
+	z-index: 15;
+}
+
+fpd-main-wrapper > .fpd-modal-lock.fpd-animated {
+	transition: all 200ms ease-out;
+}
+
+fpd-main-wrapper > .fpd-modal-lock.fpd-active {
+	display: block;
+}
+
+.fpd-modal-lock > .fpd-toggle-lock {
+	text-align: center;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	cursor: pointer;
+	transform: translate(-50%,-50%);
+}
+
+.fpd-modal-lock > .fpd-toggle-lock > span {
+	display: none;
+	font-size: 80px;
+}
+
+.fpd-modal-lock > .fpd-toggle-lock > span.fpd-icon-unlocked {
+	display: inline;
+}
+
+.fpd-modal-lock.fpd-unlocked > .fpd-toggle-lock > span.fpd-icon-locked {
+	display: inline;
+}
+
+.fpd-modal-lock.fpd-unlocked > .fpd-toggle-lock > span.fpd-icon-unlocked {
+	display: none;
+}
+
+.fpd-modal-lock > .fpd-toggle-lock > div {
+	font-size: 16px;
+	margin-top: 5px;
+	text-transform: uppercase;
+	font-weight: 100;
+}
+
+fpd-main-wrapper > .fpd-modal-lock.fpd-unlocked {
+	width: 40px;
+	height: 40px;
+	left: 15px;
+	bottom: 15px;
+	border: 1px solid rgba(0, 0, 0, 0.1) !important;
+	box-shadow: 0 1px 1px rgba(90, 90, 90, 0.1);
+}
+
+.fpd-modal-lock.fpd-unlocked span {
+	font-size: 20px !important;
+}
+
+.fpd-modal-lock.fpd-unlocked > .fpd-toggle-lock > div {
+	display: none;
+}
