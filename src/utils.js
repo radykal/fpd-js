@@ -27,17 +27,98 @@ const deepMerge = (obj1, obj2) => {
 
 export { deepMerge };
 
-const addEventList = (elem, eventType, listener) => {
+const addEvents = (elem, events=[], listener=()=>{}) => {
     
-    if(eventType == 'click') {
-        elem.addEventListener('click', listener);
-        elem.addEventListener('touchstart', listener);
-    }
-    else {
+    events = typeof events == 'string' ? [events] : events; 
+    
+    events.forEach(eventType => {
         elem.addEventListener(eventType, listener);
+    })
+        
+}
+
+export { addEvents };
+
+const addElemClasses = (elements=[], classes=[]) => {
+    
+    if(elements) {
+        
+        if(elements instanceof NodeList) {
+            
+            elements.forEach(elem => {
+                classes.forEach(c => {
+                    elem.classList.add(c);
+                })
+            
+            })
+            
+        }
+        else if(elements instanceof HTMLElement) {
+            classes.forEach(c => {
+                elements.classList.add(c);
+            })
+        }
+        
     }
     
+    return elements;
     
 }
 
-export { addEventList };
+export { addElemClasses };
+
+const removeElemClasses = (elements=[], classes=[]) => {
+    
+    if(elements) {
+        
+        if(elements instanceof NodeList) {
+            
+            elements.forEach(elem => {
+                classes.forEach(c => {
+                    elem.classList.remove(c);
+                })
+            
+            })
+            
+        }
+        else if(elements instanceof HTMLElement) {
+            classes.forEach(c => {
+                elements.classList.remove(c);
+            })
+        }
+         
+    }
+    
+    return elements;
+    
+}
+
+export { removeElemClasses };
+
+const toggleElemClasses = (elements=[], classes=[], toggle=true) => {
+    
+    if(elements) {
+        
+        if(elements instanceof NodeList) {
+            
+            elements.forEach(elem => {
+                classes.forEach(c => {
+                    elem.classList.toggle(c, toggle);
+                })
+            
+            })
+            
+        }
+        else if(elements instanceof HTMLElement) {
+            classes.forEach(c => {
+                elements.classList.toggle(c, toggle);
+            })
+        }
+        
+    }
+    
+    return elements;
+    
+}
+
+export { toggleElemClasses };

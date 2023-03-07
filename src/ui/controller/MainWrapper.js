@@ -1,12 +1,12 @@
-import MainbarView from '../view/MainWrapper.js';
+import MainWrapperView from '../view/MainWrapper.js';
 
-export default class Mainbar {
+export default class MainWrapper {
     
 
     constructor(fpdInstance) {
         
-        this.mainWrapperView = document.createElement("fpd-main-wrapper");
-        fpdInstance.container.append(this.mainWrapperView);
+        this.container = document.createElement("fpd-main-wrapper");
+        fpdInstance.container.append(this.container);
         
     }
 

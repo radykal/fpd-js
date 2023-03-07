@@ -6,6 +6,7 @@ export default class FancyProductDesigner extends EventTarget {
     
     container = null;
     $container = null;
+    currentViewInstance = null;
     
     constructor(elem, opts={}) {
         
@@ -44,12 +45,27 @@ export default class FancyProductDesigner extends EventTarget {
         setTimeout(() => {
             
             this.dispatchEvent(
-                new CustomEvent('ready')
+                new CustomEvent('uiSet')
             );
             
         }, 1)
         
+        this.#ready();
         console.log("ui ready");
+    }
+    
+    #ready() {
+            
+        this.dispatchEvent(
+            new CustomEvent('ready')
+        );
+            
+        
+        console.log("api ready");
+    }
+    
+    deselectElement() {
+        
     }
 }
 

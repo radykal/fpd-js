@@ -1,40 +1,59 @@
-.fpd-off-canvas {
+.fpd-wrapper {
     
-    fpd-main-wrapper {
-        order: 2 !important;
+    &.fpd-topbar,
+    &.fpd-off-canvas {
+        
+        > fpd-main-wrapper {
+            flex-basis: 100%;
+        }
+        
+    }
+
+    &.fpd-off-canvas {
+    
+        > fpd-main-wrapper {
+            order: 2 !important;
+        }
     }
     
-}
-
-.fpd-wrapper > fpd-main-wrapper {
-    overflow: hidden;
-    flex: 1 0;
-    min-height: 400px;
-    background: @backgroundCanvas;
-    transition: opacity 300ms ease-out;
-    order: 3;
-}
-
-fpd-main-wrapper .fpd-product-stage {
-    position: relative;
-    direction: ltr;
-    max-height: 100%;
-}
-
-.fpd-container.fpd-sidebar fpd-main-wrapper > .fpd-product-stage {
-    position: absolute !important;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.fpd-product-stage.fpd-drag canvas {
-    cursor: grab !important;
-}
-
-.fpd-product-stage > .fpd-zoom-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    max-width: 100%;
+    &.fpd-sidebar {
+        
+        > fpd-main-wrapper > .fpd-product-stage {
+            position: absolute !important;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+    }
+    
+    > fpd-main-wrapper {
+        
+        overflow: hidden;
+        flex: 1 0;
+        min-height: 400px;
+        background: @backgroundCanvas;
+        transition: opacity 300ms ease-out;
+        order: 3;
+        
+        .fpd-product-stage {
+            position: relative;
+            direction: ltr;
+            max-height: 100%;
+            
+            > .fpd-zoom-image {
+                position: absolute;
+                top: 0;
+                left: 0;
+                max-width: 100%;
+            }
+            
+        }
+        
+        &.fpd-drag canvas {
+            cursor: grab !important;
+        }
+        
+    }
+            
 }

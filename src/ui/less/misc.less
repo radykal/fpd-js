@@ -1,3 +1,20 @@
+/* Scrollbar */
+
+.fpd-scrollbar-hidden {
+    overscroll-behavior: none;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+    
+    &::-webkit-scrollbar { 
+        display: none;  /* Safari and Chrome */
+    }
+}
+
+
+
+
+
+
 /* Tooltip */
 
 .fpd-tooltip {
@@ -66,20 +83,6 @@
 .fpd-sub-tooltip-theme .tooltipster-content .fpd-item:hover {
 	opacity: 1;
 }
-
-
-/* Scrollbar */
-
-.fpd-scrollbar-hidden {
-    overscroll-behavior: none;
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none;  /* Firefox */
-    
-    &::-webkit-scrollbar { 
-        display: none;  /* Safari and Chrome */
-    }
-}
-
 
 /* Browser Alert */
 

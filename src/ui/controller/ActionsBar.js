@@ -1,12 +1,14 @@
-import ActionsBar from '../view/ActionsBar.js';
+import ActionsBarView from '../view/ActionsBar.js';
 
-export default class Mainbar {
+export default class ActionsBar extends EventTarget {
     
 
     constructor(fpdInstance) {
         
-        this.actionsBar = document.createElement("fpd-actions-bar");
-        fpdInstance.container.append(this.actionsBar);
+        super();
+        
+        this.container = document.createElement("fpd-actions-bar");
+        fpdInstance.container.append(this.container);
         
     }
 

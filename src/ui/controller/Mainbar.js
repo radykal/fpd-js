@@ -1,7 +1,7 @@
 import MainbarView from '../view/Mainbar.js';
 import ModulesHTML from '../html/modules.html';
 import UIManager from '../UIManager';
-import { addEventList } from '../../utils.js';
+import { addEvents, addElemClasses, removeElemClasses, toggleElemClasses } from '../../utils.js';
 
 export default class Mainbar extends EventTarget {
     
@@ -25,6 +25,8 @@ export default class Mainbar extends EventTarget {
     #draggableDialogEnabled = false;
     #offCanvasEnabled = false;
     contentElem = null;
+    navElem = null;
+    currentModuleKey = '';
     
     constructor(fpdInstance) {
         
@@ -34,10 +36,11 @@ export default class Mainbar extends EventTarget {
         
         const fpdContainer = fpdInstance.container;
                 
-        this.mainBarView = document.createElement("fpd-main-bar");
-        fpdContainer.append(this.mainBarView);
+        this.container = document.createElement("fpd-main-bar");
+        fpdContainer.append(this.container);
         
-        this.contentElem = this.mainBarView.querySelector('.fpd-content');
+        this.contentElem = this.container.querySelector('.fpd-content');
+        this.navElem = this.container.querySelector('.fpd-navigation');
         
         this.modulesHTML = document.createElement("div");
         this.modulesHTML.innerHTML = ModulesHTML;
@@ -50,27 +53,85 @@ export default class Mainbar extends EventTarget {
         this.#draggableDialog = document.querySelector(".fpd-draggable-dialog");
         this.#dialogContainer.append(this.#draggableDialog);
         
-        this.#draggableDialog.addEventListener('contextmenu', evt => evt.preventDefault());
-
-        this.#draggableDialog.addEventListener('mousedown', this.#draggableDialogStart.bind(this));
-        this.#draggableDialog.addEventListener('mouseup', this.#draggableDialogEnd.bind(this));
-        document.addEventListener('mousemove', this.#draggableDialogMove.bind(this));
+        //prevent right click context menu & document scrolling when in dialog content
+        addEvents(
+            this.#draggableDialog,
+            ['contextmenu', 'mousewheel'],
+            evt => evt.preventDefault()
+        )
         
-        this.#draggableDialog.addEventListener('touchstart', this.#draggableDialogStart.bind(this));
-        this.#draggableDialog.addEventListener('touchend', this.#draggableDialogEnd.bind(this));
-        document.addEventListener('touchmove', this.#draggableDialogMove.bind(this));
+        addEvents(
+            this.#draggableDialog,
+            ['mousedown', 'touchstart'],
+            this.#draggableDialogStart.bind(this)
+        )
         
-        addEventList(
+        addEvents(
+            this.#draggableDialog,
+            ['mouseup', 'touchend'],
+            this.#draggableDialogEnd.bind(this)
+        )
+        
+        addEvents(
+            document,
+            ['mousemove', 'touchmove'],
+            this.#draggableDialogMove.bind(this)
+        )
+        
+        addEvents(
             this.#draggableDialog.querySelector('.fpd-close-dialog'),
+            ['click', 'touchstart'],
+            this.#closeDialog.bind(this)
+        )
+        
+        addEvents(
+            this.container.querySelector('.fpd-close-off-canvas'),
             'click',
             this.#closeDialog.bind(this)
         )
         
-        addEventList(
-            this.mainBarView.querySelector('.fpd-close-off-canvas'),
-            'click',
-            this.#closeDialog.bind(this)
-        )
+        if(fpdContainer.classList.contains('fpd-off-canvas')) {
+            
+            let touchStart = 0,
+                panX = 0,
+                closeStartX = 0;
+            
+            this.contentElem.addEventListener('touchstart', (evt) => {
+            
+                touchStart = evt.touches[0].pageX;
+                addElemClasses(this.container, ['fpd-is-dragging']);
+            
+            })
+            this.contentElem.addEventListener('touchmove', (evt) => {
+            
+                evt.preventDefault();
+            
+                let moveX = evt.touches[0].pageX;
+                    panX = touchStart-moveX;
+                
+                panX = Math.abs(panX) < 0 ? 0 : Math.abs(panX);
+                this.contentElem.style.left = -panX+'px';
+                this.contentElem.previousElementSibling.style.left = this.contentElem.clientWidth - panX+'px';
+            
+            })
+            this.contentElem.addEventListener('touchend', (evt) => {
+            
+                if(Math.abs(panX) > 100) {
+                    
+                    this.toggleDialog(false);
+            
+                }
+                else {
+                    this.contentElem.style.left = '0px';
+                    this.contentElem.previousElementSibling.style.left = this.contentElem.clientWidth+'px';
+                }
+            
+                panX = 0;
+                removeElemClasses(this.container, ['fpd-is-dragging']);
+            
+            });
+               
+        }
         
         this.updateContentWrapper();
         this.setup(this.currentModules);
@@ -136,11 +197,36 @@ export default class Mainbar extends EventTarget {
         
         evt.stopPropagation();
         
-        this.callModule();
+        this.fpdInstance.deselectElement();
+        
+        if(this.fpdInstance.currentViewInstance) {
+            this.fpdInstance.currentViewInstance.currentUploadZone = null;
+        }
+        
+        // hide dialog when clicking on active nav item
+        if(evt.currentTarget.classList.contains('fpd-active')
+            && (this.#offCanvasEnabled || this.#draggableDialogEnabled)) {
+            
+            removeElemClasses(
+                this.navElem.querySelectorAll('.fpd-nav-item'), 
+                ['fpd-active']
+            );
+            this.toggleDialog(false);
+            
+        }
+        else {
+            
+            this.callModule(
+                evt.currentTarget.dataset.module,
+                evt.currentTarget.dataset.dynamicdesignsid,
+            );
+            
+        }
+        
     }
     
     #closeDialog() {
-        
+                
         if(this.fpdInstance.currentViewInstance && this.fpdInstance.currentViewInstance.currentUploadZone) {
             this.fpdInstance.currentViewInstance.deselectElement();
         }
@@ -151,7 +237,31 @@ export default class Mainbar extends EventTarget {
     
     callModule(name, dynamicDesignsId=null) {
         
+        removeElemClasses(
+            this.navElem.querySelectorAll('.fpd-nav-item'), 
+            ['fpd-active']
+        );
+        
+        let selectedNavItem;
+        if(dynamicDesignsId) {
+            
+            selectedNavItem = addElemClasses(
+                this.navElem.querySelector('.fpd-nav-item[data-dynamic-designs-id="'+dynamicDesignsId+'"]'),
+                ['fpd-active']
+            );
+            
+        }
+        else {
+            
+            selectedNavItem = addElemClasses(
+                this.navElem.querySelector('.fpd-nav-item[data-module="'+name+'"]'),
+                ['fpd-active']
+            );
+            
+        }
+                
         this.toggleDialog();
+        this.currentModuleKey = name;
         
     }
     
@@ -161,15 +271,28 @@ export default class Mainbar extends EventTarget {
     
     toggleDialog(toggle=true) {
         
+        const fpdContainer = this.fpdInstance.container;
+        
+        console.log(toggle);
+        
+        toggleElemClasses(fpdContainer, ['fpd-module-visible'], toggle);
+        
         if(this.#offCanvasEnabled) {
             
-            this.mainBarView.classList.toggle('fpd-show', toggle);
+            this.contentElem.style.removeProperty('left');
+            this.contentElem.previousElementSibling.style.removeProperty('left');
+            this.contentElem.style.height = this.fpdInstance.mainWrapper.container.clientHeight+'px';
+            this.container.classList.toggle('fpd-show', toggle);
             
         }
         else if(this.#draggableDialogEnabled) {
             
             this.#draggableDialog.classList.toggle('fpd-show', toggle);
             
+        }
+        
+        if(!toggle) {
+            this.currentModuleKey = '';
         }
         
         
@@ -183,22 +306,25 @@ export default class Mainbar extends EventTarget {
         this.#offCanvasEnabled = false;
         this.#draggableDialogEnabled = false;
         
+        removeElemClasses(
+            this.navElem.querySelectorAll('.fpd-nav-item'), 
+            ['fpd-active']
+        );
+        
         if(fpdContainer.classList.contains('fpd-off-canvas')) {
             
             this.#offCanvasEnabled = true;
-            
-            this.mainBarView.append(this.contentElem);
+            this.container.append(this.contentElem);
             
         }
         else if(fpdContainer.classList.contains('fpd-sidebar')) {
             
-            this.mainBarView.append(this.contentElem);
+            this.container.append(this.contentElem);
             
         }
         else {
             
             this.#draggableDialogEnabled = true;
-            
             this.#draggableDialog.append(this.contentElem);
             
         }
@@ -209,7 +335,7 @@ export default class Mainbar extends EventTarget {
                 
         let selectedModule = this.fpdInstance.mainOptions.initialActiveModule ? this.fpdInstance.mainOptions.initialActiveModule : '';
         
-        const navElem = this.mainBarView.querySelector('.fpd-navigation');
+        const navElem = this.container.querySelector('.fpd-navigation');
         
         //if only one modules exist, select it and hide nav
         if(this.currentModules.length <= 1 && !this.fpdInstance.container.classList.contains('fpd-topbar')) {
@@ -292,6 +418,7 @@ export default class Mainbar extends EventTarget {
             }
                         
             const navItemElem = document.createElement('div');
+            navItemElem.classList.add('fpd-nav-item');
             navItemElem.dataset.module = moduleType;
             navItemElem.addEventListener('click', this.#selectModule.bind(this));
             
@@ -338,6 +465,10 @@ export default class Mainbar extends EventTarget {
         //     }
         
         });
+        
+        // if(fpdInstance.$container.hasClass('fpd-device-desktop') || fpdInstance.$container.parents('.ui-composer-page').length) {
+        //     $nav.children('[data-module="'+selectedModule+'"]').click();
+        // }
         
     }
 
