@@ -1,0 +1,86 @@
+[
+  {
+    "category": "First Category Title",
+    "products": [
+      [
+        {
+          "productTitle": "First Product Title",
+          "productThumbnail": "product_thumbnail.png", //Optional: URL to product thumbnail, otherwise view thumbnail is used
+          "title": "First View Title",
+          "thumbnail": "view_thumbnail.png", //URL to view thumbnail
+          "options": {}, //Optional: Object containing options to set e.g. different prices for uploaded images (see https://jquerydoc.fancyproductdesigner.com/classes/Options.defaults.html)
+          "mask": {}, //Optionak: Object defining a mask (left[Number], top[Number], url[String: URL to a SVG with one path], scaleX[Number], scaleY[Number])
+          "elements": [
+            {
+              "type": "image",
+              "source": "image.png", //URL to PNG, JPEG or SVG
+              "title": "Element Image Title",
+              "parameters": {} //Object containing parameters to define the properties (General Parameters: https://jquerydoc.fancyproductdesigner.com/classes/Options.defaults.elementParameters.html, Image Parameters: https://jquerydoc.fancyproductdesigner.com/classes/Options.defaults.imageParameters.html)
+            },
+            {
+              "type": "text",
+              "source": "Initial Text Content", //The text content
+              "title": "Element Text Title",
+              "parameters": {} //Object containing parameters to define the properties (General Parameters: https://jquerydoc.fancyproductdesigner.com/classes/Options.defaults.elementParameters.html, Text Parameters: https://jquerydoc.fancyproductdesigner.com/classes/Options.defaults.textParameters.html)
+            }
+          ]
+        },
+        {
+          "title": "Second View Title",
+          "thumbnail": "view_thumbnail",
+          "elements": []
+        }
+      ],
+      [
+        {
+          "productTitle": "Second Product Title",
+          "title": "First View Title",
+          "thumbnail": "view_thumbnail.png",
+          "elements": []
+        }
+      ]
+    ]
+  },
+  {
+    "category": "Second Category Title",
+    "products": [
+      [
+        {
+          "productTitle": "First Product Title",
+          "productThumbnail": "product_thumbnail.png",
+          "title": "First View Title",
+          "thumbnail": "view_thumbnail.png",
+          "options": {},
+          "mask": {},
+          "elements": [
+            {
+              "type": "image",
+              "source": "image.png",
+              "title": "Element Image Title",
+              "parameters": {}
+            },
+            {
+              "type": "text",
+              "source": "Initial Text Content",
+              "title": "Element Text Title",
+              "parameters": {}
+            }
+          ]
+        },
+        {
+          "title": "Second View Title",
+          "thumbnail": "view_thumbnail",
+          "elements": []
+        }
+      ],
+      [
+        {
+          "productTitle": "Second Product Title",
+          "title": "First View Title",
+          "thumbnail": "view_thumbnail.png",
+          "elements": []
+        }
+      ]
+    ]
+  }
+]

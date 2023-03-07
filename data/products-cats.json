@@ -1,0 +1,1769 @@
+[
+  {
+    "category": "Product Category One",
+    "products": [
+	    [
+        {
+          "productTitle": "Cup",
+          "title": "First",
+          "thumbnail": "images/yellow_shirt/front/base.png",
+          "options": {
+            "customAdds": {},
+            "usePrintingBoxAsBounding": true,
+            "printingBox": {
+				"top": 300,
+				"left": 100,
+				"width": 800,
+				"height": 287,
+				"visibility": true
+			}
+          },
+          "elements": [
+	      ]
+	    }
+	    ],
+      [
+        {
+          "productTitle": "PDF Lib",
+          "title": "First",
+          "thumbnail": "images/yellow_shirt/front/base.png",
+          "options": {
+            "customImageParameters": {
+	            "price": 20
+            },
+            "customTextParameters": {
+	            "price": 20
+            },
+            "maxPrice": 20
+          },
+          "mask": {
+            "left": 100,
+            "top": 100,
+            "url": null,
+            "scaleX": 1,
+            "scaleY": 1
+          },
+          "elements": [
+            {
+              "type": "image",
+              "source": "images/oval.svg",
+              "title": "Image Top",
+              "parameters": {
+                "colors": "#fff",
+                "patterns": ["images/patterns/lines_green.png"],
+                "top": 300,
+                "left": 450,
+                "autoCenter": false,
+                "zChangeable": false,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "autoSelect": false,
+                "uniScalingUnlockable": false,
+                "lockUniScaling": false,
+                "showInColorSelection": true,
+                "advancedEditing": true,
+                "boundingBoxMode": "none",
+                "excludeFromExport": false,
+                "colorLinkGroup": "design",
+                "fixed": true
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/mangagirl.svg?test=123",
+              "title": "Image Bottom",
+              "parameters": {
+                "top": 543,
+                "left": 532,
+                "scale": 0.5,
+                "autoCenter": false,
+                "zChangeable": false,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "autoSelect": false,
+                "uniScalingUnlockable": true,
+                "lockUniScaling": true,
+                "showInColorSelection": true,
+                "advancedEditing": true,
+                "boundingBoxMode": "clipping",
+                "excludeFromExport": false,
+                "locked": false,
+                "copyable": false,
+                "colors": 1,
+                "boundingBox": {
+                  "x": 320,
+                  "y": 120,
+                  "width": 480,
+                  "height": 680
+                }
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/large_v.jpg",
+              "title": "JPG",
+              "parameters": {
+                "top": 243,
+                "left": 532,
+                "scale": 0.5,
+                "autoCenter": false,
+                "zChangeable": true,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "autoSelect": false,
+                "uniScalingUnlockable": true,
+                "lockUniScaling": true,
+                "showInColorSelection": true,
+                "advancedEditing": true,
+                "boundingBoxMode": "none",
+                "excludeFromExport": false,
+                "locked": false,
+                "copyable": false,
+                "colors": 1
+              }
+            },
+            {
+              "type": "text",
+              "source": "Hello Textbox",
+              "title": "Text One",
+              "parameters": {
+	            "z": 7,
+                "colorLinkGroup": "textImage",
+                "autoCenter": false,
+                "zChangeable": true,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": false,
+                "autoSelect": false,
+                "copyable": true,
+                "uniScalingUnlockable": false,
+                "colors": "#000,#fff,#ccc,#c0392b,#2980b9,#2980b9,#d35400,#16a085,#9b59b6,#f1c40f,#ecf0f1,#6B69D6,#d80073",
+                "fontSize": 60,
+                "patternable": true,
+                "fontStyle": "normal",
+                "fontWeight": "bold",
+                "fontFamily": "Bitter",
+                "lineHeight": 1.5,
+                "textAlign": "left",
+                "fill": "#000",
+                "editable": true,
+                "stroke": "#990000",
+                "left": 600,
+                "top": 200,
+                "maxLines": 0,
+                "maxLength": 20,
+                "widthFontSize": 0,
+                "textBox": true,
+                "width": 350,
+                "excludeFromExport": false,
+                "fixed": true,
+                "boundingBoxMode": "inside",
+                "boundingBox": {
+                  "x": 320,
+                  "y": 120,
+                  "width": 480,
+                  "height": 680
+                }
+              }
+            },
+            {
+              "type": "text",
+              "source": "Hello Worldd",
+              "title": "Text Two",
+              "parameters": {
+	            "z": 1,
+                "textLinkGroup": "linkTextt",
+                "autoCenter": false,
+                "zChangeable": true,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "autoSelect": false,
+                "copyable": true,
+                "uniScalingUnlockable": true,
+                "colors": "#000",
+                "fontSize": 60,
+                "patternable": true,
+                "fontStyle": "normal",
+                "fontWeight": "bold",
+                "fontFamily": "Aller",
+                "lineHeight": 1.5,
+                "textAlign": "left",
+                "fill": "#990000",
+                "editable": true,
+                "stroke": "#990000",
+                "left": 600,
+                "top": 400,
+                "maxLines": 0,
+                "maxLength": 20,
+                "widthFontSize": 0,
+                "excludeFromExport": false,
+                "boundingBoxMode": "none",
+                "curved": false,
+                "textPlaceholder": false,
+                "boundingBox": {
+                  "x": 320,
+                  "y": 120,
+                  "width": 480,
+                  "height": 680
+                }
+              }
+            },
+            {
+              "type": "text",
+              "source": "Hello World Test",
+              "title": "Text Two",
+              "parameters": {
+	            "z": 1,
+                "textLinkGroup": "linkText",
+                "autoCenter": false,
+                "zChangeable": true,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": false,
+                "autoSelect": false,
+                "copyable": true,
+                "uniScalingUnlockable": false,
+                "colors": ["#F9E394","#FDDF59","#FDE192","#FFE3A6","#F8D165","#F2C23B","#F6B13C","#F6B45F","#D49829","#F47E20","#C67693","#F8DCD6","#FACEB9","#F5BBA0","#ED9B76","#DD8560","#B15939","#D5A27C","#9A5354","#FCD4D1","#F9BAB2","#EC9385","#E27360","#F15840","#E24428","#C52128","#B31F2F","#783C40","#BC5F65","#D17F85","#E1B0AF","#E4D1CB","#E2C2B6","#D9B7B3","#C39993","#F0C7BD","#FDE8E8","#EEBBCA","#DFA5B4","#E38CA5","#E4789D","#EE3D8B","#B54C71","#EFD2D3","#DDA2BC","#C85E7D","#AE5572","#9F556E","#A73450","#DABFC9","#FADFE8","#B790C2","#9D7CA9","#503751","#C1BAC8","#ADA9D0","#BAB8DC","#837DB1","#727AAB","#6F569A","#485F96","#718AA2","#C7DDF3","#49B2DE","#0B80C0","#194B83","#002A4E","#1B4D73","#9FC2CE","#88AABE","#75A0B0","#006B81","#4A7685","#3A5E68","#CCEBF6","#CAE9EB","#A3DBE3","#4ABBCE","#62C6C7","#87CCC6","#00A6A8","#008E96","#A1C5C6","#497979","#688F88","#A1B1A3","#B1BD9B","#919682","#D3E5D9","#ACDCCC","#ABD8AD","#67BC99","#8EC2A7","#65B55A","#1B9948","#2D604C","#D3E18F","#B1C86D","#B1D236","#99B547","#A29B5E","#7C7635","#4C5436","#D7C9BC","#C7B48C","#D2B88C","#D8BC69","#B5A032","#AE8742","#E3E58E","#E7E394","#120E0F","#332F33","#848586","#B8B8B8","#B2B5B7","#D4D3D3","#DCDCDE","#B5BEC5","#90979C","#5F4332","#391F15","#CEC6B7","#AA977F","#898078","#756758","#504238","#4E3C2E","#FFFFFF"],
+                "fontSize": 60,
+                "patternable": true,
+                "fontStyle": "normal",
+                "fontWeight": "bold",
+                "fontFamily": "Aller",
+                "lineHeight": 1.5,
+                "textAlign": "left",
+                "fill": "#990000",
+                "editable": true,
+                "stroke": "#990000",
+                "left": 600,
+                "top": 500,
+                "maxLines": 0,
+                "maxLength": 20,
+                "widthFontSize": 0,
+                "minFontSize": 30,
+                "excludeFromExport": false,
+                "boundingBoxMode": "none",
+                "originY": "top",
+                "boundingBox": {
+                  "x": 320,
+                  "y": 120,
+                  "width": 480,
+                  "height": 680
+                }
+              }
+            }
+          ]
+        },
+        {
+          "title": "Second",
+          "thumbnail": "images/yellow_shirt/back/preview.png",
+          "options": {
+            "customAdds": {
+              "designs": false
+            }
+          },
+          "elements": [
+            {
+              "type": "text",
+              "source": "Hello Textbox",
+              "title": "Hello",
+              "parameters": {
+                "textLinkGroup": "linkText",
+                "autoCenter": false,
+                "zChangeable": false,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "colors": "#000",
+                "fontSize": 40,
+                "patternable": true,
+                "fontStyle": "normal",
+                "fontWeight": "bold",
+                "fontFamily": "Acme",
+                "lineHeight": 1.5,
+                "textAlign": "left",
+                "fill": "#990000",
+                "editable": true,
+                "stroke": "#990000",
+                "left": 250,
+                "top": 500,
+                "maxLines": 0,
+                "excludeFromExport": false,
+                "textBox": true,
+                "width": 200,
+                "maxLines": 0,
+                "maxLength": 20,
+                "widthFontSize": 0
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/mask_test.png",
+              "title": "Image",
+              "parameters": {
+                "top": 100,
+                "left": 100,
+                "autoCenter": true,
+                "zChangeable": true,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "uniScalingUnlockable": true,
+                "colors": "#000000,#ffffff,#990000",
+                "showInColorSelection": true,
+                "advancedEditing": true,
+                "boundingBoxMode": "none",
+                "boundingBox": {
+                  "x": 150,
+                  "y": 150,
+                  "width": 300,
+                  "height": 300
+                }
+              }
+            },
+            {
+              "type": "text",
+              "source": "Hello World 1",
+              "title": "Hello",
+              "parameters": {
+                "autoCenter": false,
+                "zChangeable": false,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "colors": "#000",
+                "fontSize": 25,
+                "patternable": true,
+                "fontStyle": "normal",
+                "fontWeight": "bold",
+                "lineHeight": 1.5,
+                "textAlign": "left",
+                "fill": "#990000",
+                "editable": true,
+                "replace": "Crazy",
+                "stroke": "#990000",
+                "left": 250,
+                "top": 500,
+                "maxLines": 0,
+                "excludeFromExport": false
+              }
+            },
+            {
+              "type": "text",
+              "source": "Hello World 2",
+              "title": "Hello 1234",
+              "parameters": {
+                "autoCenter": false,
+                "zChangeable": false,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "colors": "#000",
+                "fontSize": 25,
+                "patternable": true,
+                "fontStyle": "normal",
+                "fontWeight": "bold",
+                "lineHeight": 1.5,
+                "textAlign": "left",
+                "fill": "#990000",
+                "editable": true,
+                "stroke": "#990000",
+                "left": 750,
+                "top": 500,
+                "maxLines": 0,
+                "excludeFromExport": false
+              }
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "productTitle": "PDF Lib",
+          "title": "First",
+          "thumbnail": "images/yellow_shirt/back/base.png",
+          "options": {
+	        "stageWidth": 1200
+          },
+          "elements": [
+            {
+              "type": "text",
+              "source": "Hello World",
+              "title": "Hello",
+              "parameters": {
+                "autoCenter": true,
+                "zChangeable": false,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "colors": "#ffffff,#83635c,#000000,#990000,#ccc,#fef,#ddd,#eee,#ffffff,#83635c,#000000,#990000,#ccc,#fef,#ddd,#eee,#ffffff,#83635c,#000000,#990000,#ccc,#fef,#ddd,#eee,#ffffff,#83635c,#000000,#990000,#ccc,#fef,#ddd,#eee,#ffffff,#83635c,#000000,#990000,#ccc,#fef,#ddd,#eee,#ffffff,#83635c,#000000,#990000,#ccc,#fef,#ddd,#eee,#ffffff,#83635c,#000000,#990000,#ccc,#fef,#ddd,#eee,#ffffff,#83635c,#000000,#990000,#ccc,#fef,#ddd,#eee,#ffffff,#83635c,#000000,#990000,#ccc,#fef,#ddd,#eee,#ffffff,#83635c,#000000,#990000,#ccc,#fef,#ddd,#eee",
+                "fontSize": 25,
+                "patternable": true,
+                "fontStyle": "normal",
+                "fontWeight": "bold",
+                "lineHeight": 1.5,
+                "textAlign": "left",
+                "fill": "#990000",
+                "editable": true,
+                "replace": "Crazy",
+                "stroke": "#990000",
+                "left": 0,
+                "originX": "left",
+                "originY": "top",
+                "fontFamily": "Aller",
+                "textBox": true,
+                "width": 200,
+                "top": 0,
+                "maxLines": 0,
+                "excludeFromExport": false,
+                "boundingBox": {
+                  "x": 200,
+                  "y": 200,
+                  "width": 300,
+                  "height": 400
+                },
+                "boundingBoxMode": "clipping"
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/alien.svg",
+              "title": "Image",
+              "parameters": {
+                "autoCenter": true,
+                "zChangeable": true,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "uniScalingUnlockable": true,
+                "colors": true,
+                "showInColorSelection": true,
+                "advancedEditing": true
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/uz_potrait.png",
+              "title": "UZ Potrait",
+              "parameters": {
+	            "angle": 20,
+				"originX": "left",
+				"originY": "top",
+                "left": 720,
+                "top": 50,
+                "autoCenter": false,
+                "zChangeable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "copyable": true,
+                "uniScalingUnlockable": false,
+                "lockUniScaling": false,
+                "uploadZone": true,
+                "scaleMode": "contain",
+                "colors": "#000",
+                "price": 1200,
+                "uploadZoneMovable": true,
+                "advancedEditing": true,
+                "uploadZoneRemovable": true,
+                "autoSelect": true,
+                "customAdds": {
+                  "uploads": true,
+                  "designs": true,
+                  "texts": false
+                },
+                "designCategories": [
+	                "Caps",
+	                "big",
+	                "arrows"
+                ]
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/uz_landscape.png",
+              "title": "UZ Landscape",
+              "parameters": {
+	            "angle": 35,
+                "left": 200,
+                "top": 10,
+                "originX": "center",
+                "originY": "center",
+                "autoCenter": false,
+                "zChangeable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "copyable": true,
+                "uniScalingUnlockable": true,
+                "originX": "left",
+                "originY": "top",
+                "uploadZone": true,
+                "scaleMode": "cover",
+                "colors": "#000",
+                "uploadZoneMovable": false,
+                "maxW": 2000
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/uz_square.png",
+              "title": "UZ square",
+              "parameters": {
+                "left": 10,
+                "top": 450,
+                "autoCenter": false,
+                "zChangeable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "copyable": true,
+                "uniScalingUnlockable": true,
+                "originX": "left",
+                "originY": "top",
+                "uploadZone": true,
+                "scaleMode": "fit",
+                "colors": "#000"
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/uz_h.png",
+              "title": "UZ High",
+              "parameters": {
+                "left": 1100,
+                "top": 50,
+                "autoCenter": false,
+                "zChangeable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "copyable": true,
+                "uniScalingUnlockable": true,
+                "originX": "left",
+                "originY": "top",
+                "uploadZone": true,
+                "scaleMode": "fit",
+                "colors": "#000"
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/uz_w.png",
+              "title": "UZ Wide",
+              "parameters": {
+                "left": 50,
+                "top": 800,
+                "autoCenter": false,
+                "zChangeable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "copyable": true,
+                "uniScalingUnlockable": true,
+                "originX": "left",
+                "originY": "top",
+                "uploadZone": true,
+                "scaleMode": "fit",
+                "colors": "#000"
+              }
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "productTitle": "PDF Lib",
+          "title": "First",
+          "thumbnail": "images/yellow_shirt/front/base.png",
+          "options": {},
+          "elements": [
+            {
+              "type": "image",
+              "source": "images/large_v.jpg",
+              "title": "Whie Text",
+              "parameters": {
+                "left": 150,
+                "top": 300,
+                "scaleX": 0.1,
+                "scaleY": 0.1,
+                "autoCenter": false,
+                "zChangeable": true,
+                "removable": false,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "copyable": true,
+                "autoSelect": false,
+                "uniScalingUnlockable": true,
+                "flipX": false,
+                "originX": "left",
+                "originY": "top",
+                "advancedEditing": true,
+                "colors": "#000"
+              }
+            },
+            {
+              "type": "text",
+              "source": "Hello World",
+              "title": "text1",
+              "parameters": {
+                "autoCenter": false,
+                "zChangeable": false,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "colors": "#ffffff,#83635c,#000000,#990000,#ccc,#fef,#ddd,#eee,#ffffff,#83635c,#000000,#990000,#ccc,#fef,#ddd,#eee,#ffffff,#83635c,#000000,#990000,#ccc,#fef,#ddd,#eee,#ffffff,#83635c,#000000,#990000,#ccc,#fef,#ddd,#eee,#ffffff,#83635c,#000000,#990000,#ccc,#fef,#ddd,#eee,#ffffff,#83635c,#000000,#990000,#ccc,#fef,#ddd,#eee,#ffffff,#83635c,#000000,#990000,#ccc,#fef,#ddd,#eee,#ffffff,#83635c,#000000,#990000,#ccc,#fef,#ddd,#eee,#ffffff,#83635c,#000000,#990000,#ccc,#fef,#ddd,#eee,#ffffff,#83635c,#000000,#990000,#ccc,#fef,#ddd,#eee",
+                "fontSize": 25,
+                "patternable": true,
+                "colorPrices": {
+                  "990000": 0,
+                  "000000": 0
+                },
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "lineHeight": 1,
+                "textAlign": "left",
+                "fill": "#990000",
+                "editable": true,
+                "replace": "Crazy",
+                "stroke": "#990000",
+                "left": 200,
+                "originX": "left",
+                "originY": "top",
+                "fontFamily": "Aller",
+                "textBox": false,
+                "width": 200,
+                "top": 100,
+                "maxLines": 2,
+                "maxLength": 30,
+                "excludeFromExport": 0
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/alien.svg",
+              "title": "SVG",
+              "parameters": {
+                "autoCenter": true,
+                "zChangeable": true,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "uniScalingUnlockable": true,
+                "colors": "#000000",
+                "showInColorSelection": true,
+                "advancedEditing": true
+              }
+            },
+            {
+              "type": "text",
+              "source": "Last\nName",
+              "title": "Enter your last name",
+              "parameters": {
+                "zChangeable": true,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "colors": "#ffffff",
+                "fontSize": 30,
+                "minFontSize": 5,
+                "maxFontSize": 100,
+                "patternable": true,
+                "fontStyle": "normal",
+                "lineHeight": 1.5,
+                "letterSpacing": 1,
+                "textAlign": "left",
+                "fill": "#990000",
+                "editable": true,
+                "left": 200,
+                "fontFamily": "Lobster",
+                "top": 500,
+                "maxLines": 1,
+                "textPlaceholder": true
+              }
+            },
+            {
+              "type": "text",
+              "source": "First Name üäö",
+              "title": "Enter your first name",
+              "parameters": {
+                "zChangeable": false,
+                "removable": false,
+                "draggable": false,
+                "rotatable": false,
+                "resizable": false,
+                "colors": false,
+                "fontSize": 42,
+                "patternable": true,
+                "fontStyle": "normal",
+                "fontWeight": "bold",
+                "lineHeight": 1,
+                "textAlign": "left",
+                "fill": "#000",
+                "editable": true,
+                "left": 500,
+                "fontFamily": "Aller",
+                "top": 500,
+                "maxLines": 5
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/pl_512_lila.png",
+              "title": "Upload Zone 1",
+              "parameters": {
+                "left": 350,
+                "top": 300,
+                "scaleX": 0.4,
+                "scaleY": 0.4,
+                "colors": "#000",
+                "scaleMode": "cover",
+                "uploadZone": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "autoSelect": false,
+                "customAdds": {
+                  "uploads": true,
+                  "designs": true,
+                  "texts": true
+                }
+              }
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "productTitle": "Fonts Test",
+          "title": "First",
+          "thumbnail": "images/yellow_shirt/front/base.png",
+          "elements": [
+            {
+              "type": "image",
+              "source": "images/yellow_shirt/front/base.png",
+              "title": "Base",
+              "parameters": {
+                "sku": "1w3f",
+                "replace": "custommm",
+                "autoCenter": true,
+                "scale": 1,
+                "removable": false,
+                "draggable": false,
+                "rotatable": false,
+                "resizable": false,
+                "colors": "#88898a,#051938,#29588c,#000004",
+                "opacity": 1,
+                "colorPrices": {
+                  "2196F3": 10,
+                  "cccccc": 5
+                },
+                "autoSelect": false,
+                "availableFilters": [
+                  "grayscale"
+                ],
+                "colorLinkGroup": "base",
+                "fill": "#000"
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/blue.png",
+              "title": "Blue",
+              "parameters": {
+                "left": 350,
+                "top": 600,
+                "autoCenter": false,
+                "zChangeable": false,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": false,
+                "colors": "#ffffff",
+                "replace": "cap",
+                "uniScalingUnlockable": false
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/middle.jpg",
+              "title": "Middle",
+              "parameters": {
+                "left": 100,
+                "top": 100,
+                "autoCenter": false,
+                "z": 0,
+                "zChangeable": false,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "colors": "#ffffff",
+                "replace": "Image",
+                "uniScalingUnlockable": true,
+                "boundingBoxMode": "clipping",
+                "flipX": false,
+                "originX": "left",
+                "originY": "top",
+                "price": 10,
+                "boundingBox": {
+                  "x": 100,
+                  "y": 100,
+                  "width": 400,
+                  "height": 400
+                }
+              }
+            },
+            {
+              "type": "text",
+              "source": "Hello World Trip",
+              "title": "text1",
+              "parameters": {
+                "zChangeable": false,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "colors": "#ffffff,#83635c,#000000,#990000,#ccc",
+                "fontSize": 42,
+                "patternable": true,
+                "colorPrices": {
+                  "990000": 0,
+                  "000000": 0
+                },
+                "fontStyle": "normal",
+                "fontWeight": "bold",
+                "lineHeight": 1.5,
+                "textAlign": "right",
+                "fill": "#990000",
+                "editable": true,
+                "replace": "Crazy",
+                "pattern": "images/patterns/carbon.png",
+                "stroke": "#990000",
+                "left": 100,
+                "originX": "left",
+                "originY": "top",
+                "fontFamily": "Pacifico",
+                "textBox": false,
+                "maxLines": 3,
+                "excludeFromExport": true
+              }
+            },
+            {
+              "type": "text",
+              "source": "Google Font",
+              "title": "text2",
+              "parameters": {
+                "zChangeable": true,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "colors": "#83635c,#000,#fff",
+                "fontSize": 30,
+                "patternable": true,
+                "textDecoration": "underline",
+                "lineHeight": 1.5,
+                "textAlign": "left",
+                "fill": "#990000",
+                "editable": true,
+                "left": 100,
+                "top": 100,
+                "originX": "left",
+                "originY": "top",
+                "fontFamily": "Lobster",
+                "curvable": true,
+                "showInColorSelection": 1
+              }
+            },
+            {
+              "type": "text",
+              "source": "Custom Font",
+              "title": "text3",
+              "parameters": {
+                "zChangeable": true,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": false,
+                "colors": "#83635c",
+                "patternable": true,
+                "fontStyle": "normal",
+                "fontWeight": "bold",
+                "lineHeight": 1.5,
+                "textAlign": "left",
+                "fill": "#990000",
+                "editable": true,
+                "left": 100,
+                "top": 300,
+                "originX": "left",
+                "originY": "top",
+                "fontFamily": "Titania",
+                "letterSpacing": 1,
+                "curvable": false,
+                "boundingBox": "Middle2",
+                "boundingBoxMode": "limitModify",
+                "chargeAfterEditing": true,
+                "showInColorSelection": 1,
+                "maxLength": 0,
+                "maxLines": 0,
+                "fontSize": 30,
+                "minFontSize": 10,
+                "widthFontSize": 300,
+                "maxFontSize": 100,
+                "textBox": false,
+                "width": 400
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/alien.svg",
+              "title": "Image",
+              "parameters": {
+                "autoCenter": true,
+                "zChangeable": true,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "uniScalingUnlockable": true,
+                "colors": "#000000",
+                "showInColorSelection": true
+              }
+            }
+          ],
+          "options": {
+            "customImageParameters": {
+              "price": 10
+            }
+          },
+          "mask": {
+            "left": 100,
+            "top": 100,
+            "url": "images/heart_single.svg",
+            "scaleX": 0.5,
+            "scaleY": 0.5
+          },
+          "productThumbnail": "images/white_shirt/shirt.png"
+        },
+        {
+          "title": "Shirt Back",
+          "thumbnail": "images/yellow_shirt/back/preview.png",
+          "elements": [
+            {
+              "type": "image",
+              "source": "images/yellow_shirt/back/base.png",
+              "title": "Base Back",
+              "parameters": {
+                "x": 517,
+                "y": 329,
+                "price": 5,
+                "replace": "Crazy",
+                "colorLinkGroup": "base",
+                "fill": "#ccc"
+              }
+            }
+          ],
+          "options": {
+            "customAdds": {
+              "uploads": false,
+              "designs": false,
+              "texts": false
+            }
+          },
+          "mask": {
+            "url": "http://radykal.dep/wp/fpd/wp-content/uploads/sites/5/2017/06/heart_single.svg"
+          }
+        }
+      ],
+      [
+        {
+          "title": "Shirt Front",
+          "thumbnail": "images/yellow_shirt/front/base.png",
+          "elements": [
+            {
+              "type": "image",
+              "source": "images/yellow_shirt/front/base.png",
+              "title": "Base",
+              "parameters": {
+                "sku": "1w3f",
+                "replace": "custommm",
+                "autoCenter": true,
+                "scale": 1,
+                "removable": false,
+                "draggable": false,
+                "rotatable": false,
+                "resizable": false,
+                "colors": "#88898a,#051938,#29588c,#000004",
+                "opacity": 1,
+                "colorPrices": {
+                  "2196F3": 10,
+                  "cccccc": 5
+                },
+                "autoSelect": false,
+                "availableFilters": [
+                  "grayscale"
+                ],
+                "colorLinkGroup": "Material",
+                "fill": "#990000"
+              }
+            },
+            {
+              "type": "text",
+              "source": "Your Name",
+              "title": "defaulttext",
+              "parameters": {
+                "top": 200,
+                "left": 300,
+                "zChangeable": true,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "colors": "#83635c,#000000,#990000,#ccc",
+                "fontSize": 42,
+                "patternable": true,
+                "price": 2.5,
+                "fontStyle": "normal",
+                "fontWeight": "bold",
+                "lineHeight": 1.5,
+                "textAlign": "left",
+                "fill": "#000",
+                "editable": true,
+                "originX": "left",
+                "originY": "top",
+                "fontFamily": "Carme",
+                "maxLines": 2,
+                "textPlaceholder": true,
+                "maxLength": 0
+              }
+            },
+            {
+              "type": "text",
+              "source": "10",
+              "title": "defaulttext",
+              "parameters": {
+                "top": 250,
+                "left": 300,
+                "zChangeable": true,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": false,
+                "colors": "#83635c,#000000,#990000,#ccc",
+                "fontSize": 100,
+                "patternable": true,
+                "price": 2.5,
+                "fontStyle": "normal",
+                "fontWeight": "bold",
+                "lineHeight": 1.5,
+                "textAlign": "left",
+                "fill": "#000",
+                "editable": true,
+                "originX": "left",
+                "originY": "top",
+                "fontFamily": "Carme",
+                "maxLines": 1,
+                "numberPlaceholder": [
+                  0,
+                  10
+                ],
+                "maxLength": 2
+              }
+            },
+            {
+              "type": "text",
+              "source": "Default fdsfsd fds fds fdsfs\\n dfds f sf",
+              "title": "defaulttext",
+              "parameters": {
+                "autoCenter": true,
+                "boundingBox": {
+                  "x": 50,
+                  "y": 50,
+                  "width": 600,
+                  "height": 400
+                },
+                "boundingBoxMode": "inside",
+                "zChangeable": true,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "colors": "#83635c,#000000,#990000,#ccc",
+                "fontSize": 42,
+                "patternable": true,
+                "colorPrices": {
+                  "990000": 0,
+                  "000000": 0
+                },
+                "price": 2.5,
+                "fontStyle": "normal",
+                "lineHeight": 1.5,
+                "textAlign": "left",
+                "fill": "#990000",
+                "editable": true,
+                "replace": "Crazy",
+                "pattern": "images/patterns/carbon.png",
+                "stroke": "#990000",
+                "left": 100,
+                "originX": "left",
+                "originY": "top",
+                "fontFamily": "Aller",
+                "textBox": true,
+                "width": 400,
+                "maxLines": 3
+              }
+            },
+            {
+              "type": "text",
+              "source": "CurvedText",
+              "title": "left",
+              "parameters": {
+                "left": 700,
+                "top": 200,
+                "removable": true,
+                "draggable": true,
+                "rotatable": false,
+                "resizable": true,
+                "fontSize": 30,
+                "curved": true,
+                "curveReverse": false,
+                "curvable": true,
+                "curveSpacing": 15,
+                "textAlign": "center",
+                "editable": true,
+                "fill": "#990000",
+                "colors": "#000",
+                "font": "Lobster"
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/footprints.svg",
+              "title": "Manga Girl",
+              "parameters": {
+                "x": 1000,
+                "y": 229,
+                "removable": true,
+                "draggable": true,
+                "zChangeable": true,
+                "resizable": true,
+                "scale": 0.3,
+                "topped": false,
+                "rotatable": true,
+                "originX": "right",
+                "colors": "#000,#fff",
+                "angle": 0,
+                "copyable": true
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/pl_512_lila.png",
+              "title": "Upload Zone 1",
+              "parameters": {
+                "opacity": 0.5,
+                "x": 150,
+                "y": 650,
+                "colors": "#000",
+                "scaleMode": "cover",
+                "uploadZone": true,
+                "scaleX": 0.5,
+                "scaleY": 0.5,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "uniScalingUnlockable": false,
+                "locked": true,
+                "customAdds": {
+                  "uploads": true,
+                  "designs": true,
+                  "texts": true
+                }
+              }
+            }
+          ],
+          "options": {
+            "customImageParameters": {
+              "price": 10,
+              "boundingBoxMode": "inside"
+            }
+          },
+          "mask": null,
+          "productThumbnail": "images/white_shirt/shirt.png"
+        },
+        {
+          "title": "Shirt Back",
+          "thumbnail": "images/yellow_shirt/back/base.png",
+          "elements": [
+            {
+              "type": "text",
+              "source": "Your Name",
+              "title": "defaulttext",
+              "parameters": {
+                "top": 200,
+                "left": 300,
+                "zChangeable": true,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "colors": "#83635c,#000000,#990000,#ccc",
+                "fontSize": 42,
+                "patternable": true,
+                "price": 2.5,
+                "fontStyle": "normal",
+                "fontWeight": "bold",
+                "lineHeight": 1.5,
+                "textAlign": "left",
+                "fill": "#000",
+                "editable": true,
+                "originX": "left",
+                "originY": "top",
+                "fontFamily": "Carme",
+                "maxLines": 1,
+                "textPlaceholder": true
+              }
+            },
+            {
+              "type": "text",
+              "source": "10",
+              "title": "defaulttext",
+              "parameters": {
+                "top": 250,
+                "left": 300,
+                "zChangeable": true,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "colors": "#83635c,#000000,#990000,#ccc",
+                "fontSize": 100,
+                "patternable": true,
+                "price": 2.5,
+                "fontStyle": "normal",
+                "fontWeight": "bold",
+                "lineHeight": 1.5,
+                "textAlign": "left",
+                "fill": "#000",
+                "editable": false,
+                "originX": "left",
+                "originY": "top",
+                "fontFamily": "Carme",
+                "maxLines": 1,
+                "numberPlaceholder": true
+              }
+            }
+          ],
+          "options": {},
+          "mask": null
+        }
+      ],
+      [
+        {
+          "title": "Shirt Front",
+          "thumbnail": "images/yellow_shirt/front/preview.png",
+          "elements": [
+            {
+              "type": "image",
+              "source": "images/yellow_shirt/front/base.png",
+              "title": "Base Front",
+              "parameters": {
+                "price": 10,
+                "x": 325,
+                "y": 329,
+                "scale": 1,
+                "removable": false,
+                "draggable": false,
+                "rotatable": false,
+                "resizable": false,
+                "colors": "#000,#fff,#990000",
+                "opacity": 1,
+                "autoSelect": false,
+                "availableFilters": [
+                  "grayscale"
+                ],
+                "colorLinkGroup": "base",
+                "fill": "#000",
+                "showInColorSelection": 1
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/pl_512_lila.png",
+              "title": "Upload Zone 1",
+              "parameters": {
+                "x": 180,
+                "y": 350,
+                "colors": "#000",
+                "scaleMode": "cover",
+                "uploadZone": true,
+                "scaleX": 0.5,
+                "scaleY": 0.5,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "customAdds": {
+                  "uploads": true,
+                  "designs": true,
+                  "texts": false
+                },
+                "designCategories": [
+                  "random",
+                  "love",
+                  "sports"
+                ]
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/pl_512.png",
+              "title": "Upload Zone 2",
+              "parameters": {
+                "price": 15.5,
+                "x": 400,
+                "y": 120,
+                "uploadZone": true,
+                "scale": 0.5,
+                "draggable": true,
+                "rotatable": false,
+                "resizable": false,
+                "customAdds": {
+                  "designs": true,
+                  "texts": true,
+                  "uploads": true
+                },
+                "designCategories": [
+                  "random"
+                ]
+              }
+            }
+          ],
+          "options": {},
+          "mask": null
+        },
+        {
+          "title": "Shirt Back",
+          "thumbnail": "images/yellow_shirt/back/preview.png",
+          "elements": [
+            {
+              "type": "image",
+              "source": "images/yellow_shirt/back/base.png",
+              "title": "Base Back",
+              "parameters": {
+                "x": 517,
+                "y": 329,
+                "price": 5,
+                "replace": "Crazy",
+                "colorLinkGroup": "base",
+                "fill": "#ccc"
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/pl_512.png",
+              "title": "Upload Zone Back",
+              "parameters": {
+                "price": 15.5,
+                "x": 400,
+                "y": 120,
+                "uploadZone": true,
+                "scale": 0.5,
+                "draggable": true,
+                "rotatable": false,
+                "resizable": false,
+                "customAdds": {
+                  "designs": true,
+                  "texts": true,
+                  "uploads": true
+                },
+                "designCategories": [
+                  "random"
+                ]
+              }
+            }
+          ],
+          "options": {},
+          "mask": null
+        }
+      ]
+    ]
+  },
+  {
+    "category": "Product Category Two",
+    "products": [
+      [
+        {
+          "title": "Short",
+          "thumbnail": "images/shorts/preview.png",
+          "elements": [
+            {
+              "type": "image",
+              "source": "images/shorts/basic.png",
+              "title": "Base",
+              "parameters": {
+                "x": 317,
+                "y": 332,
+                "colors": "#81b5eb",
+                "price": 15
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/shorts/highlights.png",
+              "title": "Hightlights",
+              "parameters": {
+                "x": 318,
+                "y": 331
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/shorts/pullstrings.png",
+              "title": "Pullstrings",
+              "parameters": {
+                "x": 307,
+                "y": 195,
+                "colors": "#ffffff"
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/shorts/midtones.png",
+              "title": "Midtones",
+              "parameters": {
+                "x": 317,
+                "y": 332
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/shorts/shadows.png",
+              "title": "Shadow",
+              "parameters": {
+                "x": 320,
+                "y": 331
+              }
+            }
+          ],
+          "options": {},
+          "mask": null
+        }
+      ],
+      [
+        {
+          "title": "Basecap",
+          "thumbnail": "images/cap/preview.png",
+          "elements": [
+            {
+              "type": "image",
+              "source": "images/cap/basic.png",
+              "title": "Base",
+              "parameters": {
+                "x": 318,
+                "y": 311,
+                "colors": "#ededed",
+                "price": 5
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/cap/highlights.png",
+              "title": "Hightlights",
+              "parameters": {
+                "x": 309,
+                "y": 300
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/cap/shadows.png",
+              "title": "Shadows",
+              "parameters": {
+                "x": 306,
+                "y": 299
+              }
+            }
+          ],
+          "options": {},
+          "mask": null
+        }
+      ],
+      [
+        {
+          "title": "Sweater",
+          "thumbnail": "images/sweater/preview.png",
+          "elements": [
+            {
+              "type": "image",
+              "source": "images/sweater/basic.png",
+              "title": "Base",
+              "parameters": {
+                "x": 332,
+                "y": 311,
+                "colors": "#D5D5D5,#990000,#cccccc",
+                "price": 20
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/sweater/highlights.png",
+              "title": "Hightlights",
+              "parameters": {
+                "x": 332,
+                "y": 311
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/sweater/shadow.png",
+              "title": "Shadow",
+              "parameters": {
+                "x": 332,
+                "y": 309
+              }
+            }
+          ],
+          "options": {},
+          "mask": null
+        },
+        {
+          "title": "Shirt Back",
+          "thumbnail": "images/yellow_shirt/back/preview.png",
+          "elements": [
+            {
+              "type": "image",
+              "source": "images/yellow_shirt/back/base.png",
+              "title": "Base",
+              "parameters": {
+                "x": 317,
+                "y": 329,
+                "colors": "Base",
+                "price": 20
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/yellow_shirt/back/body.png",
+              "title": "Hightlights",
+              "parameters": {
+                "x": 333,
+                "y": 119
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/yellow_shirt/back/shadows.png",
+              "title": "Shadow",
+              "parameters": {
+                "x": 318,
+                "y": 329
+              }
+            },
+            {
+              "type": "text",
+              "source": "Text",
+              "parameters": {
+                "boundingBox": "Base",
+                "x": 326,
+                "y": 232,
+                "zChangeable": true,
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "colors": "#ffffff",
+                "font": "Helvetica",
+                "textSize": 12,
+                "patternable": true,
+                "textAlign": "center",
+                "curved": false,
+                "curveReverse": false,
+                "curveToggle": true
+              }
+            }
+          ],
+          "options": {},
+          "mask": null
+        }
+      ],
+      [
+        {
+          "title": "Scoop Tee",
+          "thumbnail": "images/scoop_tee/preview.png",
+          "elements": [
+            {
+              "type": "image",
+              "source": "images/scoop_tee/basic.png",
+              "title": "Base",
+              "parameters": {
+                "x": 314,
+                "y": 323,
+                "colors": "#98937f, #000000, #ffffff",
+                "price": 15
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/scoop_tee/highlights.png",
+              "title": "Hightlights",
+              "parameters": {
+                "x": 308,
+                "y": 316
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/scoop_tee/shadows.png",
+              "title": "Shadow",
+              "parameters": {
+                "x": 308,
+                "y": 316
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/scoop_tee/label.png",
+              "title": "Label",
+              "parameters": {
+                "x": 314,
+                "y": 140
+              }
+            }
+          ],
+          "options": {},
+          "mask": null
+        }
+      ],
+      [
+        {
+          "title": "Hoodie",
+          "thumbnail": "images/hoodie/preview.png",
+          "elements": [
+            {
+              "type": "image",
+              "source": "images/hoodie/basic.png",
+              "title": "Base",
+              "parameters": {
+                "x": 313,
+                "y": 322,
+                "colors": "#850b0b",
+                "price": 40
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/hoodie/highlights.png",
+              "title": "Hightlights",
+              "parameters": {
+                "x": 311,
+                "y": 318
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/hoodie/shadows.png",
+              "title": "Shadow",
+              "parameters": {
+                "x": 311,
+                "y": 321
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/hoodie/zip.png",
+              "title": "Zip",
+              "parameters": {
+                "x": 303,
+                "y": 216
+              }
+            }
+          ],
+          "options": {},
+          "mask": null
+        }
+      ],
+      [
+        {
+          "title": "Shirt",
+          "thumbnail": "images/shirt/preview.png",
+          "elements": [
+            {
+              "type": "image",
+              "source": "images/shirt/basic.png",
+              "title": "Base",
+              "parameters": {
+                "x": 327,
+                "y": 313,
+                "colors": "#6ebed5",
+                "price": 10
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/shirt/collar_arms.png",
+              "title": "Collars & Arms",
+              "parameters": {
+                "x": 326,
+                "y": 217,
+                "colors": "#000000"
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/shirt/highlights.png",
+              "title": "Hightlights",
+              "parameters": {
+                "x": 330,
+                "y": 313
+              }
+            },
+            {
+              "type": "image",
+              "source": "images/shirt/shadow.png",
+              "title": "Shadow",
+              "parameters": {
+                "x": 327,
+                "y": 312
+              }
+            },
+            {
+              "type": "text",
+              "source": "Default Text",
+              "title": "Any Text",
+              "parameters": {
+                "boundingBox": "Base",
+                "removable": true,
+                "draggable": true,
+                "rotatable": true,
+                "resizable": true,
+                "colors": "#000000"
+              }
+            }
+          ],
+          "options": {},
+          "mask": null
+        }
+      ]
+    ]
+  }
+]
