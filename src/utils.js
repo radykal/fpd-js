@@ -122,3 +122,30 @@ const toggleElemClasses = (elements=[], classes=[], toggle=true) => {
 }
 
 export { toggleElemClasses };
+
+const loadGridImage = (pictureElem, source=null) => {
+
+    if(pictureElem) {
+        
+        pictureElem.classList.add('fpd-on-loading');
+        
+        var image = new Image();
+        image.src = source ? source : pictureElem.dataset.img;
+        
+        image.onload = function() {
+            pictureElem.dataset.originwidth = this.width;
+            pictureElem.dataset.originheight = this.height;
+            pictureElem.classList.remove('fpd-on-loading');
+            pictureElem.style.backgroundImage =  'url("'+this.src+'")';
+        };
+        
+        image.onerror = function() {
+            pictureElem.parentNode.remove();
+
+        }
+
+    }
+
+}
+
+export { loadGridImage };

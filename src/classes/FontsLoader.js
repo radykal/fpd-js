@@ -1,26 +1,61 @@
 export default class FontsLoader {
     
+    static parseFontsToEmbed(fontItem, loadFromScript='') {
+    
+        var embedString = '';
+        
+        if(fontItem.hasOwnProperty('url')) {
+    
+            var fontFamily = fontItem.name,
+                fontFormat = fontItem.url.search('.woff') !== -1 ? 'woff' : 'TrueType',
+                fontURL = loadFromScript ? loadFromScript+fontItem.url : fontItem.url;
+    
+            fontFamily += ':n4'
+    
+            embedString += '@font-face {font-family:"'+fontItem.name+'"; font-style: normal; font-weight: normal; src:url("'+fontURL+'") format("'+fontFormat+'");}\n';
+    
+            if(fontItem.variants) {
+    
+                for (const fv in fontItem.variants) {
+    
+                    var ffVars = {
+                        'n7': 'font-style: normal; font-weight: bold;',
+                        'i4': 'font-style: italic; font-weight: normal;',
+                        'i7': 'font-style: italic; font-weight: bold;'
+                    };
+    
+                    fontURL = loadFromScript+fontItem.variants[fv];
+    
+    
+                    embedString += '@font-face {font-family:"'+fontItem.name+'"; '+ffVars[fv]+' src:url("'+fontURL+'") format("'+fontFormat+'");}\n';
+    
+                }
+    
+                fontFamily += ','+Object.keys(fontItem.variants).toString();
+    
+            }
+    
+        }
+    
+        return embedString;
+    
+    }
+    
     static load(fpdInstance, callback) {
         
         const fonts = fpdInstance.mainOptions.fonts;
         if(fonts && fonts.length > 0 && typeof fonts[0] === 'object') {
         
-            var googleFonts = [],
+            let googleFonts = [],
                 customFonts = [],
                 fontStateCount = 0,
                 $customFontsStyle;
-        
-            if(instance.$container.prevAll('#fpd-custom-fonts').length == 0) {
-        
-                $customFontsStyle = $('<style type="text/css" id="fpd-custom-fonts"></style>');
-                fpdInstance.$container.before($customFontsStyle);
-        
-            }
-            else {
-                $customFontsStyle = fpdInstance.$container.prevAll('#fpd-custom-fonts:first').empty();
-            }
-        
-            fonts.forEach(function(fontItem) {
+            
+            const styleFontsElem = document.createElement('style');
+            styleFontsElem.id = 'fpd-fonts';
+            fpdInstance.container.before(styleFontsElem);
+            
+            fonts.forEach((fontItem) => {
         
                 if(fontItem.hasOwnProperty('url')) {
         
@@ -38,8 +73,7 @@ export default class FontsLoader {
                         }
         
                         customFonts.push(fontFamily);
-        
-                        $customFontsStyle.append(FPDUtil.parseFontsToEmbed(fontItem, fpdInstance.mainOptions._loadFromScript));
+                        styleFontsElem.append(this.parseFontsToEmbed(fontItem, fpdInstance.mainOptions._loadFromScript));
         
                     }
         
@@ -50,7 +84,7 @@ export default class FontsLoader {
             var _fontActiveState = function(state, familyName, fvd) {
         
                 if(state == 'inactive') {
-                    FPDUtil.log(familyName+' font could not be loaded.', 'warn');
+                    console.log(familyName+' font could not be loaded.');
                 }
         
                 if(fontStateCount == (googleFonts.length + customFonts.length)-1) {

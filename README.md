@@ -14,16 +14,17 @@
 * *tests*: Test environment. If you want to change some core files (src folder), you can use this folder for development.
 
 ### Install and start dev server
-Install all dependencies.
 
-`
+```
 npm init
-`
+```
+
 
 Start dev server.
 
-`npm run start
-`
+```
+npm run start
+```
 
 Now this will run webpack dev server and opens the tests folder in your localhost. From now on you can edit the source files and you should see any changes immediately. 
 

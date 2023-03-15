@@ -208,9 +208,6 @@ textarea[data-fabric-hiddentextarea] {
 	cursor: default !important;
 	pointer-events: none;
 }
-.fpd-clearfix:before, .fpd-clearfix:after { content: "\0020"; display: block; height: 0; overflow: hidden; }
-.fpd-clearfix:after { clear: both; }
-.fpd-clearfix { zoom: 1; }
 .fpd-clear {clear: both;}
 .fpd-left {float: left;}
 .fpd-right {float: right;}
@@ -225,7 +222,6 @@ body .fpd-hidden {display: none !important;}
 	cursor: grab !important;
 }
 .fpd-container .fpd-drag:active { cursor: grabbing !important; }
-.fpd-show-up {opacity:  1 !important;}
 .fpd-hidden-canvas {
 	position: absolute !important;
 	left: -9999999px;
@@ -233,12 +229,4 @@ body .fpd-hidden {display: none !important;}
 
 [class^="fpd-icon-"]:before {
 	color: inherit !important;
-}
-
-.fpd-flex {
-	display: flex;
-	justify-content: space-around;
-}
-.fpd-flex > * {
-	flex: 1 1 auto;
 }

@@ -1,3 +1,5 @@
+import MainWrapperHTML from '../html/main-wrapper.html';
+
 class MainWrapper extends HTMLElement {
     
     constructor() {
@@ -7,6 +9,11 @@ class MainWrapper extends HTMLElement {
     }
 
     connectedCallback() {
+        
+        const templateElem = document.createElement("template");
+        templateElem.innerHTML = MainWrapperHTML;
+        
+        this.append(templateElem.content.cloneNode(true));  
         
     }
 

@@ -28,9 +28,9 @@
 </head>
 <body>
     <div class="container">
-        <!-- <div id="fpd-target" class="fpd-sidebar fpd-shadow-2"></div> -->
+        <div id="fpd-target" class="fpd-sidebar fpd-shadow-2"></div>
         <!-- <div id="fpd-target" class="fpd-off-canvas fpd-shadow-2"></div> -->
-        <div id="fpd-target" class="fpd-topbar fpd-shadow-2"></div>
+        <!-- <div id="fpd-target" class="fpd-topbar fpd-shadow-2"></div> -->
         
         <div id="ui-form">
             
@@ -59,7 +59,18 @@
                     'manage-layers',
                     'text-layers',
                     'layouts',
-                ]
+                ],
+                fonts: [
+                    {name: 'Lobster', url: 'google'},
+                    {name: 'Aller', url: 'fonts/Aller.ttf', variants: {
+                            'n7': 'fonts/Aller__bold.ttf',
+                            'i4': 'fonts/Aller__italic.ttf',
+                            'i7': 'fonts/Aller__bolditalic.ttf'
+                        }
+                    },
+                    {name: 'Pacifico', url: 'fonts/Pacifico.ttf'},
+                ],
+                productsJSON: 'data/products/product-categories.json'
             }
                 
             const fpd = new FancyProductDesigner(document.getElementById('fpd-target'), appOptions);
@@ -82,11 +93,12 @@
                 })
                 
             })
+            
+            fpd.addEventListener('productsSet', (evt) => {
+                                
+            })
                         
             jQuery(document).ready(($) => {
-                
-                
-                
             })
             
         </script>

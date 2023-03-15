@@ -1,3 +1,4 @@
+import Dropdown from './view/comps/Dropdown';
 import MainLoaderHTML from './html/main-loader.html';
 import Mainbar from './controller/Mainbar.js';
 import MainWrapper from './controller/MainWrapper.js';
@@ -17,6 +18,8 @@ export default class UIManager extends EventTarget {
     
     init() {
         
+        this.#updateResponsive();
+        
         this.fpdInstance.container.classList.add('fpd-container');
         this.fpdInstance.container.classList.add('fpd-wrapper');
         
@@ -32,7 +35,7 @@ export default class UIManager extends EventTarget {
         
         Array.from(this.fpdInstance.container.querySelectorAll('[data-defaulttext]'))
         .forEach(item => {
-            this.fpdInstance.translator.translateElement(item, this.fpdInstance.mainOptions.langJson);
+            this.fpdInstance.translatorInstance.translateElement(item, this.fpdInstance.mainOptions.langJson);
         })
         
         this.dispatchEvent(
@@ -40,8 +43,6 @@ export default class UIManager extends EventTarget {
         );
         
         window.addEventListener("resize", this.#updateResponsive.bind(this));
-        
-        this.#updateResponsive();
         
     }
     

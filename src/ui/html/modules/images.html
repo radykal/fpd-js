@@ -1,0 +1,76 @@
+<div data-moduleicon="fpd-icon-photo" data-defaulttext="Add Image" data-title="modules.images">
+
+    <div class="fpd-module-tabs">
+        <div data-context="upload">
+            <span class="fpd-icon-cloud-upload"></span>
+        </div>
+        <div data-context="facebook" class="fpd-hidden fpd-tooltip" title="Facebook">
+             <span class="fpd-icon-facebook"></span>
+        </div>
+        <div data-context="instagram" class="fpd-hidden fpd-tooltip" title="Instagram">
+             <span class="fpd-icon-instagram"></span>
+        </div>
+        <div data-context="pixabay" class="fpd-hidden fpd-tooltip" title="Pixabay">
+             <span class="fpd-icon-pixabay"></span>
+        </div>
+        <div data-context="depositphotos" class="fpd-hidden fpd-tooltip" title="Depositphotos">
+             <span class="fpd-icon-depositphotos"></span>
+        </div>
+    </div>
+
+    <div class="fpd-module-tabs-content">
+        <!-- uploads -->
+        <div data-context="upload">
+            <form class="fpd-upload-form" enctype="multipart/form-data" method="POST">
+                <div class="fpd-upload-zone">
+                    <div>
+                         <span class="fpd-icon-file-upload"></span>
+                         <span data-defaulttext="Click or drop images here">modules.upload_zone</span>
+                         <span class="fpd-price">Hello</span>
+                    </div>
+                </div>
+                <input type="file" multiple="multiple" class="fpd-input-image" name="files[]" accept="image/jpeg,image/jpg,image/png,image/svg+xml,application/pdf" />
+            </form>
+            <div class="fpd-scroll-area">
+                <div class="fpd-grid fpd-grid-cover fpd-photo-grid"></div>
+            </div>
+        </div>
+          <!-- facebook -->
+        <div data-context="facebook">
+            <div class="fpd-head">
+                <div class="fpd-facebook-login">
+                    <fb:login-button data-max-rows="1" data-show-faces="false" data-scope="user_photos"></fb:login-button>
+                </div>
+                <div class="fpd-facebook-albums fpd-dropdown fpd-search fpd-on-loading">
+                    <input type="text" class="fpd-dropdown-current" data-defaulttext="Select An Album" placeholder="modules.facebook_select_album" />
+                    <div class="fpd-dropdown-arrow"><span class="fpd-icon-arrow-dropdown"></span></div>
+                    <div class="fpd-dropdown-list"></div>
+                </div>
+            </div>
+            <div class="fpd-scroll-area">
+                <div class="fpd-grid fpd-grid-cover fpd-photo-grid"></div>
+            </div>
+        </div>
+        <!-- instagram -->
+        <div data-context="instagram">
+            <div class="fpd-scroll-area">
+                <div class="fpd-grid fpd-grid-cover fpd-photo-grid"></div>
+            </div>
+        </div>
+        <!-- pixabay -->
+        <div data-context="pixabay">
+            <div class="fpd-loader-wrapper"><div class="fpd-loader"><div class="fpd-loader-circle"></div></div></div>
+            <div class="fpd-head">
+                <a href="https://pixabay.com/" target="_blank" class="fpd-pixabay-logo"></a>
+                <div class="fpd-input-search">
+                    <input type="text" data-defaulttext="Search in Pixabay library" placeholder="modules.pixabay_search" />
+                    <span class="fpd-icon-magnify"></span>
+                </div>
+            </div>
+            <div class="fpd-scroll-area">
+                <div class="fpd-grid fpd-grid-cover fpd-photo-grid"></div>
+            </div>
+        </div>
+    </div>
+
+</div><!-- Images Module -->

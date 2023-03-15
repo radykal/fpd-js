@@ -1,44 +1,44 @@
 import { deepMerge } from '../utils';
 
 /**
- * The class defining the default options for Fancy Product Designer.
  *
  * @class Options
  */
 export default class Options {
 
 	/**
-	 * The default options. See: {{#crossLink "Options.defaults"}}{{/crossLink}}
+	 * The default options.
 	 *
 	 * @property defaults
-	 * @for Options
+     * @static
+	 * @memberof Options
 	 * @type {Object}
 	 */
-	defaults = {
+	static defaults = {
 		imageLoadTimestamp: false,
 	    /**
 		* The stage(canvas) width for the product designer.
 		*
 		* @property stageWidth
-		* @for Options.defaults
+        * @memberof Options.defaults
 		* @type {Number}
-		* @default "900"
+		* @default 900
 		*/
 		stageWidth: 900,
 		/**
 		* The stage(canvas) height for the product designer.
 		*
 		* @property stageHeight
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Number}
-		* @default "600"
+		* @default 600
 		*/
 		stageHeight: 600,
 		/**
 		* Enables the editor mode, which will add a helper box underneath the product designer with some options of the current selected element.
 		*
 		* @property editorMode
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		*/
@@ -47,44 +47,35 @@ export default class Options {
 		* The properties that will be displayed in the editor box when an element is selected.
 		*
 		* @property editorBoxParameters
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Array}
 		* @default ['left', 'top', 'angle', 'fill', 'width', 'height', 'fontSize', 'price']
 		*/
 		editorBoxParameters: ['left', 'top', 'angle', 'fill', 'width', 'height', 'fontSize', 'price'],
 		/**
-		* An array containing all available fonts.<br/>Since V4.3 you can use TrueType fonts (ttf), which is also recommend. TrueType fonts are required to include the font in the PDF for Fancy Product Designer - Admin, see example.
+		* An array containing all available fonts.
 		*
 		* @property fonts
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Aarray}
 		* @default [{name: 'Arial'}, {name: 'Lobster', url: 'google'}]
-		* @example <br />[{name: "Lobster", url: "google"}, {name: 'Custom', url: 'https://yourdomain.com/fonts/custom.ttf"}, {name: 'Aller', url: 'path/Aller.ttf', variants: {'n7': 'path/Aller__bold.ttf','i4': 'path/Aller__italic.ttf','i7': 'path/Aller__bolditalic.ttf'}}]
+		* @example [{name: "Lobster", url: "google"}, {name: 'Custom', url: 'https://yourdomain.com/fonts/custom.ttf"}, {name: 'Aller', url: 'path/Aller.ttf', variants: {'n7': 'path/Aller__bold.ttf','i4': 'path/Aller__italic.ttf','i7': 'path/Aller__bolditalic.ttf'}}]
 		*/
 		fonts: [{name: 'Arial'}, {name: 'Lobster', url: 'google'}],
-		/**
-		* The directory path that contains the templates.
-		*
-		* @property templatesDirectory
-		* @for Options.defaults
-		* @type {String}
-		* @default 'templates/'
-		*/
-		templatesDirectory: 'html/',
 		/**
 		* To add photos from Facebook, you have to set your own Facebook API key.
 		*
 		* @property facebookAppId
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String}
 		* @default ''
 		*/
 		facebookAppId: '',
 		/**
-		* To add photos from Instagram, you have to set an <a href="http://instagram.com/developer/" target="_blank">Instagram client ID</a>.
+		* To add photos from Instagram, you have to set an Instagram client ID.
 		*
 		* @property instagramClientId
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String}
 		* @default ''
 		*/
@@ -93,7 +84,7 @@ export default class Options {
 		* This URI to the html/instagram_auth.html. You have to update this option if you are using a different folder structure.
 		*
 		* @property instagramRedirectUri
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String}
 		* @default ''
 		*/
@@ -102,7 +93,7 @@ export default class Options {
 		* The URI to the script that get the access token from Instagram. You need the enter the Instagram Secret ID.
 		*
 		* @property instagramTokenUri
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String}
 		* @default ''
 		*/
@@ -111,7 +102,7 @@ export default class Options {
 		* The zoom step when using the UI slider to change the zoom level.
 		*
 		* @property zoomStep
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Number}
 		* @default 0.2
 		*/
@@ -120,7 +111,7 @@ export default class Options {
 		* The maximal zoom factor. Set it to 1 to hide the zoom feature in the user interface.
 		*
 		* @property maxZoom
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Number}
 		* @default 3
 		*/
@@ -129,7 +120,7 @@ export default class Options {
 		* Set custom names for your hexdecimal colors. key=hexcode without #, value: name of the color.
 		*
 		* @property hexNames
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Object}
 		* @default {}
 		* @example hexNames: {000000: 'dark',ffffff: 'white'}
@@ -139,7 +130,7 @@ export default class Options {
 		* The border color of the selected element.
 		*
 		* @property selectedColor
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String}
 		* @default '#d5d5d5'
 		*/
@@ -148,7 +139,7 @@ export default class Options {
 		* The border color of the bounding box.
 		*
 		* @property boundingBoxColor
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String}
 		* @default '#005ede'
 		*/
@@ -157,7 +148,7 @@ export default class Options {
 		* The border color of the element when its outside of his bounding box.
 		*
 		* @property outOfBoundaryColor
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String}
 		* @default '#990000'
 		*/
@@ -166,7 +157,7 @@ export default class Options {
 		* If true only the initial elements will be replaced when changing the product. Custom added elements will not be removed.
 		*
 		* @property replaceInitialElements
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		*/
@@ -175,28 +166,19 @@ export default class Options {
 		* If true lazy load will be used for the images in the "Designs" module and "Change Product" module.
 		*
 		* @property lazyLoad
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default true
 		*/
 		lazyLoad: true,
 		/**
-		* Defines the file type used for the templates. E.g. if you want to convert all template files (productdesigner.html and canvaserror.html) into PHP files, you need to change this option to 'php'.
-		*
-		* @property templatesType
-		* @for Options.defaults
-		* @type {String}
-		* @default 'html'
-		*/
-		templatesType: 'html',
-		/**
-		* An object that contains the settings for the AJAX post when a custom added image is added to the canvas (Uploaded Images, Facebook/Instagram Photos). This allows to send the URL of the image to a custom-built script, that returns the data URI of the image or uploads the image to your server and returns the new URL on your server. By default the URL is send to php/custom-image-handler.php. See the <a href="http://api.jquery.com/jquery.ajax/" target="_blank">official jQuery.ajax documentation</a> for more information. The data object has a reserved property called url, which is the image URL that will send to the script. The success function is also reserved.
+		* An object that contains the settings for the AJAX post when a custom added image is added to the canvas (Uploaded Images, Facebook/Instagram Photos). This allows to send the URL of the image to a custom-built script, that returns the data URI of the image or uploads the image to your server and returns the new URL on your server. By default the URL is send to php/custom-image-handler.php. See the official jQuery.ajax documentation for more information. The data object has a reserved property called url, which is the image URL that will send to the script. The success function is also reserved.
 		*
 		* @property customImageAjaxSettings
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Object}
 		* @example
-		* <pre> customImageAjaxSettings: {<br />  url: 'src/php/custom-image-handler.php',<br />  data: {<br/>   saveOnServer: 1, //image is uploaded to your server <br/>   uploadsDir: '/path/to/uploads_dir', //into this directory <br/>   uploadsDirURL: 'http://yourdomain.com/uploads_dir' //and returns the new URL from this location <br />}}</pre>
+		*customImageAjaxSettings: {<br />  url: 'src/php/custom-image-handler.php',<br />  data: {<br/>   saveOnServer: 1, //image is uploaded to your server <br/>   uploadsDir: '/path/to/uploads_dir', //into this directory <br/>   uploadsDirURL: 'http://yourdomain.com/uploads_dir' //and returns the new URL from this location <br />}}
 		*/
 		customImageAjaxSettings: {
 			/**
@@ -204,7 +186,7 @@ export default class Options {
 			*
 			* @property url
 			* @type {String}
-			* @for Options.defaults.customImageAjaxSettings
+			* @memberof Options.defaults.customImageAjaxSettings
 			* @default 'php/custom-image-handler.php'
 			*/
 			url: 'php/custom-image-handler.php',
@@ -213,7 +195,7 @@ export default class Options {
 			*
 			* @property method
 			* @type {String}
-			* @for Options.defaults.customImageAjaxSettings
+			* @memberof Options.defaults.customImageAjaxSettings
 			* @default 'POST'
 			*/
 			method: 'POST',
@@ -222,7 +204,7 @@ export default class Options {
 			*
 			* @property dataType
 			* @type {String}
-			* @for Options.defaults.customImageAjaxSettings
+			* @memberof Options.defaults.customImageAjaxSettings
 			* @default 'json'
 			*/
 			dataType: 'json',
@@ -231,7 +213,7 @@ export default class Options {
 			*
 			* @property data
 			* @type {Object}
-			* @for Options.defaults.customImageAjaxSettings
+			* @memberof Options.defaults.customImageAjaxSettings
 			* @default {
 				saveOnServer: 0, - use integer as boolean value. 0=false, 1=true
 				uploadsDir: './uploads', - if saveOnServer is 1, you need to specify the directory path where the images are saved
@@ -244,11 +226,11 @@ export default class Options {
 				uploadsDirURL: 'http://yourdomain.com/uploads' //if saveOnServer is true, you need to specify the directory URL where the images are saved
 			}
 		},
-		/**
+		/** TODO Check
 		* Enable an improved resize filter, that may improve the image quality when its resized.
 		*
 		* @property improvedResizeQuality
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		*/
@@ -257,7 +239,7 @@ export default class Options {
 		* Make the canvas and the elements in the canvas responsive.
 		*
 		* @property responsive
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default true
 		*/
@@ -266,7 +248,7 @@ export default class Options {
 		* Hex color value defining the color for the corner icon controls.
 		*
 		* @property cornerIconColor
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String}
 		* @default '#000000'
 		*/
@@ -275,7 +257,7 @@ export default class Options {
 		* The URL to the JSON file or an object containing all content from the JSON file. Set to false, if you do not need it.
 		*
 		* @property langJSON
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String | Object | Boolean}
 		* @default 'lang/default.json'
 		*/
@@ -284,7 +266,7 @@ export default class Options {
 		* The color palette when the color wheel is displayed.
 		*
 		* @property colorPickerPalette
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Array}
 		* @default []
 		* @example ['#000', '#fff']
@@ -294,7 +276,7 @@ export default class Options {
 		* An object defining the available actions in the different zones.
 		*
 		* @property actions
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Object}
 		* @default {'top': [], 'right': [], 'bottom': [], 'left': []}
 		* @example {'top': ['manage-layers'], 'right': ['info'], 'bottom': ['undo', 'redo'], 'left': []}
@@ -306,10 +288,10 @@ export default class Options {
 			'left': []
 		},
 		/**
-		* An array defining the available modules in the main bar. Possible values: 'products', 'images', 'text', 'designs'. 'names-numbers', 'drawing' requires Fancy Product Designer Plus Add-On.
+		* An array defining the available modules in the main bar. Possible values: 'products', 'images', 'text', 'designs'. 'names-numbers', 'drawing' 
 		*
 		* @property mainBarModules
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Array}
 		* @default ['products', 'images', 'text', 'designs']
 		*/
@@ -318,7 +300,7 @@ export default class Options {
 		* Set the initial active module.
 		*
 		* @property initialActiveModule
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String}
 		* @default ''
 		*/
@@ -327,7 +309,7 @@ export default class Options {
 		* An object defining the maximum values for input elements in the toolbar.
 		*
 		* @property maxValues
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String}
 		* @default {}
 		*/
@@ -336,25 +318,16 @@ export default class Options {
 		* Set a watermark image when the user downloads/prints the product via the actions. To pass a watermark, just enter a string with an image URL.
 		*
 		* @property watermark
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean | String}
 		* @default false
 		*/
 		watermark: false,
 		/**
-		* The number of columns used for the grid images in the images and designs module.
-		*
-		* @property gridColumns
-		* @for Options.defaults
-		* @type {Number}
-		* @default 2
-		*/
-		gridColumns: 2,
-		/**
 		* An object containing the currency string(use %d as placeholder for price), decimal separator and thousand separator.
 		*
 		* @property priceFormat
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Object}
 		* @default {currency: '&#36;%d', decimalSep: '.', thousandSep: ','}
 		*/
@@ -363,7 +336,7 @@ export default class Options {
 		* The ID of an element that will be used as container for the main bar.
 		*
 		* @property mainBarContainer
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean | String}
 		* @default false
 		* @example #customMainBarContainer
@@ -373,7 +346,7 @@ export default class Options {
 		* The ID of an element that will be used to open the modal, in which the designer is included.
 		*
 		* @property modalMode
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean | String}
 		* @default false
 		* @example #modalButton
@@ -383,7 +356,7 @@ export default class Options {
 		* Enable keyboard control. Use arrow keys to move and backspace key to delete selected element.
 		*
 		* @property keyboardControl
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default true
 		*/
@@ -392,7 +365,7 @@ export default class Options {
 		* Deselect active element when clicking outside of the product designer.
 		*
 		* @property deselectActiveOnOutside
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default true
 		*/
@@ -401,7 +374,7 @@ export default class Options {
 		* All upload zones will be always on top of all elements.
 		*
 		* @property uploadZonesTopped
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default true
 		*/
@@ -410,7 +383,7 @@ export default class Options {
 		* Loads the first initial product into stage.
 		*
 		* @property loadFirstProductInStage
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default true
 		*/
@@ -419,7 +392,7 @@ export default class Options {
 		* If the user leaves the page without saving the product or the getProduct() method is not, a alert window will pop up.
 		*
 		* @property unsavedProductAlert
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		*/
@@ -428,7 +401,7 @@ export default class Options {
 		* If the user adds something and off-canvas panel or dialog is opened, it will be closed.
 		*
 		* @property hideDialogOnAdd
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default true
 		*/
@@ -437,7 +410,7 @@ export default class Options {
 		* Set the placement of the toolbar. For smartphones the toolbar will be fixed at the bottom of the page. Possible values:'smart', 'inside-bottom', 'inside-top'
 		*
 		* @property toolbarPlacement
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String}
 		* @default 'smart'
 		*/
@@ -446,80 +419,81 @@ export default class Options {
 		* The grid size for snap action. First value defines the width on the a-axis, the second on the y-axis.
 		*
 		* @property snapGridSize
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Array}
 		* @default [50, 50]
 		*/
 		snapGridSize: [50, 50],
 		/**
-		* An object containing <a href="http://fabricjs.com/docs/fabric.Canvas.html" target="_blank">options for the fabricjs canvas</a>.
+		* An object containing options for the fabricjs canvas.
 		*
 		* @property fabricCanvasOptions
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Object}
 		* @default {}
 		*/
 		fabricCanvasOptions: {},
 		/**
-		* Defines the values for the select element in the names & numbers module. Requires Fancy Product Designer Plus Add-On.
+		* Defines the values for the select element in the names & numbers module. 
 		*
 		* @property namesNumbersDropdown
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Array}
 		* @default []
 		*/
 		namesNumbersDropdown: [],
 		/**
-		* Sets price for any extra entry in the names & numbers module. Requires Fancy Product Designer Plus Add-On.
+		* Sets price for any extra entry in the names & numbers module. 
 		*
 		* @property namesNumbersEntryPrice
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Number}
 		* @default 0
 		*/
 		namesNumbersEntryPrice: 0,
 		/**
-		* Sets the placement for the color selection, possible values: 'inside-tl', 'inside-tc', 'inside-tr', 'inside-bl', 'inside-bc', 'inside-br' or ID of another element(#my-color-selection). Requires Fancy Product Designer Plus Add-On.
+		* Sets the placement for the color selection, possible values: 'inside-tl', 'inside-tc', 'inside-tr', 'inside-bl', 'inside-bc', 'inside-br' or ID of another element(#my-color-selection). 
 		*
 		* @property colorSelectionPlacement
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String}
 		* @default ''
 		*/
 		colorSelectionPlacement: '',
 		/**
-		* Sets the display type for the color selection. By default the color items will be shown in a grid. You can also enable a dropdown for the color selection, but this is only working when using a custom element in colorSelectionPlacement. Possible values: grid, dropdown. Requires Fancy Product Designer Plus Add-On.
+		* Sets the display type for the color selection. By default the color items will be shown in a grid. You can also enable a dropdown for the color selection, but this is only working when using a custom element in colorSelectionPlacement. Possible values: grid, dropdown. 
 		*
 		* @property colorSelectionDisplayType
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String}
 		* @default 'grid'
 		* @version PLUS 1.1.1
 		*/
 		colorSelectionDisplayType: 'grid',
 		/**
-		* Sets the placement for the Bulk-Add Variations Form. Just enter ID or class of another element(#my-color-selection). Requires Fancy Product Designer Plus Add-On.
+		* Sets the placement for the Bulk-Add Variations Form. Just enter ID or class of another element(#my-color-selection). 
 		*
 		* @property bulkVariationsPlacement
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String}
 		* @default ''
 		*/
 		bulkVariationsPlacement: '',
 		/**
-		* The available variations for the Bulk-Add Variations Form, e.g.: {'Size': ['XL', 'L', 'M', 'S'], 'Color': ['Red', 'Blue']}. Requires Fancy Product Designer Plus Add-On.
+		* The available variations for the Bulk-Add Variations Form.
 		*
 		* @property bulkVariations
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Object}
 		* @default {}
+        * @example {'Size': ['XL', 'L', 'M', 'S'], 'Color': ['Red', 'Blue']}
 		*/
 		bulkVariations: {},
 		/**
 		* The element where the toolbar will be appended when toolbarPlacement='smart'.
 		*
 		* @property toolbarDynamicContext
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String}
 		* @default 'body'
 		*/
@@ -528,7 +502,7 @@ export default class Options {
 		* Addtional properties for the bounding box. Can be used to set the stroke width etc.. See http://fabricjs.com/docs/fabric.Rect.html
 		*
 		* @property boundingBoxProps
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Object}
 		* @default {strokeWidth: 1}
 		*/
@@ -537,7 +511,7 @@ export default class Options {
 		* If the image (custom uploaded or design) is larger than the canvas, it will be scaled down to fit into the canvas.
 		*
 		* @property fitImagesInCanvas
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		*/
@@ -546,7 +520,7 @@ export default class Options {
 		* Set a maximum price for all products or for specific views. -1 disables the max. price.
 		*
 		* @property maxPrice
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Number}
 		* @default -1
 		*/
@@ -555,7 +529,7 @@ export default class Options {
 		* The text can be edited in the canvas by double click/tap.
 		*
 		* @property inCanvasTextEditing
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default true
 		*/
@@ -564,7 +538,7 @@ export default class Options {
 		* The text input in the toolbar when be opened when an editable text is selected.
 		*
 		* @property openTextInputOnSelect
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		*/
@@ -574,7 +548,7 @@ export default class Options {
 		*
 		* @property designCategories
 		* @type {Array}
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @default []
 		*/
 		designCategories: [],
@@ -582,7 +556,7 @@ export default class Options {
 		* Will make the view(s) optional, so the user have to unlock it. The price for the elements in the view will be added to the total product price as soon as the view is unlocked.
 		*
 		* @property optionalView
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		*/
@@ -591,16 +565,16 @@ export default class Options {
 		* When using the save/load actions, store the product in user's browser storage.
 		*
 		* @property saveActionBrowserStorage
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default true
 		*/
 		saveActionBrowserStorage: true,
 		/**
-		* An array containing the pricing rules groups. Use the <a href="http://fancyproductdesigner.com/addon-pricing-rules/" target="_blank" style="text-decoration: underline;">online tool to generate pricing rules</a>. Requires Fancy Product Designer Pricing Add-On.
+		* An array containing the pricing rules groups. Use the online tool to generate pricing rules.
 		*
 		* @property pricingRules
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Array}
 		* @default []
 		*/
@@ -609,7 +583,7 @@ export default class Options {
 		* Enables an agreement modal that needs to be confirmed before uploaded images can be used in the product designer. The text in the agreement modal can be set through the language JSON.
 		*
 		* @property uploadAgreementModal
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		*/
@@ -618,7 +592,7 @@ export default class Options {
 		* An object containing the settings for the image editor.
 		*
 		* @property imageEditorSettings
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Object}
 		* @default {masks: []}
 		*/
@@ -628,7 +602,7 @@ export default class Options {
 			*
 			* @property masks
 			* @type {Array}
-			* @for Options.defaults.imageEditorSettings
+			* @memberof Options.defaults.imageEditorSettings
 			* @default []
 			*/
 			masks: []
@@ -637,7 +611,7 @@ export default class Options {
 		* An object containing left, top, width and height properties that represents a printing box. A printing box is a rectangle which is always visible in the canvas and represents the printing area. It is used in the ADMIN solution to create a PDF with a specific printing area.
 		*
 		* @propert printingBox
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Object}
 		* @default null
 		*/
@@ -646,7 +620,7 @@ export default class Options {
 		* Open the Info modal when product designer is loaded. The Info action needs to be added to show the modal.
 		*
 		* @property autoOpenInfo
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		*/
@@ -655,7 +629,7 @@ export default class Options {
 		* Create a custom guided tour by definifing an object with a key/css selector for the target element and the value for the text in the guided tour step. The first part of the key string defines the target type (module or action) followed by a a colon and the name of the module/action or just enter a custom CSS selector string, e.g. module:products, action:manage-layers or #any-element.
 		*
 		* @property guidedTour
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Null | Object}
 		* @default null
 		* @example guidedTour: {
@@ -669,7 +643,7 @@ export default class Options {
 		* As soon as an element with a color link group is added, the colours of this element will be used for the color group. If false, the colours of all element in the color group will be concatenated.
 		*
 		* @property replaceColorsInColorGroup
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		*/
@@ -678,25 +652,25 @@ export default class Options {
 		* Defines the image types in lowercase that can be uploaded. Currently the designer supports jpg, svg, png images and PDF files.
 		*
 		* @property allowedImageTypes
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Array}
 		* @default ['jpeg', 'png', 'svg', 'pdf']
 		*/
 		allowedImageTypes: ['jpeg', 'png', 'svg', 'pdf'],
 		/**
-		* To add photos from Pixabay, you have to set an <a href="https://pixabay.com/api/docs/" target="_blank">Pixabay API key</a>.
+		* To add photos from Pixabay, you have to set an Pixabay API key.
 		*
 		* @property pixabayApiKey
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String}
 		* @default ''
 		*/
 		pixabayApiKey: '',
 		/**
-		* If you want to access high-resolution images, enable this option and you have to ask Pixabay for permission. <a href="https://pixabay.com/api/docs/#hires_image_search_response" target="_blank">You can easily do that here, next to the headline</a>.
+		* If you want to access high-resolution images, enable this option and you have to ask Pixabay for permission. You can easily do that here, next to the headline.
 		*
 		* @property pixabayHighResImages
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		*/
@@ -705,7 +679,7 @@ export default class Options {
 		* Language code of the language to be searched in. Accepted values: cs, da, de, en, es, fr, id, it, hu, nl, no, pl, pt, ro, sk, fi, sv, tr, vi, th, bg, ru, el, ja, ko, zh.
 		*
 		* @property pixabayLang
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String}
 		* @default ''
 		* @version 4.7.5
@@ -715,7 +689,7 @@ export default class Options {
 		* Display the internal modals (info, qr-code etc.) in the product designer instead in the whole page.
 		*
 		* @property openModalInDesigner
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		*/
@@ -724,7 +698,7 @@ export default class Options {
 		* Shows the current image size in pixels in a tooltip above the image element when its selected.
 		*
 		* @property imageSizeTooltip
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		*/
@@ -733,7 +707,7 @@ export default class Options {
 		* Highlight objects (editable texts and upload zones) with a dashed border. To enable this just define a hexadecimal color value.
 		*
 		* @property highlightEditableObjects
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String}
 		* @default ''
 		* @version 3.7.2
@@ -743,7 +717,7 @@ export default class Options {
 		* When an element is replaced, apply fill(color) from replaced element to added element.
 		*
 		* @property applyFillWhenReplacing
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default true
 		* @version 3.7.2
@@ -753,17 +727,17 @@ export default class Options {
 		* An array containing layouts. A layout is technically a view that will replace all elements in a view when selected.
 		*
 		* @property layouts
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Array}
 		* @default []
 		* @version 4.7.0
 		*/
 		layouts: [],
 		/**
-		* Options for the Dynamic Views modul. Requires Fancy Product Designer Plus Add-On.
+		* Options for the Dynamic Views modul. 
 		*
 		* @property dynamicViewsOptions
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Object}
 		* @default {}
 		* @version 4.7.0
@@ -774,7 +748,7 @@ export default class Options {
 			*
 			* @property unit
 			* @type {String}
-			* @for Options.defaults.dynamicViewsOptions
+			* @memberof Options.defaults.dynamicViewsOptions
 			* @default 'mm'
 			*/
 			unit: 'mm',
@@ -783,7 +757,7 @@ export default class Options {
 			*
 			* @property formats
 			* @type {Array}
-			* @for Options.defaults.dynamicViewsOptions
+			* @memberof Options.defaults.dynamicViewsOptions
 			* @default []
 			*@example [
 	[100, 100],
@@ -797,7 +771,7 @@ export default class Options {
 			*
 			* @property pricePerArea
 			* @type {Number}
-			* @for Options.defaults.dynamicViewsOptions
+			* @memberof Options.defaults.dynamicViewsOptions
 			* @default 0
 			*/
 			pricePerArea: 0,
@@ -806,7 +780,7 @@ export default class Options {
 			*
 			* @property minWidth
 			* @type {Number}
-			* @for Options.defaults.dynamicViewsOptions
+			* @memberof Options.defaults.dynamicViewsOptions
 			* @default 0
 			*/
 			minWidth: 0,
@@ -815,7 +789,7 @@ export default class Options {
 			*
 			* @property minHeight
 			* @type {Number}
-			* @for Options.defaults.dynamicViewsOptions
+			* @memberof Options.defaults.dynamicViewsOptions
 			* @default 0
 			*/
 			minHeight: 0,
@@ -824,7 +798,7 @@ export default class Options {
 			*
 			* @property maxWidth
 			* @type {Number}
-			* @for Options.defaults.dynamicViewsOptions
+			* @memberof Options.defaults.dynamicViewsOptions
 			* @default 10000
 			*/
 			maxWidth: 10000,
@@ -833,7 +807,7 @@ export default class Options {
 			*
 			* @property maxHeight
 			* @type {Number}
-			* @for Options.defaults.dynamicViewsOptions
+			* @memberof Options.defaults.dynamicViewsOptions
 			* @default 10000
 			*/
 			maxHeight: 10000
@@ -842,7 +816,7 @@ export default class Options {
 		* Emojis in text elements will be removed when changing or adding text.
 		*
 		* @property disableTextEmojis
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		* @version 4.7.4
@@ -852,37 +826,27 @@ export default class Options {
 		* Enable guide lines to align the selected object to the edges of the other objects.
 		*
 		* @property smartGuides
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		* @version 4.7.7
 		*/
 		smartGuides: false,
 		/**
-		* Set the toolbar theme. Possible values: white, dark.
-		*
-		* @property toolbarTheme
-		* @for Options.defaults
-		* @type {String}
-		* @default 'white'
-		* @version 4.7.7
-		*/
-		toolbarTheme: 'white',
-		/**
 		* If a printing box has been defined for a view and the element has no individual bounding box, the printing box will be used as bounding box.
 		*
 		* @property usePrintingBoxAsBounding
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		* @version 4.8.0
 		*/
 		usePrintingBoxAsBounding: false,
 		/**
-		* An object defining the printing area when exporting the product as SVG. {top: Number, left: Number, width: Number, height: Number, visibility: Boolean}. The visibility property shows the printing box to the customers.
+		* An object defining the printing area when exporting the product as SVG. The visibility property shows the printing box to the customers.
 		*
 		* @property printingBox
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Object}
 		* @default {}
 		* @version 4.7.0
@@ -893,7 +857,7 @@ export default class Options {
 		* A JSON object or URL to a JSON file that stores all initial products. These products will be displayed in the Products module.
 		*
 		* @property productsJSON
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String}
 		* @default null
 		* @version 4.9.0
@@ -903,7 +867,7 @@ export default class Options {
 		* A JSON object or URL to a JSON file that stores all designs. These designs will be displayed in the Designs module.
 		*
 		* @property designsJSON
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String}
 		* @default null
 		* @version 4.9.0
@@ -913,7 +877,7 @@ export default class Options {
 		* When the customizationRequired argument in the getProduct is set to true, you can control if any view needs to be customized or all. Possible values: any, all.
 		*
 		* @property customizationRequiredRule
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String}
 		* @default 'any'
 		* @version 4.9.4
@@ -923,27 +887,17 @@ export default class Options {
 		* Display the notification that the product is going to be changed when clicking on a product item in the Products module.
 		*
 		* @property swapProductConfirmation
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		* @version 4.9.5
 		*/
 		swapProductConfirmation: false,
 		/**
-		* The position of the textarea in the toolbar. Possible values: sub, top (Only possible when toolbarPlacement = smart).
-		*
-		* @property toolbarTextareaPosition
-		* @for Options.defaults
-		* @type {String}
-		* @default 'sub'
-		* @version 4.9.6
-		*/
-		toolbarTextareaPosition: 'sub',
-		/**
 		* The width of a textbox can set via the "Texts" module or changed via the corner controls of the selected textbox.
 		*
 		* @property setTextboxWidth
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		* @version 5.0.1
@@ -953,7 +907,7 @@ export default class Options {
 		* Define additional properties that will be applied to all text elements in the same textLinkGroup. E.g.: ['fontFamily', 'fontSize', 'fontStyle']
 		*
 		* @property textLinkGroupProps
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Array}
 		* @default []
 		* @version 5.0.3
@@ -963,7 +917,7 @@ export default class Options {
 		* Text Templates that will appear in the Text module.
 		*
 		* @property textTemplates
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Array}
 		* @default []
 		* @example [{text: 'Hello World', properties: {fontFamily: 'Arial', textSize: 35}}]
@@ -974,37 +928,27 @@ export default class Options {
 		* Multiple objects can be selected and moved at the same time.
 		*
 		* @property multiSelection
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		* @version 5.1.0
 		*/
 		multiSelection: false,
 		/**
-		* The UI theme that you would like to use. Choose between 'flat' or 'doyle'.
-		*
-		* @property uiTheme
-		* @for Options.defaults
-		* @type {String}
-		* @default 'flat'
-		* @version 5.1.0
-		*/
-		uiTheme: 'flat',
-		/**
 		* The maximum canvas height related to the window height. A number between 0 and 1, e.g. 0.8 will set a maximum canvas height of 80% of the window height. A value of 1 will disable a calculation of a max. height.
 		*
 		* @property maxCanvasHeight
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Number}
 		* @default 1
 		* @version 5.1.1
 		*/
 		maxCanvasHeight: 1,
 		/**
-		* Set the behaviour for mobile gestures. Possible values:  <ul><li>'none': No behaviour</li><li>'pinchPanCanvas': Zoom in/out and pan canvas</li><li> 'pinchImageScale': Scale selected image with pinch</li></ul> .
+		* Set the behaviour for mobile gestures. Possible values:  'none': No behaviour, 'pinchPanCanvas': Zoom in/out and pan canvas, 'pinchImageScale': Scale selected image with pinch.
 		*
 		* @property mobileGesturesBehaviour
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String}
 		* @default 'none'
 		* @version 5.1.3
@@ -1014,7 +958,7 @@ export default class Options {
 		* Enable image quality ratings for uploaded images. Therefore you can define low, mid and high quality steps. The object receives low, mid and high keys. The values of these keys are arrays, where the first entry defines the width and the second entry defines the height.
 		*
 		* @property imageQualityRatings
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Object}
 		* @default null
 		* @example {low: [100, 200], mid: [500, 600], high: [1000, 1200]}
@@ -1025,7 +969,7 @@ export default class Options {
 		* Displays the paths of a SVG in the advanced image editor.
 		*
 		* @property splitMultiSVG
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		* @version 5.1.4
@@ -1035,7 +979,7 @@ export default class Options {
 		* Set corner controls style: Basic (Rescale and Rotate), Advanced (Rescale, Rotate, Delete, Duplicate).
 		*
 		* @property cornerControlsStyle
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		* @version 5.1.4
@@ -1045,7 +989,7 @@ export default class Options {
 		* The filename when the user downloads the product design as image or PDF.
 		*
 		* @property downloadFilename
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {String}
 		* @default 'Product'
 		* @version 5.1.5
@@ -1055,7 +999,7 @@ export default class Options {
 		* Fill all upload zones with the first uploaded images.
 		*
 		* @property autoFillUploadZones
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		* @version 5.2.7
@@ -1065,7 +1009,7 @@ export default class Options {
 		* Drag & Drop images from the images and designs module into upload zones or on canvas.
 		*
 		* @property dragDropImagesToUploadZones
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		* @version 5.2.7
@@ -1075,7 +1019,7 @@ export default class Options {
         * Controls the breakpoints for a responsive layout. You can define small and medium breakpoints. As soon as the window width will be under one of these values, it will change to small (smartphone) or medium (tablet) layout, otherwise it uses the standard layout for large screens (desktop).
         *
         * @property responsiveBreakpoints
-        * @for Options.defaults
+        * @memberof Options.defaults
         * @type {Object}
         * @default {small: 768, medium: 1024}
         * @version 6.0.0
@@ -1085,10 +1029,10 @@ export default class Options {
             medium: 1024
         },
 		/**
-		* An object containing the default element parameters in addition to the <a href="http://fabricjs.com/docs/fabric.Object.html" target="_blank">default Fabric Object properties</a>. See <a href="./Options.defaults.elementParameters.html">Options.defaults.elementParameters</a>.
+		* An object containing the default element parameters in addition to the default Fabric Object properties. See Options.defaults.elementParameters.
 		*
 		* @property elementParameters
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Object}
 		*/
 		elementParameters: {
@@ -1098,7 +1042,7 @@ export default class Options {
 			*
 			* @property z
 			* @type {Number}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default -1
 			*/
 			z: -1,
@@ -1107,16 +1051,16 @@ export default class Options {
 			*
 			* @property price
 			* @type {Number}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default 0
 			*/
 			price: 0, //how much does the element cost
 			/**
-			* <ul><li>If false, no colorization for the element is possible.</li><li>One hexadecimal color will enable the colorpicker</li><li>Mulitple hexadecimal colors separated by commmas will show a range of colors the user can choose from.</li></ul>
+			* If false, no colorization for the element is possible.One hexadecimal color will enable the colorpicker. Mulitple hexadecimal colors separated by commmas will show a range of colors the user can choose from.
 			*
 			* @property colors
 			* @type {Boolean | String}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default false
 			* @example colors: "#000000" => Colorpicker, colors: "#000000,#ffffff" => Range of colors
 			*/
@@ -1126,7 +1070,7 @@ export default class Options {
 			*
 			* @property removable
 			* @type {Boolean}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default false
 			*/
 			removable: false,
@@ -1135,7 +1079,7 @@ export default class Options {
 			*
 			* @property draggable
 			* @type {Boolean}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default false
 			*/
 			draggable: false,
@@ -1144,7 +1088,7 @@ export default class Options {
 			*
 			* @property rotatable
 			* @type {Boolean}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default false
 			*/
 			rotatable: false,
@@ -1153,7 +1097,7 @@ export default class Options {
 			*
 			* @property resizable
 			* @type {Boolean}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default false
 			*/
 			resizable: false,
@@ -1162,7 +1106,7 @@ export default class Options {
 			*
 			* @property copyable
 			* @type {Boolean}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default false
 			*/
 			copyable: false,
@@ -1171,16 +1115,16 @@ export default class Options {
 			*
 			* @property zChangeable
 			* @type {Boolean}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default false
 			*/
 			zChangeable: false,
 			/**
-			* Defines a bounding box (printing area) for the element.<ul>If false no bounding box</li><li>The title of an element in the same view, then the boundary of the target element will be used as bounding box.</li><li>An object with x,y,width and height defines the bounding box</li></ul>
+			* Defines a bounding box (printing area) for the element. If false no bounding box. The title of an element in the same view, then the boundary of the target element will be used as bounding box. An object with x,y,width and height defines the bounding box.
 			*
 			* @property boundingBox
 			* @type {Boolean}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default false
 			*/
 			boundingBox: false,
@@ -1189,7 +1133,7 @@ export default class Options {
 			*
 			* @property boundingBoxMode
 			* @type {String}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default 'clipping'
 			*/
 			boundingBoxMode: 'clipping',
@@ -1198,7 +1142,7 @@ export default class Options {
 			*
 			* @property autoCenter
 			* @type {Boolean}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default false
 			*/
 			autoCenter: false,
@@ -1207,7 +1151,7 @@ export default class Options {
 			*
 			* @property replace
 			* @type {String}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default ''
 			*/
 			replace: '',
@@ -1216,7 +1160,7 @@ export default class Options {
 			*
 			* @property replaceInAllViews
 			* @type {Boolean}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default ''
 			*/
 			replaceInAllViews: false,
@@ -1225,7 +1169,7 @@ export default class Options {
 			*
 			* @property autoSelect
 			* @type {Boolean}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default false
 			*/
 			autoSelect: false,
@@ -1234,7 +1178,7 @@ export default class Options {
 			*
 			* @property topped
 			* @type {Boolean}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default false
 			*/
 			topped: false,
@@ -1243,7 +1187,7 @@ export default class Options {
 			*
 			* @property colorPrices
 			* @type {Object}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default {}
 			* @example colorPrices: {"000000": 2, "ffffff: "3.5"}
 			*/
@@ -1253,7 +1197,7 @@ export default class Options {
 			*
 			* @property colorLinkGroup
 			* @type {Boolean | String}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default false
 			* @example 'my-color-group'
 			*/
@@ -1263,7 +1207,7 @@ export default class Options {
 			*
 			* @property patterns
 			* @type {Array}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default []
 			* @example patterns: ['patterns/pattern_1.png', 'patterns/pattern_2.png',]
 			*/
@@ -1273,25 +1217,25 @@ export default class Options {
 			*
 			* @property sku
 			* @type {String}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default ''
 			*/
 			sku: '',
 			/**
-			* When true the element is not exported in SVG. If you are going to use one of the data URL methods (e.g. <a href="./FancyProductDesigner.html#method_getProductDataURL">getProductDataURL()</a>), you need to set onlyExportable=true in the options, so the element is not exported in the data URL.
+			* When true the element is not exported in SVG. If you are going to use one of the data URI methods, you need to set onlyExportable=true in the options, so the element is not exported in the data URL.
 			*
 			* @property excludeFromExport
 			* @type {Boolean}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default false
 			*/
 			excludeFromExport: false,
 			/**
-			* Shows the element colors in color selection panel. Requires Fancy Product Designer Plus Add-On.
+			* Shows the element colors in color selection panel. 
 			*
 			* @property showInColorSelection
 			* @type {Boolean}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default false
 			*/
 			showInColorSelection: false,
@@ -1300,7 +1244,7 @@ export default class Options {
 			*
 			* @property locked
 			* @type {Boolean}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default false
 			*/
 			locked: false,
@@ -1309,7 +1253,7 @@ export default class Options {
 			*
 			* @property uniScalingUnlockable
 			* @type {Boolean}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default false
 			*/
 			uniScalingUnlockable: false,
@@ -1318,7 +1262,7 @@ export default class Options {
 			*
 			* @property fixed
 			* @type {Boolean}
-			* @for Options.defaults.elementParameters
+			* @memberof Options.defaults.elementParameters
 			* @default false
 			*/
 			fixed: false,
@@ -1338,10 +1282,10 @@ export default class Options {
 			scaleY: 1,
 		},
 		/**
-		* An object containing the default text element parameters in addition to the <a href="http://fabricjs.com/docs/fabric.IText.html" target="_blank">default Fabric IText properties</a>. See <a href="./Options.defaults.textParameters.html">Options.defaults.textParameters</a>. The properties in the object will merge with the properties in the elementParameters.
+		* An object containing the default text element parameters in addition to the default Fabric IText properties. The properties in the object will merge with the properties in the elementParameters.
 		*
 		* @property textParameters
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Object}
 		*/
 		textParameters: {
@@ -1350,7 +1294,7 @@ export default class Options {
 			*
 			* @property maxLength
 			* @type {Number}
-			* @for Options.defaults.textParameters
+			* @memberof Options.defaults.textParameters
 			* @default 0
 			*/
 			maxLength: 0,
@@ -1359,7 +1303,7 @@ export default class Options {
 			*
 			* @property curved
 			* @type {Boolean}
-			* @for Options.defaults.textParameters
+			* @memberof Options.defaults.textParameters
 			* @default false
 			*/
 			curved: false,
@@ -1368,7 +1312,7 @@ export default class Options {
 			*
 			* @property curvable
 			* @type {Boolean}
-			* @for Options.defaults.textParameters
+			* @memberof Options.defaults.textParameters
 			* @default false
 			*/
 			curvable: false,
@@ -1377,7 +1321,7 @@ export default class Options {
 			*
 			* @property curveSpacing
 			* @type {Number}
-			* @for Options.defaults.textParameters
+			* @memberof Options.defaults.textParameters
 			* @default 10
 			*/
 			curveSpacing: 10,
@@ -1386,7 +1330,7 @@ export default class Options {
 			*
 			* @property curveRadius
 			* @type {Number}
-			* @for Options.defaults.textParameters
+			* @memberof Options.defaults.textParameters
 			* @default 80
 			*/
 			curveRadius: 80,
@@ -1395,7 +1339,7 @@ export default class Options {
 			*
 			* @property curveReverse
 			* @type {Boolean}
-			* @for Options.defaults.textParameters
+			* @memberof Options.defaults.textParameters
 			* @default false
 			*/
 			curveReverse: false,
@@ -1404,7 +1348,7 @@ export default class Options {
 			*
 			* @property maxLines
 			* @type {Number}
-			* @for Options.defaults.textParameters
+			* @memberof Options.defaults.textParameters
 			* @default 0
 			*/
 			maxLines: 0,
@@ -1413,7 +1357,7 @@ export default class Options {
 			*
 			* @property textBox
 			* @type {Boolean}
-			* @for Options.defaults.textParameters
+			* @memberof Options.defaults.textParameters
 			* @default false
 			*/
 			textBox: false,
@@ -1422,7 +1366,7 @@ export default class Options {
 			*
 			* @property textPlaceholder
 			* @type {Boolean | Array}
-			* @for Options.defaults.textParameters
+			* @memberof Options.defaults.textParameters
 			* @default false
 			*/
 			textPlaceholder: false,
@@ -1431,7 +1375,7 @@ export default class Options {
 			*
 			* @property numberPlaceholder
 			* @type {Boolean}
-			* @for Options.defaults.textParameters
+			* @memberof Options.defaults.textParameters
 			* @default false
 			*/
 			numberPlaceholder: false,
@@ -1440,7 +1384,7 @@ export default class Options {
 			*
 			* @property letterSpacing
 			* @type {Number}
-			* @for Options.defaults.textParameters
+			* @memberof Options.defaults.textParameters
 			* @default 0
 			*/
 			letterSpacing: 0,
@@ -1449,7 +1393,7 @@ export default class Options {
 			*
 			* @property chargeAfterEditing
 			* @type {Boolean}
-			* @for Options.defaults.textParameters
+			* @memberof Options.defaults.textParameters
 			* @default false
 			*/
 			chargeAfterEditing: false,
@@ -1458,7 +1402,7 @@ export default class Options {
 			*
 			* @property minFontSize
 			* @type {Number}
-			* @for Options.defaults.textParameters
+			* @memberof Options.defaults.textParameters
 			* @default 1
 			*/
 			minFontSize: 1,
@@ -1467,7 +1411,7 @@ export default class Options {
 			*
 			* @property textTransform
 			* @type {String}
-			* @for Options.defaults.textParameters
+			* @memberof Options.defaults.textParameters
 			* @default 'none'
 			*/
 			textTransform: 'none',
@@ -1476,7 +1420,7 @@ export default class Options {
 			*
 			* @property widthFontSize
 			* @type {Number}
-			* @for Options.defaults.textParameters
+			* @memberof Options.defaults.textParameters
 			* @default 0
 			*/
 			widthFontSize: 0,
@@ -1485,7 +1429,7 @@ export default class Options {
 			*
 			* @property maxFontSize
 			* @type {Number}
-			* @for Options.defaults.textParameters
+			* @memberof Options.defaults.textParameters
 			* @default 1
 			*/
 			maxFontSize: 200,
@@ -1494,7 +1438,7 @@ export default class Options {
 			*
 			* @property shadowColor
 			* @type {String}
-			* @for Options.defaults.textParameters
+			* @memberof Options.defaults.textParameters
 			* @default ''
 			*/
 			shadowColor: '',
@@ -1503,7 +1447,7 @@ export default class Options {
 			*
 			* @property shadowBlur
 			* @type {Number}
-			* @for Options.defaults.textParameters
+			* @memberof Options.defaults.textParameters
 			* @default 0
 			*/
 			shadowBlur: 0,
@@ -1512,7 +1456,7 @@ export default class Options {
 			*
 			* @property shadowOffsetX
 			* @type {Number}
-			* @for Options.defaults.textParameters
+			* @memberof Options.defaults.textParameters
 			* @default 0
 			*/
 			shadowOffsetX: 0,
@@ -1521,7 +1465,7 @@ export default class Options {
 			*
 			* @property shadowOffsetY
 			* @type {Number}
-			* @for Options.defaults.textParameters
+			* @memberof Options.defaults.textParameters
 			* @default 0
 			*/
 			shadowOffsetY: 0,
@@ -1530,7 +1474,7 @@ export default class Options {
 			*
 			* @property textLinkGroup
 			* @type {String}
-			* @for Options.defaults.textParameters
+			* @memberof Options.defaults.textParameters
 			* @default ""
 			*/
 			textLinkGroup: "",
@@ -1539,7 +1483,7 @@ export default class Options {
 			*
 			* @property strokeColors
 			* @type {Array}
-			* @for Options.defaults.textParameters
+			* @memberof Options.defaults.textParameters
 			* @default []
 			*/
 			strokeColors: [],
@@ -1557,10 +1501,10 @@ export default class Options {
 			charSpacing: 0,
 		},
 		/**
-		* An object containing the default image element parameters in addition to the <a href="http://fabricjs.com/docs/fabric.Image.html" target="_blank">default Fabric Image properties</a>. See <a href="./Options.defaults.imageParameters.html">Options.defaults.imageParameters</a>. The properties in the object will merge with the properties in the elementParameters.
+		* An object containing the default image element parameters in addition to the default Fabric Image properties. See Options.defaults.imageParameters. The properties in the object will merge with the properties in the elementParameters.
 		*
 		* @property imageParameters
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Object}
 		*/
 		imageParameters: {
@@ -1569,7 +1513,7 @@ export default class Options {
 			*
 			* @property uploadZone
 			* @type {Boolean}
-			* @for Options.defaults.imageParameters
+			* @memberof Options.defaults.imageParameters
 			* @default false
 			*/
 			uploadZone: false,
@@ -1578,7 +1522,7 @@ export default class Options {
 			*
 			* @property filter
 			* @type {Boolean}
-			* @for Options.defaults.imageParameters
+			* @memberof Options.defaults.imageParameters
 			* @default null
 			*/
 			filter: null,
@@ -1587,7 +1531,7 @@ export default class Options {
 			*
 			* @property scaleMode
 			* @type {String}
-			* @for Options.defaults.imageParameters
+			* @memberof Options.defaults.imageParameters
 			* @default 'fit'
 			*/
 			scaleMode: 'fit',
@@ -1596,7 +1540,7 @@ export default class Options {
 			*
 			* @property resizeToW
 			* @type {Number}
-			* @for Options.defaults.imageParameters
+			* @memberof Options.defaults.imageParameters
 			* @default 0
 			*/
 			resizeToW: 0,
@@ -1605,7 +1549,7 @@ export default class Options {
 			*
 			* @property resizeToH
 			* @type {Number}
-			* @for Options.defaults.imageParameters
+			* @memberof Options.defaults.imageParameters
 			* @default 0
 			*/
 			resizeToH: 0,
@@ -1614,7 +1558,7 @@ export default class Options {
 			*
 			* @property advancedEditing
 			* @type {Boolean}
-			* @for Options.defaults.imageParameters
+			* @memberof Options.defaults.imageParameters
 			* @default false
 			*/
 			advancedEditing: false,
@@ -1623,7 +1567,7 @@ export default class Options {
 			*
 			* @property uploadZoneMovable
 			* @type {Boolean}
-			* @for Options.defaults.imageParameters
+			* @memberof Options.defaults.imageParameters
 			* @default false
 			* version 4.8.2
 			*/
@@ -1633,7 +1577,7 @@ export default class Options {
 			*
 			* @property uploadZoneRemovable
 			* @type {Boolean}
-			* @for Options.defaults.imageParameters
+			* @memberof Options.defaults.imageParameters
 			* @default false
 			* version 5.0.0
 			*/
@@ -1642,10 +1586,10 @@ export default class Options {
 			minScaleLimit: 0.01
 		},
 		/**
-		* An object containing the default parameters for custom added images. See <a href="./Options.defaults.customImageParameters.html">Options.defaults.customImageParameters</a>. The properties in the object will merge with the properties in the elementParameters and imageParameters.
+		* An object containing the default parameters for custom added images. See  Options.defaults.customImageParameters. The properties in the object will merge with the properties in the elementParameters and imageParameters.
 		*
 		* @property customImageParameters
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Object}
 		*/
 		customImageParameters: {
@@ -1654,7 +1598,7 @@ export default class Options {
 			*
 			* @property minW
 			* @type {Number}
-			* @for Options.defaults.customImageParameters
+			* @memberof Options.defaults.customImageParameters
 			* @default 100
 			*/
 			minW: 100,
@@ -1663,7 +1607,7 @@ export default class Options {
 			*
 			* @property minH
 			* @type {Number}
-			* @for Options.defaults.customImageParameters
+			* @memberof Options.defaults.customImageParameters
 			* @default 100
 			*/
 			minH: 100,
@@ -1672,7 +1616,7 @@ export default class Options {
 			*
 			* @property maxW
 			* @type {Number}
-			* @for Options.defaults.customImageParameters
+			* @memberof Options.defaults.customImageParameters
 			* @default 1500
 			*/
 			maxW: 1500,
@@ -1681,7 +1625,7 @@ export default class Options {
 			*
 			* @property maxH
 			* @type {Number}
-			* @for Options.defaults.customImageParameters
+			* @memberof Options.defaults.customImageParameters
 			* @default 1500
 			*/
 			maxH: 1500,
@@ -1690,7 +1634,7 @@ export default class Options {
 			*
 			* @property minDPI
 			* @type {Number}
-			* @for Options.defaults.customImageParameters
+			* @memberof Options.defaults.customImageParameters
 			* @default 72
 			*/
 			minDPI: 72,
@@ -1699,7 +1643,7 @@ export default class Options {
 			*
 			* @property maxSize
 			* @type {Number}
-			* @for Options.defaults.customImageParameters
+			* @memberof Options.defaults.customImageParameters
 			* @default 10
 			*/
 			maxSize: 10
@@ -1708,7 +1652,7 @@ export default class Options {
 		* An object containing additional parameters for custom added text.The properties in the object will merge with the properties in the elementParameters and textParameters.
 		*
 		* @property customTextParameters
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Object}
 		*/
 		customTextParameters: {},
@@ -1716,7 +1660,7 @@ export default class Options {
 		* An object containing the supported media types the user can add in the product designer.
 		*
 		* @property customAdds
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Object}
 		*/
 		customAdds: {
@@ -1725,7 +1669,7 @@ export default class Options {
 			*
 			* @property designs
 			* @type {Boolean}
-			* @for Options.defaults.customAdds
+			* @memberof Options.defaults.customAdds
 			* @default true
 			*/
 			designs: true,
@@ -1734,7 +1678,7 @@ export default class Options {
 			*
 			* @property uploads
 			* @type {Boolean}
-			* @for Options.defaults.customAdds
+			* @memberof Options.defaults.customAdds
 			* @default true
 			*/
 			uploads: true,
@@ -1743,7 +1687,7 @@ export default class Options {
 			*
 			* @property texts
 			* @type {Boolean}
-			* @for Options.defaults.customAdds
+			* @memberof Options.defaults.customAdds
 			* @default true
 			*/
 			texts: true,
@@ -1752,7 +1696,7 @@ export default class Options {
 			*
 			* @property drawing
 			* @type {Boolean}
-			* @for Options.defaults.customAdds
+			* @memberof Options.defaults.customAdds
 			* @default true
 			*/
 			drawing: true
@@ -1761,35 +1705,35 @@ export default class Options {
 		* An object containing the properties (parameters) for the QR code.
 		*
 		* @property qrCodeProps
-		* @for Options.defaults
+		* @memberof Options.defaults
 		* @type {Object}
 		*/
 		qrCodeProps: {
 			/**
 			* @property autoCenter
 			* @type {Boolean}
-			* @for Options.defaults.qrCodeProps
+			* @memberof Options.defaults.qrCodeProps
 			* @default true
 			*/
 			autoCenter: true,
 			/**
 			* @property draggable
 			* @type {Boolean}
-			* @for Options.defaults.qrCodeProps
+			* @memberof Options.defaults.qrCodeProps
 			* @default true
 			*/
 			draggable: true,
 			/**
 			* @property removable
 			* @type {Boolean}
-			* @for Options.defaults.qrCodeProps
+			* @memberof Options.defaults.qrCodeProps
 			* @default true
 			*/
 			removable: true,
 			/**
 			* @property resizable
 			* @type {Boolean}
-			* @for Options.defaults.qrCodeProps
+			* @memberof Options.defaults.qrCodeProps
 			* @default true
 			*/
 			resizable: true
@@ -1800,12 +1744,13 @@ export default class Options {
 	 * Merges the default options with custom options.
 	 *
 	 * @method merge
-	 * @for Options
+     * @static
+	 * @memberof Options
 	 * @param {Object} defaults The default object.
 	 * @param {Object} [merge] The merged object, that will be merged into the defaults.
 	 * @return {Object} The new options object.
 	 */
-	merge(defaults, merge) {
+	merge(defaults={}, merge={}) {
 
 		typeof merge === 'undefined' ? {} : merge;
         
@@ -1820,7 +1765,8 @@ export default class Options {
 	 * Returns all element parameter keys.
 	 *
 	 * @method getParameterKeys
-	 * @for Options
+     * @static
+	 * @memberof Options
 	 * @return {Array} An array containing all element parameter keys.
 	 */
 	getParameterKeys() {
@@ -1837,3 +1783,5 @@ export default class Options {
 	};
 
 };
+
+window.FPDOptions = Options;
