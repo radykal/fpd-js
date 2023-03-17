@@ -1,0 +1,31 @@
+fpd-module-designs {
+    
+    .fpd-head {
+        border-radius: 0 0 2px 2px;
+        display: none;
+        border-bottom: 1px solid @secondaryModuleColor;
+    }
+    
+    &.fpd-head-visible .fpd-head,
+    &.fpd-single-cat .fpd-head {
+        display: block;
+        padding: 10px;
+    }
+    
+    &.fpd-single-cat .fpd-back {
+        display: none;
+    }
+    
+    .fpd-single-cat .fpd-input-search {
+        width: 100%;
+    }
+    
+    .fpd-scroll-area {
+        
+        > .fpd-grid {
+            gap: 2px 2px;
+        }
+        
+    }
+    
+}

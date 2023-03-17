@@ -1,6 +1,6 @@
 import ProductsHTML from '../../html/modules/products.html';
 
-class ProductsModule extends HTMLElement {
+class ProductsView extends HTMLElement {
     
     constructor() {
         
@@ -16,4 +16,4 @@ class ProductsModule extends HTMLElement {
 
 }
 
-customElements.define( 'fpd-module-products', ProductsModule );
+customElements.define( 'fpd-module-products', ProductsView );

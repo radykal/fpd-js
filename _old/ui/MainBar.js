@@ -72,9 +72,6 @@ var FPDMainBar = function(fpdInstance, $mainBar, $modules, $draggableDialog) {
 	//call module by name
 	this.callModule = function(name, dynamicDesignsId) {
         
-		instance.$selectedModule = instance.$content.children('div').removeClass('fpd-active')
-		.filter(dynamicDesignsId ? '[data-dynamic-designs-id="'+dynamicDesignsId+'"]' : '[data-module="'+name+'"]:not([data-dynamic-designs-id])')
-		.addClass('fpd-active');
         
 	
 

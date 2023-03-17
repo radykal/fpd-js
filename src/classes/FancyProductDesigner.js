@@ -24,6 +24,7 @@ export default class FancyProductDesigner extends EventTarget {
      * @default null
      */
     container = null;
+    
     /**
      * The current selected view instance.
      *
@@ -33,8 +34,28 @@ export default class FancyProductDesigner extends EventTarget {
      * @memberof FancyProductDesigner
      */
     currentViewInstance = null;
-    loadingCustomImage = false;
+    
+    /**
+     * Array containing all products.
+     *
+     * @type {Array}
+     * @readonly
+     * @instance
+     * @memberof FancyProductDesigner
+     */
     products = [];
+    
+    /**
+     * Array containing all designs.
+     *
+     * @type {Array}
+     * @readonly
+     * @instance
+     * @memberof FancyProductDesigner
+     */
+    designs = [];
+    
+    loadingCustomImage = false;
     lazyBackgroundObserver = null;
     
     constructor(elem, opts={}) {
@@ -118,6 +139,24 @@ export default class FancyProductDesigner extends EventTarget {
             }
         
         }
+        
+        if(this.mainOptions.designsJSON) {
+            
+            if(typeof this.mainOptions.productsJSON === 'object') {
+                this.setupDesigns(this.mainOptions.designsJSON);
+            }
+            else {
+                                    
+                fetch(this.mainOptions.designsJSON)
+                .then((response) => response.json())
+                .catch(() => {
+                    alert('Design JSON could not be loaded. Please check that your URL is correct! URL: '+this.mainOptions.designsJSON);
+                })
+                .then((data) => this.setupDesigns(data));
+            
+            }
+        
+        }
             
     }
     
@@ -161,18 +200,33 @@ export default class FancyProductDesigner extends EventTarget {
          *
          * @event FancyProductDesigner#productsSet
          * @property {CustomEvent} event
-         * @property {Array} event.detail.products - An array containing the products.
          */
         this.dispatchEvent(
-            new CustomEvent('productsSet', {
-                detail: {
-                    products: products
-                }
-            })
+            new CustomEvent('productsSet')
         );
         
-        
     }
+    
+    /**
+     * Set up the designs with a JSON.
+     *
+     * @method setupDesigns
+     * @param {Array} designs An array containg the categories with designs.
+     */
+    setupDesigns(designs) {
+
+        this.designs = designs;
+                
+        /**
+         * Gets fired as soon as the designs are set.
+         *
+         * @event FancyProductDesigner#designsSet
+         */
+        this.dispatchEvent(
+            new CustomEvent('designsSet')
+        );
+
+    };
     
     /**
      * Adds a new product to the product designer.

@@ -30,7 +30,7 @@ export default class Mainbar extends EventTarget {
         this.container = document.createElement("fpd-main-bar");
         fpdContainer.append(this.container);
         
-        this.contentElem = this.container.querySelector('.fpd-content');
+        this.contentElem = this.container.querySelector('.fpd-module-content');
         this.navElem = this.container.querySelector('.fpd-navigation');
         
         this.currentModules = fpdInstance.mainOptions.mainBarModules;
@@ -42,11 +42,11 @@ export default class Mainbar extends EventTarget {
         this.#dialogContainer.append(this.#draggableDialog);
         
         //prevent right click context menu & document scrolling when in dialog content
-        addEvents(
-            this.#draggableDialog,
-            ['contextmenu'],
-            evt => evt.preventDefault()
-        )
+        // addEvents(
+        //     this.#draggableDialog,
+        //     ['contextmenu'],
+        //     evt => evt.preventDefault()
+        // )
         
         addEvents(
             this.#draggableDialog,
@@ -220,8 +220,14 @@ export default class Mainbar extends EventTarget {
     
     callModule(name, dynamicDesignsId=null) {
         
+        //unselect current module
         removeElemClasses(
             this.navElem.querySelectorAll('.fpd-nav-item'), 
+            ['fpd-active']
+        );
+        
+        removeElemClasses(
+            Array.from(this.contentElem.children), 
             ['fpd-active']
         );
         
@@ -241,6 +247,11 @@ export default class Mainbar extends EventTarget {
                 ['fpd-active']
             );
             
+            addElemClasses(
+                this.contentElem.querySelector('fpd-module-'+name),
+                ['fpd-active']
+            );
+                        
         }
                 
         this.toggleContentDisplay();
@@ -333,7 +344,7 @@ export default class Mainbar extends EventTarget {
     updateContentWrapper() {
         
         const fpdContainer = this.fpdInstance.container;
-        
+            
         this.toggleContentDisplay(false);
         this.#offCanvasEnabled = false;
         this.#draggableDialogEnabled = false;
@@ -360,7 +371,7 @@ export default class Mainbar extends EventTarget {
             this.#draggableDialog.append(this.contentElem);
             
         }
-        
+                
     }
     
     toggleUploadZonePanel(toggle=true) {
@@ -428,7 +439,7 @@ export default class Mainbar extends EventTarget {
         else {
             navElem.classList.remove('fpd-hidden');
         }
-                
+        
         navElem.innerHTML = this.contentElem.innerHTML = '';
         
         //add selected modules
@@ -439,39 +450,6 @@ export default class Mainbar extends EventTarget {
                     navItemTitle = '';
                         
             const moduleWrapper = new ModuleWrapper(this.fpdInstance, this.contentElem, moduleType);
-            
-            //todo
-        //     if(moduleType.includes('designs')) {
-        // 
-        //         moduleType = 'designs';
-        // 
-        //         if(!FPDUtil.isEmpty(fpdInstance.mainOptions.dynamicDesigns) && module.includes('designs_')) {
-        // 
-        //             dynamicDesignId = module.split('_').pop();
-        // 
-        //             if(dynamicDesignId && fpdInstance.mainOptions.dynamicDesigns[dynamicDesignId]) {
-        // 
-        //                 var dynamicDesignConfig = fpdInstance.mainOptions.dynamicDesigns[dynamicDesignId];
-        // 
-        //                 navItemTitle = dynamicDesignConfig.name;
-        //                 moduleAttrs['data-dynamic-designs-id'] = dynamicDesignId;
-        // 
-        //                 if(!FPDUtil.isEmpty(dynamicDesignConfig.icon) && dynamicDesignConfig.icon.indexOf('.svg') != -1) {
-        // 
-        //                     useFpdIcon = false;
-        // 
-        //                     $.get(dynamicDesignConfig.icon, function(data) {
-        //                         $moduleIcon.append($(data).children('svg'));
-        //                     });
-        //                 }
-        // 
-        //             }
-        //             else { //dynamic designs module does not exist
-        //                 return;
-        //             }
-        //         }
-        // 
-        //     }
             
             if(!moduleWrapper.moduleInstance)
                 return;

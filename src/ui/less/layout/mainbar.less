@@ -4,40 +4,47 @@ fpd-main-bar {
     position: relative;
     max-height: 500px;
     
-    .fpd-content {
-        background: #fff;
-    }
-    
     .fpd-close-off-canvas {
         display: none;
     }
     
     /* Navigation */
+    .fpd-navigation {
+        background: var(--fpd-primary-color);
+    }
+    
     .fpd-navigation,
     .fpd-navigation .fpd-nav-icon:before {
         color: var(--fpd-mainbar-nav-color);
     }
-    
-    .fpd-navigation > div svg * {
-        fill: var(--fpd-mainbar-nav-color);
-    }
-    
+        
     .fpd-navigation > div {
         padding: 11px 10px;
         text-align: center;
         cursor: pointer;
+        
+        &.fpd-active {
+            background: var(--fpd-primary-fg-color) !important;
+            color: var(--fpd-primary-color);
+            
+            .fpd-nav-icon:before {
+                color: var(--fpd-primary-color);
+            }
+            
+        }
+        
+        svg {
+            width: 24px;
+            max-height: 30px;
+            vertical-align: middle;
+            
+            * {
+                fill: var(--fpd-mainbar-nav-color);
+            }
+        }
+        
     }
-    
-    .fpd-navigation > div.fpd-active {
-        background: #fff !important;
-    }
-    
-    .fpd-navigation > div svg {
-        width: 24px;
-        max-height: 30px;
-        vertical-align: middle;
-    }
-    
+        
 } 
 
 /* Side Bar */
@@ -49,10 +56,10 @@ fpd-main-bar {
     > fpd-main-bar {
         height: 100%;
         flex: 0 var(--fpd-sidebar-width);
-        background: #fff;
+        background: var(--fpd-primary-fg-color);
         overflow: hidden;
         
-        > .fpd-content {
+        > .fpd-module-content {
             flex: 1;
         }
         
@@ -93,7 +100,7 @@ fpd-main-bar {
                 
             }
             
-            > .fpd-content {
+            > .fpd-module-content {
                 flex: 1 0 100%;
                 height: ~"calc(100% - var(--fpd-sidebar-nav-width))";
                 min-height: auto;
@@ -110,7 +117,7 @@ fpd-main-bar {
                 width: 38px;
                 height: 30px;
                 line-height: 30px;
-                background: #fff;
+                background: var(--fpd-primary-fg-color);
                 z-index: 1000;
                 box-shadow: 1px -3px 4px rgb(0 0 0 / 20%);
                 cursor: pointer;
@@ -127,7 +134,7 @@ fpd-main-bar {
                 display: block !important;
             }
             
-            .fpd-content {
+            .fpd-module-content {
                 display: block !important;
             }
             
@@ -205,7 +212,7 @@ fpd-main-bar {
             white-space: nowrap;
         }
         
-        > .fpd-content {
+        > .fpd-module-content {
             display: none;
         }
             
@@ -221,7 +228,7 @@ fpd-main-bar {
         
         order: 3;
         
-        .fpd-content {
+        .fpd-module-content {
             height: auto;
             width: var(--fpd-off-canvas-width);
             left: ~"calc(-1 * var(--fpd-off-canvas-width))";
@@ -256,7 +263,7 @@ fpd-main-bar {
         
         &.fpd-show  {
             
-            .fpd-content {
+            .fpd-module-content {
                 left: 0;
             }
             
@@ -269,7 +276,7 @@ fpd-main-bar {
         
         &:not(.fpd-is-dragging) {
             
-            .fpd-content,
+            .fpd-module-content,
             .fpd-close-off-canvas {
                 transition: left 300ms cubic-bezier(0.215, 0.61, 0.355, 1);
             }
@@ -282,12 +289,25 @@ fpd-main-bar {
 
 /* Content */
 
-.fpd-content > div {
-    display: none;
+.fpd-module-content {
+    background: var(--fpd-primary-fg-color);
     
-    &.fpd-active {
+    > * {
+        height: 100%;
+        display: none;
+        
+        > div {
+            height: 100%;
+            display: flex;
+            flex-flow: column;
+        }
+    }
+    
+    > *.fpd-active {
         display: block;
     }
+    
+    
     
 }
 
@@ -298,7 +318,7 @@ fpd-main-bar {
     width: 350px;
     height: 450px;
     margin-top: 5px;
-    background: #fff;
+    background: var(--fpd-primary-fg-color);
     position: absolute !important;
     left: ~"calc(50% - 175px)";
     top: ~"calc(45% - 200px)";
@@ -315,7 +335,8 @@ fpd-main-bar {
 }
 
 .fpd-draggable-dialog > .fpd-dialog-head {
-    color: #fff;
+    background: var(--fpd-primary-color);
+    color: var(--fpd-primary-fg-color);
     display: flex;
     height: 40px;
     font-size: 15px;
@@ -351,7 +372,7 @@ fpd-main-bar {
     opacity: 1;
 }
 
-.fpd-draggable-dialog .fpd-content {
+.fpd-draggable-dialog .fpd-module-content {
     top: 0 !important;
     height: ~"calc(100% - 40px)" !important;
 }

@@ -1,0 +1,53 @@
+fpd-module-text {
+            
+    .fpd-add-text {
+        
+        padding: 10px;
+        
+        input {
+            padding: 3px 5px;
+            width: 80px;
+            display: block;
+        }
+        
+        .fpd-btn {
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        
+    }
+        
+    .fpd-text-templates {
+        
+        border-top: 1px solid var(--fpd-border-color);
+        
+        .fpd-grid {
+            gap: 2px;
+            
+            .fpd-item {
+                background: @secondaryModuleColor;
+                text-align: center;
+                position: relative;
+                border-radius: 2px;
+            
+                > div {
+                    font-size: 16px;
+                    width: 80%;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                }
+                
+                &:hover {
+                    background: darken(@secondaryModuleColor, 10%);
+                }
+            
+            }
+            
+        }
+        
+    }
+
+}
+

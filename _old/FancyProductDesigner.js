@@ -13,13 +13,7 @@
 
 var FancyProductDesigner = function(elem, opts) {
 
-	'use strict';
-
-	$ = jQuery;
-
 	var instance = this,
-		$window = $(window),
-		$body = $('body'),
 		$elem,
 		$mainBar,
 		$stageLoader,
@@ -37,21 +31,6 @@ var FancyProductDesigner = function(elem, opts) {
 		_productElementLoadingIndex = 0,
 		_outOfBoundingBoxLabel = '';
 
-	/**
-	 * Array containing all added products categorized.
-	 *
-	 * @property products
-	 * @type Array
-	 */
-	this.products = [];
-
-	/**
-	 * Array containing all added designs.
-	 *
-	 * @property designs
-	 * @type Array
-	 */
-	this.designs = [];
 
 	/**
 	 * The current selected product category index.
@@ -275,34 +254,12 @@ var FancyProductDesigner = function(elem, opts) {
 		"plus": {}
 	};
 	this._order = {};
-	this._loadingCustomImage = false;
 	this._prevPrintingBoxes = [];
 
 	var fpdOptionsInstance = new FancyProductDesignerOptions();
 	this.mainOptions = fpdOptionsInstance.merge(fpdOptionsInstance.defaults, opts);
 
 	var _initialize = function() {
-
-		// @@include('../envato/evilDomain.js')
-
-		//create custom jquery expression to ignore case when filtering
-		$.expr[":"].containsCaseInsensitive = $.expr.createPseudo(function(arg) {
-		    return function( elem ) {
-		        return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
-		    };
-		});
-
-		//check if element is a jquery object
-		if(elem instanceof jQuery) {
-			$elem = elem;
-		}
-		else {
-			$elem = $(elem);
-		}
-
-		instance.$modalContainer = instance.mainOptions.openModalInDesigner ? $elem : $('body');
-
-		$elem.removeClass('fpd-module-visible fpd-ui-theme-doyle');
 
 		initCSSClasses = $elem.attr('class') ? $elem.attr('class') : '';
 
@@ -315,13 +272,6 @@ var FancyProductDesigner = function(elem, opts) {
 
 		if(!instance.mainOptions.fabricCanvasOptions.allowTouchScrolling) {
 			$elem.addClass('fpd-disable-touch-scrolling');
-		}
-
-		//doyle setup
-		$elem.addClass('fpd-device-'+FPDUtil.getDeviceByScreenSize());
-		$elem.addClass('fpd-ui-theme-'+instance.mainOptions.uiTheme);
-		if(instance.mainOptions.uiTheme == 'doyle') {
-			$elem.removeClass('fpd-topbar fpd-tabs-top').addClass('fpd-sidebar fpd-tabs-side')
 		}
 
 		instance.$container = $elem.data('instance', instance);
@@ -414,31 +364,6 @@ var FancyProductDesigner = function(elem, opts) {
 
 		}
 
-		//test if browser is supported (safari, chrome, opera, firefox IE>9)
-		var canvasTest = document.createElement('canvas'),
-			canvasIsSupported = Boolean(canvasTest.getContext && canvasTest.getContext('2d')),
-			minIE = instance.mainOptions.templatesDirectory ? 9 : 8;
-
-		if(!canvasIsSupported || (FPDUtil.isIE() && Number(FPDUtil.isIE()) <= minIE)) {
-
-			_loadTemplate('canvaserror', instance.mainOptions.templatesType, 0, function(html) {
-
-				$elem.append($.parseHTML(html)).fadeIn(300);
-				$elem.trigger('templateLoad', [this.url]);
-
-			});
-
-			/**
-		     * Gets fired when the browser does not support HTML5 canvas.
-		     *
-		     * @event FancyProductDesigner#canvasFail
-		     * @param {Event} event
-		     */
-			$elem.trigger('canvasFail');
-
-			return false;
-		}
-
 		//lowercase all keys in hexNames
 		var key,
 			keys = Object.keys(instance.mainOptions.hexNames),
@@ -485,86 +410,12 @@ var FancyProductDesigner = function(elem, opts) {
 			instance.pricingRulesInstance = new FPDPricingRules($elem, instance);
 		}
 
-		//load language JSON
-		if(instance.mainOptions.langJSON !== false) {
-
-			if(typeof instance.mainOptions.langJSON === 'object') {
-
-				instance.langJson = instance.mainOptions.langJSON;
-
-				$elem.trigger('langJSONLoad', [instance.langJson]);
-
-				_initProductStage();
-
-			}
-			else {
-
-				$.getJSON(instance.mainOptions.langJSON).done(function(data) {
-
-					instance.langJson = data;
-
-					/**
-				     * Gets fired when the language JSON is loaded.
-				     *
-				     * @event FancyProductDesigner#langJSONLoad
-				     * @param {Event} event
-				     * @param {Object} langJSON - A JSON containing the translation.
-				     */
-					$elem.trigger('langJSONLoad', [instance.langJson]);
-
-					_initProductStage();
-
-				})
-				.fail(function(data) {
-
-					FPDUtil.showModal('Language JSON "'+instance.mainOptions.langJSON+'" could not be loaded or is not valid. Make sure you set the correct URL in the options and the JSON is valid!');
-
-					$elem.trigger('langJSONLoad', [instance.langJson]);
-				});
-
-			}
-
-
-		}
-		else {
-			_initProductStage();
-		}
 
 	}; //init end
 
 	//init the product stage
 	var _initProductStage = function() {
 
-		var loaderHTML = '<div class="fpd-loader-wrapper"><div class="fpd-loader"><div class="fpd-loader-circle"></div><span class="fpd-loader-text" data-defaulttext="Initializing Product Designer">misc.initializing</span></div></div>',
-			tooltipHtml = '<div class="fpd-element-tooltip" style="display: none;" data-defaulttext="Move element in its containment!">misc.out_of_bounding_box</div>';
-
-		//add init loader
-		instance.$mainWrapper = $elem.addClass('fpd-container fpd-clearfix fpd-grid-columns-'+instance.mainOptions.gridColumns).html(loaderHTML+'<div class="fpd-main-wrapper">'+tooltipHtml+'<div class="fpd-snap-line-h"></div><div class="fpd-snap-line-v"></div><div class="fpd-product-stage" style="width:'+instance.mainOptions.stageWidth+'px;height: '+instance.mainOptions.stageHeight+'px;"></div></div>').children('.fpd-main-wrapper');
-
-		instance.$actionsWrapper = $('<div class="fpd-actions-container"></div>');
-		if(instance.mainOptions.uiTheme == 'doyle') {
-			instance.$actionsWrapper.addClass('fpd-primary-bg-color').prependTo(instance.$container);
-		}
-		else { //flat
-			instance.$actionsWrapper.appendTo(instance.$mainWrapper);
-		}
-
-
-		if(!instance.mainOptions.editorMode) {
-			$elem.after('<div class="fpd-device-info">'+instance.getTranslation('misc', 'not_supported_device_info')+'</div>');
-		}
-
-		instance.$mainWrapper.prepend('<div class="fpd-modal-lock"><div class="fpd-toggle-lock"><span class="fpd-icon-unlocked"></span><span class="fpd-icon-locked"></span><div>'+instance.getTranslation('misc', 'view_optional_unlock')+'</div></div></div>');
-
-		instance.$productStage  = instance.$mainWrapper.children('.fpd-product-stage')
-		instance.$elementTooltip = instance.$mainWrapper.children('.fpd-element-tooltip');
-		$stageLoader = $elem.children('.fpd-loader-wrapper');
-
-		instance.translateElement($stageLoader.find('.fpd-loader-text'));
-		_outOfBoundingBoxLabel = instance.translateElement(instance.$elementTooltip);
-		if(instance.mainOptions.modalMode) {
-			instance.translateElement($body.find('.fpd-modal-overlay .fpd-done'));
-		}
 
 		//load editor box if requested
 		if(typeof instance.mainOptions.editorMode === 'string') {
@@ -698,24 +549,6 @@ var FancyProductDesigner = function(elem, opts) {
 	//now load UI elements from external HTML file
 	var _loadProductDesignerTemplate = function(html) {
 
-		/**
-	     * Gets fired as soon as a template has been loaded.
-	     *
-	     * @event FancyProductDesigner#templateLoad
-	     * @param {Event} event
-	     * @param {string} URL - The URL of the loaded template.
-	     */
-		$elem.trigger('templateLoad', [this.url]);
-
-		$uiElements = $(html);
-
-		$uiElements.find('[data-defaulttext]').each(function(index, uiElement) {
-
-			instance.translateElement($(uiElement));
-
-		});
-
-		instance.translatedUI = $uiElements;
 
 		if(instance.mainOptions.mainBarContainer) {
 
@@ -727,14 +560,6 @@ var FancyProductDesigner = function(elem, opts) {
 			$mainBar = $uiElements.children('.fpd-mainbar').insertBefore($elem.children('.fpd-loader-wrapper'));
 		}
 
-		$modules = $uiElements.children('.fpd-modules');
-
-		if($elem.hasClass('fpd-sidebar')) {
-			$elem.height(instance.mainOptions.stageHeight);
-		}
-		else {
-			$elem.width(instance.mainOptions.stageWidth);
-		}
 
 		//show tabs content
 		$body.on('click', '.fpd-module-tabs > div', function() {
@@ -747,30 +572,6 @@ var FancyProductDesigner = function(elem, opts) {
 
 		});
 
-		//setup modules
-		if(instance.mainOptions.mainBarModules) {
-
-			instance.mainBar = new FPDMainBar(
-				instance,
-				$mainBar,
-				$modules,
-				$uiElements.children('.fpd-draggable-dialog')
-			);
-
-		}
-
-		//init Actions
-		if(instance.mainOptions.actions) {
-			instance.actions = new FPDActions(instance, $uiElements.children('.fpd-actions'));
-		}
-
-		/**
-	     * Gets fired as soon as the user interface with all modules, actions is set and translated.
-	     *
-	     * @event FancyProductDesigner#uiSet
-	     * @param {Event} event
-	     */
-		$elem.trigger('uiSet');
 
 		//init Toolbar
 		var $elementToolbar = $uiElements.children('.fpd-element-toolbar');
@@ -993,11 +794,6 @@ var FancyProductDesigner = function(elem, opts) {
 
 		});
 
-		$('.fpd-dropdown').click(function() {
-
-			$(this).toggleClass('fpd-active');
-
-		});
 
 		$body.on('click', '.fpd-views-wrapper .fpd-view-prev, .fpd-views-wrapper .fpd-view-next', function() {
 
@@ -1415,27 +1211,6 @@ var FancyProductDesigner = function(elem, opts) {
 				})
 				.fail(function() {
 					FPDUtil.showModal('Products JSON could not be loaded. Please check that your URL is correct!<br>URL: <i>'+instance.mainOptions.productsJSON+'</i>');
-				});
-
-			}
-
-		}
-
-		if(instance.mainOptions.designsJSON) {
-
-			if(typeof instance.mainOptions.designsJSON === 'object') {
-				instance.setupDesigns(instance.mainOptions.designsJSON);
-			}
-			else {
-
-				$.getJSON(instance.mainOptions.designsJSON)
-				.done(function(data) {
-					/*data = data[0];
-					data = data.designs;*/
-					instance.setupDesigns(data);
-				})
-				.fail(function() {
-					FPDUtil.showModal('Designs JSON could not be loaded. Please check that your URL is correct!<br>URL: <i>'+instance.mainOptions.designsJSON+'</i>');
 				});
 
 			}
@@ -3212,31 +2987,6 @@ var FancyProductDesigner = function(elem, opts) {
 	};
 
 	/**
-	 * Get the translation of a label.
-	 *
-	 * @method getTranslation
-	 * @param {String} section The section key you want - toolbar, actions, modules or misc.
-	 * @param {String} label The label key.
-	 */
-	this.getTranslation = function(section, label, defaulText) {
-
-		defaulText = defaulText === undefined ? '' : defaulText;
-
-		if(instance.langJson) {
-
-			section = instance.langJson[section];
-
-			if(section) {
-				return section[label] ? section[label] : defaulText;
-			}
-
-		}
-
-		return defaulText;
-
-	};
-
-	/**
 	 * Returns an array with all custom added elements.
 	 *
 	 * @method getCustomElements
@@ -3713,69 +3463,6 @@ var FancyProductDesigner = function(elem, opts) {
 
 	};
 
-	//translates a HTML element
-	this.translateElement = function($tag) {
-
-		var label = '';
-		if(instance.langJson) {
-
-			var objString = '';
-
-			if($tag.attr('placeholder') !== undefined) {
-				objString = $tag.attr('placeholder');
-			}
-			else if($tag.attr('title') !== undefined) {
-				objString = $tag.attr('title');
-			}
-			else if($tag.data('title') !== undefined) {
-				objString = $tag.data('title');
-			}
-			else {
-				objString = $tag.text();
-			}
-
-			var keys = objString.split('.'),
-				firstObject = instance.langJson[keys[0]];
-
-			if(firstObject) { //check if object exists
-
-				label = firstObject[keys[1]];
-
-				if(label === undefined) { //if label does not exist in JSON, take default text
-					label = $tag.data('defaulttext');
-				}
-
-			}
-			else {
-				label = $tag.data('defaulttext');
-			}
-
-			//store all translatable labels in json
-			var sectionObj = instance.languageJSON[keys[0]];
-			sectionObj[keys[1]] = label;
-
-		}
-		else {
-			label = $tag.data('defaulttext');
-		}
-
-		if($tag.attr('placeholder') !== undefined) {
-			$tag.attr('placeholder', label).text('');
-		}
-		else if($tag.attr('title') !== undefined) {
-			$tag.attr('title', label);
-		}
-		else if($tag.data('title') !== undefined) {
-			$tag.data('title', label);
-		}
-		else {
-			$tag.text(label);
-		}
-
-		return label;
-
-	};
-
 	this.selectGuidedTourStep = function(target) {
 
 		$body.children('.fpd-gt-step').remove();
@@ -3850,84 +3537,6 @@ var FancyProductDesigner = function(elem, opts) {
 	};
 
 	/**
-	 * Set up the products with a JSON.
-	 *
-	 * @method setupProducts
-	 * @param {Array} products An array containg the products or categories with products.
-	 * @example [{
-	 "category": "Category Title", "products":
-	 	[{"productTitle": "TITLE OF PRODUCT", "productThumbnail": "THUMBNAIL OF PRODUCT" "title": "TITLE OF VIEW", "thumbnail": "THUMBNAIL OF VIEW", "OPTIONS": {OBJECT VIEW OPTIONS}, "ELEMENTS": [ARRAY OF ELEMENTS]
-	 	...
-]}
-	 */
-	this.setupProducts = function(products) {
-
-		products = products === undefined ? [] : products;
-
-		this.products = [];
-
-		products.forEach(function(productItem) {
-
-			if(productItem.hasOwnProperty('category')) { //check if products JSON contains categories
-
-				productItem.products.forEach(function(singleProduct) {
-					instance.addProduct(singleProduct, productItem.category);
-				});
-
-			}
-			else {
-				instance.addProduct(productItem);
-			}
-
-		});
-
-		//load first product
-		if(instance.mainOptions.loadFirstProductInStage && products.length > 0 && !stageCleared) {
-			instance.selectProduct(0);
-		}
-		else {
-			instance.toggleSpinner(false);
-		}
-
-		/**
-	     * Gets fired as soon as products are set either from the HTML or added as JSON.
-	     *
-	     * @event FancyProductDesigner#productsSet
-	     * @param {Event} event
-	     * @param {Array} products - An array containing the products.
-	     */
-		$elem.trigger('productsSet', [instance.products]);
-
-	};
-
-	/**
-	 * Set up the designs with a JSON.
-	 *
-	 * @method setupDesigns
-	 * @param {Array} designs An array containg the categories with designs.
-	 * @example [{
-	 "title": "Category Title", "thumbnail": "Thumbnail of Category", "designs": [ARRAY OF ELEMENTS]},
-	 {"title": "Category Title", "thumbnail": "Thumbnail of Category", "category": [
-	 		{"title": "Category Child", "thumbnail": "Thumbnail of Category", "designs": [ARRAY OF ELEMENTS]}
-	 ]}
-]
-	 */
-	this.setupDesigns = function(designs) {
-
-		instance.designs = designs;
-
-		/**
-	     * Gets fired as soon as designs are set either from the HTML or added as JSON.
-	     *
-	     * @event FancyProductDesigner#designsSet
-	     * @param {Event} event
-	     * @param {Array} designs - An array containing the designs.
-	     */
-		$elem.trigger('designsSet', [instance.designs]);
-
-	};
-
-	/**
 	 * Toggle the responsive behavior.
 	 *
 	 * @method toggleResponsive
@@ -3953,106 +3562,7 @@ var FancyProductDesigner = function(elem, opts) {
 
 	};
 
-	/**
-	 * Load custom fonts or from Google webfonts  used in the product designer.
-	 *
-	 * @method loadFonts
-	 * @param {Array} fonts An array containing objects with name and URL to the font file.
-	 * @param {Function} callback A function that will be called when all fonts have been loaded.
-	 * @version 4.7.6
-	 */
-	this.loadFonts = function(fonts, callback) {
 
-		if(fonts && fonts.length > 0 && typeof fonts[0] === 'object') {
-
-			var googleFonts = [],
-				customFonts = [],
-				fontStateCount = 0,
-				$customFontsStyle;
-
-			if(instance.$container.prevAll('#fpd-custom-fonts').length == 0) {
-
-				$customFontsStyle = $('<style type="text/css" id="fpd-custom-fonts"></style>');
-				instance.$container.before($customFontsStyle);
-
-			}
-			else {
-				$customFontsStyle = instance.$container.prevAll('#fpd-custom-fonts:first').empty();
-			}
-
-			fonts.forEach(function(fontItem) {
-
-				if(fontItem.hasOwnProperty('url')) {
-
-					if(fontItem.url == 'google') { //from google fonts
-						googleFonts.push(fontItem.name+':400,400i,700,700i');
-					}
-					else { //custom fonts
-
-						var fontFamily = fontItem.name;
-
-						fontFamily += ':n4'
-
-						if(fontItem.variants) {
-							fontFamily += ','+Object.keys(fontItem.variants).toString();
-						}
-
-						customFonts.push(fontFamily);
-
-						$customFontsStyle.append(FPDUtil.parseFontsToEmbed(fontItem, instance.mainOptions._loadFromScript));
-
-					}
-
-				}
-
-			});
-
-			var _fontActiveState = function(state, familyName, fvd) {
-
-				if(state == 'inactive') {
-					FPDUtil.log(familyName+' font could not be loaded.', 'warn');
-				}
-
-				if(fontStateCount == (googleFonts.length + customFonts.length)-1) {
-					callback();
-				}
-
-				fontStateCount++;
-
-			};
-
-			var WebFontOpts = {
-				 fontactive: function(familyName, fvd) {
-				    _fontActiveState('active', familyName, fvd);
-			    },
-			    fontinactive: function(familyName, fvd) {
-				    _fontActiveState('inactive', familyName, fvd);
-				},
-			    timeout: 3000
-			};
-
-			if(googleFonts.length > 0) {
-				WebFontOpts.google = {families: googleFonts};
-			}
-
-			if(customFonts.length > 0) {
-				WebFontOpts.custom = {families: customFonts};
-			}
-
-			if(typeof WebFont !== 'undefined' && (googleFonts.length > 0 || customFonts.length > 0)) {
-				WebFont.load(WebFontOpts);
-			}
-			else {
-				callback();
-			}
-
-
-		}
-		else {
-			callback();
-		}
-
-	};
 
 	/**
 	 * Generates an object that will be used for the print-ready export. This objects includes the used fonts and the SVG data strings to generate the PDF.

@@ -43,20 +43,21 @@ const addElemClasses = (elements=[], classes=[]) => {
     
     if(elements) {
         
-        if(elements instanceof NodeList) {
+        if(elements instanceof HTMLElement) {
+            
+            classes.forEach(c => {
+                elements.classList.add(c);
+            })
+            
+        }
+        else {
             
             elements.forEach(elem => {
                 classes.forEach(c => {
                     elem.classList.add(c);
                 })
-            
             })
             
-        }
-        else if(elements instanceof HTMLElement) {
-            classes.forEach(c => {
-                elements.classList.add(c);
-            })
         }
         
     }
@@ -71,7 +72,14 @@ const removeElemClasses = (elements=[], classes=[]) => {
     
     if(elements) {
         
-        if(elements instanceof NodeList) {
+        if(elements instanceof HTMLElement) {
+            
+            classes.forEach(c => {
+                elements.classList.remove(c);
+            })
+            
+        }
+        else {
             
             elements.forEach(elem => {
                 classes.forEach(c => {
@@ -81,11 +89,7 @@ const removeElemClasses = (elements=[], classes=[]) => {
             })
             
         }
-        else if(elements instanceof HTMLElement) {
-            classes.forEach(c => {
-                elements.classList.remove(c);
-            })
-        }
+        
          
     }
     
@@ -99,20 +103,21 @@ const toggleElemClasses = (elements=[], classes=[], toggle=true) => {
     
     if(elements) {
         
-        if(elements instanceof NodeList) {
+        if(elements instanceof HTMLElement) {
+            
+            classes.forEach(c => {
+                elements.classList.toggle(c, toggle);
+            })
+            
+        }
+        else {
             
             elements.forEach(elem => {
                 classes.forEach(c => {
                     elem.classList.toggle(c, toggle);
                 })
-            
             })
             
-        }
-        else if(elements instanceof HTMLElement) {
-            classes.forEach(c => {
-                elements.classList.toggle(c, toggle);
-            })
         }
         
     }

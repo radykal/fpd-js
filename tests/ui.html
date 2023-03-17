@@ -45,7 +45,8 @@
         <script>
             
             const appOptions = {
-                langJson: 'http://localhost:8080/data/langs/default.json',
+                langJson: 'data/langs/default.json',
+                initialActiveModule: 'designs',
                 responsiveBreakpoints: {
                 },
                 mainBarModules: [
@@ -70,7 +71,66 @@
                     },
                     {name: 'Pacifico', url: 'fonts/Pacifico.ttf'},
                 ],
-                productsJSON: 'data/products/product-categories.json'
+                productsJSON: 'data/products/product-categories.json',
+                designsJSON: 'data/designs/design-categories.json',
+                textTemplates: [
+                    {
+                        text: "This is\nmy world",
+                        properties: {
+                            fontSize: 30,
+                            fontFamily: "Lobster"
+                        }
+                    },
+                    {
+                        text: "This is my crazy world.",
+                        properties: {
+                            fontSize: 50,
+                            fontFamily: "Lobster"
+                        }
+                    },
+                    {
+                        text: "This is\nmy world",
+                        properties: {
+                            fontSize: 30,
+                            fontFamily: "Lobster"
+                        }
+                    },
+                    {
+                        text: "This is my crazy world.",
+                        properties: {
+                            fontSize: 50,
+                            fontFamily: "Lobster"
+                        }
+                    },
+                    {
+                        text: "This is\nmy world",
+                        properties: {
+                            fontSize: 30,
+                            fontFamily: "Lobster"
+                        }
+                    },
+                    {
+                        text: "This is my crazy world.",
+                        properties: {
+                            fontSize: 50,
+                            fontFamily: "Lobster"
+                        }
+                    },
+                    {
+                        text: "This is\nmy world",
+                        properties: {
+                            fontSize: 30,
+                            fontFamily: "Lobster"
+                        }
+                    },
+                    {
+                        text: "This is my crazy world.",
+                        properties: {
+                            fontSize: 50,
+                            fontFamily: "Lobster"
+                        }
+                    }
+                ],
             }
                 
             const fpd = new FancyProductDesigner(document.getElementById('fpd-target'), appOptions);

@@ -163,15 +163,6 @@ export default class Options {
 		*/
 		replaceInitialElements: false,
 		/**
-		* If true lazy load will be used for the images in the "Designs" module and "Change Product" module.
-		*
-		* @property lazyLoad
-		* @memberof Options.defaults
-		* @type {Boolean}
-		* @default true
-		*/
-		lazyLoad: true,
-		/**
 		* An object that contains the settings for the AJAX post when a custom added image is added to the canvas (Uploaded Images, Facebook/Instagram Photos). This allows to send the URL of the image to a custom-built script, that returns the data URI of the image or uploads the image to your server and returns the new URL on your server. By default the URL is send to php/custom-image-handler.php. See the official jQuery.ajax documentation for more information. The data object has a reserved property called url, which is the image URL that will send to the script. The success function is also reserved.
 		*
 		* @property customImageAjaxSettings

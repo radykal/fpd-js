@@ -20,7 +20,9 @@
 	touch-action: none !important;
 }
 
+/* Scrollbar */
 .fpd-container .fpd-scroll-area {
+    
 	height: 100%;
     overflow: auto;
     scrollbar-width: var(--fpd-scrollbar-width);
@@ -45,6 +47,18 @@
     }
     
 }
+
+.fpd-scrollbar-hidden {
+    overscroll-behavior: none;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+    
+    &::-webkit-scrollbar { 
+        display: none;  /* Safari and Chrome */
+    }
+}
+
+
 
 /* View Modal Lock */
 
