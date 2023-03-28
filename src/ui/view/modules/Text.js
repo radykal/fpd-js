@@ -1,4 +1,4 @@
-import TextHTML from '../../html/modules/text.html';
+import html from '/src/ui/html/modules/text.html';
 
 class TextView extends HTMLElement {
     
@@ -10,7 +10,7 @@ class TextView extends HTMLElement {
 
     connectedCallback() {
         
-        this.innerHTML = TextHTML;
+        this.innerHTML = html;
         
     }
 

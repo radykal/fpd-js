@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Framework | Testing all web components</title>
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="//code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src='./dist/js/vendor.js'></script>
     <script src='js/FancyProductDesigner.js'></script>
     <link href="./dist/css/vendor.css" rel="stylesheet" type="text/css">
     <style>
@@ -46,14 +47,16 @@
             
             const appOptions = {
                 langJson: 'data/langs/default.json',
-                initialActiveModule: 'designs',
+                initialActiveModule: 'images',
                 responsiveBreakpoints: {
                 },
                 mainBarModules: [
                     'products',
                     'images',
                     'text',
+                    'text-to-image',
                     'designs',
+                    'designs_love',
                     'manage-layers',
                     'text-layers',
                     'layouts',
@@ -131,6 +134,34 @@
                         }
                     }
                 ],
+                dynamicDesigns: {
+                    "love": {
+                        name: "Love",
+                        icon: "https://dek8oqj8xxsl6.cloudfront.net/img/humans/silhouettes/silhouette_10.svg",
+                        categories: ['love']
+                    }
+                },
+                customImageAjaxSettings: {
+                    url: 'https://radykal.dep/fpd-js/server/php/custom-image-handler.php',
+                    data: {
+                        saveOnServer: 1,
+                        uploadsDir: '/Users/rady/htdocs/fpd-js/data/uploads',
+                        uploadsDirURL: this.location.origin + '/data/uploads'
+                    }
+                },
+                facebookAppId: '893957135155898',
+                instagramClientId: '6748682918479320',
+                instagramRedirectUri: 'https://localhost:8080/data/html/instagram_auth.html',
+                instagramTokenUri: 'https://radykal.dep/fpd-js/server/php/instagram-token.php',
+                customImageParameters: {
+                    price: 10,
+                    maxSize: 1
+                },
+                uploadAgreementModal: false,
+                swapProductConfirmation: true,
+                pixabayApiKey: '7571591-cf8ff820ec635edeb4e8c6af7',
+                 pixabayLang: 'de',
+                pixabayHighResImages: false,
             }
                 
             const fpd = new FancyProductDesigner(document.getElementById('fpd-target'), appOptions);

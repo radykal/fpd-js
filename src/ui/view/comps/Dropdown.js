@@ -1,16 +1,44 @@
-import DropdownHTML from '../../html/comps/dropdown.html';
+import DropdownHTML from '/src/ui/html/comps/dropdown.html';
 
 class FPD_Dropdown extends HTMLElement {
     
+    placeholder = '';
+    value = '';
     searchable = false;
     
     constructor() {
         
         super();
         this.innerHTML = DropdownHTML;
+        
+    }
+    
+    connectedCallback() {
+
         this.addEventListener('click', () => {
-            
             this.classList.toggle('fpd-active');
+        });
+        
+        this.querySelector('input.fpd-dropdown-current')
+        .addEventListener('keyup', (evt) => {
+            
+            if(this.searchable) {
+                
+                const searchStr = evt.currentTarget.value;
+                this.querySelectorAll('.fpd-dropdown-list .fpd-item').forEach((item) => {
+                    
+                    if(searchStr.length == 0) {
+                        item.classList.remove('fpd-hidden');
+                    }
+                    else {
+                        item.classList.toggle(
+                            'fpd-hidden', 
+                            !item.innerText.toLowerCase().includes(searchStr.toLowerCase()));
+                    }
+            
+                })
+                
+            }
             
         })
         
@@ -18,11 +46,7 @@ class FPD_Dropdown extends HTMLElement {
     
     static get observedAttributes() {
         
-        return ['searchable']
-        
-    }
-
-    connectedCallback() {
+        return ['searchable', 'placeholder', 'value']
         
     }
     
@@ -30,8 +54,18 @@ class FPD_Dropdown extends HTMLElement {
         
         if (oldValue !== newValue) {
             
-            if(name === 'searchable') {
+            if(name === 'placeholder') {
+                this.querySelector('input.fpd-dropdown-current')
+                .setAttribute('placeholder', newValue);
             }
+            else if(name === 'value') {
+                this.querySelector('input.fpd-dropdown-current')
+                .value = newValue;
+            }
+            else if(name === 'searchable') {
+                this.searchable = this.hasAttribute('searchable');
+            }
+            
         }
         
     }

@@ -2,7 +2,7 @@ import MainbarView from '../view/Mainbar.js';
 import UIManager from '../UIManager';
 import ModuleWrapper from './ModuleWrapper';
 
-import { addEvents, addElemClasses, removeElemClasses, toggleElemClasses } from '../../utils.js';
+import { addEvents, addElemClasses, removeElemClasses, toggleElemClasses } from '/src/helpers/utils';
 
 export default class Mainbar extends EventTarget {
     
@@ -201,7 +201,7 @@ export default class Mainbar extends EventTarget {
             
             this.callModule(
                 evt.currentTarget.dataset.module,
-                evt.currentTarget.dataset.dynamicdesignsid,
+                evt.currentTarget.dataset.dynamicDesignsId,
             );
             
         }
@@ -236,6 +236,11 @@ export default class Mainbar extends EventTarget {
             
             selectedNavItem = addElemClasses(
                 this.navElem.querySelector('.fpd-nav-item[data-dynamic-designs-id="'+dynamicDesignsId+'"]'),
+                ['fpd-active']
+            );
+            
+            addElemClasses(
+                this.contentElem.querySelector('[data-dynamic-designs-id="'+dynamicDesignsId+'"]'),
                 ['fpd-active']
             );
             
@@ -446,14 +451,13 @@ export default class Mainbar extends EventTarget {
         modules.forEach((moduleType) => {
         
                 let dynamicDesignId = null,
-                    moduleAttrs = {},
                     navItemTitle = '';
                         
             const moduleWrapper = new ModuleWrapper(this.fpdInstance, this.contentElem, moduleType);
             
             if(!moduleWrapper.moduleInstance)
                 return;
-            
+                            
             //create nav item element            
             const navItemElem = document.createElement('div');
             navItemElem.classList.add('fpd-nav-item');
@@ -463,16 +467,28 @@ export default class Mainbar extends EventTarget {
             
             //create nav icon
             let moduleIcon = document.createElement('span');
-            moduleIcon.classList.add('fpd-nav-icon');
-            moduleIcon.classList.add(moduleWrapper.configs.icon);
+            if(moduleWrapper.configs.icon.includes('.svg')) {
+                
+                fetch(moduleWrapper.configs.icon)
+                .then(r => r.text())
+                .then(svg => {
+                    moduleIcon.innerHTML = svg;
+                })
+                
+            }
+            else {
+                moduleIcon.classList.add('fpd-nav-icon');
+                moduleIcon.classList.add(moduleWrapper.configs.icon);
+            }
+            
             navItemElem.append(moduleIcon);
             
             //create label inside nav item
-            if(!dynamicDesignId) {
+            if(moduleWrapper.configs.langKeys) {
                 
                 //get translation for nav item label
                 const langKeys = moduleWrapper.configs.langKeys;
-                navItemTitle = this.fpdInstance.translatorInstance.getTranslation(
+                navItemTitle = this.fpdInstance.translator.getTranslation(
                     langKeys[0], 
                     langKeys[1], 
                     this.fpdInstance.mainOptions.langJson, 
@@ -480,16 +496,25 @@ export default class Mainbar extends EventTarget {
                 );
                 
             }
+            else if(moduleWrapper.configs.defaultText) {
+                navItemTitle = moduleWrapper.configs.defaultText;
+            }
             
+            //create nav item label
             const navItemLabelElem = document.createElement('span');
             navItemLabelElem.className = 'fpd-label';
             navItemLabelElem.innerText = navItemTitle;
             navItemElem.append(navItemLabelElem);
                    
             //attach attributes to nav item
-            for(const [key, value] of Object.entries(moduleAttrs)) {            
-                navItemElem.setAttribute(key, value);
+            if(moduleWrapper.configs.attrs) {
+                
+                for(const [key, value] of Object.entries(moduleWrapper.configs.attrs)) {            
+                    navItemElem.setAttribute(key, value);
+                }
+                
             }
+            
                                 
         });
         

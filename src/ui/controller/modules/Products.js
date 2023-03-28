@@ -1,6 +1,9 @@
-import ProductsView from '../../view/modules/Products';
-
-import { loadGridImage } from '../../../utils.js';
+import ProductsView from '/src/ui/view/modules/Products';
+import Modal from '/src/ui/view/comps/Modal';
+import { 
+    addEvents,
+    loadGridImage 
+} from '/src/helpers/utils';
 
 export default class ProductsModule extends EventTarget {
         
@@ -13,26 +16,6 @@ export default class ProductsModule extends EventTarget {
         this.fpdInstance = fpdInstance;
         this.container = document.createElement("fpd-module-products");
         wrapper.append(this.container);
-        
-        this.container.querySelector('input')
-        .addEventListener('keyup', (evt) => {
-            
-            const searchStr = evt.currentTarget.value;
-            
-            this.container.querySelectorAll('.fpd-dropdown-list .fpd-item').forEach((item) => {
-                
-                if(searchStr.length == 0) {
-                    item.classList.remove('fpd-hidden');
-                }
-                else {
-                    item.classList.toggle(
-                        'fpd-hidden', 
-                        !item.innerText.toLowerCase().includes(searchStr.toLowerCase()));
-                }
-
-            })
-            
-        })
                 
         fpdInstance.addEventListener('productsSet', (evt) => {
                         
@@ -79,7 +62,6 @@ export default class ProductsModule extends EventTarget {
         
         });
 
-        
     }
     
     #checkProductsLength() {
@@ -124,16 +106,32 @@ export default class ProductsModule extends EventTarget {
             
             if(this.fpdInstance.mainOptions.swapProductConfirmation) {
                 
-                //todo
-                var $confirm = FPDUtil.showModal(fpdInstance.getTranslation('modules', 'products_confirm_replacement'), false, 'confirm', fpdInstance.$modalContainer);
-            
-                $confirm.find('.fpd-confirm').text(fpdInstance.getTranslation('modules', 'products_confirm_button'))
-                .click(function() {
-            
-                    fpdInstance.selectProduct(index, this.currentCategoryIndex);
-                    $confirm.find('.fpd-modal-close').click();
-            
-                })
+                var confirmModal = Modal(
+                    this.fpdInstance.translator.getTranslation(
+                        'modules', 
+                        'products_confirm_replacement'
+                    ), 
+                    false, 
+                    'confirm', 
+                    this.fpdInstance.modalContainer
+                );
+                
+                const confirmBtn = confirmModal.querySelector('.fpd-confirm');
+                confirmBtn.innerText = this.fpdInstance.translator.getTranslation(
+                    'modules', 
+                    'products_confirm_button'
+                );
+                
+                addEvents(
+                    confirmBtn,
+                    ['click'],
+                    () => {
+                        
+                        this.fpdInstance.selectProduct(index, this.currentCategoryIndex);
+                        confirmModal.remove();
+                        
+                    }
+                )
             
             }
             else {

@@ -1,3 +1,5 @@
+import { getJSON } from '/src/helpers/request';
+
 export default class Translator extends EventTarget {
     
     langJSON = null;
@@ -27,22 +29,20 @@ export default class Translator extends EventTarget {
         
             }
             else {
-        
-                fetch(langJSON)
-                .then(response => response.json())
-                .then(data => {
-                    this.langJSON = data;
-                    callback.call(this);
-        
+                
+                getJSON({
+                    url: langJSON,
+                    onSuccess: (data) => {
+                        this.langJSON = data;
+                        callback.call(this);
+                    },
+                    onError: (error) => {
+                        
+                        alert('Language JSON "'+langJSON+'" could not be loaded or is not valid. Make sure you set the correct URL in the options and the JSON is valid!');
+                        
+                        callback.call(this);
+                    }
                 })
-                .catch((error) => {
-        
-                    //todo
-                    //FPDUtil.showModal('Language JSON "'+instance.mainOptions.langJSON+'" could not be loaded or is not valid. Make sure you set the correct URL in the options and the JSON is valid!');
-                    
-                    callback.call(this);
-                    
-                });
         
             }
             

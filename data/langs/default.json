@@ -99,7 +99,9 @@
 		"text_layers_clear": "Clear",
 		"layouts": "Layouts",
 		"layouts_confirm_replacement": "Are you sure to replace all elements in the current view?",
-		"layouts_confirm_button": "Yes, got it!"
+		"layouts_confirm_button": "Yes, got it!",
+        "text_to_image": "Text To Image",
+        "text_to_image_generate": "Generate"
 	},
 	"image_editor": {
 		"mask": "Mask",

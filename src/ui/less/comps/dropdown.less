@@ -70,5 +70,16 @@ fpd-dropdown {
     input:focus ~ .fpd-dropdown-arrow {
         transform: rotate(90deg);
     }
+    
+    &.fpd-on-loading .fpd-dropdown-arrow {
+        display: none !important;
+    }
+    
+    &.fpd-on-loading > input.fpd-dropdown-current {
+        background-size: 20px;
+        background-repeat: no-repeat;
+        background-position: 98% center;
+        background-image: var(--fpd-loading-svg);
+    }
         
 }

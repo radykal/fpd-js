@@ -1,0 +1,128 @@
+.fpd-modal-overlay {
+    position: absolute !important;
+    width: 100% !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    background: rgba(0,0,0,0.5);
+    z-index: 10000;
+    overflow: auto;
+}
+
+.fpd-modal-overlay.fpd-modal-product-designer,
+.fpd-overflow-hidden .fpd-modal-overlay {
+    position: fixed !important;
+}
+
+.fpd-modal-internal.fpd-modal-overlay {
+    z-index: 10000000000;
+}
+
+.fpd-modal-overlay > .fpd-modal-wrapper {
+    background: #fff;
+    width: 450px;
+    max-width: 100%;
+    min-height: 200px;
+    position: absolute;
+    left: 50%;
+    top: 30%;
+    padding: 40px;
+    z-index: 10020;
+    max-width: 100%;
+    transform: translateX(-50%);
+    box-sizing: border-box;
+}
+
+.fpd-modal-overlay.fpd-fullscreen > .fpd-modal-wrapper {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    overflow: auto;
+}
+
+.fpd-modal-wrapper > .fpd-modal-close {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 200ms ease-out;
+}
+
+.fpd-modal-wrapper > .fpd-modal-close:hover {
+    opacity: 1;
+}
+
+.fpd-modal-wrapper > .fpd-modal-content {
+    color: rgba(0,0,0,0.7);
+    line-height: 22px;
+    margin-top: 20px;
+    word-break: break-word;
+}
+
+.fpd-modal-content * {
+    max-width: 100%;
+}
+
+.fpd-modal-content input[type="text"] {
+    padding: 10px 5px;
+    font-size: 13px;
+    border: 1px solid #ccc;
+}
+
+.fpd-modal-content input:focus {
+    outline: none;
+}
+
+.fpd-modal-content .fpd-btn {
+    background: rgba(0,0,0,0.6);
+    text-transform: uppercase;
+    font-size: 14px;
+    padding: 4px 12px;
+    text-align: center;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 300ms ease-out;
+}
+
+.fpd-modal-content .fpd-btn:hover {
+    background: rgba(0,0,0,0.8);
+}
+
+/* Modal Types */
+
+.fpd-modal-internal[data-type="prompt"] input {
+    width: 100%;
+    display: block;
+}
+
+.fpd-modal-internal[data-type="prompt"] {
+    text-align: center;
+}
+
+.fpd-modal-internal[data-type="confirm"] {
+    text-align: center;
+}
+
+.fpd-modal-internal .fpd-confirm-msg {
+    margin-bottom: 10px;
+}
+
+/* Modal Product Designer */
+
+.fpd-modal-product-designer.fpd-modal-overlay > .fpd-modal-wrapper {
+    padding: 60px 40px 40px;
+}
+
+.fpd-modal-product-designer.fpd-modal-overlay .fpd-done {
+    margin: 20px 0 0;
+    color: #fff;
+}
+
+.fpd-modal-mode-active .fpd-element-toolbar,
+.fpd-modal-mode-active .fpd-draggable-dialog {
+    display: none !important;
+}

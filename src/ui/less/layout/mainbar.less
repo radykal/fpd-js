@@ -18,7 +18,7 @@ fpd-main-bar {
         color: var(--fpd-mainbar-nav-color);
     }
         
-    .fpd-navigation > div {
+    .fpd-navigation > .fpd-nav-item {
         padding: 11px 10px;
         text-align: center;
         cursor: pointer;
@@ -31,7 +31,13 @@ fpd-main-bar {
                 color: var(--fpd-primary-color);
             }
             
+            svg * {
+                fill: var(--fpd-primary-color);
+            }
+            
         }
+        
+
         
         svg {
             width: 24px;
@@ -149,7 +155,6 @@ fpd-main-bar {
 .fpd-sidebar {
     
     .fpd-navigation {
-        height: 100%;
         min-height: var(--fpd-container-min-height);
         flex: 0 0 var(--fpd-sidebar-nav-width);
         overflow: auto;

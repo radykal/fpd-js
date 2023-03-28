@@ -7,93 +7,6 @@ var FPDPathGroupName = fabric.version === '1.6.7' ? 'path-group' : 'group';
  */
 var FPDUtil =  {
 
-	/**
-	 * Checks if browser is IE and return version number.
-	 *
-	 * @method isIE
-	 * @return {Boolean} Returns true if browser is IE.
-	 * @static
-	 */
-	isIE : function() {
-
-		var myNav = navigator.userAgent.toLowerCase();
-		return (myNav.indexOf('msie') !== -1) ? parseInt(myNav.split('msie')[1]) : false;
-
-	},
-
-	/**
-	 * Resets the key names of the deprecated keys.
-	 *
-	 * @method rekeyDeprecatedKeys
-	 * @param {Object} object An object containing element parameters.
-	 * @return {Object} Returns the edited object.
-	 * @static
-	 */
-	rekeyDeprecatedKeys : function(object) {
-
-		var depractedKeys = [
-			{old: 'x', replace: 'left'},
-			{old: 'y', replace: 'top'},
-			{old: 'degree', replace: 'angle'},
-			{old: 'currentColor', replace: 'fill'},
-			{old: 'filters', replace: 'availableFilters'},
-			{old: 'textSize', replace: 'fontSize'},
-			{old: 'font', replace: 'fontFamily'},
-			{old: 'scale', replace: ['scaleX', 'scaleY']},
-			{old: 'uploadZoneScaleMode', replace: 'scaleMode'},
-		];
-
-		for(var i=0; i < depractedKeys.length; ++i) {
-			if(object.hasOwnProperty(depractedKeys[i].old) && !object.hasOwnProperty(depractedKeys[i].replace)) {
-
-				var replaceObj = depractedKeys[i].replace;
-				//this.log('FPD 4.0.0: Parameter "'+depractedKeys[i].old+'" is depracted. Please use "'+replaceObj.toString()+'" instead!', 'warn');
-
-				if(typeof replaceObj === 'object') { //check if old needs to be replaced with multiple options, e.g. scale=>scaleX,scaleY
-
-					for(var j=0; j < replaceObj.length; ++j) {
-						object[replaceObj[j]] = object[depractedKeys[i].old];
-					}
-
-				}
-				else {
-					object[depractedKeys[i].replace] = object[depractedKeys[i].old];
-				}
-
-				delete object[depractedKeys[i].old];
-			}
-		}
-
-		return object;
-
-	},
-
-	/**
-	 * Writes a message in the console.
-	 *
-	 * @method log
-	 * @param {String} message The text that will be displayed in the console.
-	 * @param {String} [type=log] The output type - info, error, warn or log.
-	 * @static
-	 */
-	log : function(message, type) {
-
-		if(typeof console === 'undefined') { return false; }
-
-		if(type === 'info') {
-			console.info(message);
-		}
-		else if (type === 'error') {
-			console.error(message);
-		}
-		else if (type === 'warn') {
-			console.warn(message);
-		}
-		else {
-			console.log(message);
-		}
-
-	},
 
 	/**
 	 * Checks if a string is an URL.
@@ -277,217 +190,8 @@ var FPDUtil =  {
 	    }
 
 	    return a;
-	},
+	},	
 
-	/**
-	 * Creates a nice scrollbar for an element.
-	 *
-	 * @method createScrollbar
-	 * @param {jQuery} target The target element.
-	 * @static
-	 */
-	createScrollbar : function($target, axis) {
-
-		axis = axis === undefined ? 'y' : axis;
-
-		if($target.hasClass('mCustomScrollbar')) {
-			$target.mCustomScrollbar('update');
-			$target.mCustomScrollbar('scrollTo', 0);
-		}
-		else {
-			$target.mCustomScrollbar({
-				scrollbarPosition: 'outside',
-				autoExpandScrollbar: true,
-				autoHideScrollbar: false,
-				scrollInertia: 200,
-				axis: axis,
-				keyboard: {enable: false},
-				mouseWheel: {
-					preventDefault: true
-				},
-				callbacks: {
-					onTotalScrollOffset: 100,
-					onTotalScroll:function() {
-						jQuery(this).trigger('_sbOnTotalScroll');
-						FPDUtil.refreshLazyLoad(jQuery(this).find('.fpd-grid'), true);
-					}
-				}
-			});
-		}
-
-	},
-
-	/**
-	 * Checks if a value is not empty. 0 is allowed.
-	 *
-	 * @method notEmpty
-	 * @param {Number | String} value The target value.
-	 * @return {Array} Returns true if not empty.
-	 * @static
-	 */
-	notEmpty : function(value) {
-
-		if(value === undefined || value === false || value.length === 0) {
-			return false;
-		}
-		return true;
-
-	},
-
-	/**
-	 * Opens the modal box with an own message.
-	 *
-	 * @method showModal
-	 * @param {String} message The message you would like to display in the modal box.
-	 * @return {jQuery} Returns a jQuery object containing the modal.
-	 * @static
-	 */
-	showModal : function(htmlMessage, fullscreen, type, $container) {
-
-		type = type === undefined ? '' : type;
-		$container = $container === undefined ? jQuery('body') : $container;
-
-		if($container.is('body')) {
-			$container.addClass('fpd-overflow-hidden')
-		}
-
-		var fullscreenCSS = fullscreen ? 'fpd-fullscreen' : '',
-			html = '<div class="fpd-modal-internal fpd-modal-overlay"><div class="fpd-modal-wrapper fpd-shadow-3"><div class="fpd-modal-close"><span class="fpd-icon-close"></span></div><div class="fpd-modal-content"></div></div></div>';
-
-		if(jQuery('.fpd-modal-internal').length === 0) {
-
-			$container.append(html)
-			.children('.fpd-modal-internal:first').click(function(evt) {
-
-				var $target = jQuery(evt.target);
-				if($target.hasClass('fpd-modal-overlay')) {
-
-					$target.find('.fpd-modal-close').click();
-
-				}
-
-			});
-
-		}
-
-		if(type === 'prompt') {
-			htmlMessage = '<input type="text" placeholder="'+htmlMessage+'" /><span class="fpd-btn"></span>';
-		}
-		else if(type === 'confirm') {
-			htmlMessage = '<div class="fpd-confirm-msg">'+htmlMessage+'</div><span class="fpd-btn fpd-confirm"></span>';
-		}
-
-		$container.children('.fpd-modal-internal').attr('data-type', type).removeClass('fpd-fullscreen').addClass(fullscreenCSS)
-		.fadeIn(300).find('.fpd-modal-content').html(htmlMessage);
-
-		return $container.children('.fpd-modal-internal');
-
-	},
-
-	/**
-	 * Shows a message in the snackbar.
-	 *
-	 * @method showMessage
-	 * @param {String} text The text for the message.
-	 * @static
-	 */
-	showMessage : function(text, autoRemove) {
-
-		autoRemove = autoRemove === undefined ? true : autoRemove;
-
-		var $body = jQuery('body'),
-			$snackbarWrapper;
-
-		if($body.children('.fpd-snackbar-wrapper').length > 0) {
-			$snackbarWrapper = $body.children('.fpd-snackbar-wrapper');
-		}
-		else {
-			$snackbarWrapper = $body.append('<div class="fpd-snackbar-wrapper"></div>').children('.fpd-snackbar-wrapper');
-		}
-
-		var $snackbar = jQuery('<div class="fpd-snackbar fpd-shadow-1"><p></p></div>');
-		$snackbar.children('p').html(text);
-		$snackbar.appendTo($snackbarWrapper);
-
-		setTimeout(function() {
-
-			$snackbar.addClass('fpd-show-up');
-
-			if(autoRemove) {
-				setTimeout(function() {
-					$snackbar.remove();
-				}, 5000);
-			}
-
-
-		}, 10);
-
-		return $snackbar;
-
-	},
-
-	/**
-	 * Adds a preloader icon to loading picture and loads the image.
-	 *
-	 * @method loadGridImage
-	 * @param {jQuery} picture The image container.
-	 * @param {String} source The image URL.
-	 * @static
-	 */
-	loadGridImage : function($picture, source) {
-
-		if($picture.length > 0 && source) {
-
-			$picture.addClass('fpd-on-loading');
-			var image = new Image();
-			image.src = source;
-			image.onload = function() {
-				$picture.data('originWidth', this.width).data('originHeight', this.height)
-				.removeClass('fpd-on-loading').fadeOut(0)
-				.stop().fadeIn(200).css('background-image', 'url("'+this.src+'")');
-			};
-			image.onerror = function() {
-
-				$picture.parent('.fpd-item').remove();
-
-			}
-
-		}
-
-	},
-
-	//
-	/**
-	 * Refreshs the items using lazy load.
-	 *
-	 * @method refreshLazyLoad
-	 * @param {jQuery} container The container.
-	 * @param {Boolean} loadByCounter If true 15 images will be loaded at once. If false all images will be loaded in the container.
-	 * @static
-	 */
-	refreshLazyLoad : function($container, loadByCounter) {
-
-		if($container && $container.length > 0 /* && $container.is(':visible') */) {
-
-			var $item = $container.children('.fpd-item.fpd-hidden:first'),
-				counter = 0,
-				amount = loadByCounter ? 15 : 0;
-
-			while(
-				(counter < amount
-					|| $container.parent('.mCSB_container').height()-150 < $container.parents('.fpd-scroll-area:first').height())
-				&& $item.length > 0
-			) {
-				var $pic = $item.children('picture');
-				$item.removeClass('fpd-hidden');
-				FPDUtil.loadGridImage($pic, $pic.data('img'));
-				$item = $item.next('.fpd-item.fpd-hidden');
-				counter++;
-			}
-
-		}
-
-	},
 
 	/**
 	 * Parses the fabricjs options to a FPD options object.
@@ -586,82 +290,6 @@ var FPDUtil =  {
 		}
 
 		return parseFloat(scaling.toFixed(10));
-
-	},
-
-	/**
-	 * Checks if the browser local storage is available.
-	 *
-	 * @method localStorageAvailable
-	 * @return {Boolean} Returns true if local storage is available.
-	 * @static
-	 */
-	localStorageAvailable : function() {
-
-		var localStorageAvailable = true;
-		//execute this because of a ff issue with localstorage
-		try {
-			window.localStorage.length;
-			window.localStorage.setItem('fpd-storage', 'just-testing');
-			//window.localStorage.clear();
-		}
-		catch(error) {
-			localStorageAvailable = false;
-			//In Safari, the most common cause of this is using "Private Browsing Mode". You are not able to save products in your browser.
-		}
-
-		return localStorageAvailable;
-
-	},
-
-	/**
-	 * Checks if the dimensions of an image is within the allowed range set in the customImageParameters of the view options.
-	 *
-	 * @method checkImageDimensions
-	 * @param {FancyProductDesigner} fpdInstance Instance of FancyProductDesigner.
-	 * @param {Number} imageW The image width.
-	 * @param {Number} imageH The image height.
-	 * @return {Array} Returns true if image dimension is within allowed range(minW, minH, maxW, maxH).
-	 * @static
-	 */
-	checkImageDimensions : function(fpdInstance, imageW, imageH) {
-
-		var imageRestrictions = fpdInstance.currentViewInstance.options.customImageParameters;
-
-		var uploadZone = fpdInstance.currentViewInstance.getUploadZone(fpdInstance.currentViewInstance.currentUploadZone);
-		if(uploadZone) {
-			imageRestrictions = $.extend({}, imageRestrictions, uploadZone);
-		}
-
-		if(imageW > imageRestrictions.maxW ||
-		imageW < imageRestrictions.minW ||
-		imageH > imageRestrictions.maxH ||
-		imageH < imageRestrictions.minH) {
-
-			fpdInstance._loadingCustomImage = false;
-
-			if(fpdInstance.mainBar) {
-				fpdInstance.mainBar.toggleDialog(false);
-
-				if(fpdInstance.currentViewInstance.currentUploadZone) {
-					fpdInstance.mainBar.toggleUploadZonePanel(false);
-				}
-
-			}
-
-			var msg = fpdInstance.getTranslation('misc', 'uploaded_image_size_alert')
-					  .replace('%minW', imageRestrictions.minW)
-					  .replace('%minH', imageRestrictions.minH)
-					  .replace('%maxW', imageRestrictions.maxW)
-					  .replace('%maxH', imageRestrictions.maxH);
-
-			FPDUtil.showModal(msg);
-			return false;
-
-		}
-		else {
-			return true;
-		}
 
 	},
 
@@ -973,55 +601,11 @@ var FPDUtil =  {
 
 		}
 
-	    //thumbnails in images module
-		if($item.parents('[data-module="images"]:first').length > 0 && price === null) {
-
-			if(!isNaN($item.data('price'))) {
-				price = $item.data('price');
-			}
-			else if(currentViewOptions && currentViewOptions.customImageParameters.price) {
-				price = currentViewOptions.customImageParameters.price;
-			}
-
-		}
-		//thumbnails in designs/products module
-		else {
-
-			if($item.data('parameters') && $item.data('parameters').price && price === null) {
-				price = $item.data('parameters').price;
-			}
-
-		}
-
-		$item.children('.fpd-price').toggle(Boolean(price)).html(price ? fpdInstance.formatPrice(price) : '')
-
     },
 
     isZero: function(value) {
 
 	    return value === 0 || (typeof value === 'string' && value === "0");
-
-    },
-
-    isEmpty: function(value) {
-
-	    if (value === undefined) {
-			return true;
-  		}
-
-	    if (value == null) {
-			return true;
-  		}
-
-  		if (typeof value === 'string' || Array.isArray(value)) {
-			return !value.length;
-  		}
-
-  		if (typeof value === 'object') {
-			return !Object.keys(value).length;
-  		}
-
-	    return false;
 
     },
 
@@ -1065,49 +649,6 @@ var FPDUtil =  {
 
     },
 
-    parseFontsToEmbed : function(fontItem, loadFromScript) {
-
-	    var embedString = '';
-
-	    loadFromScript = loadFromScript === undefined ? '' : loadFromScript;
-
-		if(fontItem.hasOwnProperty('url')) {
-
-			var fontFamily = fontItem.name,
-				fontFormat = fontItem.url.search('.woff') !== -1 ? 'woff' : 'TrueType',
-				fontURL = loadFromScript ? loadFromScript+fontItem.url : fontItem.url;
-
-			fontFamily += ':n4'
-
-			embedString += '@font-face {font-family:"'+fontItem.name+'"; font-style: normal; font-weight: normal; src:url("'+fontURL+'") format("'+fontFormat+'");}';
-
-			if(fontItem.variants) {
-
-				Object.keys(fontItem.variants).forEach(function(fv) {
-
-					var ffVars = {
-						'n7': 'font-style: normal; font-weight: bold;',
-						'i4': 'font-style: italic; font-weight: normal;',
-						'i7': 'font-style: italic; font-weight: bold;'
-					};
-
-					fontURL = loadFromScript ? loadFromScript+fontItem.variants[fv] : fontItem.variants[fv];
-
-
-					embedString += '@font-face {font-family:"'+fontItem.name+'"; '+ffVars[fv]+' src:url("'+fontURL+'") format("'+fontFormat+'");}';
-
-				})
-
-				fontFamily += ','+Object.keys(fontItem.variants).toString();
-
-			}
-
-		}
-
-		return embedString;
-
-    },
-
     convertHexToRGBA : function(hexCode, opacity) {
 
 	    var hex = hexCode.replace('#', '');
@@ -1144,11 +685,6 @@ var FPDUtil =  {
 
     },
 
-    getFileExtension: function(str) {
-	    //ext > lowercase > remove query params
-	    return str.split('.').pop().toLowerCase().split('?')[0];
-    },
-
 	/**
 	 * Changes the DPI of a base64 image.
 	 *
@@ -1168,6 +704,5 @@ var FPDUtil =  {
 
 };
 
-var FPDDisallowChars = /<|>/g;
 
 var FPDEmojisRegex = /(?:[\u261D\u26F9\u270A-\u270D]|\uD83C[\uDF85\uDFC2-\uDFC4\uDFC7\uDFCA-\uDFCC]|\uD83D[\uDC42\uDC43\uDC46-\uDC50\uDC66-\uDC69\uDC6E\uDC70-\uDC78\uDC7C\uDC81-\uDC83\uDC85-\uDC87\uDCAA\uDD74\uDD75\uDD7A\uDD90\uDD95\uDD96\uDE45-\uDE47\uDE4B-\uDE4F\uDEA3\uDEB4-\uDEB6\uDEC0\uDECC]|\uD83E[\uDD18-\uDD1C\uDD1E\uDD1F\uDD26\uDD30-\uDD39\uDD3D\uDD3E\uDDD1-\uDDDD])(?:\uD83C[\uDFFB-\uDFFF])?|(?:[\u231A\u231B\u23E9-\u23EC\u23F0\u23F3\u25FD\u25FE\u2614\u2615\u2648-\u2653\u267F\u2693\u26A1\u26AA\u26AB\u26BD\u26BE\u26C4\u26C5\u26CE\u26D4\u26EA\u26F2\u26F3\u26F5\u26FA\u26FD\u2705\u270A\u270B\u2728\u274C\u274E\u2753-\u2755\u2757\u2795-\u2797\u27B0\u27BF\u2B1B\u2B1C\u2B50\u2B55]|\uD83C[\uDC04\uDCCF\uDD8E\uDD91-\uDD9A\uDDE6-\uDDFF\uDE01\uDE1A\uDE2F\uDE32-\uDE36\uDE38-\uDE3A\uDE50\uDE51\uDF00-\uDF20\uDF2D-\uDF35\uDF37-\uDF7C\uDF7E-\uDF93\uDFA0-\uDFCA\uDFCF-\uDFD3\uDFE0-\uDFF0\uDFF4\uDFF8-\uDFFF]|\uD83D[\uDC00-\uDC3E\uDC40\uDC42-\uDCFC\uDCFF-\uDD3D\uDD4B-\uDD4E\uDD50-\uDD67\uDD7A\uDD95\uDD96\uDDA4\uDDFB-\uDE4F\uDE80-\uDEC5\uDECC\uDED0-\uDED2\uDEEB\uDEEC\uDEF4-\uDEF8]|\uD83E[\uDD10-\uDD3A\uDD3C-\uDD3E\uDD40-\uDD45\uDD47-\uDD4C\uDD50-\uDD6B\uDD80-\uDD97\uDDC0\uDDD0-\uDDE6])|(?:[#\*0-9\xA9\xAE\u203C\u2049\u2122\u2139\u2194-\u2199\u21A9\u21AA\u231A\u231B\u2328\u23CF\u23E9-\u23F3\u23F8-\u23FA\u24C2\u25AA\u25AB\u25B6\u25C0\u25FB-\u25FE\u2600-\u2604\u260E\u2611\u2614\u2615\u2618\u261D\u2620\u2622\u2623\u2626\u262A\u262E\u262F\u2638-\u263A\u2640\u2642\u2648-\u2653\u2660\u2663\u2665\u2666\u2668\u267B\u267F\u2692-\u2697\u2699\u269B\u269C\u26A0\u26A1\u26AA\u26AB\u26B0\u26B1\u26BD\u26BE\u26C4\u26C5\u26C8\u26CE\u26CF\u26D1\u26D3\u26D4\u26E9\u26EA\u26F0-\u26F5\u26F7-\u26FA\u26FD\u2702\u2705\u2708-\u270D\u270F\u2712\u2714\u2716\u271D\u2721\u2728\u2733\u2734\u2744\u2747\u274C\u274E\u2753-\u2755\u2757\u2763\u2764\u2795-\u2797\u27A1\u27B0\u27BF\u2934\u2935\u2B05-\u2B07\u2B1B\u2B1C\u2B50\u2B55\u3030\u303D\u3297\u3299]|\uD83C[\uDC04\uDCCF\uDD70\uDD71\uDD7E\uDD7F\uDD8E\uDD91-\uDD9A\uDDE6-\uDDFF\uDE01\uDE02\uDE1A\uDE2F\uDE32-\uDE3A\uDE50\uDE51\uDF00-\uDF21\uDF24-\uDF93\uDF96\uDF97\uDF99-\uDF9B\uDF9E-\uDFF0\uDFF3-\uDFF5\uDFF7-\uDFFF]|\uD83D[\uDC00-\uDCFD\uDCFF-\uDD3D\uDD49-\uDD4E\uDD50-\uDD67\uDD6F\uDD70\uDD73-\uDD7A\uDD87\uDD8A-\uDD8D\uDD90\uDD95\uDD96\uDDA4\uDDA5\uDDA8\uDDB1\uDDB2\uDDBC\uDDC2-\uDDC4\uDDD1-\uDDD3\uDDDC-\uDDDE\uDDE1\uDDE3\uDDE8\uDDEF\uDDF3\uDDFA-\uDE4F\uDE80-\uDEC5\uDECB-\uDED2\uDEE0-\uDEE5\uDEE9\uDEEB\uDEEC\uDEF0\uDEF3-\uDEF8]|\uD83E[\uDD10-\uDD3A\uDD3C-\uDD3E\uDD40-\uDD45\uDD47-\uDD4C\uDD50-\uDD6B\uDD80-\uDD97\uDDC0\uDDD0-\uDDE6])\uFE0F/g;

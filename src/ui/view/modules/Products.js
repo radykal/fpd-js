@@ -1,4 +1,4 @@
-import ProductsHTML from '../../html/modules/products.html';
+import html from '/src/ui/html/modules/products.html';
 
 class ProductsView extends HTMLElement {
     
@@ -10,7 +10,7 @@ class ProductsView extends HTMLElement {
 
     connectedCallback() {
         
-        this.innerHTML = ProductsHTML;
+        this.innerHTML = html;
         
     }
 

@@ -1,4 +1,5 @@
 const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');   
 
 module.exports = (env, argv) => {
     
@@ -14,7 +15,11 @@ module.exports = (env, argv) => {
             path: path.resolve(__dirname, 'test'),
             publicPath: '',
         },
+        watchOptions: {
+            ignored: ['/data/uploads/**/', '/node_modules/', '/dist/**'],
+        },
         devServer: {
+            https: true,  
             static:  [
                 {
                     directory: path.join(__dirname, 'dist'),
@@ -27,8 +32,7 @@ module.exports = (env, argv) => {
                 { 
                     directory: path.join(__dirname, 'data'),
                     publicPath: '/data',
-                }
-                
+                },                
             ]     
         },
         module: {

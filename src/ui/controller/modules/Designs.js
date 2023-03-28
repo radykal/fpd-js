@@ -1,6 +1,6 @@
-import DesignsView from '../../view/modules/Designs';
+import DesignsView from '/src/ui/view/modules/Designs';
 
-import { deepMerge, addEvents } from '../../../utils.js';
+import { deepMerge, addEvents, createImgThumbnail } from '/src/helpers/utils';
 
 export default class DesignsModule extends EventTarget {
     
@@ -8,19 +8,21 @@ export default class DesignsModule extends EventTarget {
     #categoriesUsed = false;
     #categoryLevelIndexes = [];
     #currentCategories = null;
+    #dynamicDesignsId = null;
     
-    constructor(fpdInstance, wrapper, dynamicDesignId=null) {
+    constructor(fpdInstance, wrapper, dynamicDesignsId=null) {
         
-        super();
+                super();
         
-        this.#searchInLabel = fpdInstance.translatorInstance.getTranslation('modules', 'designs_search_in').toUpperCase();        
+        this.#searchInLabel = fpdInstance.translator.getTranslation('modules', 'designs_search_in').toUpperCase();        
         this.fpdInstance = fpdInstance;
+        this.#dynamicDesignsId = dynamicDesignsId;
         
         this.container = document.createElement("fpd-module-designs");
         wrapper.append(this.container);
         
-        if(dynamicDesignId) {
-            this.container.dataset.dynamicDesignsId = dynamicDesignId;            
+        if(dynamicDesignsId) {
+            this.container.dataset.dynamicDesignsId = dynamicDesignsId;            
         }
         
         this.headElem = this.container.querySelector('.fpd-head');
@@ -127,6 +129,7 @@ export default class DesignsModule extends EventTarget {
     #displayCategories(categories, parentCategory) {
             
         this.gridElem.innerHTML = '';
+        this.gridElem.classList.remove('fpd-padding');
         this.headElem.querySelector('.fpd-input-search input').value = '';
         this.container.classList.remove('fpd-designs-active');
         this.container.classList.add('fpd-categories-active');
@@ -153,10 +156,16 @@ export default class DesignsModule extends EventTarget {
         gridItem.dataset.search = category.title.toLowerCase();
         
         if(category.thumbnail) {
+            
             const picElem = document.createElement('picture');
             picElem.dataset.img = category.thumbnail;
             gridItem.append(picElem);
             this.fpdInstance.lazyBackgroundObserver.observe(picElem);
+            
+            const titleElem = document.createElement('span');
+            titleElem.innerText = category.title;
+            gridItem.append(titleElem);
+            
         }
         else {
             gridItem.innerHTML = '<span>'+category.title+'</span>';
@@ -192,6 +201,7 @@ export default class DesignsModule extends EventTarget {
     #displayDesigns(designObjects, categoryParameters={}) {
         
         this.gridElem.innerHTML = '';
+        this.gridElem.classList.add('fpd-padding');
         this.headElem.querySelector('.fpd-input-search input').value = '';
         this.container.classList.remove('fpd-categories-active')
         this.container.classList.add('fpd-designs-active', 'fpd-head-visible');
@@ -210,18 +220,16 @@ export default class DesignsModule extends EventTarget {
     
         design.thumbnail = design.thumbnail === undefined ? design.source : design.thumbnail;
         
-        const gridItem = document.createElement('div');
-        gridItem.className = 'fpd-item';
-        gridItem.dataset.title = design.title;
-        gridItem.dataset.source = design.source;
-        gridItem.dataset.search = design.title.toLowerCase();
-        gridItem.dataset.thumbnail = design.thumbnail;
-        gridItem.parameters = design.parameters;
-        gridItem.innerHTML = '<picture data-img="'+design.thumbnail+'"></picture><span class="fpd-price"></span>';
-                
-        this.gridElem.append(gridItem);
+        const thumbnailItem = createImgThumbnail({
+                url: design.source,
+                thumbnailUrl: design.thumbnail,
+                title: design.title,
+                price: this.fpdInstance.formatPrice(design.parameters.price),
+        });
         
-        gridItem.addEventListener('click', (evt) => {
+        thumbnailItem.dataset.search = design.title.toLowerCase();
+        thumbnailItem.dataset.parameters = design.parameters;
+        thumbnailItem.addEventListener('click', (evt) => {
             
             const item = evt.currentTarget;
             
@@ -232,11 +240,11 @@ export default class DesignsModule extends EventTarget {
             );
             
         })
+                 
+        this.gridElem.append(thumbnailItem);
         
-        this.fpdInstance.lazyBackgroundObserver.observe(gridItem.querySelector('picture'));
-        
-        //todo
-        //FPDUtil.setItemPrice($lastItem, fpdInstance);
+        this.fpdInstance.lazyBackgroundObserver
+        .observe(thumbnailItem.querySelector('picture'));
   
     };
     
@@ -254,8 +262,13 @@ export default class DesignsModule extends EventTarget {
         this.#currentCategories = this.fpdInstance.designs;
         this.#displayCategories(this.#currentCategories);
     
-        let catTitles = []; //stores category titles that are only visible for UZ or view
-    
+        let catTitles = [];
+        
+        //display dynamic designs
+        if(this.#dynamicDesignsId) {
+            catTitles = this.fpdInstance.mainOptions.dynamicDesigns[this.#dynamicDesignsId].categories;
+        }
+        
         if(this.fpdInstance.currentViewInstance) {
     
             var element = this.fpdInstance.currentViewInstance.currentElement;
@@ -264,11 +277,7 @@ export default class DesignsModule extends EventTarget {
             if(element && element.uploadZone && element.designCategories) {
                 catTitles = this.fpdInstance.currentViewInstance.currentElement.designCategories;
             }
-            //display ror dynamic designs
-            else if(dynamicDesignId) {
-                catTitles = this.fpdInstance.mainOptions.dynamicDesigns[dynamicDesignId].categories;
-            }
-            //all
+            //enabled for the view
             else {
                 catTitles = this.fpdInstance.currentViewInstance.options.designCategories;
             }
@@ -278,24 +287,33 @@ export default class DesignsModule extends EventTarget {
         //check for particular design categories
         var allCatElems = this.container.querySelectorAll('.fpd-category');
         if(catTitles.length > 0) {
-    
-            var $visibleCats = $allCats.hide().filter(function() {
-                var title = $(this).children('span').text();
-                return $.inArray(title, catTitles) > -1;
-            }).show($visibleCats);
-    
-            if($visibleCats.length === 1) {
-                $module.toggleClass('fpd-single-cat');
-                $visibleCats.first().click();
-                $module.find('.fpd-category').filter(function() { return $(this).css("display") == "block" }).click();
+            
+            const visibleCats = [];
+            for (let item of allCatElems) {
+                                
+                if(catTitles.includes(item.dataset.search)) {
+                    item.classList.remove('fpd-hidden');
+                    visibleCats.push(item);
+                }
+                else {
+                    item.classList.add('fpd-hidden');
+                    
+                }
+                
+            }
+            
+            //when only one category is enabled, open it
+            if(visibleCats.length === 1) {
+                this.container.classList.add('fpd-single-cat');
+                visibleCats[0].click();
             }
     
         }
         else {
-            //$allCats.show();
+            for (let item of allCatElems) {            
+                item.classList.remove('fpd-hidden');
+            }
         }
     
     };
-
-
 }

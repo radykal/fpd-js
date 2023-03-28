@@ -1,9 +1,10 @@
 import Options from './Options.js';
-import FontsLoader from './FontsLoader.js';
-import Translator from '../ui/Translator.js';
-import UIManager from '../ui/UIManager';
+import FontsLoader from '/src/helpers/FontsLoader.js';
+import Translator from '/src/ui/Translator.js';
+import UIManager from '/src/ui/UIManager';
 
-import { loadGridImage } from '../utils.js';
+import { loadGridImage } from '/src/helpers/utils';
+import { getJSON } from '/src/helpers/request';
 
 /**
  * Creates a new FancyProductDesigner.
@@ -24,6 +25,17 @@ export default class FancyProductDesigner extends EventTarget {
      * @default null
      */
     container = null;
+    
+    /**
+     * The main options set for this Product Designer.
+     *
+     * @type Object
+     * @readonly
+     * @instance
+     * @memberof FancyProductDesigner
+     * @default {}
+     */
+    mainOptions = {};
     
     /**
      * The current selected view instance.
@@ -55,6 +67,16 @@ export default class FancyProductDesigner extends EventTarget {
      */
     designs = [];
     
+    /**
+     * The container for internal modals.
+     *
+     * @type HTMLElement
+     * @default document.body
+     * @instance
+     * @memberof FancyProductDesigner
+     */
+    modalContainer = document.body;
+    
     loadingCustomImage = false;
     lazyBackgroundObserver = null;
     
@@ -72,13 +94,16 @@ export default class FancyProductDesigner extends EventTarget {
         });
                 
         this.container = elem;
+        this.container.instance = this;
         
-        this.optionsInstance = new Options();
-        this.mainOptions = this.optionsInstance.merge(Options.defaults, opts);
+        this.mainOptions = Options.merge(Options.defaults, opts);
         
-        this.translatorInstance = new Translator()
-        this.translatorInstance.loadLangJSON(this.mainOptions.langJson, this.#langLoaded.bind(this));
-              
+        //todo: remove this
+        this.currentViewInstance = { options:  {...this.mainOptions} };
+        
+        this.translator = new Translator();
+        this.translator.loadLangJSON(this.mainOptions.langJson, this.#langLoaded.bind(this));
+                      
     }
     
     #langLoaded() {
@@ -128,13 +153,16 @@ export default class FancyProductDesigner extends EventTarget {
                 this.setupProducts(this.mainOptions.productsJSON);
             }
             else {
-                                    
-                fetch(this.mainOptions.productsJSON)
-                .then((response) => response.json())
-                .catch(() => {
-                    alert('Products JSON could not be loaded. Please check that your URL is correct! URL: '+this.mainOptions.productsJSON);
-                })
-                .then((data) => this.setupProducts(data));
+                
+                getJSON({
+                    url: this.mainOptions.productsJSON,
+                    onSuccess: (data) => {
+                        this.setupProducts(data);
+                    },
+                    onError: () => {
+                        alert('Products JSON could not be loaded. Please check that your URL is correct! URL: '+this.mainOptions.productsJSON);
+                    } 
+                });                    
         
             }
         
@@ -146,13 +174,17 @@ export default class FancyProductDesigner extends EventTarget {
                 this.setupDesigns(this.mainOptions.designsJSON);
             }
             else {
-                                    
-                fetch(this.mainOptions.designsJSON)
-                .then((response) => response.json())
-                .catch(() => {
-                    alert('Design JSON could not be loaded. Please check that your URL is correct! URL: '+this.mainOptions.designsJSON);
-                })
-                .then((data) => this.setupDesigns(data));
+                
+                getJSON({
+                    url: this.mainOptions.designsJSON,
+                    onSuccess: (data) => {
+                        this.setupDesigns(data);
+                    },
+                    onError: () => {
+                        alert('Design JSON could not be loaded. Please check that your URL is correct! URL: '+this.mainOptions.designsJSON);
+                    } 
+                });
+
             
             }
         
@@ -188,12 +220,12 @@ export default class FancyProductDesigner extends EventTarget {
         });
         
         //load first product
-        // if(this.mainOptions.loadFirstProductInStage && products.length > 0 && !stageCleared) {
-        //     this.selectProduct(0);
-        // }
-        // else {
-        //     this.toggleSpinner(false);
-        // }
+        if(this.mainOptions.loadFirstProductInStage && products.length > 0) {
+            this.selectProduct(0);
+        }
+        else {
+            this.toggleSpinner(false);
+        }
         
         /**
          * Gets fired as soon as products are set.
@@ -276,7 +308,11 @@ export default class FancyProductDesigner extends EventTarget {
         
     }
     
-    selectProduct() {
+    selectProduct(index) {
+                
+    }
+    
+    toggleSpinner() {
         
     }
     
@@ -294,7 +330,124 @@ export default class FancyProductDesigner extends EventTarget {
     deselectElement() {
         
     }
+    
+    /**
+     * Formats the price to a string with the currency and the decimal as well as the thousand separator.
+     *
+     * @method formatPrice
+     * @param {Number} [price] The price thats gonna be formatted.
+     * @return {String} The formatted price string.
+     */
+    formatPrice(price) {
+        
+        const priceFormatOpts = this.mainOptions.priceFormat;
+        if(price && typeof priceFormatOpts === 'object') {
+    
+            const thousandSep = priceFormatOpts.thousandSep;
+            const decimalSep = priceFormatOpts.decimalSep;
+    
+            let splitPrice = price.toString().split('.'),
+                absPrice = splitPrice[0],
+                decimalPrice = splitPrice[1],
+                tempAbsPrice = '';
+    
+            if (typeof absPrice != 'undefined') {
+    
+                for (var i=absPrice.length-1; i>=0; i--) {
+                    tempAbsPrice += absPrice.charAt(i);
+                }
+    
+                tempAbsPrice = tempAbsPrice.replace(/(\d{3})/g, "$1" + thousandSep);
+                if (tempAbsPrice.slice(-thousandSep.length) == thousandSep) {
+                    tempAbsPrice = tempAbsPrice.slice(0, -thousandSep.length);
+                }
+    
+                absPrice = '';
+                for (var i=tempAbsPrice.length-1; i>=0 ;i--) {
+                    absPrice += tempAbsPrice.charAt(i);
+                }
+    
+                if (typeof decimalPrice != 'undefined' && decimalPrice.length > 0) {
+                    //if only one decimal digit add zero at end
+                    if(decimalPrice.length == 1) {
+                        decimalPrice += '0';
+                    }
+                    absPrice += decimalSep + decimalPrice;
+                }
+    
+            }
+    
+            absPrice = priceFormatOpts.currency.replace('%d', absPrice.toString());
+    
+            return absPrice;
+    
+        }
+        else if(price) {
+            price = priceFormatOpts.priceFormat.replace('%d', price);
+        }
+    
+        return price;
+    
+    };
+    
+    _addGridItemToCanvas(item, additionalOpts={}, viewIndex) {
+        
+        viewIndex = viewIndex === undefined ? this.currentViewIndex : viewIndex;
+    
+        if(!this.currentViewInstance) { return; }
+        
+    // 
+        //var options = deepMerge(
+        //             {_addToUZ: instance.currentViewInstance.currentUploadZone},
+        //             additionalOpts
+        //         );
+        // 
+        //         this._addCanvasImage(
+        //             item.dataset.source,
+        //             item.dataset.title,
+        //             options,
+        //             $item.parents('[data-context="upload"]').length == 0,
+        //             viewIndex
+        //         );
+    }
+    
+    _addCanvasImage(source, title, options={}, isRemoteImage=false, viewIndex) {
+        
+        viewIndex = viewIndex === undefined ? this.currentViewIndex : viewIndex;
+        
+        if(!this.currentViewInstance) { return; }
+    
+        let ajaxSettings = this.mainOptions.customImageAjaxSettings,
+            saveOnServer = ajaxSettings.data && ajaxSettings.data.saveOnServer ? 1 : 0;
+    
+        //download remote image to local server (FB, Insta, Pixabay)
+        if(saveOnServer && isRemoteImage) {
+    
+            _downloadRemoteImage(
+                source,
+                title,
+                options
+            );
+    
+        }
+        //add data uri or local image to canvas
+        else {
+    
+            this.loadingCustomImage = true;
+            this.addCustomImage(
+                source,
+                title ,
+                options,
+                viewIndex
+            );
+    
+        }
+    
+        if(this.productCreated && this.mainOptions.hideDialogOnAdd && this.mainBar) {
+            this.mainBar.toggleDialog(false);
+        }
+    
+    }
 }
 
 window.FancyProductDesigner = FancyProductDesigner;
-

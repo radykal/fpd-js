@@ -14,14 +14,8 @@
 var FancyProductDesigner = function(elem, opts) {
 
 	var instance = this,
-		$elem,
-		$mainBar,
-		$stageLoader,
-		$uiElements,
-		$modules,
 		$editorBox = null,
 		$thumbnailPreview = null,
-		stageCleared = false,
 		zoomReseted = false,
 		firstProductCreated = false,
 		inTextField = false,
@@ -87,15 +81,6 @@ var FancyProductDesigner = function(elem, opts) {
 	this.currentViews = null;
 
 	/**
-	 * The current view instance.
-	 *
-	 * @property currentViewInstance
-	 * @type FancyProductDesignerView
-	 * @default null
-	 */
-	this.currentViewInstance = null;
-
-	/**
 	 * The current selected element.
 	 *
 	 * @property currentElement
@@ -104,22 +89,6 @@ var FancyProductDesigner = function(elem, opts) {
 	 */
 	this.currentElement = null;
 
-	/**
-	 * JSON Object containing all translations.
-	 *
-	 * @property langJson
-	 * @type Object
-	 * @default null
-	 */
-	this.langJson = null;
-
-	/**
-	 * The main options set for this Product Designer.
-	 *
-	 * @property mainOptions
-	 * @type Object
-	 */
-	this.mainOptions;
 
 	/**
 	 * jQuery object pointing on the product stage.
@@ -245,14 +214,6 @@ var FancyProductDesigner = function(elem, opts) {
 	 */
 	this.mouseOverCanvas = false;
 
-	this.languageJSON = {
-		"toolbar": {},
-		"actions": {},
-		"modules": {},
-		"misc": {},
-		"image_editor": {},
-		"plus": {}
-	};
 	this._order = {};
 	this._prevPrintingBoxes = [];
 
@@ -273,8 +234,6 @@ var FancyProductDesigner = function(elem, opts) {
 		if(!instance.mainOptions.fabricCanvasOptions.allowTouchScrolling) {
 			$elem.addClass('fpd-disable-touch-scrolling');
 		}
-
-		instance.$container = $elem.data('instance', instance);
 
 		//add product designer into modal
 		if(instance.mainOptions.modalMode) {
@@ -1546,92 +1505,8 @@ var FancyProductDesigner = function(elem, opts) {
 
 	};
 
-	this._addGridItemToStage = function($item, additionalOpts, viewIndex) {
 
-		viewIndex = viewIndex === undefined ? instance.currentViewIndex : viewIndex;
-
-		if(!instance.currentViewInstance) { return; }
-
-		additionalOpts = additionalOpts === undefined ? {} : additionalOpts;
-
-		var moduleType = $item.parents('.fpd-module:first').data('module'),
-			title = $item.data('title') ? $item.data('title') : null;
-
-		if(moduleType == 'designs') {
-
-			var options = $.extend(
-				{},
-				$item.data('parameters') ? $item.data('parameters') : {},
-				additionalOpts
-			);
-
-			instance._addCanvasDesign(
-				$item.data('source'),
-				$item.data('title'),
-				options,
-				viewIndex
-			);
-
-		}
-		else {
-
-			var options = $.extend(
-				{},
-				$item.data('options') ? $item.data('options') : {},
-				{_addToUZ: instance.currentViewInstance.currentUploadZone},
-				additionalOpts
-			);
-
-			instance._addCanvasImage(
-				$item.data('source'),
-				$item.data('title'),
-				options,
-				$item.parents('[data-context="upload"]').length == 0,
-				viewIndex
-			);
-
-		}
-
-	};
-
-	this._addCanvasImage = function(source, title, options, isRemoteImage, viewIndex) {
-
-		options = options === undefined ? {} : options;
-		isRemoteImage = isRemoteImage === undefined ? false : isRemoteImage;
-
-		if(!instance.currentViewInstance) { return; }
-
-		var ajaxSettings = instance.mainOptions.customImageAjaxSettings,
-			saveOnServer = ajaxSettings.data && ajaxSettings.data.saveOnServer ? 1 : 0;
-
-		//download remote image to local server (FB, Insta, Pixabay)
-		if(saveOnServer && isRemoteImage) {
-
-			_downloadRemoteImage(
-				source,
-				title,
-				options
-			);
-
-		}
-		//add data uri or local image to canvas
-		else {
-
-			instance._loadingCustomImage = true;
-			instance.addCustomImage(
-				source,
-				title ,
-				options,
-				viewIndex
-			);
-
-		}
-
-		if(instance.productCreated && instance.mainOptions.hideDialogOnAdd && instance.mainBar) {
-			instance.mainBar.toggleDialog(false);
-		}
-
-	};
+	
 
 	this._addCanvasDesign = function(source, title, params, viewIndex) {
 
@@ -2404,7 +2279,6 @@ var FancyProductDesigner = function(elem, opts) {
 	     */
 		$elem.trigger('clear');
 		$elem.trigger('priceChange', [0, 0, 0]);
-		stageCleared = true;
 
 	};
 

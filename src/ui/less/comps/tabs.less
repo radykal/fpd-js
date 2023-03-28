@@ -1,0 +1,47 @@
+.fpd-module-tabs {
+    
+    display: flex;
+    background: var(--fpd-module-secondary-color);
+    color: var(--fpd-module-secondary-text-color);
+    
+    > div {
+        flex: 1;
+        text-align: center;
+        cursor: pointer;
+        padding: 8px 0;
+        font-size: 20px;
+        
+        &:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        &.fpd-active {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        
+    }
+    
+}
+
+.fpd-module-tabs-content {
+    height: 100%;
+    
+    > div {
+        display: none;
+        height: 100%;
+        
+        &.fpd-active {
+            display: block;
+        }
+        
+    }
+    
+}
+
+.fpd-sidebar .fpd-module-tabs {
+    top: 50px;
+}
+
+.fpd-hide-tabs .fpd-module-tabs {
+    display: none !important;
+}

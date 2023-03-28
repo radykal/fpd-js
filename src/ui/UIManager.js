@@ -28,14 +28,19 @@ export default class UIManager extends EventTarget {
         
         //this.fpdInstance.container.appendChild(loaderElem.firstChild.cloneNode(true));
         
-        this.fpdInstance.actions = new ActionsBar(this.fpdInstance);
-        this.fpdInstance.mainbar = new Mainbar(this.fpdInstance);
+        this.fpdInstance.actionsBar = new ActionsBar(this.fpdInstance);
+        this.fpdInstance.mainBar = new Mainbar(this.fpdInstance);
         
         this.fpdInstance.mainWrapper = new MainWrapper(this.fpdInstance);
         
         Array.from(this.fpdInstance.container.querySelectorAll('[data-defaulttext]'))
         .forEach(item => {
-            this.fpdInstance.translatorInstance.translateElement(item, this.fpdInstance.mainOptions.langJson);
+            
+            this.fpdInstance.translator.translateElement(
+                item, 
+                this.fpdInstance.mainOptions.langJson
+            );
+            
         })
         
         this.dispatchEvent(

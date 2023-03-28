@@ -1,0 +1,32 @@
+.fpd-snackbar-wrapper {
+    
+    position: fixed;
+    left: 12px;
+    bottom: 0;
+    z-index: 100000;
+    
+    .fpd-snackbar {
+        background: var(--fpd-snackbar-bg-color);
+        margin-bottom: 10px;
+        color: #fff;
+        line-height: 18px;
+        font-size: 14px;
+        min-width: 288px;
+        max-width: 568px;
+        overflow-y: hidden;
+        border-radius: 2px;
+        -webkit-transition: all 300ms ease-out;
+        transition: all 300ms ease-out;
+    }
+    
+    .fpd-snackbar p {
+        margin: 0;
+        padding: 16px 24px;
+    }
+    
+    .fpd-snackbar.fpd-show-up {
+        max-height: 300px;
+    }
+    
+}
+

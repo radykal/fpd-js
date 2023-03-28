@@ -1,4 +1,4 @@
-import { deepMerge } from '../utils';
+import { deepMerge } from '/src/helpers/utils';
 
 /**
  *
@@ -181,24 +181,6 @@ export default class Options {
 			* @default 'php/custom-image-handler.php'
 			*/
 			url: 'php/custom-image-handler.php',
-			/**
-			* The HTTP method to use for the request.
-			*
-			* @property method
-			* @type {String}
-			* @memberof Options.defaults.customImageAjaxSettings
-			* @default 'POST'
-			*/
-			method: 'POST',
-			/**
-			* The type of data that you're expecting back from the server.
-			*
-			* @property dataType
-			* @type {String}
-			* @memberof Options.defaults.customImageAjaxSettings
-			* @default 'json'
-			*/
-			dataType: 'json',
 			/**
 			* The data object sent to the server.
 			*
@@ -1019,6 +1001,16 @@ export default class Options {
             small: 768,
             medium: 1024
         },
+        /**
+        * Define our dynamic designs module.
+        *
+        * @property dynamicDesigns
+        * @memberof Options.defaults
+        * @type {Object}
+        * @default {}
+        * @version 6.0.0
+        */
+        dynamicDesigns: {},
 		/**
 		* An object containing the default element parameters in addition to the default Fabric Object properties. See Options.defaults.elementParameters.
 		*
@@ -1741,7 +1733,7 @@ export default class Options {
 	 * @param {Object} [merge] The merged object, that will be merged into the defaults.
 	 * @return {Object} The new options object.
 	 */
-	merge(defaults={}, merge={}) {
+	static merge(defaults={}, merge={}) {
 
 		typeof merge === 'undefined' ? {} : merge;
         
@@ -1760,7 +1752,7 @@ export default class Options {
 	 * @memberof Options
 	 * @return {Array} An array containing all element parameter keys.
 	 */
-	getParameterKeys() {
+	static getParameterKeys() {
         
 		var elementParametersKeys = Object.keys(this.defaults.elementParameters),
 			imageParametersKeys = Object.keys(this.defaults.imageParameters),

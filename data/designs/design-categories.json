@@ -10,7 +10,7 @@
                     {
                         "title": "Chef",
                         "source": "https://dek8oqj8xxsl6.cloudfront.net/img/humans/professions/chef.svg",
-                        "parameters": {},
+                        "parameters": {"price": 1.5},
                         "thumbnail": "https://dek8oqj8xxsl6.cloudfront.net/img/humans/professions/chef.svg"
                     },
                     {

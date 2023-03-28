@@ -8,57 +8,64 @@
         margin-bottom: 10px;
         -webkit-appearance: none;
         resize: none;
+        width: 100%;
         
         &:focus {
-            box-shadow: 0 3px 15px rgb(90 97 105 / 20%), 0 2px 3px rgb(90 97 105 / 30%) !important;
+            box-shadow: 0 3px 15px rgb(90 97 105 / 20%), 0 2px 3px rgb(90 97 105 / 30%);
         }
         
     }
     
     textarea {
-        width: 100%;
         min-height: 100px;
+    }
+    
+    .fpd-input-back-search,
+    .fpd-input-search {
+        
+        display: flex;
+        box-shadow: 0 3px 15px rgb(90 97 105 / 10%), 0 2px 3px rgb(90 97 105 / 20%);
+        height: 40px;
+        border-radius: 4px;
+        flex: 1;
+        
+        input {
+            flex: 1;
+            box-shadow: none !important;
+            margin: 0;
+            padding: 0 5px;
+            line-height: 1;
+        }
+        
+        span {
+            width: 20px;
+            align-self: center;
+            text-align: center;
+        }
+        
     }
     
     .fpd-input-back-search {
         
-        display: flex;
-        box-shadow: 0 3px 15px rgba(90, 97, 105, 0.1), 0 2px 3px rgba(90, 97, 105, 0.2);
+        .fpd-input-search {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            box-shadow: none !important;
+        }
     
         .fpd-back {
+            color: var(--fpd-module-secondary-text-color);
             border: none !important;
+            background: rgba(0,0,0, 0.03) !important;
             line-height: 1;
             padding: 9px 8px !important;
             display: inline-block;
             width: 32px;
-            height: 38px;
+            height: 100%;
             text-align: center;
-            background: rgba(0,0,0, 0.03) !important;
-            color: var(--fpd-module-secondary-text-color);
-            float: left;
             margin: 0 !important;
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
-        }
-        
-        .fpd-input-search {
-            
-            display: flex;
-            flex: 1;
-            
-            input {
-                flex: 1;
-                box-shadow: none !important;
-                margin: 0;
-                padding: 0 5px;
-            }
-            
-            span {
-                width: 20px;
-                align-self: center;
-                text-align: center;
-            }
-            
         }
         
     

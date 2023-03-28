@@ -1,6 +1,6 @@
-import TextView from '../../view/modules/Text';
+import TextView from '/src/ui/view/modules/Text';
 
-import { deepMerge, addEvents } from '../../../utils.js';
+import { deepMerge, addEvents } from '/src/helpers/utils';
 
 export default class TextsModule extends EventTarget {
     
