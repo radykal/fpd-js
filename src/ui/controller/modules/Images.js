@@ -111,8 +111,9 @@ export default class ImagesModule extends EventTarget {
                 
                 }
                 
-                this.container.querySelector('.fpd-upload-zone .fpd-price')
-                .innerHTML = price ? price : '';
+                const priceElem = this.container.querySelector('.fpd-upload-zone .fpd-price');
+                if(priceElem)
+                    priceElem.innerHTML = price ? price : '';
                 
             }
         );

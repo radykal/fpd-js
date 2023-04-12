@@ -44,7 +44,25 @@ export default class FontsLoader {
     static load(fpdInstance, callback) {
         
         const fonts = fpdInstance.mainOptions.fonts;
+                
         if(fonts && fonts.length > 0 && typeof fonts[0] === 'object') {
+            
+            //sort fonts alphabetically
+            fonts.sort((a, b) => {
+                
+                let nameA = a.name.toUpperCase(), // ignore upper and lowercase
+                    nameB = b.name.toUpperCase(); // ignore upper and lowercase
+                    
+                if (nameA < nameB) {
+                    return -1;
+                }
+                if (nameA > nameB) {
+                    return 1;
+                }
+            
+                //same
+                return 0;
+            });
         
             let googleFonts = [],
                 customFonts = [],

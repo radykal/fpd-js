@@ -8,138 +8,7 @@ var FPDPathGroupName = fabric.version === '1.6.7' ? 'path-group' : 'group';
 var FPDUtil =  {
 
 
-	/**
-	 * Checks if a string is an URL.
-	 *
-	 * @method isUrl
-	 * @param {String} s The string.
-	 * @return {Boolean} Returns true if string is an URL.
-	 * @static
-	 */
-	isUrl : function(s) {
-
-		var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
-		return regexp.test(s);
-
-	},
-
-	/**
-	 * Removes an element from an array by value.
-	 *
-	 * @method removeFromArray
-	 * @param {Array} array The target array.
-	 * @param {String} element The element value.
-	 * @return {Array} Returns the edited array.
-	 * @static
-	 */
-	removeFromArray : function(array, element) {
-
-	    var index = array.indexOf(element);
-	    if (index > -1) {
-		    array.splice(index, 1);
-		}
-
-		return array;
-
-	},
-
-	/**
-	 * Checks if a string is XML formatted.
-	 *
-	 * @method isXML
-	 * @param {String} string The target string.
-	 * @return {Boolean} Returns true if string is XML formatted.
-	 * @static
-	 */
-	isXML : function(string){
-
-	    try {
-	        xmlDoc = jQuery.parseXML(string); //is valid XML
-	        return true;
-	    } catch (err) {
-	        // was not XML
-	        return false;
-	    }
-
-	},
-
-	/**
-	 * Checks if an image can be colorized and returns the image type
-	 *
-	 * @method elementIsColorizable
-	 * @param {fabric.Object} element The target element.
-	 * @return {String | Boolean} Returns the element type(text, dataurl, png or svg) or false if the element can not be colorized.
-	 * @static
-	 */
-	elementIsColorizable : function(element) {
-
-		if(this.getType(element.type) === 'text') {
-			return 'text';
-		}
-
-		if(!element.source) {
-			return false;
-		}
-
-		//check if url is a png or base64 encoded
-		var imageParts = element.source.split('.');
-		//its base64 encoded
-		if(imageParts.length == 1) {
-
-			//check if dataurl is png
-			if(imageParts[0].search('data:image/png;') == -1) {
-				element.fill = element.colors = false;
-				return false;
-			}
-			else {
-				return 'dataurl';
-			}
-
-		}
-		//its a url
-		else {
-
-			var source = element.source;
-
-			source = source.split('?')[0];//remove all url parameters
-			imageParts = source.split('.');
-
-			//only png and svg are colorizable
-			if(jQuery.inArray('png', imageParts) == -1 && !FPDUtil.isSVG(element)) {
-				element.fill = element.colors = false;
-				return false;
-			}
-			else {
-				if(FPDUtil.isSVG(element)) {
-					return 'svg';
-				}
-				else {
-					return 'png';
-				}
-			}
-
-		}
-
-	},
-
-	/**
-	 * Returns a simpler type of a fabric object.
-	 *
-	 * @method getType
-	 * @param {String} fabricType The fabricjs type.
-	 * @return {String} This could be image or text.
-	 * @static
-	 */
-	getType : function(fabricType) {
-
-		if(fabricType === 'text' || fabricType === 'i-text' || fabricType === 'curvedText' || fabricType === 'textbox') {
-			return 'text';
-		}
-		else {
-			return 'image';
-		}
-
-	},
+	
 
 	/**
 	 * Looks for the .fpd-tooltip classes and adds a nice tooltip to these elements (tooltipster).
@@ -244,54 +113,7 @@ var FPDUtil =  {
 
 	},
 
-	/**
-	 * Returns the scale value calculated with the passed image dimensions and the defined "resize-to" dimensions.
-	 *
-	 * @method getScalingByDimesions
-	 * @param {Number} imgW The width of the image.
-	 * @param {Number} imgH The height of the image.
-	 * @param {Number} resizeToW The maximum width for the image.
-	 * @param {Number} resizeToH The maximum height for the image.
-	 * @return {Number} The scale value to resize an image to a desired dimension.
-	  * @static
-	 */
-	getScalingByDimesions : function(imgW, imgH, resizeToW, resizeToH, mode) {
-
-		mode = typeof mode === 'undefined' ? 'fit' : mode;
-		resizeToW = typeof resizeToW !== 'number' ? 0 : resizeToW;
-		resizeToH = typeof resizeToH !== 'number' ? 0 : resizeToH;
-
-		var scaling = 1,
-			rwSet = resizeToW !== 0,
-			rhSet = resizeToH !== 0;
-
-		if(mode === 'cover') { //cover whole area
-
-			var dW = resizeToW - imgW,
-				dH =  resizeToH - imgH;
-
-		    if (dW < dH) { //scale width
-		    	scaling = rwSet ? Math.max(resizeToW / imgW,  resizeToH / imgH) : 1;
-		    }
-		    else { //scale height
-		      	scaling = rhSet ? Math.max(resizeToW / imgW,  resizeToH / imgH) : 1;
-		    }
-
-		}
-		else { //fit into area
-
-			if(imgW > imgH) {
-				scaling = rwSet ? Math.min(resizeToW / imgW,  resizeToH / imgH) : 1;
-			}
-			else {
-				scaling = rhSet ? Math.min(resizeToW / imgW,  resizeToH / imgH) : 1;
-			}
-
-		}
-
-		return parseFloat(scaling.toFixed(10));
-
-	},
+	
 
 	/**
 	 * Checks if an element has a color selection.
@@ -477,27 +299,6 @@ var FPDUtil =  {
 
 	},
 
-	elementIsEditable : function(element) {
-
-		return element &&
-			(typeof element.colors === 'object' ||
-			element.colors === true ||
-			element.colors == 1 ||
-			element.removable ||
-			element.draggable ||
-			element.resizable ||
-			element.rotatable ||
-			element.zChangeable ||
-			element.advancedEditing ||
-			element.editable ||
-			element.uploadZone ||
-			(element.colorLinkGroup && element.colorLinkGroup.length > 0) ||
-			element.__editorMode
-			);
-
-
-	},
-
 	hexToRgb : function(hex) {
 
 	    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -559,29 +360,7 @@ var FPDUtil =  {
 
     },
 
-    objectHasKeys: function (obj, keys) {
-
-		if(obj && typeof obj === 'object') {
-
-			var hasAllKeys = true;
-			for(var i=0; i < keys.length; ++i) {
-
-				var key = keys[i];
-				if(!obj.hasOwnProperty(key)) {
-					hasAllKeys = false;
-					break;
-				}
-
-			}
-
-			return hasAllKeys;
-
-		}
-		else {
-			return false;
-		}
-
-    },
+    
 
     setItemPrice: function($item, fpdInstance) {
 
@@ -600,12 +379,6 @@ var FPDUtil =  {
 			}
 
 		}
-
-    },
-
-    isZero: function(value) {
-
-	    return value === 0 || (typeof value === 'string' && value === "0");
 
     },
 

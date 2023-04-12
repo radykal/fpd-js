@@ -72,8 +72,6 @@ var FPDMainBar = function(fpdInstance, $mainBar, $modules, $draggableDialog) {
 	//call module by name
 	this.callModule = function(name, dynamicDesignsId) {
         
-        
-	
 
 		if(name === 'text') {
 			instance.$selectedModule.find('textarea').focus();
@@ -101,31 +99,6 @@ var FPDMainBar = function(fpdInstance, $mainBar, $modules, $draggableDialog) {
 		}
 
 		instance.toggleDialog(true);
-
-	};
-
-	this.setContentWrapper = function(wrapper) {
-
-		if(wrapper === 'sidebar') {
-
-			if($nav.children('.fpd-active').length === 0) {
-				$nav.children().first().addClass('fpd-active');
-			}
-
-		}
-		else if(wrapper === 'draggable-dialog') {
-
-			$nav.removeClass('fpd-hidden');
-
-		}
-
-		//if only modules exist, select it and hide nav
-		if(instance.currentModules.length <= 1 && !fpdInstance.$container.hasClass('fpd-topbar')) {
-			$nav.addClass('fpd-hidden');
-		}
-		else {
-			$nav.removeClass('fpd-hidden');
-		}
 
 	};
 

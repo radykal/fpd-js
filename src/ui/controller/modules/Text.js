@@ -4,7 +4,6 @@ import { deepMerge, addEvents } from '/src/helpers/utils';
 
 export default class TextsModule extends EventTarget {
     
-    static disallowChars = /<|>/g;
     #currentViewOptions;
     
     constructor(fpdInstance, wrapper) {
@@ -69,7 +68,7 @@ export default class TextsModule extends EventTarget {
                     maxLength = this.#currentViewOptions ? this.#currentViewOptions.customTextParameters.maxLength : 0,
                     maxLines = this.#currentViewOptions ? this.#currentViewOptions.customTextParameters.maxLines : 0;
                                     
-                text = text.replace(TextsModule.disallowChars, '');
+                text = text.replace(FancyProductDesigner.forbiddenTextChars, '');
                 
                 //remove emojis
                 if(fpdInstance.mainOptions.disableTextEmojis) {
@@ -148,16 +147,16 @@ export default class TextsModule extends EventTarget {
         //todo check
         fpdInstance.addEventListener('viewSelect', (evt) => {
             
-            const detail = evt.detail;
-            this.#currentViewOptions = detail.viewInstance.options;
-        
-            if(currentViewOptions.customTextParameters && currentViewOptions.customTextParameters.price) {
-                var price = fpdInstance.formatPrice(currentViewOptions.customTextParameters.price);
-                $module.find('.fpd-btn > .fpd-price').html(' - '+price);
-            }
-            else {
-                $module.find('.fpd-btn > .fpd-price').html('');
-            }
+        //     const detail = evt.detail;
+        //     this.#currentViewOptions = detail.viewInstance.options;
+        // 
+        //     if(currentViewOptions.customTextParameters && currentViewOptions.customTextParameters.price) {
+        //         var price = fpdInstance.formatPrice(currentViewOptions.customTextParameters.price);
+        //         $module.find('.fpd-btn > .fpd-price').html(' - '+price);
+        //     }
+        //     else {
+        //         $module.find('.fpd-btn > .fpd-price').html('');
+        //     }
         
         });
 

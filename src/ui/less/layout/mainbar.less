@@ -2,7 +2,6 @@ fpd-main-bar {
     
     display: flex;
     position: relative;
-    max-height: 500px;
     
     .fpd-close-off-canvas {
         display: none;
@@ -57,7 +56,6 @@ fpd-main-bar {
 
 .fpd-wrapper.fpd-sidebar {
     
-    min-height: var(--fpd-container-min-height);
     
     > fpd-main-bar {
         height: 100%;
@@ -73,15 +71,21 @@ fpd-main-bar {
     
     &.fpd-layout-small {
         
+        fpd-main-wrapper {
+            order: 2;
+            flex-basis: 100%;
+            margin-bottom: var(--fpd-sidebar-nav-width);
+        }
+        
         fpd-main-bar {
-            height: 100%;
+            height: auto !important;
             width: 100%;
             flex-basis: auto;
             flex-flow: row wrap;
             z-index: 999999999999;
             position: absolute;
             left: 0;
-            top: 0;
+            bottom: 0;
             overflow: visible;
             
             > .fpd-navigation {
@@ -135,6 +139,10 @@ fpd-main-bar {
         }
         
         &.fpd-module-visible {
+            
+            fpd-main-bar {
+                height: 100% !important;
+            }
             
             .fpd-close-off-canvas {
                 display: block !important;
@@ -322,7 +330,6 @@ fpd-main-bar {
     display: none;
     width: 350px;
     height: 450px;
-    margin-top: 5px;
     background: var(--fpd-primary-fg-color);
     position: absolute !important;
     left: ~"calc(50% - 175px)";
@@ -333,6 +340,7 @@ fpd-main-bar {
     border-radius: 2px;
     max-width: 100%;
     overflow: hidden;
+    border-radius: 6px;
 }
 
 .fpd-draggable-dialog.fpd-show {

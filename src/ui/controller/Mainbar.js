@@ -2,7 +2,13 @@ import MainbarView from '../view/Mainbar.js';
 import UIManager from '../UIManager';
 import ModuleWrapper from './ModuleWrapper';
 
-import { addEvents, addElemClasses, removeElemClasses, toggleElemClasses } from '/src/helpers/utils';
+import { 
+    addEvents, 
+    addElemClasses, 
+    removeElemClasses, 
+    toggleElemClasses 
+} from '/src/helpers/utils';
+import { fetchText } from '/src/helpers/request';
 
 export default class Mainbar extends EventTarget {
     
@@ -77,6 +83,43 @@ export default class Mainbar extends EventTarget {
             'click',
             this.#closeDialog.bind(this)
         )
+        
+        addEvents(
+            fpdInstance,
+            'viewSelect',
+            () => {
+                
+                this.toggleContentDisplay(false);
+                
+            }
+        )
+        // fpdInstance.$container.on('viewSelect', function() {
+        // 
+        //     if(instance.$selectedModule) {
+        // 
+        //         if(instance.$selectedModule.filter('[data-module="manage-layers"]').length > 0) {
+        //             FPDLayersModule.createList(fpdInstance, instance.$selectedModule);
+        //         }
+        //         else if(instance.$selectedModule.filter('[data-module="text-layers"]').length > 0) {
+        //             FPDTextLayersModule.createList(fpdInstance, instance.$selectedModule);
+        //         }
+        //         //PLUS
+        //         else if(typeof FPDNamesNumbersModule !== 'undefined'
+        //             && instance.$selectedModule.filter('[data-module="names-numbers"]').length > 0) {
+        //             FPDNamesNumbersModule.setup(fpdInstance, instance.$selectedModule);
+        //         }
+        // 
+        //     }
+        // 
+        //     /**
+        //      * Gets fired as soon as the list with the layers has been updated. Is fired when a view is selected or an object has been added/removed.
+        //      *
+        //      * @event FancyProductDesigner#layersListUpdate
+        //      * @param {Event} event
+        //      */
+        //     fpdInstance.$container.trigger('layersListUpdate');
+        // 
+        // });
         
         if(fpdContainer.classList.contains('fpd-off-canvas')) {
             
@@ -469,10 +512,14 @@ export default class Mainbar extends EventTarget {
             let moduleIcon = document.createElement('span');
             if(moduleWrapper.configs.icon.includes('.svg')) {
                 
-                fetch(moduleWrapper.configs.icon)
-                .then(r => r.text())
-                .then(svg => {
-                    moduleIcon.innerHTML = svg;
+                fetchText({
+                    url: moduleWrapper.configs.icon,
+                    onSuccess: (svgStr) => {
+                        moduleIcon.innerHTML = svgStr;
+                    },
+                    onError: (error) => {
+                        console.log(error);
+                    }
                 })
                 
             }

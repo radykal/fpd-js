@@ -11,8 +11,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_front-1.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 178,
                             "top": 139,
@@ -201,8 +201,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_back-1.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 860,
                         "printingBox": {
                             "left": 190,
                             "top": 150,
@@ -323,8 +323,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_vneck/preview_men_vneck_front.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 193,
                             "top": 167,
@@ -440,8 +440,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_vneck/preview_men_vneck_back.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 195,
                             "top": 109,
@@ -562,8 +562,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_front-1.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 178,
                             "top": 139,
@@ -752,8 +752,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_back-1.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 190,
                             "top": 150,
@@ -874,8 +874,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_vneck/preview_men_vneck_front.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 193,
                             "top": 167,
@@ -991,8 +991,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_vneck/preview_men_vneck_back.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 195,
                             "top": 109,
@@ -1113,8 +1113,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_front-1.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 178,
                             "top": 139,
@@ -1303,8 +1303,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_back-1.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 190,
                             "top": 150,
@@ -1425,8 +1425,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_vneck/preview_men_vneck_front.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 193,
                             "top": 167,
@@ -1542,8 +1542,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_vneck/preview_men_vneck_back.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 195,
                             "top": 109,
@@ -1664,8 +1664,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_front-1.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 178,
                             "top": 139,
@@ -1854,8 +1854,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_back-1.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 190,
                             "top": 150,
@@ -1976,8 +1976,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_vneck/preview_men_vneck_front.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 193,
                             "top": 167,
@@ -2093,8 +2093,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_vneck/preview_men_vneck_back.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 195,
                             "top": 109,
@@ -2215,8 +2215,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_front-1.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 178,
                             "top": 139,
@@ -2405,8 +2405,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_back-1.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 190,
                             "top": 150,
@@ -2527,8 +2527,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_vneck/preview_men_vneck_front.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 193,
                             "top": 167,
@@ -2644,8 +2644,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_vneck/preview_men_vneck_back.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 195,
                             "top": 109,
@@ -2766,8 +2766,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_front-1.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 178,
                             "top": 139,
@@ -2956,8 +2956,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_back-1.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 190,
                             "top": 150,
@@ -3078,8 +3078,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_vneck/preview_men_vneck_front.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 193,
                             "top": 167,
@@ -3195,8 +3195,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_vneck/preview_men_vneck_back.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 195,
                             "top": 109,
@@ -3317,8 +3317,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_front-1.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 178,
                             "top": 139,
@@ -3507,8 +3507,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_back-1.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 190,
                             "top": 150,
@@ -3629,8 +3629,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_vneck/preview_men_vneck_front.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 193,
                             "top": 167,
@@ -3746,8 +3746,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_vneck/preview_men_vneck_back.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 195,
                             "top": 109,
@@ -3868,8 +3868,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_front-1.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 178,
                             "top": 139,
@@ -4058,8 +4058,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_back-1.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 190,
                             "top": 150,
@@ -4180,8 +4180,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_vneck/preview_men_vneck_front.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 193,
                             "top": 167,
@@ -4297,8 +4297,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_vneck/preview_men_vneck_back.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 195,
                             "top": 109,
@@ -4424,8 +4424,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_women_standard/preview_women_standard_shirt_front-1.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 207,
                             "top": 136,
@@ -4543,8 +4543,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_women_standard/preview_women_standard_shirt_back.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 195,
                             "top": 105,
@@ -4665,8 +4665,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_women_long/preview_women_long_shirt_front-1.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 195,
                             "top": 124,
@@ -4782,8 +4782,8 @@
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_women_long/preview_women_long_shirt_back-1.png",
                     "mask": {},
                     "options": {
-                        "stageWidth": "600",
-                        "stageHeight": "660",
+                        "stageWidth": 600,
+                        "stageHeight": 660,
                         "printingBox": {
                             "left": 198,
                             "top": 111,

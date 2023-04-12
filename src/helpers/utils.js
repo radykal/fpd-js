@@ -1,7 +1,39 @@
 import Modal from '/src/ui/view/comps/Modal';
 
+const isPlainObject = (value) => {
+    return Object.prototype.toString.call(value) === '[object Object]';
+}
+
+export { isPlainObject };
+
+const objectHasKeys = (obj, keys) => {
+
+    if(obj && typeof obj === 'object') {
+
+        let hasAllKeys = true;
+        for(var i=0; i < keys.length; ++i) {
+
+            var key = keys[i];
+            if(!obj.hasOwnProperty(key)) {
+                hasAllKeys = false;
+                break;
+            }
+
+        }
+
+        return hasAllKeys;
+
+    }
+    else {
+        return false;
+    }
+
+}
+
+export { objectHasKeys };
+
 const deepMerge = (obj1, obj2) => {
-   
+    
     // Create a new object that combines the properties of both input objects
     const merged = {
         ...obj1,
@@ -11,11 +43,11 @@ const deepMerge = (obj1, obj2) => {
     if(Object.keys(obj2).length) {
         
         // Loop through the properties of the merged object
-        for (const key of Object.keys(merged)) {
+        for(const key of Object.keys(merged)) {
+            
             // Check if the property is an object
-            if (typeof merged[key] === 'object' && !(merged[key] instanceof Array) && merged[key] !== null) {
-                // If the property is an object, recursively merge the objects
-                if(obj2[key]) {
+            if (isPlainObject(merged[key])) {
+                if(obj1[key] && obj2[key]) {
                     merged[key] = deepMerge(obj1[key], obj2[key]);
                 }
                 
@@ -28,6 +60,76 @@ const deepMerge = (obj1, obj2) => {
 }
 
 export { deepMerge };
+
+/**
+ * Checks if a string is an URL.
+ *
+ * @method isUrl
+ * @param {String} s The string.
+ * @return {Boolean} Returns true if string is an URL.
+ * @static
+ */
+const isUrl = (s) => {
+
+    var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+    return regexp.test(s);
+
+}
+
+export { isUrl };
+
+/**
+ * Removes an element from an array by value.
+ *
+ * @method removeFromArray
+ * @param {Array} array The target array.
+ * @param {String} element The element value.
+ * @return {Array} Returns the edited array.
+ * @static
+ */
+const removeFromArray  = (array, element) => {
+
+    var index = array.indexOf(element);
+    if (index > -1) {
+        array.splice(index, 1);
+    }
+
+    return array;
+
+}
+
+export { removeFromArray };
+
+/**
+ * Checks if a string is XML formatted.
+ *
+ * @method isXML
+ * @param {String} string The target string.
+ * @return {Boolean} Returns true if string is XML formatted.
+ * @static
+ */
+const isXML = (string) => {
+
+    try {
+        //todo
+        xmlDoc = jQuery.parseXML(string); //is valid XML
+        return true;
+    } catch (err) {
+        // was not XML
+        return false;
+    }
+
+};
+
+export { isXML };
+
+const isZero = (value) => {
+
+    return value === 0 || (typeof value === 'string' && value === "0");
+
+}
+
+export { isZero };
 
 const addEvents = (elements, events=[], listener=()=>{}) => {
     
@@ -273,6 +375,7 @@ export { createImgThumbnail };
  */
 const checkImageDimensions = (fpdInstance, imageW, imageH) => {
     
+    console.log(imageW);
     const viewInst = fpdInstance.currentViewInstance;
     let imageRestrictions = viewInst.options.customImageParameters;
     
@@ -288,10 +391,11 @@ const checkImageDimensions = (fpdInstance, imageW, imageH) => {
     imageH < imageRestrictions.minH) {
 
         fpdInstance.loadingCustomImage = false;
-
+        
+        console.log(fpdInstance.mainBar);
         if(fpdInstance.mainBar) {
             
-            fpdInstance.mainBar.toggleDialog(false);
+            fpdInstance.mainBar.toggleContentDisplay(false);
 
             if(viewInst.currentUploadZone) {
                 fpdInstance.mainBar.toggleUploadZonePanel(false);

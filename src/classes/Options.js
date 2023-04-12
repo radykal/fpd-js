@@ -916,7 +916,7 @@ export default class Options {
 		* @default 1
 		* @version 5.1.1
 		*/
-		maxCanvasHeight: 1,
+		maxCanvasHeight: 0.8,
 		/**
 		* Set the behaviour for mobile gestures. Possible values:  'none': No behaviour, 'pinchPanCanvas': Zoom in/out and pan canvas, 'pinchImageScale': Scale selected image with pinch.
 		*

@@ -113,7 +113,7 @@ export default class ProductsModule extends EventTarget {
                     ), 
                     false, 
                     'confirm', 
-                    this.fpdInstance.modalContainer
+                    this.fpdInstance.container
                 );
                 
                 const confirmBtn = confirmModal.querySelector('.fpd-confirm');

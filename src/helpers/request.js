@@ -62,3 +62,33 @@ const postJSON = (props) => {
 }
 
 export { postJSON };
+
+const fetchText = (props) => {
+    
+    let url = props.url;
+    
+    return fetch(url)
+    .then(res => {
+        
+        if(res.ok) {
+            
+            res.text().then(text => {
+                if(props.onSuccess)
+                    props.onSuccess(text);
+            });
+            
+        }
+        else {
+            
+            res.text().then(error => {
+                if(props.onError)
+                    props.onError(error);
+            });
+            
+        }
+        
+    })
+    
+}
+
+export { fetchText };

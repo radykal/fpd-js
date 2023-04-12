@@ -3,6 +3,7 @@ import MainLoaderHTML from './html/main-loader.html';
 import Mainbar from './controller/Mainbar.js';
 import MainWrapper from './controller/MainWrapper.js';
 import ActionsBar from './controller/ActionsBar.js';
+import ViewsWrapper from './controller/ViewsWrapper.js';
 
 export default class UIManager extends EventTarget {
     
@@ -23,15 +24,18 @@ export default class UIManager extends EventTarget {
         this.fpdInstance.container.classList.add('fpd-container');
         this.fpdInstance.container.classList.add('fpd-wrapper');
         
-        const loaderElem = document.createElement('div');
-        loaderElem.innerHTML = MainLoaderHTML;
+        const loader = document.createElement('div');
+        loader.innerHTML = MainLoaderHTML;
         
-        //this.fpdInstance.container.appendChild(loaderElem.firstChild.cloneNode(true));
+        this.fpdInstance.container.appendChild(loader.firstChild.cloneNode(true));
+        this.fpdInstance.mainLoader = this.fpdInstance.container.querySelector('.fpd-loader-wrapper');
         
         this.fpdInstance.actionsBar = new ActionsBar(this.fpdInstance);
         this.fpdInstance.mainBar = new Mainbar(this.fpdInstance);
         
         this.fpdInstance.mainWrapper = new MainWrapper(this.fpdInstance);
+        this.fpdInstance.productStage = this.fpdInstance.mainWrapper.container.querySelector('.fpd-product-stage');
+        this.fpdInstance.viewsWrapper = new ViewsWrapper(this.fpdInstance);
         
         Array.from(this.fpdInstance.container.querySelectorAll('[data-defaulttext]'))
         .forEach(item => {

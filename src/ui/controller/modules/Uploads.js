@@ -9,6 +9,8 @@ import {
     getFileExtension
 } from '/src/helpers/utils';
 
+
+
 export default class UploadsModule extends EventTarget {
     
     #allowedFileTypes;
@@ -40,63 +42,45 @@ export default class UploadsModule extends EventTarget {
             this.#allowedFileTypes.push('jpg');
         }
         
-        let acceptTypes = {
-            'image/*': []
-        };
+        const uploadInput = this.container.querySelector('.fpd-upload-input');
+        let acceptTypes = [];
         this.#allowedFileTypes.forEach((imageTpye) => {
         
             if(imageTpye == 'pdf') {
-                acceptTypes['application/*'] = ['.pdf'];
+                acceptTypes.push('application/pdf')
             }
             else {
-        
+            
                 if(imageTpye == 'svg') {
                     imageTpye += '+xml';
                 }
-                acceptTypes['image/*'].push('.'+imageTpye);
-        
+                acceptTypes.push('image/'+imageTpye);
+            
             }
         
         });
+        uploadInput.setAttribute('accept', acceptTypes.join());
         
-        //add files per click
+        //open file picker
         addEvents(
             uploadZone,
             'click',
             async (evt) => {
-                evt.preventDefault();
                 
-                try {
-                    
-                    const fileHandles = await window.showOpenFilePicker({
-                        types: [
-                            {
-                                accept: acceptTypes
-                            },
-                        ],
-                        excludeAcceptAllOption: true,
-                        multiple: true,
-                    });
-                    
-                    let files = [];
-                    fileHandles.forEach(async (fh, i) => {
-                        
-                        const fileData = await fh.getFile();
-                        files.push(fileData);
-                        
-                        if(i == fileHandles.length-1) {
-                            this.#parseFiles(files);
-                        }
-                        
-                    })
-                    
-                }
-                catch(err) {
-                    console.log(err);
-                }
+                evt.preventDefault();
+                uploadInput.click();
                                 
             }
         );
+        
+        //add files per click
+        addEvents(
+            uploadInput,
+            'change', 
+            (evt) => {
+                this.#parseFiles(evt.currentTarget.files);
+            }
+        )
         
         //add files per drag&drop
         addEvents(
@@ -181,7 +165,7 @@ export default class UploadsModule extends EventTarget {
                 ), 
                 false, 
                 'confirm', 
-                this.fpdInstance.modalContainer
+                this.fpdInstance.container
             );
             
             const confirmBtn = confirmModal.querySelector('.fpd-confirm');
@@ -313,7 +297,7 @@ export default class UploadsModule extends EventTarget {
                         );
                         dpiMsg = dpiMsg.replace('%dpi', mainOptions.customImageParameters.minDPI)
                         
-                        Modal(dpiMsg, false, '', this.fpdInstance.modalContainer);
+                        Modal(dpiMsg, false, '', this.fpdInstance.container);
                         
                         this.fpdInstance.loadingCustomImage = false;
                         return false;
@@ -415,7 +399,7 @@ export default class UploadsModule extends EventTarget {
                             
                             this.fpdInstance.loadingCustomImage = false;
                             thumbnail.remove();
-                            Modal('Upload failed. Please try again or check your web console!');
+                            Snackbar('Upload failed. Please try again or check your web console!');
                         
                         };
                         
@@ -513,7 +497,7 @@ export default class UploadsModule extends EventTarget {
                                         
             this.fpdInstance.loadingCustomImage = false;
             uploadSnackBar.remove();
-            Modal('Upload failed. Please try again or check your web console!');
+            Snackbar('Upload failed. Please try again or check your web console!');
         
         };
         

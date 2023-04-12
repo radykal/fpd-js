@@ -32,6 +32,10 @@ module.exports = (env, argv) => {
                 { 
                     directory: path.join(__dirname, 'data'),
                     publicPath: '/data',
+                },
+                { 
+                    directory: path.join(__dirname, 'examples'),
+                    publicPath: '/examples',
                 },                
             ]     
         },

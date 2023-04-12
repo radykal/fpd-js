@@ -4,7 +4,7 @@ import { isEmpty } from '/src/helpers/utils';
 
 export default class TextToImageModule extends EventTarget {
     
-    #apiEndpoint = 'http://radykal.dep/fpd-js/server/php/sd-api.php';
+    #apiEndpoint = 'https://radykal.dep/fpd-js/server/php/sd-api.php';
     #isLoading = false;
     
     constructor(fpdInstance, wrapper) {

@@ -1,10 +1,10 @@
 const { src, dest, series } = require('gulp');
-const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
 const less = require('gulp-less');
 const concat = require('gulp-concat');
 const cleanCSS = require('gulp-clean-css');
-const sourcemaps = require('gulp-sourcemaps');
+const webpack = require('webpack-stream');
+
 
 function buildVendorJS() {
     
@@ -18,9 +18,26 @@ function buildVendorJS() {
 function buildJS() {
     
     return src('./src/classes/FancyProductDesigner.js')
-        .pipe(sourcemaps.init())
-        .pipe(babel())
-        .pipe(sourcemaps.write('./'))
+        .pipe(webpack({
+            mode: 'production',
+            module: {
+               rules:[
+                    {
+                        test: /\.less$/,
+                        use:[
+                            "style-loader", 
+                            "css-loader",
+                            "less-loader"
+                        ]
+                    },
+                    {
+                        test: /\.html$/i,
+                        loader: "html-loader",
+                    },
+               ]
+            }
+        }))
+        .pipe(concat('FancyProductDesigner.js'))
         .pipe(dest('dist/js/'));
         
 }

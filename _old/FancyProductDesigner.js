@@ -13,7 +13,6 @@
 
 var FancyProductDesigner = function(elem, opts) {
 
-	var instance = this,
 		$editorBox = null,
 		$thumbnailPreview = null,
 		zoomReseted = false,
@@ -21,37 +20,15 @@ var FancyProductDesigner = function(elem, opts) {
 		inTextField = false,
 		initCSSClasses = '',
 		$draggedImage,
-		_totalProductElements = 0,
-		_productElementLoadingIndex = 0,
+
 		_outOfBoundingBoxLabel = '';
 
 
-	/**
-	 * The current selected product category index.
-	 *
-	 * @property currentCategoryIndex
-	 * @type Number
-	 * @default 0
-	 */
-	this.currentCategoryIndex = 0;
 
-	/**
-	 * The current selected product index.
-	 *
-	 * @property currentProductIndex
-	 * @type Number
-	 * @default 0
-	 */
-	this.currentProductIndex = 0;
 
-	/**
-	 * The current selected view index.
-	 *
-	 * @property currentViewIndex
-	 * @type Number
-	 * @default 0
-	 */
-	this.currentViewIndex = 0;
+
+
+
 
 	/**
 	 * The price considering the elements price in all views with order quantity.
@@ -115,41 +92,10 @@ var FancyProductDesigner = function(elem, opts) {
 	 */
 	this.watermarkImg = null;
 
-	/**
-	 * Indicates if the product is created or not.
-	 *
-	 * @property productCreated
-	 * @type Boolean
-	 * @default false
-	 */
-	this.productCreated = false;
 
-	/**
-	 * Indicates if the product was saved.
-	 *
-	 * @property doUnsavedAlert
-	 * @type Boolean
-	 * @default false
-	 */
-	this.doUnsavedAlert = false;
 
-	/**
-	 * Array containing all FancyProductDesignerView instances of the current showing product.
-	 *
-	 * @property viewInstances
-	 * @type Array
-	 * @default []
-	 */
-	this.viewInstances = [];
 
-	/**
-	 * Object containing all color link groups.
-	 *
-	 * @property colorLinkGroups
-	 * @type Object
-	 * @default {}
-	 */
-	this.colorLinkGroups = {};
+
 
 	/**
 	 * The order quantity.
@@ -178,23 +124,8 @@ var FancyProductDesigner = function(elem, opts) {
 	 */
 	this.pricingRulesPrice = 0;
 
-	/**
-	 * The container for internal modals.
-	 *
-	 * @property $modalContainer
-	 * @type jQuery
-	 * @default 0
-	 */
-	this.$modalContainer = $('body');
 
-	/**
-	 * Array will all added custom elements.
-	 *
-	 * @property globalCustomElements
-	 * @type Array
-	 * @default []
-	 */
-	this.globalCustomElements = [];
+
 
 	/**
 	 * Array will all fixed elements.
@@ -215,7 +146,7 @@ var FancyProductDesigner = function(elem, opts) {
 	this.mouseOverCanvas = false;
 
 	this._order = {};
-	this._prevPrintingBoxes = [];
+
 
 	var fpdOptionsInstance = new FancyProductDesignerOptions();
 	this.mainOptions = fpdOptionsInstance.merge(fpdOptionsInstance.defaults, opts);
@@ -334,31 +265,6 @@ var FancyProductDesigner = function(elem, opts) {
 		});
 		instance.mainOptions.hexNames = newHexNames;
 
-		//sort fonts
-		if(instance.mainOptions.fonts && instance.mainOptions.fonts.length > 0) {
-
-			//fonts array has objects
-			if(typeof instance.mainOptions.fonts[0] === 'object') {
-				instance.mainOptions.fonts.sort(function(a, b) {
-					var nameA = a.name.toUpperCase(), // ignore upper and lowercase
-						nameB = b.name.toUpperCase(); // ignore upper and lowercase
-					if (nameA < nameB) {
-						return -1;
-					}
-					if (nameA > nameB) {
-						return 1;
-					}
-
-					//same
-					return 0;
-				});
-			}
-			else {
-				instance.mainOptions.fonts.sort();
-			}
-
-		}
-
 		//PLUS
 		if(typeof FancyProductDesignerPlus !== 'undefined') {
 			FancyProductDesignerPlus.setup($elem, instance);
@@ -410,12 +316,12 @@ var FancyProductDesigner = function(elem, opts) {
             currentWindowWidth = 0;
 
 		$window.resize(function() {
-                        
+
 			//fix for android browser, because keyboard trigger resize event
 			if(window.innerWidth === currentWindowWidth || inTextField) {
 				return;
 			}
-            
+
             currentWindowWidth = window.innerWidth;
 
 			if(instance.currentViewInstance) {
@@ -435,7 +341,7 @@ var FancyProductDesigner = function(elem, opts) {
 				}
 
 			}
-            
+
 			//deselect element if one is selected and active element is not input (FB browser fix)
 			//alert(document.activeElement);
 			if(instance.currentElement && $(document.activeElement).is(':not(input)') && $(document.activeElement).is(':not(textarea)')) {
@@ -496,12 +402,6 @@ var FancyProductDesigner = function(elem, opts) {
 
 		});
 
-		instance.loadFonts(instance.mainOptions.fonts, function() {
-			instance.mainOptions.templatesDirectory ?
-				_loadTemplate('productdesigner', instance.mainOptions.templatesType, 0, _loadProductDesignerTemplate)
-			:
-				_ready();
-		});
 
 	};
 
@@ -519,17 +419,6 @@ var FancyProductDesigner = function(elem, opts) {
 			$mainBar = $uiElements.children('.fpd-mainbar').insertBefore($elem.children('.fpd-loader-wrapper'));
 		}
 
-
-		//show tabs content
-		$body.on('click', '.fpd-module-tabs > div', function() {
-
-			var $this = $(this),
-				context = $(this).data('context');
-
-			$this.addClass('fpd-active').siblings().removeClass('fpd-active');
-			$this.parent().next('.fpd-module-tabs-content').children().hide().filter('[data-context="'+context+'"]').show();
-
-		});
 
 
 		//init Toolbar
@@ -551,7 +440,7 @@ var FancyProductDesigner = function(elem, opts) {
 
 			evt.stopPropagation();
 			evt.preventDefault();
-            
+
 			if(element && !element._ignore && instance.currentViewInstance) {
 
 				//upload zone is selected
@@ -576,12 +465,12 @@ var FancyProductDesigner = function(elem, opts) {
 				}
 				//if element has no upload zone and an upload zone is selected, close dialogs and call first module
 				else if(instance.currentViewInstance.currentUploadZone) {
-                    
+
 					instance.mainBar.toggleDialog(false);
 					instance.mainBar.toggleUploadZonePanel(false);
 
 				}
-                
+
 				instance.toolbar.update(element);
 
 				if(instance.mainOptions.openTextInputOnSelect && FPDUtil.getType(element.type) === 'text' && element.editable) {
@@ -592,7 +481,7 @@ var FancyProductDesigner = function(elem, opts) {
 
 			}
 			else {
-                
+
 				instance.toolbar.toggle(false);
 				$body.children('[class^="fpd-element-toolbar"]').find('input').spectrum('destroy');
 
@@ -670,6 +559,7 @@ var FancyProductDesigner = function(elem, opts) {
 				}
 
 				if(!FPDUtil.isEmpty(element.textLinkGroup)) {
+
 					var textLinkGroupProps = instance.mainOptions.textLinkGroupProps || [];
 					Object.keys(parameters).forEach(function(param) {
 
@@ -907,7 +797,7 @@ var FancyProductDesigner = function(elem, opts) {
 				   instance.deselectElement();
 
 			}
-            
+
 			//close upload zone panel if click outside of fpd-container, needed otherwise elements can be added to upload zone e.g. mspc
 			if($target.closest('.fpd-container, .fpd-modal-internal').length === 0
 				&& instance.currentViewInstance && instance.currentViewInstance.currentUploadZone
@@ -1250,7 +1140,7 @@ var FancyProductDesigner = function(elem, opts) {
 		$window.resize();
 
 	};
-	
+
 	//get category index by category name
 	var _getCategoryIndexInProducts = function(catName) {
 
@@ -1264,23 +1154,7 @@ var FancyProductDesigner = function(elem, opts) {
 
 	};
 
-	var _toggleUndoRedoBtn = function(undos, redos) {
 
-		if(undos.length === 0) {
-		  	instance.$actionsWrapper.find('[data-action="undo"]').addClass('fpd-disabled');
-  		}
-  		else {
-	  		instance.$actionsWrapper.find('[data-action="undo"]').removeClass('fpd-disabled');
-  		}
-
-  		if(redos.length === 0) {
-	  		instance.$actionsWrapper.find('[data-action="redo"]').addClass('fpd-disabled');
-  		}
-  		else {
-	  		instance.$actionsWrapper.find('[data-action="redo"]').removeClass('fpd-disabled');
-  		}
-
-	};
 
 	var _updateEditorBox = function(element) {
 
@@ -1312,74 +1186,7 @@ var FancyProductDesigner = function(elem, opts) {
 
 	};
 
-	var _onViewCreated = function() {
 
-		//add all views of product till views end is reached
-		if(instance.viewInstances.length < instance.currentViews.length) {
-
-			instance.addView(instance.currentViews[instance.viewInstances.length]);
-
-		}
-		//all views added
-		else {
-
-			$elem.off('viewCreate', _onViewCreated);
-
-			instance.toggleSpinner(false);
-			instance.selectView(0);
-
-			//search for object with auto-select
-			if(!instance.mainOptions.editorMode && instance.currentViewInstance && $(instance.currentViewInstance.stage.getElement()).is(':visible')) {
-				var viewElements = instance.currentViewInstance.stage.getObjects(),
-					selectElement = null;
-
-				for(var i=0; i < viewElements.length; ++i) {
-					var obj = viewElements[i];
-
-					 if(obj.autoSelect && !obj.hasUploadZone) {
-					 	selectElement = obj;
-					 }
-
-				}
-			}
-
-			if(selectElement && instance.currentViewInstance) {
-				setTimeout(function() {
-
-					instance.currentViewInstance.stage.setActiveObject(selectElement);
-					selectElement.setCoords();
-					instance.currentViewInstance.stage.renderAll();
-
-				}, 500);
-			}
-
-			instance.productCreated = true;
-
-			//close dialog and off-canvas on element add
-			if( instance.mainBar && instance.mainBar.__setup) {
-
-				//instance.mainBar.toggleDialog(false);
-
-			}
-
-			if(instance.mainBar) {
-				instance.mainBar.__setup = true; //initial active module fix
-			}
-
-			$window.resize();
-
-			/**
-		     * Gets fired as soon as a product has been fully added to the designer.
-		     *
-		     * @event FancyProductDesigner#productCreate
-		     * @param {Event} event
-		     * @param {array} currentViews - An array containing all views of the product.
-		     */
-			$elem.trigger('productCreate', [instance.currentViews]);
-
-		}
-
-	};
 
 	var _updateElementTooltip = function() {
 
@@ -1410,26 +1217,6 @@ var FancyProductDesigner = function(elem, opts) {
 
 	};
 
-	var _loadTemplate = function(template, type, loadIndex, callback) {
-
-		var templateType = $.isArray(type) ? type[loadIndex] : type;
-
-		$.get(
-			instance.mainOptions.templatesDirectory+template+'.'+templateType,
-			callback
-		)
-		.fail(function() {
-
-			if($.isArray(type) && type[loadIndex+1]) {
-				_loadTemplate(template, type, ++loadIndex, callback);
-			}
-			else {
-				alert(instance.mainOptions.templatesDirectory+template+'.'+templateType+' could not be loaded.')
-			}
-
-		});
-
-	};
 
 	var _calculateViewsPrice = function() {
 
@@ -1506,7 +1293,7 @@ var FancyProductDesigner = function(elem, opts) {
 	};
 
 
-	
+
 
 	this._addCanvasDesign = function(source, title, params, viewIndex) {
 
@@ -1529,664 +1316,6 @@ var FancyProductDesigner = function(elem, opts) {
 		if(instance.productCreated && instance.mainOptions.hideDialogOnAdd && instance.mainBar) {
 			instance.mainBar.toggleDialog(false);
 		}
-
-	};
-
-	/**
-	 * Adds a new product to the product designer.
-	 *
-	 * @method addProduct
-	 * @param {array} views An array containing the views for a product. A view is an object with a title, thumbnail and elements property. The elements property is an array containing one or more objects with source, title, parameters and type.
-	 * @param {string} [category] If categories are used, you need to define the category title.
-	 */
-	this.addProduct = function(views, category) {
-
-		var catIndex = _getCategoryIndexInProducts(category);
-
-		/*views.forEach(function(view) {
-			view.options = view.options === undefined && typeof view.options !== 'object' ? instance.mainOptions : fpdOptionsInstance.merge(instance.mainOptions, view.options)
-		});*/
-
-		if(category === undefined) {
-			instance.products.push(views);
-		}
-		else {
-
-			if(catIndex === false) {
-
-				catIndex = instance.products.length;
-				instance.products[catIndex] = {category: category, products: []};
-
-			}
-
-			instance.products[catIndex].products.push(views);
-
-		}
-
-		/**
-		 * Gets fired when a product is added.
-		 *
-		 * @event FancyProductDesigner#productAdd
-		 * @param {Event} event
-		 * @param {Array} views - The product views.
-		 * @param {String} category - The category title.
-		 * @param {Number} catIndex - The index of the category.
-		 */
-		$elem.trigger('productAdd', [views, category, catIndex]);
-
-	};
-
-	/**
-	 * Selects a product by index and category index.
-	 *
-	 * @method selectProduct
-	 * @param {number} index The requested product by an index value. 0 will load the first product.
-	 * @param {number} [categoryIndex] The requested category by an index value. 0 will load the first category.
-	 * @example fpd.selectProduct( 1, 2 ); //will load the second product from the third category
-	 */
-	this.selectProduct = function(index, categoryIndex) {
-
-		instance.currentCategoryIndex = categoryIndex === undefined ? instance.currentCategoryIndex : categoryIndex;
-
-		var productsObj;
-		if(instance.products && instance.products.length && instance.products[0].category) { //categories enabled
-			var category = instance.products[instance.currentCategoryIndex];
-			productsObj = category.products;
-		}
-		else { //no categories enabled
-			productsObj = instance.products;
-		}
-
-		instance.currentProductIndex = index;
-		if(index < 0) { currentProductIndex = 0; }
-		else if(index > productsObj.length-1) { instance.currentProductIndex = productsObj.length-1; }
-
-		var product = productsObj[instance.currentProductIndex];
-
-		/**
-		 * Gets fired when a product is selected.
-		 *
-		 * @event FancyProductDesigner#productSelect
-		 * @param {Event} event
-		 * @param {Number} index - The index of the product in the category.
-		 * @param {Number} categoryIndex - The index of the category.
-		 * @param {Object} product - An object containing the product (views).
-		 */
-		$elem.trigger('productSelect', [index, categoryIndex, product]);
-
-		instance.loadProduct(product, instance.mainOptions.replaceInitialElements);
-
-	};
-
-	/**
-	 * Loads a new product to the product designer.
-	 *
-	 * @method loadProduct
-	 * @param {array} views An array containing the views for the product.
-	 * @param {Boolean} [onlyReplaceInitialElements=false] If true, the initial elements will be replaced. Custom added elements will stay on the canvas.
-	 * @param {Boolean} [mergeMainOptions=false] Merges the main options into every view options.
-	 */
-	this.loadProduct = function(views, replaceInitialElements, mergeMainOptions) {
-
-		if(!views) { return; }
-
-		instance._prevPrintingBoxes = [];
-		this.viewInstances.forEach(function(viewInstance) {
-
-			instance._prevPrintingBoxes.push(FPDUtil.objectHasKeys(viewInstance.options.printingBox, ['left','top','width','height']) ? viewInstance.options.printingBox : null);
-
-		})
-
-		replaceInitialElements = replaceInitialElements === undefined ? false : replaceInitialElements;
-		mergeMainOptions = mergeMainOptions === undefined ? false : mergeMainOptions;
-
-		if($stageLoader.is(':hidden')) {
-			instance.toggleSpinner(true);
-		}
-
-		//reset when loading a product
-		instance.productCreated = false;
-		instance.colorLinkGroups = {};
-
-		instance.globalCustomElements = [];
-		if(replaceInitialElements) {
-			instance.globalCustomElements = instance.getCustomElements();
-		}
-		else {
-			instance.doUnsavedAlert = false;
-		}
-
-		instance.fixedElements = instance.getFixedElements();
-
-		instance.reset();
-
-		if(mergeMainOptions) {
-
-			views.forEach(function(view, i) {
-				view.options = fpdOptionsInstance.merge(instance.mainOptions, view.options);
-			});
-
-		}
-
-		instance.currentViews = views;
-
-		_totalProductElements = _productElementLoadingIndex = 0;
-		views.forEach(function(view, i) {
-			_totalProductElements += view.elements.length;
-		});
-
-		if(!instance.$viewSelectionWrapper) {
-
-			instance.$viewSelectionWrapper = $('<div class="fpd-views-wrapper"><span class="fpd-view-prev"><span class="fpd-icon-forward"></span></span><div class="fpd-views-selection"></div><span class="fpd-view-next"><span class="fpd-icon-forward"></span></span></div>');
-
-		}
-
-		if(($elem.hasClass('fpd-views-outside') || $elem.hasClass('fpd-device-smartphone')) && !instance.mainOptions.modalMode) {
-			$elem.after(instance.$viewSelectionWrapper);
-		}
-		else {
-			instance.$mainWrapper.append(instance.$viewSelectionWrapper);
-		}
-
-		$elem.on('viewCreate', _onViewCreated);
-
-		if(views) {
-			instance.addView(views[0]);
-		}
-
-	};
-
-	/**
-	 * Adds a view to the current visible product.
-	 *
-	 * @method addView
-	 * @param {object} view An object with title, thumbnail and elements properties.
-	 */
-	this.addView = function(view) {
-
-		var viewImageURL = instance.mainOptions._loadFromScript ? instance.mainOptions._loadFromScript + view.thumbnail : view.thumbnail;
-
-		instance.$viewSelectionWrapper.children('.fpd-views-selection')
-		.append('<div class="fpd-shadow-1 fpd-item fpd-tooltip" title="'+view.title+'"><picture style="background-image: url('+viewImageURL+');"></picture></div>')
-		.children('div:last').click(function(evt) {
-
-			instance.selectView(instance.$viewSelectionWrapper.children('.fpd-views-selection').children('.fpd-item').index($(this)));
-
-		});
-
-		var mainOptions = $.extend(true, {}, instance.mainOptions);
-
-		//remove unnecessary props that are not needed in view
-		delete mainOptions['productsJSON'];
-		delete mainOptions['designsJSON'];
-		delete mainOptions['guidedTour'];
-		delete mainOptions['fonts'];
-		delete mainOptions['pricingRules'];
-		delete mainOptions['hexNames'];
-		delete mainOptions['customImageAjaxSettings'];
-		delete mainOptions['colorPickerPalette'];
-		delete mainOptions['imageEditorSettings'];
-		delete mainOptions['mainBarModules'];
-
-		view.options = view.options === undefined && typeof view.options !== 'object' ? mainOptions : $.extend(true, {}, fpdOptionsInstance.merge(mainOptions, view.options));
-
-
-		var viewInstance = new FancyProductDesignerView(instance.$productStage, view, function(viewInstance) {
-
-			//remove view instance if not added to product container
-			if($(viewInstance.stage.wrapperEl).parent().length === 0) {
-				viewInstance.reset();
-				return;
-			}
-
-			if(instance.viewInstances.length == 0) {
-				viewInstance.resetCanvasSize();
-			}
-
-			instance.viewInstances.push(viewInstance);
-			/**
-			 * Gets fired when a view is created.
-			 *
-			 * @event FancyProductDesigner#viewCreate
-			 * @param {Event} event
-			 * @param {FancyProductDesignerView} viewInstance
-			 */
-			$elem.trigger('viewCreate', [viewInstance]);
-
-		}, instance.mainOptions.fabricCanvasOptions );
-
-
-		viewInstance.stage.on({
-
-			'object:scaling': function(opts) {
-			},
-			'object:moving': function(opts) {
-			},
-			'object:rotating': function(opts) {
-			}
-
-		});
-
-		$(viewInstance)
-		.on('beforeElementAdd', function(evt, type, source, title, params) {
-
-			if(!instance.productCreated) {
-				_productElementLoadingIndex++;
-
-				var loadElementState = title + '<br>' + String(_productElementLoadingIndex) + '/' + _totalProductElements;
-				$stageLoader.find('.fpd-loader-text').html(loadElementState);
-			}
-
-		})
-		.on('canvas:mouseUp', function(evt, viewInstance) {
-
-			if(instance.mainOptions.fabricCanvasOptions.allowTouchScrolling) {
-				$elem.removeClass('fpd-disable-touch-scrolling');
-				instance.currentViewInstance.stage.allowTouchScrolling = true;
-			}
-
-		})
-		.on('canvas:mouseMove', function(evt, viewInstance, opts) {
-
-			instance.mouseOverCanvas = opts.target ? opts.target : true;
-
-		})
-		.on('canvas:mouseOut', function(evt, viewInstance) {
-
-			instance.mouseOverCanvas = false;
-
-		})
-		.on('elementAdd', function(evt, element) {
-
-			if(!element) {
-				instance.toggleSpinner(false);
-				return;
-			}
-
-			if(instance.productCreated && FPDUtil.getType(element.type) == 'image' && element.isCustom) {
-				instance.toggleSpinner(false);
-				FPDUtil.showMessage(instance.getTranslation('misc', 'image_added'));
-			}
-
-			//check if element has a color linking group
-			if(element.colorLinkGroup && element.colorLinkGroup.length > 0 && !instance.mainOptions.editorMode) {
-
-				var viewIndex = this.getIndex();
-
-				if(instance.colorLinkGroups.hasOwnProperty(element.colorLinkGroup)) { //check if color link object exists for the link group
-
-					//add new element with id and view index of it
-					instance.colorLinkGroups[element.colorLinkGroup].elements.push({id: element.id, viewIndex: viewIndex});
-
-					if(typeof element.colors === 'object') {
-
-						//create color group colors
-						var colorGroupColors = instance.mainOptions.replaceColorsInColorGroup ? element.colors : instance.colorLinkGroups[element.colorLinkGroup].colors.concat(element.colors);
-						instance.colorLinkGroups[element.colorLinkGroup].colors = FPDUtil.arrayUnique(colorGroupColors);
-
-					}
-
-				}
-				else {
-
-					//create initial color link object
-					instance.colorLinkGroups[element.colorLinkGroup] = {elements: [{id:element.id, viewIndex: viewIndex}], colors: []};
-
-					if(typeof element.colors === 'object') {
-
-						instance.colorLinkGroups[element.colorLinkGroup].colors = element.colors;
-
-					}
-
-				}
-
-			}
-
-			//close dialog and off-canvas on element add
-			if(instance.mainBar && instance.productCreated && instance.mainOptions.hideDialogOnAdd) {
-				instance.mainBar.toggleDialog(false);
-
-			}
-
-			/**
-			 * Gets fired when an element is added.
-			 *
-			 * @event FancyProductDesigner#elementAdd
-			 * @param {Event} event
-			 * @param {fabric.Object} element
-			 */
-			$elem.trigger('elementAdd', [element]);
-
-			$elem.trigger('viewCanvasUpdate', [viewInstance]);
-
-		})
-		.on('boundingBoxToggle', function(evt, currentBoundingObject, addRemove) {
-
-			/**
-		     * Gets fired as soon as the bounding box is added to or removed from the stage.
-		     *
-		     * @event FancyProductDesigner#boundingBoxToggle
-		     * @param {Event} event
-		     * @param {fabric.Object} currentBoundingObject - A fabricJS rectangle representing the bounding box.
-		     * @param {Boolean} addRemove - True=added, false=removed.
-		     */
-			$elem.trigger('boundingBoxToggle', [currentBoundingObject, addRemove]);
-
-		})
-		.on('elementSelect', function(evt, element) {
-
-			instance.currentElement = element;
-
-			if(element) {
-				_updateElementTooltip();
-			}
-			else { //deselected
-
-				if(instance.$elementTooltip) {
-					instance.$elementTooltip.hide();
-				}
-
-				instance.$mainWrapper.children('.fpd-snap-line-h, .fpd-snap-line-v').hide();
-
-			}
-			/**
-			 * Gets fired when an element is selected.
-			 *
-			 * @event FancyProductDesigner#elementSelect
-			 * @param {Event} event
-			 * @param {fabric.Object} element
-			 */
-			$elem.trigger('elementSelect', [element]);
-
-		})
-		.on('elementChange', function(evt, type, element) {
-
-			_updateElementTooltip();
-			_updateEditorBox(element.getBoundingRect());
-
-			/**
-			 * Gets fired when an element is changed.
-			 *
-			 * @event FancyProductDesigner#elementChange
-			 * @param {Event} event
-			 * @param {fabric.Object} element
-			 */
-			$elem.trigger('elementChange', [type, element]);
-
-		})
-		.on('elementModify', function(evt, element, parameters) {
-
-			_updateElementTooltip();
-
-			/**
-			 * Gets fired when an element is modified.
-			 *
-			 * @event FancyProductDesigner#elementModify
-			 * @param {Event} event
-			 * @param {fabric.Object} element
-			 * @param {Object} parameters
-			 */
-			$elem.trigger('elementModify', [element, parameters]);
-
-			/**
-			 * Gets fired when an element is modified.
-			 *
-			 * @event FancyProductDesigner#viewCanvasUpdate
-			 * @param {Event} event
-			 * @param {FancyProductDesignerView} viewInstance
-			 */
-			$elem.trigger('viewCanvasUpdate', [viewInstance]);
-
-		})
-		.on('undoRedoSet', function(evt, undos, redos) {
-
-			instance.doUnsavedAlert = true;
-			_toggleUndoRedoBtn(undos, redos);
-
-			/**
-			 * Gets fired when an undo or redo state is set.
-			 *
-			 * @event FancyProductDesigner#undoRedoSet
-			 * @param {Event} event
-			 * @param {Array} undos - Array containing all undo objects.
-			 * @param {Array} redos - Array containing all redo objects.
-			 */
-			$elem.trigger('undoRedoSet', [undos, redos]);
-
-		})
-		.on('priceChange', function(evt, price, viewPrice) {
-
-			var truePrice = instance.calculatePrice();
-
-			/**
-		     * Gets fired as soon as the price changes in a view.
-		     *
-		     * @event FancyProductDesigner#priceChange
-		     * @param {Event} event
-		     * @param {number} elementPrice - The price of the element.
-		     * @param {number} totalPrice - The true price of all views with quantity.
-		     * @param {number} singleProductPrice - The true price of all views without quantity.
-		     */
-			$elem.trigger('priceChange', [price, truePrice, instance.singleProductPrice]);
-
-		})
-		.on('elementCheckContainemt', function(evt, element, boundingBoxMode) {
-
-			if(boundingBoxMode === 'inside') {
-
-				_updateElementTooltip();
-
-			}
-
-		})
-		.on('elementColorChange', function(evt, element, hex, colorLinking) {
-
-			if(instance.productCreated && colorLinking && element.colorLinkGroup && element.colorLinkGroup.length > 0) {
-
-				var group = instance.colorLinkGroups[element.colorLinkGroup];
-				if(group && group.elements) {
-					for(var i=0; i < group.elements.length; ++i) {
-
-						var id = group.elements[i].id,
-							viewIndex = group.elements[i].viewIndex,
-							target = instance.getElementByID(id, viewIndex);
-
-						if(target && target !== element && hex) {
-							instance.viewInstances[viewIndex].changeColor(target, hex, false);
-						}
-
-					}
-				}
-
-			}
-
-			/**
-			 * Gets fired when the color of an element is changed.
-			 *
-			 * @event FancyProductDesigner#elementColorChange
-			 * @param {Event} event
-			 * @param {fabric.Object} element
-			 * @param {String} hex Hexadecimal color string.
-			 * @param {Boolean} colorLinking Color of element is linked to other colors.
-			 */
-			$elem.trigger('elementColorChange', [element, hex, colorLinking]);
-			$elem.trigger('viewCanvasUpdate', [viewInstance]);
-
-		})
-		.on('elementRemove', function(evt, element) {
-
-			//delete fixed element
-			var deleteIndex = instance.fixedElements.findIndex(function(item) {
-				return item.element.title == element.title
-			})
-
-			if(deleteIndex != -1) {
-				instance.fixedElements.splice(deleteIndex, 1);
-			}
-
-			/**
-		     * Gets fired as soon as an element has been removed.
-		     *
-		     * @event FancyProductDesigner#elementRemove
-		     * @param {Event} event
-		     * @param {fabric.Object} element - The fabric object that has been removed.
-		     */
-			$elem.trigger('elementRemove', [element]);
-
-			$elem.trigger('viewCanvasUpdate', [viewInstance]);
-
-		})
-		.on('fabricObject:added fabricObject:removed', function(evt, element) {
-
-			$elem.trigger(evt.type, [element]);
-
-		})
-		.on('textEditEnter', function() {
-
-			if(instance.currentElement) {
-				instance.toolbar.updatePosition(instance.currentElement);
-			}
-
-		})
-
-		viewInstance.setup();
-
-		FPDUtil.updateTooltip();
-
-		instance.$viewSelectionWrapper.children('.fpd-views-selection').children().length > 1 ? instance.$viewSelectionWrapper.show() : instance.$viewSelectionWrapper.hide();
-
-	};
-
-	/**
-	 * Selects a view from the current visible views.
-	 *
-	 * @method selectView
-	 * @param {number} index The requested view by an index value. 0 will load the first view.
-	 */
-	this.selectView = function(index) {
-
-		if(instance.viewInstances.length <= 0) {return;}
-
-		instance.resetZoom();
-
-		instance.currentViewIndex = index;
-		if(index < 0) { instance.currentViewIndex = 0; }
-		else if(index > instance.viewInstances.length-1) { instance.currentViewIndex = instance.viewInstances.length-1; }
-
-		instance.$viewSelectionWrapper.children('.fpd-views-selection').children('div').removeClass('fpd-view-active')
-		.eq(index).addClass('fpd-view-active');
-
-		instance.$mainWrapper.children('.fpd-ruler').remove();
-
-		if(instance.currentViewInstance) {
-			//delete all undos/redos
-			instance.currentViewInstance.undos = [];
-			instance.currentViewInstance.redos = [];
-
-			//remove some objects
-			var removeObjs = ['_snap_lines_group', '_ruler_hor', '_ruler_ver'];
-			for(var i=0; i<removeObjs.length; ++i) {
-				var removeObj = instance.currentViewInstance.getElementByID(removeObjs[i]);
-				if(removeObj) {
-					instance.currentViewInstance.stage.remove(removeObj);
-				}
-			}
-
-			instance.currentViewInstance._snapElements = false;
-
-		}
-
-		instance.currentViewInstance = instance.viewInstances[instance.currentViewIndex];
-
-		instance.deselectElement();
-
-		//select view wrapper and render stage of view
-		instance.$productStage.children('.fpd-view-stage').addClass('fpd-hidden').eq(instance.currentViewIndex).removeClass('fpd-hidden');
-		instance.currentViewInstance.stage.renderAll();
-
-		//toggle custom adds
-		if($mainBar && $mainBar.find('.fpd-navigation').length) {
-
-			var viewOpts = instance.currentViewInstance.options,
-				$nav = $mainBar.find('.fpd-navigation');
-
-			$nav.children('[data-module="designs"]').toggleClass('fpd-disabled', !viewOpts.customAdds.designs);
-			$('.fpd-sc-module-wrapper [data-module="designs"]').toggleClass('fpd-disabled', !viewOpts.customAdds.designs);
-			$nav.children('[data-module="images"]').toggleClass('fpd-disabled', !viewOpts.customAdds.uploads);
-			$('.fpd-sc-module-wrapper [data-module="images"]').toggleClass('fpd-disabled', !viewOpts.customAdds.designs);
-			$nav.children('[data-module="text"]').toggleClass('fpd-disabled', !viewOpts.customAdds.texts);
-			$('.fpd-sc-module-wrapper [data-module="text"]').toggleClass('fpd-disabled', !viewOpts.customAdds.designs);
-
-			//PLUS
-			if(typeof FPDNamesNumbersModule !== 'undefined') {
-				$nav.children('[data-module="names-numbers"]').toggleClass('fpd-disabled', !instance.currentViewInstance.textPlaceholder && !instance.currentViewInstance.numberPlaceholder);
-			}
-			$nav.children('[data-module="drawing"]').toggleClass('fpd-disabled', !viewOpts.customAdds.drawing);
-
-			//select nav item, if sidebar layout is used, no active item is set and active item is not disabled
-			if($elem.hasClass('fpd-device-desktop')) {
-
-				if($elem.hasClass('fpd-sidebar')) {
-
-					if(($nav.children('.fpd-active').length === 0) || $nav.children('.fpd-active').hasClass('fpd-disabled')) {
-
-						$nav.children(':not(.fpd-disabled)').length > 0 ? $nav.children(':not(.fpd-disabled)').first().click() : instance.mainBar.$content.children('.fpd-module').removeClass('fpd-active');
-
-					}
-					else if(instance.mainBar.$content.children('.fpd-active').length == 0 && instance.productCreated) {
-						$nav.children(':first').click()
-					}
-
-				}
-				else if($elem.hasClass('fpd-topbar')) {
-
-					if($nav.children('.fpd-active').hasClass('fpd-disabled')) {
-
-						instance.mainBar.toggleDialog(false);
-					}
-
-				}
-
-			}
-
-			//if products module is hidden and selected, select next
-			if(instance.$container.hasClass('fpd-products-module-hidden') && $nav.children('.fpd-active').filter('[data-module="products"]').length > 0) {
-				$nav.children(':not(.fpd-disabled)').eq(1).click();
-			}
-
-		}
-
-		//adjust off-canvas height to view height
-		if(instance.mainBar && instance.mainBar.$content && instance.$container.filter('[class*="fpd-off-canvas-"]').length > 0) {
-			instance.mainBar.$content.height(instance.$mainWrapper.height());
-		}
-
-		_toggleUndoRedoBtn(instance.currentViewInstance.undos, instance.currentViewInstance.redos);
-
-		//toggle view locker
-		instance.$mainWrapper.children('.fpd-modal-lock')
-		.removeClass('fpd-animated')
-		.toggleClass('fpd-active', instance.currentViewInstance.options.optionalView)
-		.toggleClass('fpd-unlocked', !instance.currentViewInstance.locked);
-		setTimeout(function() {
-			instance.$mainWrapper.children('.fpd-modal-lock').addClass('fpd-animated');
-		}, 1);
-
-		//reset view canvas size
-		instance.$productStage.width(instance.currentViewInstance.options.stageWidth);
-		instance.currentViewInstance.resetCanvasSize();
-		instance.currentViewInstance.resetCanvasSize(); //fix: to calculate correct size when views have different dimensions
-
-
-		/**
-	     * Gets fired as soon as a view has been selected.
-	     *
-	     * @event FancyProductDesigner#viewSelect
-	     * @param {Event} event
-	     * @param {Number} viewIndex
-	     * @param {Object} viewInstance
-	     */
-		$elem.trigger('viewSelect', [instance.currentViewIndex, instance.currentViewInstance]);
 
 	};
 
@@ -2246,41 +1375,7 @@ var FancyProductDesigner = function(elem, opts) {
 
 	};
 
-	/**
-	 * Clears the product stage and resets everything.
-	 *
-	 * @method reset
-	 */
-	this.reset = function() {
 
-		if(instance.currentViews === null) { return; }
-
-		$elem.off('viewCreate', _onViewCreated);
-
-		instance.deselectElement();
-		instance.resetZoom();
-		instance.currentViewIndex = instance.currentPrice = instance.singleProductPrice = instance.pricingRulesPrice = 0;
-		instance.currentViewInstance = instance.currentViews = instance.currentElement = null;
-
-		instance.viewInstances.forEach(function(view) {
-			view.stage.clear();
-		});
-
-		instance.$mainWrapper.find('.fpd-view-stage').remove();
-		$body.find('.fpd-views-selection').children().remove();
-
-		instance.viewInstances = [];
-
-		/**
-	     * Gets fired as soon as the stage has been cleared.
-	     *
-	     * @event FancyProductDesigner#clear
-	     * @param {Event} event
-	     */
-		$elem.trigger('clear');
-		$elem.trigger('priceChange', [0, 0, 0]);
-
-	};
 
 	/**
 	 * Deselects the selected element of the current showing view.
@@ -2860,63 +1955,6 @@ var FancyProductDesigner = function(elem, opts) {
 
 	};
 
-	/**
-	 * Returns an array with all custom added elements.
-	 *
-	 * @method getCustomElements
-	 * @param {string} [type='all'] The type of elements. Possible values: 'all', 'image', 'text'.
-	 * @param {Number} [viewIndex=-1] The index of the target view. By default all views are target.
-	 * @param {String} [deselectElement=true] Deselect current selected element.
-	 * @return {array} An array with objects with the fabric object and the view index.
-	 */
-	this.getCustomElements = function(type, viewIndex, deselectElement) {
-
-		var elements = this.getElements(viewIndex, type, deselectElement),
-			customElements = [];
-
-		elements.forEach(function(element) {
-
-			if(element.isCustom) {
-
-				var viewIndex = instance.$productStage.children('.fpd-view-stage').index(element.canvas.wrapperEl);
-				customElements.push({element: element, viewIndex: viewIndex});
-
-			}
-
-		});
-
-		return customElements;
-
-	};
-
-	/**
-	 * Returns an array with all fixed elements.
-	 *
-	 * @method getFixedElements
-	 * @param {string} [type='all'] The type of elements. Possible values: 'all', 'image', 'text'.
-	 * @param {Number} [viewIndex=-1] The index of the target view. By default all views are target.
-	 * @param {String} [deselectElement=true] Deselect current selected element.
-	 * @return {array} An array with objects with the fabric object and the view index.
-	 */
-	this.getFixedElements = function(type, viewIndex, deselectElement) {
-
-		var elements = this.getElements(viewIndex, type, deselectElement),
-			fixedElements = [];
-
-		elements.forEach(function(element) {
-
-			if(element.fixed) {
-
-				var viewIndex = instance.$productStage.children('.fpd-view-stage').index(element.canvas.wrapperEl);
-				fixedElements.push({element: element, viewIndex: viewIndex});
-
-			}
-
-		});
-
-		return fixedElements;
-
-	};
 
 	/**
 	 * Adds a new custom image to the product stage. This method should be used if you are using an own image uploader for the product designer. The customImageParameters option will be applied on the images that are added via this method.
