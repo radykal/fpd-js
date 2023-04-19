@@ -9,7 +9,7 @@ export default class ActionsBar extends EventTarget {
         
         this.container = document.createElement("fpd-actions-bar");
         fpdInstance.container.append(this.container);
-        
+                
     }
 
 }

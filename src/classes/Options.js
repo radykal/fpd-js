@@ -199,15 +199,6 @@ export default class Options {
 				uploadsDirURL: 'http://yourdomain.com/uploads' //if saveOnServer is true, you need to specify the directory URL where the images are saved
 			}
 		},
-		/** TODO Check
-		* Enable an improved resize filter, that may improve the image quality when its resized.
-		*
-		* @property improvedResizeQuality
-		* @memberof Options.defaults
-		* @type {Boolean}
-		* @default false
-		*/
-		improvedResizeQuality: false,
 		/**
 		* Make the canvas and the elements in the canvas responsive.
 		*
@@ -907,6 +898,16 @@ export default class Options {
 		* @version 5.1.0
 		*/
 		multiSelection: false,
+        /**
+        * The maximum canvas height related to the window height. A number between 0 and 1, e.g. 0.8 will set a maximum canvas height of 80% of the window height. A value of 1 will disable a calculation of a max. height.
+        *
+        * @property maxCanvasHeight
+        * @memberof Options.defaults
+        * @type {Number}
+        * @default 1
+        * @version 6.0.0
+        */
+        canvasHeight: 'auto',
 		/**
 		* The maximum canvas height related to the window height. A number between 0 and 1, e.g. 0.8 will set a maximum canvas height of 80% of the window height. A value of 1 will disable a calculation of a max. height.
 		*

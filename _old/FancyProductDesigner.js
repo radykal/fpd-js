@@ -25,56 +25,6 @@ var FancyProductDesigner = function(elem, opts) {
 
 
 
-
-
-
-
-
-	/**
-	 * The price considering the elements price in all views with order quantity.
-	 *
-	 * @property currentPrice
-	 * @type Number
-	 * @default 0
-	 */
-	this.currentPrice = 0;
-
-	/**
-	 * The price considering the elements price in all views without order quantity.
-	 *
-	 * @property singleProductPrice
-	 * @type Number
-	 * @default 0
-	 */
-	this.singleProductPrice = 0;
-
-	/**
-	 * The current views.
-	 *
-	 * @property currentViews
-	 * @type Array
-	 * @default null
-	 */
-	this.currentViews = null;
-
-	/**
-	 * The current selected element.
-	 *
-	 * @property currentElement
-	 * @type fabric.Object
-	 * @default null
-	 */
-	this.currentElement = null;
-
-
-	/**
-	 * jQuery object pointing on the product stage.
-	 *
-	 * @property $productStage
-	 * @type jQuery
-	 */
-	this.$productStage = null;
-
 	/**
 	 * jQuery object pointing on the tooltip for the current selected element.
 	 *
@@ -91,10 +41,6 @@ var FancyProductDesigner = function(elem, opts) {
 	 * @default null
 	 */
 	this.watermarkImg = null;
-
-
-
-
 
 
 	/**
@@ -114,17 +60,6 @@ var FancyProductDesigner = function(elem, opts) {
 	 * @default null
 	 */
 	this.bulkVariations = null;
-
-	/**
-	 * The calculated price for the pricing rules.
-	 *
-	 * @property pricingRulesPrice
-	 * @type Number
-	 * @default 0
-	 */
-	this.pricingRulesPrice = 0;
-
-
 
 
 	/**
@@ -147,13 +82,7 @@ var FancyProductDesigner = function(elem, opts) {
 
 	this._order = {};
 
-
-	var fpdOptionsInstance = new FancyProductDesignerOptions();
-	this.mainOptions = fpdOptionsInstance.merge(fpdOptionsInstance.defaults, opts);
-
 	var _initialize = function() {
-
-		initCSSClasses = $elem.attr('class') ? $elem.attr('class') : '';
 
 		instance.mainOptions.mainBarContainer = instance.mainOptions.modalMode !== false ? false : instance.mainOptions.mainBarContainer;
 
@@ -177,8 +106,6 @@ var FancyProductDesigner = function(elem, opts) {
 
 			$modalProductDesigner.children()
 			.append('<div class="fpd-done fpd-btn" data-defaulttext="Done">misc.modal_done</div><div class="fpd-modal-close"><span class="fpd-icon-close"></span></div>');
-
-			$modalProductDesigner.addClass('fpd-ui-theme-'+instance.mainOptions.uiTheme)
 
 			$(instance.mainOptions.modalMode).addClass('fpd-modal-mode-btn').click(function(evt) {
 
@@ -292,22 +219,6 @@ var FancyProductDesigner = function(elem, opts) {
 
 		$body.on('focus blur', '[class^="fpd-element-toolbar"] textarea, [class^="fpd-element-toolbar"] input[type="number"], [class^="fpd-element-toolbar"] input[type="text"]', function(evt) {
 			inTextField = evt.type == 'focusin';
-
-		});
-
-		instance.$container.on('screenSizeChange', function(evt, device){
-
-			if(instance.mainOptions.uiTheme !== 'doyle') {
-
-				if(device === 'smartphone') {
-					instance.$actionsWrapper.insertBefore(instance.$mainWrapper);
-				}
-				else {
-					instance.$actionsWrapper.appendTo(instance.$mainWrapper);
-				}
-
-			}
-
 
 		});
 
@@ -1295,29 +1206,7 @@ var FancyProductDesigner = function(elem, opts) {
 
 
 
-	this._addCanvasDesign = function(source, title, params, viewIndex) {
-
-		params = params === undefined ? {} : params;
-
-		if(!instance.currentViewInstance) { return; }
-
-		instance.toggleSpinner(true, instance.getTranslation('misc', 'loading_image'));
-
-		params = $.extend({}, instance.currentViewInstance.options.customImageParameters, params);
-
-		params.isCustom = true;
-		if(instance.currentViewInstance.currentUploadZone) {
-			params._addToUZ = instance.currentViewInstance.currentUploadZone;
-		}
-
-
-		instance.addElement('image', source, title, params, viewIndex);
-
-		if(instance.productCreated && instance.mainOptions.hideDialogOnAdd && instance.mainBar) {
-			instance.mainBar.toggleDialog(false);
-		}
-
-	};
+	
 
 	/**
 	 * Adds a new element to the product designer.
@@ -1372,23 +1261,6 @@ var FancyProductDesigner = function(elem, opts) {
 		}
 
 		instance.viewInstances[viewIndex].setElementParameters(parameters, element);
-
-	};
-
-
-
-	/**
-	 * Deselects the selected element of the current showing view.
-	 *
-	 * @method deselectElement
-	 */
-	this.deselectElement = function() {
-
-		if(instance.currentViewInstance) {
-
-			instance.currentViewInstance.deselectElement();
-
-		}
 
 	};
 
@@ -1592,81 +1464,7 @@ var FancyProductDesigner = function(elem, opts) {
 
 	};
 
-	/**
-	 * Returns an array with fabricjs objects.
-	 *
-	 * @method getElements
-	 * @param {Number} [viewIndex=-1] The index of the target view. By default all views are target.
-	 * @param {String} [elementType='all'] The type of elements to return. By default all types are returned. Possible values: text, image.
-	 * @param {String} [deselectElement=true] Deselect current selected element.
-	 * @return {Array} An array containg the elements.
-	 */
-	this.getElements = function(viewIndex, elementType, deselectElement) {
-
-		viewIndex = viewIndex === undefined || isNaN(viewIndex) ? -1 : viewIndex;
-		elementType = elementType === undefined ? 'all' : elementType;
-		deselectElement = deselectElement === undefined ? true : deselectElement;
-
-		if(deselectElement) {
-			this.deselectElement();
-		}
-
-		var allElements = [];
-		if(viewIndex === -1) {
-
-			for(var i=0; i < instance.viewInstances.length; ++i) {
-				allElements = allElements.concat(instance.viewInstances[i].stage.getObjects());
-			}
-
-		}
-		else {
-
-			if(instance.viewInstances[viewIndex]) {
-				allElements = instance.viewInstances[viewIndex].stage.getObjects();
-			}
-			else {
-				return [];
-			}
-
-		}
-
-		//remove bounding-box and printing-box object
-		allElements = allElements.filter(function(obj) {
-			return !obj._ignore;
-		});
-
-		if(elementType === 'text') {
-
-			var textElements = [];
-			allElements.forEach(function(elem) {
-
-				if(FPDUtil.getType(elem.type) === 'text') {
-					textElements.push(elem);
-				}
-
-			});
-
-			return textElements;
-
-		}
-		else if(elementType === 'image') {
-
-			var imageElements = [];
-			allElements.forEach(function(elem) {
-
-				if(FPDUtil.getType(elem.type) === 'image') {
-					imageElements.push(elem);
-				}
-
-			});
-
-			return imageElements;
-
-		}
-
-		return allElements;
-
-	};
+	
 
 	/**
 	 * Opens the current showing product in a Pop-up window and shows the print dialog.
@@ -1820,20 +1618,7 @@ var FancyProductDesigner = function(elem, opts) {
 
 	};
 
-	/**
-	 * Get an elment by ID.
-	 *
-	 * @method getElementByID
-	 * @param {Number} id The id of an element.
-	 * @param {Number} [viewIndex] The view index you want to search in. If no index is set, it will use the current showing view.
-	 */
-	this.getElementByID = function(id, viewIndex) {
-
-		viewIndex = viewIndex === undefined ? instance.currentViewIndex : viewIndex;
-
-		return instance.viewInstances[viewIndex] ? instance.viewInstances[viewIndex].getElementByID(id) : null;
-
-	};
+	
 
 	/**
 	 * Returns the current showing product with all views and elements in the views.

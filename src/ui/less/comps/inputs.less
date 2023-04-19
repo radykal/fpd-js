@@ -1,14 +1,16 @@
 .fpd-container {
     
     input, textarea {
+        color: var(--fpd-input-text-color);
         box-shadow: 0 3px 15px rgb(90 97 105 / 10%), 0 2px 3px rgb(90 97 105 / 20%);
         border: none;
-        border-radius: 4px;
+        border-radius: var(--fpd-border-radius);
         padding: 10px;
         margin-bottom: 10px;
         -webkit-appearance: none;
         resize: none;
         width: 100%;
+        font-size: 16px;
         
         &:focus {
             box-shadow: 0 3px 15px rgb(90 97 105 / 20%), 0 2px 3px rgb(90 97 105 / 30%);

@@ -14,9 +14,16 @@ class FPD_Dropdown extends HTMLElement {
     }
     
     connectedCallback() {
-
+        
         this.addEventListener('click', () => {
             this.classList.toggle('fpd-active');
+        });
+        
+        this.querySelector('.fpd-dropdown-arrow').addEventListener('click', (evt) => {
+            
+            evt.stopPropagation();
+            this.classList.toggle('fpd-active');
+            
         });
         
         this.querySelector('input.fpd-dropdown-current')

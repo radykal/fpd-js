@@ -2,15 +2,8 @@ import Modal from '/src/ui/view/comps/Modal';
 import Canvas from '/src/fabricjs/Canvas';
 
 import { 
-    addEvents,
-    isPlainObject,
-    deepMerge,
-    objectHasKeys,
-    isUrl,
-    isZero,
-    isEmpty
+    deepMerge
 } from '/src/helpers/utils';
-
 
 /**
  * Creates a new FancyProductDesigner.
@@ -26,24 +19,16 @@ export default class FancyProductDesignerView extends EventTarget {
      *
      * @type Array
      * @static
-     * @default ['stageWidth',
-        'stageHeight',
-        'customAdds',
-        'customImageParameters',
-        'customTextParameters',
-        'maxPrice',
-        'optionalView',
-        'designCategories',
-        'printingBox',
-        'output',
-        'layouts',
-        'usePrintingBoxAsBounding']
      * @instance
      * @memberof FancyProductDesigner
      */
     static relevantOptions = [
         'stageWidth',
         'stageHeight',
+        'selectedColor',
+        'boundingBoxColor',
+        'outOfBoundaryColor',
+        'cornerIconColor',
         'customAdds',
         'elementParameters',
         'imageParameters',
@@ -60,7 +45,6 @@ export default class FancyProductDesignerView extends EventTarget {
         'threeJsPreviewModel',
         'editorMode',
         'imageLoadTimestamp',
-        '_loadFromScript',
         'fitImagesInCanvas',
         'setTextboxWidth',
         'inCanvasTextEditing',
@@ -68,6 +52,7 @@ export default class FancyProductDesignerView extends EventTarget {
         'disableTextEmojis',
         'cornerControlsStyle',
         'responsive',
+        'canvasHeight',
         'maxCanvasHeight'
     ];
     
@@ -76,7 +61,6 @@ export default class FancyProductDesignerView extends EventTarget {
     title;
     thumbnail;
     options;
-    fpdCanvas = null;
     canvasElem = null;
     fabricCanvas = null;
     responsiveScale = 1;
@@ -91,8 +75,11 @@ export default class FancyProductDesignerView extends EventTarget {
         this.thumbnail = viewData.thumbnail;
         this.options = viewData.options;
         
-        const selectionColor = 'rgba(84,223,230,1.00)';
-        const canvasOptions = deepMerge({
+        const selectionColor = this.options.selectedColor;
+        fabric.Object.prototype.borderColor = selectionColor;
+        fabric.Object.prototype.cornerColor = this.options.cornerIconColor;
+        
+        fabricCanvasOptions = deepMerge({
             containerClass: 'fpd-view-stage fpd-hidden',
             selection: this.options.multiSelection,
             selectionBorderColor: selectionColor,
@@ -105,15 +92,24 @@ export default class FancyProductDesignerView extends EventTarget {
         }, fabricCanvasOptions);
         
         
-        this.fpdCanvas = new Canvas(container, canvasOptions, this.options);
+        this.fabricOptions = fabricCanvasOptions;
         
-        addEvents(
-            this.fpdCanvas,
+        //create canvas tag for fabricjs
+        this.canvasElem = document.createElement('canvas');
+        container.append(this.canvasElem);
+        
+        this.fabricCanvas = new fabric.Canvas(this.canvasElem, fabricCanvasOptions);
+        this.fabricCanvas.viewOptions = this.options;
+        this.fabricCanvas.setDimensions({
+            width: this.options.stageWidth, 
+            height: this.options.stageHeight
+        });
+        
+        this.fabricCanvas.on(
             'imageFail',
-            (evt) => {
-
+            ({url}) => {
                 Modal(`
-                    <p>The image with the URL<br /><i style='font-size: 10px;'>${evt.detail.url}</i><br />can not be loaded into the canvas.</p>
+                    <p>The image with the URL<br /><i style='font-size: 10px;'>${url}</i><br />can not be loaded into the canvas.</p>
                     <p><b>Troubleshooting</b>
                         <ul>
                             <li>The URL is not correct!</li>
@@ -124,10 +120,6 @@ export default class FancyProductDesignerView extends EventTarget {
                 `);
             }
         )
-        
-        //todo: maybe remove these 2 lines
-        this.canvasElem = this.fpdCanvas.canvasElem;
-        this.fabricCanvas = this.fpdCanvas.fabricCanvas;
                 
     }
     
@@ -151,35 +143,50 @@ export default class FancyProductDesignerView extends EventTarget {
      */
     loadElements(elements, callback) {
     
-        if(this.fpdCanvas.initialElementsLoaded) {
-            this.fpdCanvas.reset(false);
+        if(this.fabricCanvas.initialElementsLoaded) {
+            this.fabricCanvas.reset(false);
         }
         
-        this.fpdCanvas.addElements(elements, callback);
+        this.fabricCanvas.addElements(elements, callback);
     
     }
     
     /**
      * Resizes the canvas responsive.
      *
-     * @method resetCanvasSize
+     * @method resetSize
      */
     resetSize() {
         
         const viewStage = this.fabricCanvas.wrapperEl;
         const viewStageWidth = viewStage.clientWidth;
         
-        this.responsiveScale = viewStageWidth < this.options.stageWidth ? viewStageWidth / this.options.stageWidth : 1;
+        let widthScale = viewStageWidth < this.options.stageWidth ? viewStageWidth / this.options.stageWidth : 1;
+        let scaleHeight = widthScale;
+        this.responsiveScale = widthScale;
+        
+        let canvasHeight = this.options.stageHeight;
+        if(this.options.canvasHeight !== 'auto') {
+            
+            if(this.options.canvasHeight.includes('px')) {
+                
+                canvasHeight = parseInt(this.options.canvasHeight);
+                this.responsiveScale = widthScale * (canvasHeight / this.options.stageHeight);
+                scaleHeight = 1;
+            }
+            
+        }
         
         if(!isNaN(this.options.maxCanvasHeight) && this.options.maxCanvasHeight !== 1) {
         
             const maxHeight = window.innerHeight * parseFloat(this.options.maxCanvasHeight);
-            if(this.options.stageHeight > this.options.stageWidth && (this.options.stageHeight * this.responsiveScale) > maxHeight) {
-                this.responsiveScale = maxHeight / this.options.stageHeight;
+            if((canvasHeight * scaleHeight) > maxHeight) {
+                this.responsiveScale = widthScale * (maxHeight / this.options.stageHeight);
+                canvasHeight = maxHeight;
             }
         
         }
-        
+                
         this.responsiveScale = parseFloat(Number(this.responsiveScale.toFixed(7)));
         this.responsiveScale = Math.min(this.responsiveScale, 1);
         
@@ -211,6 +218,8 @@ export default class FancyProductDesignerView extends EventTarget {
         this.dispatchEvent(
             new CustomEvent('sizeUpdate', {
                 detail: {
+                    responsiveScale: this.responsiveScale,
+                    canvasHeight: canvasHeight * scaleHeight
                 }
             })
         );
@@ -222,63 +231,10 @@ export default class FancyProductDesignerView extends EventTarget {
     #afterSetup() {
         
         this.onCreatedCallback(this);
-        return;
         
-        if(instance.options.keyboardControl) {
-    
-            $(document).on('keydown', function(evt) {
-    
-                var $target = $(evt.target);
-    
-                if(instance.currentElement && !$target.is('textarea,input[type="text"],input[type="number"]')) {
-    
-                    switch(evt.which) {
-                        case 8:
-                            //remove element
-                            if(instance.currentElement.removable && $('.fpd-image-editor-container').length == 0) {
-                                instance.removeElement(instance.currentElement);
-                            }
-    
-                        break;
-                        case 37: // left
-    
-                            if(instance.currentElement.draggable) {
-                                instance.setElementParameters({left: instance.currentElement.left - 1});
-                            }
-    
-                        break;
-                        case 38: // up
-    
-                            if(instance.currentElement.draggable) {
-                                instance.setElementParameters({top: instance.currentElement.top - 1});
-                            }
-    
-                        break;
-                        case 39: // right
-    
-                            if(instance.currentElement.draggable) {
-                                instance.setElementParameters({left: instance.currentElement.left + 1});
-                            }
-    
-                        break;
-                        case 40: // down
-    
-                            if(instance.currentElement.draggable) {
-                                instance.setElementParameters({top: instance.currentElement.top + 1});
-                            }
-    
-                        break;
-    
-                        default: return; //other keys
-                    }
-    
-                    evt.preventDefault();
-    
-                }
-    
-            });
-    
-        }
+        
+        
+        return;
     
         //attach handlers to stage
         var lastTouchX,
@@ -293,7 +249,7 @@ export default class FancyProductDesignerView extends EventTarget {
                     instance.stage.forEachObject(function(obj) {
     
                         if(obj !== instance.stage.getActiveObject() && !obj.isMoving
-                            && ((getType(obj.type) === 'text' && obj.editable) || obj.uploadZone)) {
+                            && ((obj.getType() === 'text' && obj.editable) || obj.uploadZone)) {
     
                             var bound = obj.getBoundingRect();
                             instance.stage.contextContainer.setLineDash([5, 15]);
@@ -452,7 +408,7 @@ export default class FancyProductDesignerView extends EventTarget {
             },
             'text:changed': function(opts) {
     
-                instance.setElementParameters({text: opts.target.text});
+                instance.fabricCanvas.setElementParameters({text: opts.target.text});
                 $this.trigger('textChange', [opts.target]);
     
             },

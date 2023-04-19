@@ -87,12 +87,9 @@ export default class Mainbar extends EventTarget {
         addEvents(
             fpdInstance,
             'viewSelect',
-            () => {
-                
-                this.toggleContentDisplay(false);
-                
-            }
+            this.#viewSelected.bind(this)
         )
+                
         // fpdInstance.$container.on('viewSelect', function() {
         // 
         //     if(instance.$selectedModule) {
@@ -261,6 +258,52 @@ export default class Mainbar extends EventTarget {
         
     }
     
+    #viewSelected() {
+        
+        const viewInst = this.fpdInstance.currentViewInstance;
+        const viewOpts = viewInst.options;
+        const viewAdds = viewOpts.customAdds;
+        
+        toggleElemClasses(
+            document.querySelectorAll('.fpd-nav-item[data-module^="designs"]'),
+            ['fpd-disabled'],
+            !viewAdds.designs
+        );
+        
+        toggleElemClasses(
+            document.querySelectorAll('.fpd-nav-item[data-module="images"]'),
+            ['fpd-disabled'],
+            !viewAdds.uploads
+        );
+        
+        toggleElemClasses(
+            document.querySelectorAll('.fpd-nav-item[data-module="text-to-image"]'),
+            ['fpd-disabled'],
+            !viewAdds.uploads
+        );
+        
+        toggleElemClasses(
+            document.querySelectorAll('.fpd-nav-item[data-module="drawing"]'),
+            ['fpd-disabled'],
+            !viewAdds.drawing
+        );
+        
+        toggleElemClasses(
+            document.querySelectorAll('.fpd-nav-item[data-module="text"]'),
+            ['fpd-disabled'],
+            !viewAdds.texts
+        );
+        
+        toggleElemClasses(
+            document.querySelectorAll('.fpd-nav-item[data-module="names-numbers"]'),
+            ['fpd-disabled'],
+            !viewInst.textPlaceholder && !viewInst.numberPlaceholder
+        );
+
+        this.toggleContentDisplay(false);
+        
+    }
+    
     callModule(name, dynamicDesignsId=null) {
         
         //unselect current module
@@ -294,6 +337,7 @@ export default class Mainbar extends EventTarget {
                 this.navElem.querySelector('.fpd-nav-item[data-module="'+name+'"]'),
                 ['fpd-active']
             );
+            
             
             addElemClasses(
                 this.contentElem.querySelector('fpd-module-'+name),
@@ -560,8 +604,7 @@ export default class Mainbar extends EventTarget {
                     navItemElem.setAttribute(key, value);
                 }
                 
-            }
-            
+            }  
                                 
         });
         

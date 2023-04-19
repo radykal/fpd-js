@@ -7498,7 +7498,6 @@ fabric.ElementsParser = function(elements, callback, options, reviver, parsingOp
     }
     ctx.restore();
   }
-
   /**
    * Render a square control, as per fabric features.
    * This function is written to respect object properties like transparentCorners, cornerSize

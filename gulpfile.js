@@ -53,7 +53,7 @@ function minifyJS() {
 
 function buildVendorCSS() {
     
-    return src(['./src/vendor/FontFPD/style.css'])
+    return src(['./src/vendor/css/*.css', './src/vendor/FontFPD/style.css'])
         .pipe(cleanCSS())
         .pipe(concat('vendor.css'))
         .pipe(dest('dist/css/'));

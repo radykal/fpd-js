@@ -1,0 +1,41 @@
+.fpd-list {
+    
+    width: 100%;
+    overflow: auto;
+    
+    > .fpd-list-row {
+        display: flex;
+        font-size: 15px;
+        overflow: hidden;
+        border-top-width: 1px;
+        border-top-style: solid;
+        border-top-color: var(--fpd-border-color);
+        cursor: pointer;
+        transition: background 300ms ease-out;
+        
+        &:first-child {
+            border-top: none;
+        }
+        
+        &:hover {
+            background: var(--fpd-list-bg-color-hover);
+        }
+        
+        > .fpd-cell-full {
+            flex: 1 100%;
+        }
+        
+        > div {
+            padding: 22px 0;
+            flex: 1;
+        }
+        
+    }
+    
+    .fpd-sortable-placeholder {
+        background: rgba(0,0,0, 0.05);
+        border: 2px dotted var(--fpd-border-color);
+        height: 65px;
+    }
+    
+}

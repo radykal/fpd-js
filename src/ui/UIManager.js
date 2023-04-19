@@ -20,6 +20,7 @@ export default class UIManager extends EventTarget {
     init() {
         
         this.#updateResponsive();
+        this.#setMainTooltip();
         
         this.fpdInstance.container.classList.add('fpd-container');
         this.fpdInstance.container.classList.add('fpd-wrapper');
@@ -76,6 +77,60 @@ export default class UIManager extends EventTarget {
             this.fpdInstance.container.classList.remove('fpd-layout-small');
             this.fpdInstance.container.classList.add('fpd-layout-large');
         }
+        
+    }
+    
+    #setMainTooltip() {
+        
+        const tooltipContext = document.body;
+        
+        const mainTooltip = document.createElement('div');
+        mainTooltip.className = 'fpd-main-tooltip';
+        tooltipContext.append(mainTooltip);
+        this.fpdInstance.mainTooltip = mainTooltip;
+        
+        tooltipContext.addEventListener('mouseover', (evt) => {
+            
+            const currentElem = evt.target;
+            
+            if(currentElem.classList.contains('fpd-tooltip')) {
+                
+                const txt = currentElem.getAttribute('aria-label');
+                mainTooltip.innerHTML = txt;
+                
+                const extraOffset = 5;
+                const { x, y, width, height } = currentElem.getBoundingClientRect();
+                
+                let topPos = Math.floor(y - mainTooltip.clientHeight - extraOffset);
+                let leftPos = Math.floor(x + width / 2 - mainTooltip.clientWidth / 2);
+                
+                if(topPos < 0) {
+                    topPos = Math.floor(y + height + extraOffset);
+                }
+                
+                if(leftPos < 0) {
+                    leftPos = 0;
+                }
+                else if(leftPos > window.outerWidth - mainTooltip.clientWidth) {
+                    leftPos = window.outerWidth - mainTooltip.clientWidth - extraOffset;
+                }
+                
+                mainTooltip.style.left = `${leftPos}px`;
+                mainTooltip.style.top = `${topPos}px`;
+                mainTooltip.classList.add('fpd-show');
+                
+            }
+            else {
+                mainTooltip.classList.remove('fpd-show');
+            }
+            
+        });
+        
+        tooltipContext.addEventListener('touchstart', (evt) => {
+            
+                mainTooltip.classList.remove('fpd-show');
+            
+        });
         
     }
     

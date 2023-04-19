@@ -1,0 +1,25 @@
+.fpd-main-tooltip {
+    
+    position: fixed;
+    background: rgba(0,0,0, 0.8);
+    color: #fff;
+    padding: 5px;
+    font-size: 14px;
+    min-width: 30px;
+    top: 0;
+    left: 0;
+    border-radius: var(--fpd-border-radius);
+    pointer-events: none;
+    transform: scale(0);
+    opacity: 0;
+    z-index: 10000000000;
+    visibility: hidden;
+    transition: transform 0.1s ease;
+    
+    &.fpd-show {
+        visibility: visible;
+        opacity: 1;
+        transform: scale(1);
+    }
+    
+}

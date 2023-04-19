@@ -1,6 +1,6 @@
 export default class FontsLoader {
     
-    static parseFontsToEmbed(fontItem, loadFromScript='') {
+    static parseFontsToEmbed(fontItem) {
     
         var embedString = '';
         
@@ -8,7 +8,7 @@ export default class FontsLoader {
     
             var fontFamily = fontItem.name,
                 fontFormat = fontItem.url.search('.woff') !== -1 ? 'woff' : 'TrueType',
-                fontURL = loadFromScript ? loadFromScript+fontItem.url : fontItem.url;
+                fontURL = FancyProductDesigner.proxyFileServer + fontItem.url;
     
             fontFamily += ':n4'
     
@@ -24,7 +24,7 @@ export default class FontsLoader {
                         'i7': 'font-style: italic; font-weight: bold;'
                     };
     
-                    fontURL = loadFromScript+fontItem.variants[fv];
+                    fontURL = FancyProductDesigner.proxyFileServer + fontItem.variants[fv];
     
     
                     embedString += '@font-face {font-family:"'+fontItem.name+'"; '+ffVars[fv]+' src:url("'+fontURL+'") format("'+fontFormat+'");}\n';
@@ -91,7 +91,7 @@ export default class FontsLoader {
                         }
         
                         customFonts.push(fontFamily);
-                        styleFontsElem.append(this.parseFontsToEmbed(fontItem, fpdInstance.mainOptions._loadFromScript));
+                        styleFontsElem.append(this.parseFontsToEmbed(fontItem));
         
                     }
         

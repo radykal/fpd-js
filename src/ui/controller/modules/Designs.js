@@ -228,15 +228,15 @@ export default class DesignsModule extends EventTarget {
         });
         
         thumbnailItem.dataset.search = design.title.toLowerCase();
-        thumbnailItem.dataset.parameters = design.parameters;
+        thumbnailItem.parameters = design.parameters;
         thumbnailItem.addEventListener('click', (evt) => {
             
             const item = evt.currentTarget;
             
-            this.fpdInstance._addCanvasDesign(
+            this.fpdInstance.addCanvasDesign(
                 item.dataset.source,
                 item.dataset.title,
-                item.dataset.parameters
+                item.parameters
             );
             
         })

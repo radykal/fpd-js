@@ -29,12 +29,17 @@
         
         .fpd-product-stage {
             
+            display: flex;
+            justify-content: center;
+            align-items: center;
             position: relative;
             direction: ltr;
             max-height: 100%;
-            // width: 100%;
-            align-self: center;
             margin: auto;
+            
+            > .fpd-view-stage {
+                background: rgba(255,255,255, 0.7);
+            }
             
             > .fpd-zoom-image {
                 position: absolute;

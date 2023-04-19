@@ -89,14 +89,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
 		 */
 		instance.zoom = 1;
 
-		/**
-		 * The current selected element.
-		 *
-		 * @property currentElement
-		 * @type fabric.Object
-		 * @default null
-		 */
-		instance.currentElement = null;
+		
 		/**
 		 * The current selected bounding box object.
 		 *
@@ -635,27 +628,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
 
 			if(url) {
 
-				fabric.util.loadImage(url, function(img) {
-
-					if(typeof element.getObjects == 'function') { //multi-path svg
-						var paths = element.getObjects();
-						for(var i=0; i < paths.length; ++i) {
-							paths[i].set('fill', new fabric.Pattern({
-								source: img,
-								repeat: 'repeat'
-							}));
-						}
-					}
-					else { //single path SVG
-						element.set('fill', new fabric.Pattern({
-							source: img,
-							repeat: 'repeat'
-						}));
-					}
-
-					instance.stage.renderAll();
-
-				});
+				
 			}
 
 		}
@@ -664,11 +637,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
 			if(url) {
 				fabric.util.loadImage(url, function(img) {
 
-					element.set('fill', new fabric.Pattern({
-						source: img,
-						repeat: 'repeat'
-					}));
-					instance.stage.renderAll();
+					
 				});
 			}
 			else {
@@ -809,7 +778,6 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
 	 */
 	this.deselectElement = function(discardActiveObject) {
 
-		discardActiveObject = typeof discardActiveObject == 'undefined' ? true : discardActiveObject;
 
 		if(instance.currentBoundingObject) {
 
@@ -826,7 +794,6 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
 		instance.currentElement = null;
 		instance.stage.renderAll().calcOffset();
 
-		$this.trigger('elementSelect', [null]);
 
 	};
 
@@ -1238,117 +1205,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
 
 
 
-	/**
-	 * Changes the color of an element.
-	 *
-	 * @method changeColor
-	 * @param {fabric.Object} element The element to colorize.
-	 * @param {String} hex The color.
-	 * @param {Boolean} colorLinking Use color linking.
-	 */
-	this.changeColor = function(element, hex, colorLinking) {
-
-		colorLinking = typeof colorLinking === 'undefined' ? true : colorLinking;
-
-		var colorizable = FPDUtil.elementIsColorizable(element);
-
-		//check if hex color has only 4 digits, if yes, append 3 more
-		if(typeof hex === 'string' && hex.length == 4) {
-			hex += hex.substr(1, hex.length);
-		}
-
-		//text
-		if(FPDUtil.getType(element.type) === 'text') {
-
-			hex = hex === false ? '#000000' : hex;
-			if(typeof hex == 'object') {
-				hex = hex[0];
-			}
-
-			//set color of a text element
-			element.set('fill', hex);
-			instance.stage.renderAll();
-
-			element.pattern = null;
-			element.fill = hex;
-
-		}
-		//path groups (svg)
-		else if(element.type == FPDPathGroupName && typeof hex == 'object') {
-
-			for(var i=0; i < hex.length; ++i) {
-				if(element.getObjects()[i]) {
-					element.getObjects()[i].set('fill', hex[i]);
-				}
-
-			}
-
-			instance.stage.renderAll();
-
-			element.svgFill = hex;
-			delete element['fill'];
-
-		}
-		//image
-		else {
-
-			if(typeof hex == 'object') {
-				hex = hex[0];
-			}
-
-			if(typeof hex !== 'string') {
-				hex = false;
-			}
-
-			//colorize png or dataurl image
-			if(colorizable == 'png' || colorizable == 'dataurl') {
-
-				element.filters = [];
-
-				//fix: fabricjs 2.+ when element is custom element and changing base products
-				setTimeout(function() {
-
-					if(hex) {
-						element.filters.push(new fabric.Image.filters.BlendColor({mode: 'tint', color: hex}));
-					}
-
-					element.applyFilters();
-					instance.stage.renderAll();
-
-					$this.trigger('elementColorChange', [element, hex, colorLinking]);
-
-				}, 1);
-
-				element.fill = hex;
-
-			}
-			//colorize svg (single path)
-			else if(colorizable == 'svg') {
-
-				element.set('fill', hex);
-				instance.stage.renderAll();
-
-				$this.trigger('elementColorChange', [element, hex, colorLinking]);
-
-			}
-
-
-		}
-
-		_setColorPrice(element, hex);
-
-		/**
-	     * Gets fired when the color of an element is changing.
-	     *
-	     * @event FancyProductDesignerView#elementColorChange
-	     * @param {Event} event
-	     * @param {fabric.Object} element
-	     * @param {String} hex
-	     * @param {Boolean} colorLinking
-	     */
-		$this.trigger('elementColorChange', [element, hex, colorLinking]);
-
-	};
+	
 
 	/**
 	 * Gets the index of the view.

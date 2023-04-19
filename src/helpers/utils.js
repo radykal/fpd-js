@@ -78,6 +78,13 @@ const isUrl = (s) => {
 
 export { isUrl };
 
+const removeUrlParams = (url) => {
+    return url.replace(/\?.*$/, '');
+}
+
+export { removeUrlParams };
+
+
 /**
  * Removes an element from an array by value.
  *
@@ -100,29 +107,6 @@ const removeFromArray  = (array, element) => {
 
 export { removeFromArray };
 
-/**
- * Checks if a string is XML formatted.
- *
- * @method isXML
- * @param {String} string The target string.
- * @return {Boolean} Returns true if string is XML formatted.
- * @static
- */
-const isXML = (string) => {
-
-    try {
-        //todo
-        xmlDoc = jQuery.parseXML(string); //is valid XML
-        return true;
-    } catch (err) {
-        // was not XML
-        return false;
-    }
-
-};
-
-export { isXML };
-
 const isZero = (value) => {
 
     return value === 0 || (typeof value === 'string' && value === "0");
@@ -131,7 +115,7 @@ const isZero = (value) => {
 
 export { isZero };
 
-const addEvents = (elements, events=[], listener=()=>{}) => {
+const addEvents = (elements, events=[], listener=()=>{}, useCapture=false) => {
     
     events = typeof events == 'string' ? [events] : events; 
     
@@ -139,18 +123,18 @@ const addEvents = (elements, events=[], listener=()=>{}) => {
         
         if(elements instanceof HTMLElement) {
             
-            elements.addEventListener(eventType, listener);
+            elements.addEventListener(eventType, listener, useCapture);
             
         }
         else if(Array.from(elements).length) {
             
             elements.forEach(elem => {
-                elem.addEventListener(eventType, listener);
+                elem.addEventListener(eventType, listener, useCapture);
             })
             
         }
         else {
-            elements.addEventListener(eventType, listener);
+            elements.addEventListener(eventType, listener, useCapture);
         }
         
     })
@@ -336,8 +320,12 @@ const createImgThumbnail = (opts={}) => {
     thumbnail.className = 'fpd-item';
     thumbnail.dataset.source = opts.url;
     
-    if(opts.title)
+    if(opts.title) {
         thumbnail.dataset.title = opts.title;
+        thumbnail.setAttribute('aria-label', opts.title);
+        thumbnail.classList.add('fpd-tooltip');
+    }
+        
     
     const picElem = document.createElement('picture');
     picElem.dataset.img = opts.thumbnailUrl ? opts.thumbnailUrl : opts.url;
@@ -375,7 +363,6 @@ export { createImgThumbnail };
  */
 const checkImageDimensions = (fpdInstance, imageW, imageH) => {
     
-    console.log(imageW);
     const viewInst = fpdInstance.currentViewInstance;
     let imageRestrictions = viewInst.options.customImageParameters;
     
@@ -392,7 +379,6 @@ const checkImageDimensions = (fpdInstance, imageW, imageH) => {
 
         fpdInstance.loadingCustomImage = false;
         
-        console.log(fpdInstance.mainBar);
         if(fpdInstance.mainBar) {
             
             fpdInstance.mainBar.toggleContentDisplay(false);
@@ -432,3 +418,111 @@ const getFileExtension = (str) => {
 }
 
 export { getFileExtension }
+
+/**
+ * Returns the available colors of an element.
+ *
+ * @method elementAvailableColors
+ * @param {fabric.Object} element The target element.
+ * @param {FancyProductDesigner} fpdInstance Instance of FancyProductDesigner.
+ * @return {Array} Available colors.
+ * @static
+ */
+const elementAvailableColors = (element, fpdInstance) => {
+
+    var availableColors = [];
+    if(element.type == 'group') {
+        
+        const paths = element.getObjects();
+        if(paths.length === 1) {
+            availableColors = element.colors;
+        }
+        else {
+            availableColors = [];
+            paths.forEach((path) => {
+                
+                const color = tinycolor(path.fill);
+                availableColors.push(color.toHexString());
+                
+            })
+
+        }
+
+    }
+    else if(element.colorLinkGroup && fpdInstance.colorLinkGroups[element.colorLinkGroup]) {
+        availableColors = fpdInstance.colorLinkGroups[element.colorLinkGroup].colors;
+    }
+    else {
+        availableColors = element.colors;
+    }
+
+    return availableColors;
+
+}
+
+export { elementAvailableColors }
+
+const getBgCssFromElement = (element) => {
+
+    let currentFill = element.fill;
+
+    //fill: hex
+    if(typeof currentFill === 'string') {
+        return currentFill;
+    }
+    //fill: pattern or svg fill
+    else if(typeof currentFill === 'object') {
+
+        if(currentFill.source) { //pattern
+            currentFill = currentFill.source.src;
+            return 'url('+currentFill+')';
+        }
+        else { //svg has fill
+            return currentFill[0];
+        }
+
+    }
+    //element: svg
+    else if(element.colors === true && element.type === 'group') {
+        return tinycolor(element.getObjects()[0].fill);
+    }
+    //no fill, only colors set
+    else if(currentFill === false && element.colors && element.colors[0]) {
+        return element.colors[0];
+    }
+
+}
+
+export { getBgCssFromElement };
+
+const getNextSibling = (elem, selector) => {
+
+    // Get the next sibling element
+    var sibling = elem.nextElementSibling;
+
+    // If the sibling matches our selector, use it
+    // If not, jump to the next sibling and continue the loop
+    while (sibling) {
+        if (sibling.matches(selector)) return sibling;
+        sibling = sibling.nextElementSibling
+    }
+
+};
+
+export { getNextSibling };
+
+const getPrevSibling = (elem, selector) => {
+
+    // Get the next sibling element
+    var sibling = elem.nextElementSibling;
+
+    // If the sibling matches our selector, use it
+    // If not, jump to the next sibling and continue the loop
+    while (sibling) {
+        if (sibling.matches(selector)) return sibling;
+        sibling = sibling.nextElementSibling
+    }
+
+};
+
+export { getPrevSibling };

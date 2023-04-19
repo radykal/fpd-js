@@ -3,6 +3,7 @@ import TextModule from './modules/Text';
 import DesignsModule from './modules/Designs';
 import TextToImageModule from './modules/TextToImage';
 import ImagesModule from './modules/Images';
+import LayersModule from './modules/Layers';
 
 import { isEmpty } from '/src/helpers/utils';
 
@@ -60,6 +61,9 @@ export default class ModuleWrapper extends EventTarget {
         }
         else if(moduleType === 'images') {
             moduleInstance = new ImagesModule(fpdInstance, wrapper);
+        }
+        else if(moduleType === 'manage-layers') {
+            moduleInstance = new LayersModule(fpdInstance, wrapper);
         }
         // else if(moduleType === 'layouts') {
         //     moduleInstance = new FPDLayoutsModule(this.fpdInstance, $moduleClone);
