@@ -9,29 +9,29 @@ import { isEmpty } from '/src/helpers/utils';
 
 export default class ModuleWrapper extends EventTarget {
     
-    constructor(fpdInstance, wrapper, moduleType) {
+    constructor(fpdInstance, wrapper, moduleKey) {
         
         super();
         
         let moduleInstance;
                 
-        if(moduleType === 'products') {
+        if(moduleKey === 'products') {
             moduleInstance = new ProductsModule(fpdInstance, wrapper);
         }
-        else if(moduleType === 'text') {
+        else if(moduleKey === 'text') {
             moduleInstance = new TextModule(fpdInstance, wrapper);
         }
-        else if(moduleType === 'text-to-image') {
+        else if(moduleKey === 'text-to-image') {
             moduleInstance = new TextToImageModule(fpdInstance, wrapper);
         }
-        else if(moduleType.includes('designs')) {
+        else if(moduleKey.includes('designs')) {
             
             let dynamicDesignId = null;
-            if(moduleType.includes('designs_')) {
+            if(moduleKey.includes('designs_')) {
         
                 if(!isEmpty(fpdInstance.mainOptions.dynamicDesigns)) {
         
-                    dynamicDesignId = moduleType.split('_').pop();
+                    dynamicDesignId = moduleKey.split('_').pop();
         
                     if(dynamicDesignId && fpdInstance.mainOptions.dynamicDesigns[dynamicDesignId]) {
         
@@ -59,29 +59,35 @@ export default class ModuleWrapper extends EventTarget {
             
             moduleInstance = new DesignsModule(fpdInstance, wrapper, dynamicDesignId);
         }
-        else if(moduleType === 'images') {
+        else if(moduleKey === 'images') {
             moduleInstance = new ImagesModule(fpdInstance, wrapper);
         }
-        else if(moduleType === 'manage-layers') {
+        else if(moduleKey === 'manage-layers') {
             moduleInstance = new LayersModule(fpdInstance, wrapper);
         }
-        // else if(moduleType === 'layouts') {
+        // else if(moduleKey === 'layouts') {
         //     moduleInstance = new FPDLayoutsModule(this.fpdInstance, $moduleClone);
         // }
-        // else if(moduleType === 'drawing') {
+        // else if(moduleKey === 'drawing') {
         //     moduleInstance = new FPDDrawingModule(this.fpdInstance, $moduleClone);
         // }
-        // else if(moduleType === 'dynamic-views') {
-        //     moduleInstance = new FPDDynamicViews(this.fpdInstance, $moduleClone);
-        // }
+
+        //additional custom modules: add your own modules
+        if(FancyProductDesigner.additionalModules && !moduleInstance) {
+
+            const ClassModule = FancyProductDesigner.additionalModules[moduleKey];            
+            if(ClassModule)
+                moduleInstance = new ClassModule(fpdInstance, wrapper);
+            
+        }        
         
         if(!moduleInstance) { return; }
         
         this.moduleInstance = moduleInstance;
-        fpdInstance['moduleInstance_'+moduleType] = moduleInstance;
+        fpdInstance['moduleInstance_'+moduleKey] = moduleInstance;
         
         //store module configs
-        if(!moduleType.includes('designs_')) {
+        if(!moduleKey.includes('designs_')) {
             
             const configsElem = moduleInstance.container.querySelector('div');
             this.configs = {
@@ -92,8 +98,7 @@ export default class ModuleWrapper extends EventTarget {
             };
             
         }
-        
-        
+ 
     }
 
 }

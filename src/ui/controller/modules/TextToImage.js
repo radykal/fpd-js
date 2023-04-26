@@ -47,9 +47,7 @@ export default class TextToImageModule extends EventTarget {
                 .then((response) => response.json())
                 .then((data) => {
                     
-                    
                     data = JSON.parse(data);
-                    console.log(data);
                     
                     if(data && data.output) {
                         

@@ -136,13 +136,11 @@ export default class InstgramImagesModule extends EventTarget {
                 
                 }
                 else if(data.error_message) {
-                    console.log(data);
                     this.fpdInstance.toggleSpinner(false);
                 } 
                 
             },
             onError: (evt) => {
-                console.log(evt);
                 this.fpdInstance.toggleSpinner(false);
             }
         });

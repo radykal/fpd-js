@@ -13,17 +13,8 @@
 
 var FancyProductDesigner = function(elem, opts) {
 
-		$editorBox = null,
-		$thumbnailPreview = null,
 		zoomReseted = false,
-		firstProductCreated = false,
-		inTextField = false,
-		initCSSClasses = '',
 		$draggedImage,
-
-		_outOfBoundingBoxLabel = '';
-
-
 
 	/**
 	 * jQuery object pointing on the tooltip for the current selected element.
@@ -60,16 +51,6 @@ var FancyProductDesigner = function(elem, opts) {
 	 * @default null
 	 */
 	this.bulkVariations = null;
-
-
-	/**
-	 * Array will all fixed elements.
-	 *
-	 * @property fixedElements
-	 * @type Array
-	 * @default []
-	 */
-	this.fixedElements = [];
 
 	/**
 	 * Returns if mouse is over a fabricJS canvas and in which case the fabricJS object.
@@ -181,17 +162,6 @@ var FancyProductDesigner = function(elem, opts) {
 
 		}
 
-		//lowercase all keys in hexNames
-		var key,
-			keys = Object.keys(instance.mainOptions.hexNames),
-			n = keys.length,
-			newHexNames = {};
-
-		Object.keys(instance.mainOptions.hexNames).forEach(function(hexKey) {
-			newHexNames[hexKey.toLowerCase()] = instance.mainOptions.hexNames[hexKey];
-		});
-		instance.mainOptions.hexNames = newHexNames;
-
 		//PLUS
 		if(typeof FancyProductDesignerPlus !== 'undefined') {
 			FancyProductDesignerPlus.setup($elem, instance);
@@ -222,27 +192,8 @@ var FancyProductDesigner = function(elem, opts) {
 
 		});
 
-		//window resize handler
-		var device = '',
-            currentWindowWidth = 0;
-
 		$window.resize(function() {
 
-			//fix for android browser, because keyboard trigger resize event
-			if(window.innerWidth === currentWindowWidth || inTextField) {
-				return;
-			}
-
-            currentWindowWidth = window.innerWidth;
-
-			if(instance.currentViewInstance) {
-				instance.currentViewInstance.resetCanvasSize();
-			}
-
-			if(instance.mainBar && instance.mainBar.$content
-				&& instance.$container.filter('[class*="fpd-off-canvas-"]').length > 0) {
-				instance.mainBar.$content.height(instance.$mainWrapper.height());
-			}
 
 			if(instance.actions) {
 
@@ -254,7 +205,6 @@ var FancyProductDesigner = function(elem, opts) {
 			}
 
 			//deselect element if one is selected and active element is not input (FB browser fix)
-			//alert(document.activeElement);
 			if(instance.currentElement && $(document.activeElement).is(':not(input)') && $(document.activeElement).is(':not(textarea)')) {
 				instance.deselectElement();
 			}
@@ -263,54 +213,6 @@ var FancyProductDesigner = function(elem, opts) {
 				return;
 			}
 
-			var currentDevice = FPDUtil.getDeviceByScreenSize();
-			if(currentDevice == 'smartphone') {
-
-				if(!instance.$container.hasClass('fpd-topbar') && instance.mainBar) {
-
-					if(instance.mainOptions.uiTheme !== 'doyle') {
-
-						instance.$container.removeClass('fpd-sidebar').addClass('fpd-topbar');
-						instance.mainBar.setContentWrapper('draggable-dialog');
-
-					}
-
-				}
-
-			}
-			else if(currentDevice == 'tablet') {
-			}
-			else if(currentDevice == 'desktop') {
-
-				if(instance.mainOptions.uiTheme !== 'doyle' && initCSSClasses.search('fpd-topbar') === -1 && instance.$container.hasClass('fpd-topbar')) {
-
-					instance.$container.removeClass('fpd-topbar').addClass('fpd-sidebar');
-
-					if(instance.mainBar && !instance.mainOptions.mainBarContainer) {
-						instance.mainBar.setContentWrapper('sidebar');
-					}
-				}
-
-			}
-
-			if(device !== currentDevice) {
-
-				/**
-			     * Gets fired as soon as the screen size has changed. Breakpoints: Smartphone Width < 568, Tablet Width > 568 and < 768, Desktop Width > 768.
-			     *
-			     * @event FancyProductDesigner#canvasFail
-			     * @param {Event} event
-			     * @param {String} device Possible values: desktop, tablet, smartphone.
-			     */
-				$elem.trigger('screenSizeChange', [currentDevice]);
-			}
-
-			if(instance.currentViewInstance) {
-				instance.currentViewInstance.resetCanvasSize();
-			}
-
-			device = currentDevice;
-
 		});
 
 
@@ -318,7 +220,6 @@ var FancyProductDesigner = function(elem, opts) {
 
 	//now load UI elements from external HTML file
 	var _loadProductDesignerTemplate = function(html) {
-
 
 		if(instance.mainOptions.mainBarContainer) {
 
@@ -329,8 +230,6 @@ var FancyProductDesigner = function(elem, opts) {
 		else {
 			$mainBar = $uiElements.children('.fpd-mainbar').insertBefore($elem.children('.fpd-loader-wrapper'));
 		}
-
-
 
 		//init Toolbar
 		var $elementToolbar = $uiElements.children('.fpd-element-toolbar');
@@ -349,54 +248,7 @@ var FancyProductDesigner = function(elem, opts) {
 
 		$elem.on('elementSelect', function(evt, element) {
 
-			evt.stopPropagation();
-			evt.preventDefault();
-
-			if(element && !element._ignore && instance.currentViewInstance) {
-
-				//upload zone is selected
-				if(element.uploadZone && !instance.mainOptions.editorMode) {
-
-					element.set('borderColor', 'transparent');
-
-					var customAdds = $.extend(
-						{},
-						instance.currentViewInstance.options.customAdds,
-						element.customAdds ? element.customAdds : {}
-					);
-
-					//mobile fix: elementSelect is triggered before click, this was adding an image on mobile
-					setTimeout(function() {
-						instance.currentViewInstance.currentUploadZone = element.title;
-						instance.mainBar.toggleUploadZoneAdds(customAdds);
-						instance.mainBar.toggleUploadZonePanel();
-					}, 100);
-
-					return;
-				}
-				//if element has no upload zone and an upload zone is selected, close dialogs and call first module
-				else if(instance.currentViewInstance.currentUploadZone) {
-
-					instance.mainBar.toggleDialog(false);
-					instance.mainBar.toggleUploadZonePanel(false);
-
-				}
-
-				instance.toolbar.update(element);
-
-				if(instance.mainOptions.openTextInputOnSelect && FPDUtil.getType(element.type) === 'text' && element.editable) {
-					$elementToolbar.find('.fpd-tool-edit-text:first').click();
-				}
-
-				_updateEditorBox(element);
-
-			}
-			else {
-
-				instance.toolbar.toggle(false);
-				$body.children('[class^="fpd-element-toolbar"]').find('input').spectrum('destroy');
-
-			}
+			
 
 		})
 		.on('elementChange', function(evt, type, element) {
@@ -512,12 +364,6 @@ var FancyProductDesigner = function(elem, opts) {
 			}
 
 		})
-		.on('screenSizeChange', function(evt, device) {
-
-			$elem.removeClass('fpd-device-smartphone fpd-device-tablet fpd-device-desktop')
-			.addClass('fpd-device-'+device);
-
-		})
 
 		//switchers
 		$('.fpd-switch-container').click(function() {
@@ -554,17 +400,6 @@ var FancyProductDesigner = function(elem, opts) {
 
 		});
 
-
-		$body.on('click', '.fpd-views-wrapper .fpd-view-prev, .fpd-views-wrapper .fpd-view-next', function() {
-
-			if($(this).hasClass('fpd-view-prev')) {
-				instance.selectView(instance.currentViewIndex - 1);
-			}
-			else {
-				instance.selectView(instance.currentViewIndex + 1);
-			}
-
-		})
 
 		//drag image items on canvas or upload zone
 		var itemDragged = false,
@@ -661,9 +496,7 @@ var FancyProductDesigner = function(elem, opts) {
 
 		//window.localStorage.setItem('fpd-gt-closed', 'no');
 
-		//store a boolean to detect if the text in textarea (toolbar) was selected, then dont deselect
-		var _fixSelectionTextarea = false;
-
+	
 		//general close handler for modal
 		$body.on('click', '.fpd-modal-close', function(evt) {
 
@@ -701,14 +534,6 @@ var FancyProductDesigner = function(elem, opts) {
 
 			var $target = $(evt.target);
 
-			//deselect element if click outside of a fpd-container
-			if($target.closest('.fpd-container, [class^="fpd-element-toolbar"], .sp-container').length === 0
-				&& instance.mainOptions.deselectActiveOnOutside && !_fixSelectionTextarea) {
-
-				   instance.deselectElement();
-
-			}
-
 			//close upload zone panel if click outside of fpd-container, needed otherwise elements can be added to upload zone e.g. mspc
 			if($target.closest('.fpd-container, .fpd-modal-internal').length === 0
 				&& instance.currentViewInstance && instance.currentViewInstance.currentUploadZone
@@ -717,7 +542,6 @@ var FancyProductDesigner = function(elem, opts) {
 
 			}
 
-			_fixSelectionTextarea = false;
 
 		})
 		//thumbnail preview effect
@@ -726,92 +550,8 @@ var FancyProductDesigner = function(elem, opts) {
 			var $this = $(this),
 				price = null;
 
-			if(instance.currentViewInstance && instance.currentViewInstance.currentUploadZone
-				&& $(evt.target).parents('.fpd-upload-zone-adds-panel').length > 0) {
-
-				var uploadZone = instance.currentViewInstance.getUploadZone(instance.currentViewInstance.currentUploadZone);
-				if(uploadZone && uploadZone.price) {
-					price = uploadZone.price;
-				}
-
-			}
 
 			if($draggedImage) { return;}
-
-			if(evt.type === 'mouseover' && $this.data('source')) {
-
-				//do not show when scrolling
-				if($this.parents('.mCustomScrollBox:first').next('.mCSB_scrollTools_onDrag').length) {
-					return;
-				}
-
-				$thumbnailPreview = $('<div class="fpd-thumbnail-preview"><picture></picture></div>');
-				FPDUtil.loadGridImage($thumbnailPreview.children('picture'), $this.children('picture').data('img'));
-
-				//thumbnails in images module
-				if($this.parents('[data-module="images"]:first').length > 0 && price === null) {
-
-					if(!isNaN($this.data('price'))) {
-						price = $this.data('price');
-					}
-					else if(instance.currentViewInstance && instance.currentViewInstance.options.customImageParameters.price) {
-						price = instance.currentViewInstance.options.customImageParameters.price;
-					}
-
-				}
-				//thumbnails in designs/products module
-				else {
-
-					if($this.data('title')) {
-						$thumbnailPreview.addClass('fpd-title-enabled');
-						$thumbnailPreview.append('<div class="fpd-preview-title">'+$this.data('title')+'</div>');
-					}
-
-					if($this.data('parameters') && $this.data('parameters').price && price === null) {
-						price = $this.data('parameters').price;
-					}
-
-				}
-
-				if(price) {
-					$thumbnailPreview.append('<div class="fpd-preview-price">'+instance.formatPrice(price)+'</div>');
-				}
-
-				if($this.children('.fpd-image-quality-ratings').length) {
-
-					var $cloneRatings = $this.children('.fpd-image-quality-ratings').clone();
-
-					$thumbnailPreview.append($cloneRatings);
-
-					if($this.children('.fpd-image-quality-ratings').data('quality-label')) {
-						$cloneRatings
-						.append('<span class="fpd-image-quality-rating-label">'+$this.children('.fpd-image-quality-ratings').data('quality-label')+'</span>');
-					}
-
-
-				}
-
-
-				$body.append($thumbnailPreview);
-
-			}
-
-			if($thumbnailPreview !== null) {
-
-				if(evt.type === 'mousemove' || evt.type === 'mouseover') {
-
-					var leftPos = evt.pageX + 10 + $thumbnailPreview.outerWidth() > $window.width() ? $window.width() - $thumbnailPreview.outerWidth() : evt.pageX + 10;
-					$thumbnailPreview.css({left: leftPos, top: evt.pageY + 10});
-
-				}
-				else if(evt.type === 'mouseout' || evt.type == 'click') {
-
-					$thumbnailPreview.siblings('.fpd-thumbnail-preview').remove();
-					$thumbnailPreview.remove();
-
-				}
-
-			}
 
 		}).
 		on('mousedown', function(evt) {
@@ -863,65 +603,6 @@ var FancyProductDesigner = function(elem, opts) {
 				}
 
 			}
-
-			if(['productCreate', 'layoutElementsAdded'].indexOf(evt.type) != -1 && (instance.globalCustomElements.length > 0 || instance.fixedElements.length > 0)) {
-
-                var globalElements = instance.globalCustomElements.concat(instance.fixedElements),
-                	customElementsCount = 0;
-
-                function _addCustomElement(object) {
-
-                    var viewInstance = instance.viewInstances[object.viewIndex];
-
-                    if(viewInstance) { //add element to correct view
-
-	                    var fpdElement = object.element;
-
-						//replace printing box if global element has a printing box from previous product
-	                    if(instance._prevPrintingBoxes[object.viewIndex]) {
-
-		                    var prevPrintingBox = instance._prevPrintingBoxes[object.viewIndex];
-		                    if(	typeof fpdElement.boundingBox === 'object'
-		                    	&& FPDUtil.objectHasKeys(viewInstance.options.printingBox, ['left','top','width','height']))
-		                    {
-			                    if(JSON.stringify(prevPrintingBox) === JSON.stringify(fpdElement.boundingBox)) {
-				                    fpdElement.boundingBox = viewInstance.options.printingBox;
-			                    }
-
-			                }
-
-	                    }
-
-                        viewInstance.addElement(
-                            FPDUtil.getType(fpdElement.type),
-                            fpdElement.source,
-                            fpdElement.title,
-                            viewInstance.getElementJSON(fpdElement)
-                        );
-
-                    }
-                    else {
-                        _customElementAdded();
-                    }
-
-                };
-
-                function _customElementAdded() {
-
-                    customElementsCount++;
-                    if(customElementsCount < globalElements.length) {
-                        _addCustomElement(globalElements[customElementsCount]);
-                    }
-                    else {
-                        $elem.off('elementAdd', _customElementAdded);
-                    }
-
-                };
-
-                $elem.on('elementAdd', _customElementAdded);
-                _addCustomElement(globalElements[0]);
-
-            }
 
 			firstProductCreated = instance.mainOptions.modalMode && evt.type === 'modalDesignerOpen';
 
@@ -1038,96 +719,10 @@ var FancyProductDesigner = function(elem, opts) {
 				}
 
 			});
-		}
+		
 
-		/**
-	     * Gets fired as soon as the product designer is ready to receive API calls.
-	     *
-	     * @event FancyProductDesigner#ready
-	     * @param {Event} event
-	     */
-		$elem.trigger('ready');
-
-		$window.resize();
 
 	};
-
-	//get category index by category name
-	var _getCategoryIndexInProducts = function(catName) {
-
-		var catIndex =  $.map(instance.products, function(obj, index) {
-		    if(obj.category == catName) {
-		        return index;
-		    }
-		}).shift();
-
-		return isNaN(catIndex) ? false : catIndex;
-
-	};
-
-
-
-	var _updateEditorBox = function(element) {
-
-		if($editorBox === null) {
-			return;
-		}
-
-		$editorBox.children('div').empty();
-		$editorBox.children('h5').text(element.title);
-
-		for(var i=0; i < instance.mainOptions.editorBoxParameters.length; ++i) {
-
-			var parameter = instance.mainOptions.editorBoxParameters[i],
-				value = element[parameter];
-
-			if(value !== undefined) {
-
-				value = typeof value === 'number' ? value.toFixed(2) : value;
-				value = (typeof value === 'object' && value.source) ? value.source.src : value;
-				if(parameter === 'fill' && element.type === FPDPathGroupName) {
-					value = element.svgFill;
-				}
-
-				$editorBox.children('div').append('<p><i>'+parameter+'</i>: <input type="text" value="'+value+'" readonly /></p>');
-
-			}
-
-		}
-
-	};
-
-
-
-	var _updateElementTooltip = function() {
-
-		var element = instance.currentElement;
-
-		if(element && instance.$elementTooltip && instance.productCreated && !element.uploadZone && !element.__editorMode) {
-
-			if(element.isOut && element.boundingBoxMode === 'inside') {
-				instance.$elementTooltip.text(_outOfBoundingBoxLabel).show();
-			}
-			else if(instance.mainOptions.imageSizeTooltip && FPDUtil.getType(element.type) === 'image') {
-				instance.$elementTooltip.text(parseInt(element.width * element.scaleX) +' x '+ parseInt(element.height * element.scaleY)).show();
-			}
-			else {
-				instance.$elementTooltip.hide();
-			}
-
-			var oCoords = element.oCoords;
-			instance.$elementTooltip.css({
-				left: instance.$productStage.position().left + oCoords.mt.x,
-				top: oCoords.mt.y - 10 + instance.$productStage.position().top
-			});
-
-		}
-		else if(instance.$elementTooltip) {
-			instance.$elementTooltip.hide();
-		}
-
-	};
-
 
 	var _calculateViewsPrice = function() {
 
@@ -1142,71 +737,6 @@ var FancyProductDesigner = function(elem, opts) {
 
 		}
 	};
-
-	var _downloadRemoteImage = function(source, title, options) {
-
-		options = options === undefined ? {} : options;
-
-		var ajaxSettings = instance.mainOptions.customImageAjaxSettings,
-			uploadsDir = (ajaxSettings.data && ajaxSettings.data.uploadsDir) ? ajaxSettings.data.uploadsDir : '',
-			uploadsDirURL = (ajaxSettings.data && ajaxSettings.data.uploadsDirURL) ? ajaxSettings.data.uploadsDirURL : '',
-			saveOnServer = ajaxSettings.data && ajaxSettings.data.saveOnServer ? 1 : 0;
-
-		instance._loadingCustomImage = true;
-		instance.toggleSpinner(true,  instance.getTranslation('misc', 'loading_image'));
-		instance.$viewSelectionWrapper.addClass('fpd-disabled');
-
-		var uploadAjaxSettings  = $.extend({}, ajaxSettings);
-		uploadAjaxSettings.success = function(data) {
-
-			if(data && data.error === undefined) {
-
-				instance.addCustomImage(
-					data.image_src,
-					data.filename ? data.filename : title,
-					options
-				);
-
-			}
-			else {
-
-				instance.toggleSpinner(false);
-				FPDUtil.showModal(data.error);
-
-			}
-
-		};
-
-		uploadAjaxSettings.data = {
-			url: source,
-			uploadsDir: uploadsDir,
-			uploadsDirURL: uploadsDirURL,
-			saveOnServer: saveOnServer
-		};
-
-		//ajax post
-		$.ajax(uploadAjaxSettings)
-		.fail(function(evt) {
-
-			instance._loadingCustomImage = false;
-			instance.toggleSpinner(false);
-			FPDUtil.showModal(evt.statusText);
-
-		});
-
-		if(instance.productCreated && instance.mainOptions.hideDialogOnAdd &&
-			instance.$container.hasClass('fpd-topbar') && instance.mainBar) {
-
-			instance.mainBar.toggleDialog(false);
-
-		}
-
-	};
-
-
-
-
-	
 
 	/**
 	 * Adds a new element to the product designer.
@@ -1240,27 +770,6 @@ var FancyProductDesigner = function(elem, opts) {
 			}
 
 		}
-
-	};
-
-	/**
-	 * Sets the parameters for a specified element.
-	 *
-	 * @method setElementParameters
-	 * @param {object} parameters An object with the parameters that should be applied to the element.
-	 * @param {fabric.Object | string} [element] A fabric object or the title of an element. If not set, the current selected element is used.
-	 * @param {Number} [viewIndex] The index of the view you would like target. If not set, the current showing view will be used.
-	 */
-	this.setElementParameters = function(parameters, element, viewIndex) {
-
-		element = element === undefined ? instance.stage.getActiveObject() : element;
-		viewIndex = viewIndex === undefined ? instance.currentViewIndex : viewIndex;
-
-		if(!element || parameters === undefined) {
-			return false;
-		}
-
-		instance.viewInstances[viewIndex].setElementParameters(parameters, element);
 
 	};
 
@@ -1409,61 +918,6 @@ var FancyProductDesigner = function(elem, opts) {
 		return SVGs;
 
 	};
-
-	/**
-	 * Shows or hides the spinner with an optional message.
-	 *
-	 * @method toggleSpinner
-	 * @param {String} state The state can be "show" or "hide".
-	 * @param {Boolean} msg The message that will be displayed underneath the spinner.
-	 * @return {jQuery} $stageLoader jQuery object containing the stage loader.
-	 */
-	this.toggleSpinner = function(state, msg) {
-
-		state = state === undefined ? true : state;
-		msg = msg === undefined ? '' : msg;
-
-		if(state) {
-
-			$stageLoader.fadeIn(300).find('.fpd-loader-text').html(msg);
-
-		}
-		else {
-
-			$stageLoader.stop().fadeOut(300);
-
-		}
-
-		return $stageLoader;
-
-	};
-
-	/**
-	 * Returns an fabric object by title.
-	 *
-	 * @method getElementByTitle
-	 * @param {String} title The title of an element.
-	 * @param {Number} [viewIndex=-1] The index of the target view. By default all views are scanned.
-	 * @return {fabric.Object} FabricJS Object.
-	 */
-	this.getElementByTitle = function(title, viewIndex) {
-
-		viewIndex === undefined ? -1 : viewIndex;
-
-		var searchedElement = false;
-		this.getElements(viewIndex, 'all', false).some(function(element) {
-
-			if(element.title == title) {
-				searchedElement = element;
-				return true;
-			}
-
-		});
-
-		return searchedElement;
-
-	};
-
 	
 
 	/**
@@ -1596,28 +1050,6 @@ var FancyProductDesigner = function(elem, opts) {
 
 
 	};
-
-	/**
-	 * Resets the zoom.
-	 *
-	 * @method resetZoom
-	 */
-	this.resetZoom = function() {
-
-		zoomReseted = true;
-		this.deselectElement();
-
-		if(instance.currentViewInstance) {
-
-			var responsiveScale = instance.currentViewInstance.responsiveScale;
-
-			instance.currentViewInstance.stage.zoomToPoint(new fabric.Point(0, 0), responsiveScale);
-			instance.currentViewInstance.stage.absolutePan(new fabric.Point(0, 0));
-
-		}
-
-	};
-
 	
 
 	/**
@@ -1737,71 +1169,6 @@ var FancyProductDesigner = function(elem, opts) {
 
 		//returns an array with all views
 		return product;
-
-	};
-
-
-	/**
-	 * Adds a new custom image to the product stage. This method should be used if you are using an own image uploader for the product designer. The customImageParameters option will be applied on the images that are added via this method.
-	 *
-	 * @method addCustomImage
-	 * @param {string} source The URL of the image.
-	 * @param {string} title The title for the design.
-	 * @param {Object} options Additional options.
-	 * @param {number} [viewIndex] The index of the view where the element needs to be added to. If no index is set, it will be added to current showing view.
-	 */
-	this.addCustomImage = function(source, title, options, viewIndex) {
-
-		options = options === undefined ? {} : options;
-		viewIndex = viewIndex === undefined ? instance.currentViewIndex : viewIndex;
-
-		var image = new Image;
-
-		image.crossOrigin = "anonymous";
-    	image.src = source;
-
-    	this.toggleSpinner(true, instance.getTranslation('misc', 'loading_image'));
-    	instance.$viewSelectionWrapper.addClass('fpd-disabled');
-
-		image.onload = function() {
-
-			instance._loadingCustomImage = false;
-
-			var imageH = this.height,
-				imageW = this.width,
-				currentCustomImageParameters = instance.currentViewInstance.options.customImageParameters,
-				imageParts = this.src.split('.');
-
-			if(!FPDUtil.checkImageDimensions(instance, imageW, imageH)) {
-				instance.toggleSpinner(false);
-    			return false;
-			}
-
-			var fixedParams = {
-				isCustom: true,
-			};
-
-			//enable color wheel for svg and when no colors are set
-			if($.inArray('svg', imageParts) != -1 && !currentCustomImageParameters.colors) {
-				fixedParams.colors = true;
-			}
-
-
-			instance.addElement(
-    			'image',
-    			source,
-    			title,
-	    		$.extend({}, currentCustomImageParameters, fixedParams, options),
-	    		viewIndex
-    		);
-
-    		instance.$viewSelectionWrapper.removeClass('fpd-disabled');
-
-		}
-
-		image.onerror = function(evt) {
-			FPDUtil.showModal('Image could not be loaded!');
-		}
 
 	};
 

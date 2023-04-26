@@ -7,7 +7,7 @@
     <!-- <script src="//code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script> -->
     <link rel="stylesheet" type="text/css" href="css/semantic.min.css">
     
-    <script src='./dist/fabric510.js'></script>
+    <script src='./dist/fabric-5.3.1.js'></script>
     <script src='./dist/js/vendor.js'></script>
     <link href="./dist/css/vendor.css" rel="stylesheet" type="text/css">
     <script src='js/FancyProductDesigner.js'></script>
@@ -19,13 +19,13 @@
         }
         
         #fpd-target {
+            margin-top: 40px;
         }
         
     </style>
 </head>
 <body>
     
-    <div class="fpd-tooltip" aria-label="hello" style="display: inline-block; position: fixed; right: 0; bottom: 0;">test</div>
     <div class="ui container">
         
         <div class="ui one column grid" style="padding-top: 20px;">
@@ -51,15 +51,19 @@
                     <button id="undo" class="ui button" data-tooltip="test">Undo</button>
                     <button id="redo" class="ui button">Redo</button>
                     <button id="test" class="ui button">Test</button>
+                    <button id="toSVG" class="ui button">toSVG</button>
+                    <input type="range" id="range-test" min="0" max="360">
                 </div>
+                <div id="editor-box-wrapper"></div>
+                <div id="svg-display"></div>
             </div>
             
         </div>
         <script>
-            
+
             const appOptions = {
                 langJson: 'data/langs/default.json',
-                initialActiveModule: 'products',
+                initialActiveModule: 'text',
                 responsiveBreakpoints: {
                 },
                 mainBarModules: [
@@ -74,6 +78,7 @@
                     'layouts',
                 ],
                 fonts: [
+                    {name: 'Pacifico', url: 'google'},
                     {name: 'Lobster', url: 'google'},
                     {name: 'Aller', url: 'fonts/Aller.ttf', variants: {
                             'n7': 'fonts/Aller__bold.ttf',
@@ -162,22 +167,43 @@
                 instagramClientId: '6748682918479320',
                 instagramRedirectUri: 'https://localhost:8080/data/html/instagram_auth.html',
                 instagramTokenUri: 'https://radykal.dep/fpd-js/server/php/instagram-token.php',
-                customImageParameters: {
-                    price: 10,
-                    maxSize: 1,
-                },
                 uploadAgreementModal: false,
                 swapProductConfirmation: false,
                 pixabayApiKey: '7571591-cf8ff820ec635edeb4e8c6af7',
-                 pixabayLang: 'de',
+                pixabayLang: 'de',
                 pixabayHighResImages: false,
+                fitImagesInCanvas: true,
                 colorPickerPalette: ["#000", "#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc", '#5f27cd', '#222f3e', '#10ac84',"#000", "#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc", '#5f27cd', '#222f3e', '#10ac84',"#000", "#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc", '#5f27cd', '#222f3e', '#10ac84',"#000", "#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc", '#5f27cd', '#222f3e', '#10ac84'],
                 hexNames: {'000': 'black', ffffff:'white',FFFFFF:'white',990000:'red',cccccc:'grey', "83635c": 'Chestnut', f4cccc: 'Redder'},
                 elementParameters: {
                     patterns: ['images/patterns/carbon.png', 'images/patterns/grune_2.png', 'images/patterns/grunge_1.png', 'images/patterns/lines_green.png', 'images/patterns/lines_purple.png', 'images/patterns/lines_red.png', 'images/patterns/wood_1.png', 'images/patterns/wood_2.png', 'images/patterns/wood_3.png', 'images/patterns/carbon.png','images/patterns/carbon.png', 'images/patterns/grune_2.png', 'images/patterns/grunge_1.png', 'images/patterns/lines_green.png', 'images/patterns/lines_purple.png', 'images/patterns/lines_red.png', 'images/patterns/wood_1.png', 'images/patterns/wood_2.png', 'images/patterns/wood_3.png', 'images/patterns/carbon.png']
                 },
-                canvasHeight: '800px',
-                maxCanvasHeight: 0.7
+                customImageParameters: {
+                    removable: true,
+                    draggable: true,
+                    resizable: true,
+                    autoCenter: true,
+                    price: 10,
+                    maxSize: 1,
+                    autoSelect: true
+                },
+                customTextParameters: {
+                    autoCenter: true,
+                    draggable: true,
+                    removable: true,
+                    colors: true,
+                    maxLines: 3,
+                    maxLength: 10
+                },
+                canvasHeight: 'auto',
+                maxCanvasHeight: 0.8,
+                highlightEditableObjects: '',
+                inCanvasTextEditing: true,
+                replaceInitialElements: true,
+                cornerControlsStyle: 'advanced',
+                multiSelection: false,
+                disableTextEmojis: true,
+                editorMode: false
             }
                 
             const fpd = new FancyProductDesigner(document.getElementById('fpd-target'), appOptions);
@@ -222,8 +248,25 @@
             
             testApiWrapper.querySelector('#test')
             .addEventListener('click', (evt) => {
-                let test = fpd.deselectElement();
-                console.log(test);
+                let elem = fpd.currentViewInstance.fabricCanvas.getElementByTitle('Design Me');
+                elem.set('text', "haha");
+                elem.canvas.renderAll();
+            })
+
+            testApiWrapper.querySelector('#toSVG')
+            .addEventListener('click', (evt) => {
+
+                let svgStr = fpd.currentViewInstance.fabricCanvas.toSVG();
+                document.querySelector('#svg-display').innerHTML = svgStr;
+                
+            })
+
+            testApiWrapper.querySelector('#range-test')
+            .addEventListener('input', (evt) => {
+                
+                let elem = fpd.currentViewInstance.fabricCanvas.getElementByTitle('Design Me');
+                fpd.currentViewInstance.fabricCanvas.setElementOptions({curveRadius: parseInt(evt.currentTarget.value)}, elem);
+                
             })
             
         </script>

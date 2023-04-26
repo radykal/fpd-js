@@ -1,11 +1,100 @@
 import { 
-    isUrl,
     removeUrlParams
 } from '/src/helpers/utils';
 
-import Controls from './objects/Controls';
-import Image from './objects/Image';
-import Group from './objects/Group';
+import {
+    drawCirclePath
+} from './utils.js';
+
+import './objects/Controls';
+import './objects/Image';
+import './objects/Group';
+import './objects/Text';
+import './objects/IText';
+import './objects/Textbox';
+
+fabric.Object.propertiesToInclude = ['_isInitial', 'lockMovementX', 'lockMovementY', 'lockRotation', 'lockScalingX', 'lockScalingY', 'lockScalingFlip', 'lockUniScaling', 'resizeType', 'clipTo', 'clippingRect', 'boundingBox', 'boundingBoxMode', 'selectable', 'evented', 'title', 'editable', 'cornerColor', 'cornerIconColor', 'borderColor', 'isEditable', 'hasUploadZone', 'cornerSize'];
+
+fabric.Object.prototype.initialize = (function(originalFn) {
+    return function(...args) {
+        originalFn.call(this, ...args);
+        this._elementInit();
+        return this;
+    };
+})(fabric.Object.prototype.initialize);
+
+fabric.Object.prototype._elementInit = function() {
+
+    const _updateFontSize = (elem) => {
+        
+        if(elem.getType() === 'text' && !elem.curved && !elem.uniScalingUnlockable) {
+            
+            var newFontSize = elem.fontSize * elem.scaleX;
+        
+            newFontSize = parseFloat(Number(newFontSize).toFixed(0));
+            elem.scaleX = 1;
+            elem.scaleY = 1;
+            elem._clearCache();
+            
+            elem.set('fontSize', newFontSize);
+        
+        }
+    }
+    
+    this.on({
+        'added': () => {
+            
+            if(this.isCustom && !this.hasUploadZone && !this.replace) {                
+				this.copyable = this.originParams.copyable = true;
+			}
+            
+        },
+        'modified': (opts) => {
+                        
+            _updateFontSize(this);
+            
+        },
+        'moving': () => {
+
+            this._checkContainment();
+
+        },
+        'rotating': () => {
+
+            this._checkContainment();
+
+        },
+        'scaling': () => {
+
+            this._checkContainment();
+
+        },
+        'selected': () => {
+
+            let widthControls = !this.lockUniScaling;
+            if(this.textBox)
+                widthControls = true;
+            
+            if(this.canvas.viewOptions.cornerControlsStyle == 'basic') {
+                this.controls.mtr.offsetX = 0;
+                this.cornerSize = 16;
+            }
+            
+            this.setControlsVisibility({
+                ml: widthControls,
+                mr: widthControls,
+                mt: !this.lockUniScaling,
+                mb: !this.lockUniScaling,
+                tr: this.removable,
+                tl: this.copyable,
+                mtr: this.rotatable,
+                br: this.resizable,
+            });
+            
+        }
+    })
+    
+};
 
 fabric.Object.prototype.getType = function (fabricType) {
     
@@ -95,7 +184,7 @@ fabric.Object.prototype.checkEditable = function (checkProps) {
 
 };
 
-fabric.Object.prototype.changeColor = function (colorData) {
+fabric.Object.prototype.changeColor = function (colorData, colorLinking=true) {
     
     const colorizable = this.isColorizable();
     
@@ -155,7 +244,7 @@ fabric.Object.prototype.changeColor = function (colorData) {
             
             this.applyFilters();
             this.canvas.renderAll();
-            this.canvas.fire('elementColorChange', { target: this });
+            this.canvas.fire('elementColorChange', { target: this, colorLinking: colorLinking});
             this.fill = colorData;
     
         }
@@ -164,7 +253,7 @@ fabric.Object.prototype.changeColor = function (colorData) {
             
             this.set('fill', colorData);
             this.canvas.renderAll();
-            this.canvas.fire('elementColorChange', { target: this });
+            this.canvas.fire('elementColorChange', { target: this, colorLinking: colorLinking });
     
         }
     
@@ -282,7 +371,7 @@ fabric.Object.prototype.getBoundingBoxCoords = function() {
         }
         else {
 
-            var objects = this.fabricCanvas.getObjects();
+            var objects = this.canvas.getObjects();
 
             for(var i=0; i < objects.length; ++i) {
 
@@ -313,3 +402,334 @@ fabric.Object.prototype.getBoundingBoxCoords = function() {
     return false;
 
 }
+
+/**
+ * Centers an element horizontal or/and vertical.
+ *
+ * @method centerElement
+ * @param {Boolean} h Center horizontal.
+ * @param {Boolean} v Center vertical.
+ * @param {fabric.Object} [element] The element to center. If not set, it centers the current selected element.
+ */
+fabric.Object.prototype.centerElement = function(hCenter=true, vCenter=true) {
+
+    let boundingBox = this.getBoundingBoxCoords(),
+        left = this.left,
+        top = this.top;
+    
+    if(hCenter) {
+    
+        if(boundingBox) {
+            left = boundingBox.cp ? boundingBox.cp.x : boundingBox.left + boundingBox.width * 0.5;
+        }
+        else {
+            left = this.canvas.viewOptions.stageWidth * 0.5;
+        }
+    
+    }
+    
+    if(vCenter) {
+        if(boundingBox) {
+            top = boundingBox.cp ? boundingBox.cp.y : boundingBox.top + boundingBox.height * 0.5;
+        }
+        else {
+            top = this.canvas.viewOptions.stageHeight * 0.5;
+        }
+    
+    }
+    
+    this.setPositionByOrigin(new fabric.Point(left, top), 'center', 'center');
+    
+    this.canvas.renderAll();
+    this.setCoords();
+    this._checkContainment();
+    
+    this.autoCenter = false;
+
+}
+
+//checks if an element is in its containment (bounding box)
+fabric.Object.prototype._checkContainment = function() {
+    
+    if(this.canvas.currentBoundingObject && !this.hasUploadZone) {
+
+        this.setCoords();
+
+        if(this.boundingBoxMode === 'limitModify') {
+
+            let targetBoundingRect = this.getBoundingRect(),
+                bbBoundingRect = instance.currentBoundingObject.getBoundingRect(),
+                minX = bbBoundingRect.left,
+                maxX = bbBoundingRect.left+bbBoundingRect.width-targetBoundingRect.width,
+                minY = bbBoundingRect.top,
+                maxY = bbBoundingRect.top+bbBoundingRect.height-targetBoundingRect.height;
+
+            //check if target element is not contained within bb
+            if(!this.isContainedWithinObject(instance.currentBoundingObject)) {
+
+                //check if no corner is used, 0 means its dragged
+                if(this.__corner === 0) {
+                    if(targetBoundingRect.left > minX && targetBoundingRect.left < maxX) {
+                       limitModifyParameters.left = this.left;
+                    }
+
+                    if(targetBoundingRect.top > minY && targetBoundingRect.top < maxY) {
+                       limitModifyParameters.top = this.top;
+                    }
+                }
+
+                this.setOptions(limitModifyParameters);
+
+
+            } else {
+
+                limitModifyParameters = {
+                    left: this.left, 
+                    top: this.top, 
+                    angle: this.angle, 
+                    scaleX: this.scaleX, 
+                    scaleY: this.scaleY
+                };
+                
+                if(this.getType() == 'text') {
+                    
+                    limitModifyParameters.fontSize = this.fontSize;
+                    limitModifyParameters.lineHeight = this.lineHeight;
+                    limitModifyParameters.charSpacing = this.charSpacing;
+                    
+                }
+
+            }
+
+        }
+        else if(this.boundingBoxMode === 'inside' || this.boundingBoxMode === 'clipping') {
+
+            var isOut = false,
+                tempIsOut = this.isOut;
+
+                isOut = !this.isContainedWithinObject(this.canvas.currentBoundingObject);
+
+            if(isOut) {
+
+                if(this.boundingBoxMode === 'inside') {
+                    this.borderColor = this.canvas.viewOptions.outOfBoundaryColor;
+                }
+
+                this.isOut = true;
+
+            }
+            else {
+
+                if(this.boundingBoxMode === 'inside') {
+                    this.borderColor = this.canvas.viewOptions.selectedColor;
+                }
+
+                this.isOut = false;
+
+            }
+
+            if(tempIsOut != this.isOut && tempIsOut != undefined) {
+                
+                if(isOut) {
+
+                    /**
+                     * Gets fired as soon as an element is outside of its bounding box.
+                     *
+                     * @event FancyProductDesignerView#elementOut
+                     * @param {Event} event
+                     */
+                    this.canvas.fire('elementOut', {
+                        target: this,
+                    })
+                }
+                else {
+
+                    /**
+                     * Gets fired as soon as an element is inside of its bounding box again.
+                     *
+                     * @event FancyProductDesignerView#elementIn
+                     * @param {Event} event
+                     */
+                    this.canvas.fire('elementIn', {
+                        target: this,
+                    })
+                }
+                
+            }
+            
+            this.canvas.fire('elementCheckContainemt', {
+                target: this,
+                boundingBoxMode: this.boundingBoxMode
+            })
+
+        }
+
+    }
+
+    this.canvas.renderAll();
+
+}
+
+//defines the clipping area
+fabric.Object.prototype._clipElement = function() {
+
+    var bbCoords = this.getBoundingBoxCoords() || this.clippingRect;
+    if(bbCoords) {
+
+        this.clippingRect = bbCoords;
+
+        const clipRect = new fabric.Rect({
+            originX: 'left',
+            originY: 'top',
+            angle: bbCoords.angle || 0,
+            left: bbCoords.left,
+            top: bbCoords.top,
+            width: bbCoords.width,
+            height: bbCoords.height,
+            fill: '#DDD',
+            absolutePositioned: true,
+        });
+
+        this.clipPath = clipRect;
+
+    }
+
+};
+
+fabric.Object.prototype.getElementJSON = function(addPropertiesToInclude=false, propertyKeys=[]) {
+    
+    if(this.canvas) {
+
+        propertyKeys = Object.keys(this.canvas.viewOptions.elementParameters);
+        
+        if(this.getType() === 'text') {
+            propertyKeys = propertyKeys.concat(Object.keys(this.canvas.viewOptions.textParameters));
+        }
+        else {
+            propertyKeys = propertyKeys.concat(Object.keys(this.canvas.viewOptions.imageParameters));
+        }
+
+    }
+
+    if(addPropertiesToInclude) {
+        propertyKeys = propertyKeys.concat(fabric.Object.propertiesToInclude);
+    }
+    
+    if(this.uploadZone) {
+        propertyKeys.push('customAdds');
+        propertyKeys.push('designCategories');
+        propertyKeys.push('designCategories[]'); //fpd-admin
+    }
+
+    if(this.getType() === 'text') {
+        propertyKeys.push('text');
+        propertyKeys.push('_initialText');
+    }
+
+    if(this.type === 'group') {
+        propertyKeys.push('svgFill');
+    }
+
+    propertyKeys.push('width');
+    propertyKeys.push('height');
+    propertyKeys.push('isEditable');
+    propertyKeys.push('hasUploadZone');
+    propertyKeys.push('clippingRect');
+    propertyKeys.push('evented');
+    propertyKeys.push('isCustom');
+    propertyKeys.push('currentColorPrice');
+    propertyKeys.push('_isPriced');
+    propertyKeys.push('originParams');
+    propertyKeys.push('originSource');
+    propertyKeys.push('_printingBox');
+    propertyKeys = propertyKeys.sort();
+    
+    
+    let elementProps = {};
+    propertyKeys.forEach(key => {
+        
+        if(this[key] !== undefined) {
+            elementProps[key] = this[key];
+        }
+            
+    });
+
+    return elementProps;
+
+};
+
+/**
+	 * Aligns an element.
+	 *
+	 * @method alignElement
+	 * @param {String} pos Allowed values: left, right, top or bottom.
+	 */
+fabric.Object.prototype.alignToPosition = function(pos='left') {
+
+    
+    let localPoint = this.getPointByOrigin('left', 'top'),
+        boundingBox = this.getBoundingBoxCoords(),
+        posOriginX = 'left',
+        posOriginY = 'top';
+
+    if(pos === 'left') {
+
+        localPoint.x = boundingBox ? boundingBox.left : 0;
+        localPoint.x += this.padding + 1;
+
+    }
+    else if(pos === 'top') {
+
+        localPoint.y = boundingBox ? boundingBox.top : 0;
+        localPoint.y += this.padding + 1;
+
+    }
+    else if(pos === 'right') {
+
+        localPoint.x = boundingBox ? boundingBox.left + boundingBox.width - this.padding : this.canvas.viewOptions.stageWidth - this.padding;
+        posOriginX = 'right';
+
+    }
+    else {
+
+        localPoint.y = boundingBox ? boundingBox.top + boundingBox.height - this.padding : this.canvas.viewOptions.stageHeight;
+        posOriginY = 'bottom';
+
+    }
+
+    this.setPositionByOrigin(localPoint, posOriginX, posOriginY);
+    this.setCoords();
+    this._checkContainment();
+
+};
+
+fabric.Object.prototype.toggleUploadZone = function() {
+            
+    if(this.hasUploadZone && this.canvas) {
+
+        //check if upload zone contains objects
+        let objects = this.canvas.getObjects(),
+            uploadZoneEmpty = true;
+
+        for(var i=0; i < objects.lenth; ++i) {
+
+            var object = objects[i];
+            if(object.replace == this.replace) {
+                uploadZoneEmpty = false;
+                break;
+            }
+
+        }
+
+        //get upload zone of element
+        var uploadZoneObject = this.canvas.getUploadZone(this.replace);
+        if(uploadZoneObject) {
+            //show/hide upload zone
+            uploadZoneObject.set('opacity', uploadZoneEmpty ? 1 : 0);
+            uploadZoneObject.evented = uploadZoneEmpty;
+        }
+
+        this.canvas.renderAll();
+    }
+
+};

@@ -858,16 +858,6 @@ export default class Options {
 		*/
 		swapProductConfirmation: false,
 		/**
-		* The width of a textbox can set via the "Texts" module or changed via the corner controls of the selected textbox.
-		*
-		* @property setTextboxWidth
-		* @memberof Options.defaults
-		* @type {Boolean}
-		* @default false
-		* @version 5.0.1
-		*/
-		setTextboxWidth: false,
-		/**
 		* Define additional properties that will be applied to all text elements in the same textLinkGroup. E.g.: ['fontFamily', 'fontSize', 'fontStyle']
 		*
 		* @property textLinkGroupProps
@@ -898,6 +888,16 @@ export default class Options {
 		* @version 5.1.0
 		*/
 		multiSelection: false,
+		/**
+		* The border color when multiple elements are selected.
+		*
+		* @property multiSelectionColor
+		* @memberof Options.defaults
+		* @type {Boolean}
+		* @default '#54dfe6'
+		* @version 6.0.0
+		*/
+		multiSelectionColor: '#54dfe6',
         /**
         * The maximum canvas height related to the window height. A number between 0 and 1, e.g. 0.8 will set a maximum canvas height of 80% of the window height. A value of 1 will disable a calculation of a max. height.
         *
@@ -950,12 +950,12 @@ export default class Options {
 		*/
 		splitMultiSVG: false,
 		/**
-		* Set corner controls style: Basic (Rescale and Rotate), Advanced (Rescale, Rotate, Delete, Duplicate).
+		* Set corner controls style: "basic" (Rescale and Rotate) or "advanced" (Rescale, Rotate, Delete, Duplicate).
 		*
 		* @property cornerControlsStyle
 		* @memberof Options.defaults
 		* @type {Boolean}
-		* @default false
+		* @default "advanced"
 		* @version 5.1.4
 		*/
 		cornerControlsStyle: 'advanced',
@@ -1301,15 +1301,6 @@ export default class Options {
 			*/
 			curvable: false,
 			/**
-			* The letter spacing when the text is curved.
-			*
-			* @property curveSpacing
-			* @type {Number}
-			* @memberof Options.defaults.textParameters
-			* @default 10
-			*/
-			curveSpacing: 10,
-			/**
 			* The radius when the text is curved.
 			*
 			* @property curveRadius
@@ -1328,7 +1319,7 @@ export default class Options {
 			*/
 			curveReverse: false,
 			/**
-			* The maximal allowed lines. 0 means unlimited characters.
+			* The maximal allowed lines. 0 means unlimited lines.
 			*
 			* @property maxLines
 			* @type {Number}
@@ -1601,18 +1592,18 @@ export default class Options {
 			* @property maxW
 			* @type {Number}
 			* @memberof Options.defaults.customImageParameters
-			* @default 1500
+			* @default 10000
 			*/
-			maxW: 1500,
+			maxW: 10000,
 			/**
 			* The maximum upload size height.
 			*
 			* @property maxH
 			* @type {Number}
 			* @memberof Options.defaults.customImageParameters
-			* @default 1500
+			* @default 10000
 			*/
-			maxH: 1500,
+			maxH: 10000,
 			/**
 			* The minimum allowed DPI for uploaded images. Works only with JPEG images.
 			*
@@ -1735,12 +1726,8 @@ export default class Options {
 	 * @return {Object} The new options object.
 	 */
 	static merge(defaults={}, merge={}) {
-
-		typeof merge === 'undefined' ? {} : merge;
         
-        //todo: do deep merge here instead of multiple extends
 		var options = deepMerge(defaults, merge);
-
 		return options;
 
 	};
@@ -1768,4 +1755,5 @@ export default class Options {
 
 };
 
-window.FPDOptions = Options;
+if(window)
+	window.FPDOptions = Options;

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Framework | Testing all web components</title>
     <script src='../dist/fabric510.js'></script>
+    <script src='../dist/js/vendor.js'></script>
     <script src='../dist/js/FancyProductDesigner.js'></script>
     <link href="../dist/css/vendor.css" rel="stylesheet" type="text/css">
     <link href="../dist/css/FancyProductDesigner.css" rel="stylesheet" type="text/css">
@@ -48,10 +49,6 @@
                     'designs_love',
                     'manage-layers',
                     'text-layers',
-                    'layouts',
-                    'manage-layers',
-                    'text-layers',
-                    'layouts',
                 ],
                 fonts: [
                     {name: 'Lobster', url: 'google'},
@@ -63,7 +60,7 @@
                     },
                     {name: 'Pacifico', url: 'fonts/Pacifico.ttf'},
                 ],
-                productsJSON: '../data/products/product-categories.json',
+                productsJSON: './product-categories.json',
                 designsJSON: '../data/designs/design-categories.json',
                 textTemplates: [
                     {
@@ -145,6 +142,11 @@
                 customImageParameters: {
                     price: 10,
                     maxSize: 1,
+                },
+                colorPickerPalette: ["#000", "#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc", '#5f27cd', '#222f3e', '#10ac84',"#000", "#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc", '#5f27cd', '#222f3e', '#10ac84',"#000", "#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc", '#5f27cd', '#222f3e', '#10ac84',"#000", "#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc", '#5f27cd', '#222f3e', '#10ac84'],
+                hexNames: {'000': 'black', ffffff:'white',FFFFFF:'white',990000:'red',cccccc:'grey', "83635c": 'Chestnut', f4cccc: 'Redder'},
+                elementParameters: {
+                    patterns: ['images/patterns/carbon.png', 'images/patterns/grune_2.png', 'images/patterns/grunge_1.png', 'images/patterns/lines_green.png', 'images/patterns/lines_purple.png', 'images/patterns/lines_red.png', 'images/patterns/wood_1.png', 'images/patterns/wood_2.png', 'images/patterns/wood_3.png', 'images/patterns/carbon.png','images/patterns/carbon.png', 'images/patterns/grune_2.png', 'images/patterns/grunge_1.png', 'images/patterns/lines_green.png', 'images/patterns/lines_purple.png', 'images/patterns/lines_red.png', 'images/patterns/wood_1.png', 'images/patterns/wood_2.png', 'images/patterns/wood_3.png', 'images/patterns/carbon.png']
                 },
                 uploadAgreementModal: false,
                 swapProductConfirmation: true,

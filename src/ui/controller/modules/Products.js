@@ -96,7 +96,7 @@ export default class ProductsModule extends EventTarget {
         
         //create grid item
         const itemElem = document.createElement('div');
-        itemElem.className = 'fpd-item';
+        itemElem.className = 'fpd-item fpd-hover-thumbnail';
         itemElem.dataset.title = productTitle;
         itemElem.dataset.source = thumbnail;
         itemElem.dataset.index = index;

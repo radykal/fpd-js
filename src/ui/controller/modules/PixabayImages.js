@@ -101,7 +101,7 @@ export default class PixabayImagesModule extends EventTarget {
                 if (data.hits.length > 0) {
                 
                     data.hits.forEach((item) => {
-                        
+                                                
                         const thumbnail = createImgThumbnail({
                                     url: item.imageURL ? item.imageURL : item.webformatURL, 
                                     thumbnailUrl: item.webformatURL, 

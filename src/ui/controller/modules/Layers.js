@@ -38,7 +38,7 @@ export default class LayersModule extends EventTarget {
         
         addEvents(
             fpdInstance,
-            'elementAdd', 
+            ['elementAdd', 'elementRemove'], 
             (evt) => {
                 
                 if(fpdInstance.productCreated) {
@@ -153,6 +153,35 @@ export default class LayersModule extends EventTarget {
         
             sourceContent = document.createElement('textarea');
             sourceContent.innerText = element.text;
+            
+            addEvents(
+                sourceContent,
+                'keyup',
+                (evt) => {
+                    
+                    evt.stopPropagation();
+                    
+                    let txt = evt.target.value;
+                    txt = txt.replace(FancyProductDesigner.forbiddenTextChars, '');
+                    
+                    //remove emojis
+                    if(this.fpdInstance.mainOptions.disableTextEmojis) {
+                        txt = txt.replace(FPDEmojisRegex, '');
+                        txt = txt.replace(String.fromCharCode(65039), ""); //fix: some emojis left a symbol with char code 65039
+                    }
+                    
+                    this.fpdInstance.currentViewInstance.fabricCanvas.
+                    setElementOptions({text: txt}, element);
+                    
+                }
+            )
+            
+            //update input when text has changed
+            element.on({
+                'editing:exited': () => {
+                    sourceContent.value = element.text;
+                }
+            })
         
         }
         
@@ -259,7 +288,6 @@ export default class LayersModule extends EventTarget {
                     
                     evt.stopPropagation();
                     this.fpdInstance.currentViewInstance.fabricCanvas.removeElement(element);
-                    rowElem.remove();
                     
                 }
             )

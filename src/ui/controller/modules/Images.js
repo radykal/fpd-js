@@ -8,7 +8,8 @@ import {
     addEvents, 
     isEmpty, 
     addElemClasses, 
-    removeElemClasses 
+    removeElemClasses,
+    objectGet
 } from '/src/helpers/utils';
 
 export default class ImagesModule extends EventTarget {
@@ -82,16 +83,18 @@ export default class ImagesModule extends EventTarget {
             fpdInstance,
             ['viewSelect', 'secondaryModuleCalled'],
             (evt) => {
-                
-                if(!fpdInstance.currentViewInstance) { return; }
+                                
+                if(!fpdInstance.currentViewInstance) return;
                 
                 let currentViewOptions = fpdInstance.currentViewInstance.options,
                     price = null;
                 
                 //get upload zone price
-                if(fpdInstance.currentViewInstance.currentUploadZone) { 
+                if(this.container.parentNode.classList.contains('fpd-upload-zone-content') 
+                    && fpdInstance.currentViewInstance.currentUploadZone
+                ) { 
                 
-                    const uploadZone = fpdInstance.currentViewInstance.getUploadZone(
+                    const uploadZone = fpdInstance.currentViewInstance.fabricCanvas.getUploadZone(
                                         fpdInstance.currentViewInstance.currentUploadZone
                                     );
                                     
@@ -101,19 +104,14 @@ export default class ImagesModule extends EventTarget {
                 
                 }
                 
-                if(price == null 
-                    && currentViewOptions.customImageParameters 
-                    && currentViewOptions.customImageParameters.price
-                ) {
-                    price = fpdInstance.formatPrice(
-                        currentViewOptions.customImageParameters.price
-                    );
-                
+                const viewImagePrice = objectGet(currentViewOptions, 'customTextParameters.price', 0);
+                if(price == null && viewImagePrice) {
+                    price = viewImagePrice;
                 }
-                
+                                
                 const priceElem = this.container.querySelector('.fpd-upload-zone .fpd-price');
                 if(priceElem)
-                    priceElem.innerHTML = price ? price : '';
+                    priceElem.innerHTML = price ? fpdInstance.formatPrice(price) : '';
                 
             }
         );

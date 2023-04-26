@@ -32,6 +32,29 @@ const objectHasKeys = (obj, keys) => {
 
 export { objectHasKeys };
 
+const objectsAreEqual = (obj1, obj2) => {
+
+    var props1 = Object.getOwnPropertyNames(obj1);
+    var props2 = Object.getOwnPropertyNames(obj2);
+
+    if (props1.length != props2.length) {
+        return false;
+    }
+
+    for (var i = 0; i < props1.length; i++) {
+        let val1 = obj1[props1[i]];
+        let val2 = obj2[props1[i]];
+        let isObjects = isPlainObject(val1) && isPlainObject(val2);
+        if (isObjects && !objectsAreEqual(val1, val2) || !isObjects && val1 !== val2) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+export { objectsAreEqual };
+
 const deepMerge = (obj1, obj2) => {
     
     // Create a new object that combines the properties of both input objects
@@ -61,6 +84,25 @@ const deepMerge = (obj1, obj2) => {
 
 export { deepMerge };
 
+
+const objectGet = (obj, path, defValue) => {
+
+    // If path is not defined or it has false value
+    if (!path) return undefined
+    // Check if path is string or array. Regex : ensure that we do not have '.' and brackets.
+    const pathArray = Array.isArray(path) ? path : path.match(/([^[.\]])+/g)
+    // Find value
+    const result = pathArray.reduce(
+    (prevObj, key) => prevObj && prevObj[key],
+    obj
+    )
+    // If found value is undefined return default value; otherwise return the value
+    return result === undefined ? defValue : result;
+}
+
+export { objectGet };
+
+
 /**
  * Checks if a string is an URL.
  *
@@ -84,6 +126,28 @@ const removeUrlParams = (url) => {
 
 export { removeUrlParams };
 
+/**
+ * Makes an unique array.
+ *
+ * @method arrayUnique
+ * @param {Array} array The target array.
+ * @return {Array} Returns the edited array.
+ * @static
+ */
+const arrayUnique = (array) => {
+
+    var a = array.concat();
+    for(var i=0; i<a.length; ++i) {
+        for(var j=i+1; j<a.length; ++j) {
+            if(a[i] === a[j])
+                a.splice(j--, 1);
+        }
+    }
+
+    return a;
+}
+
+export { arrayUnique };
 
 /**
  * Removes an element from an array by value.
@@ -312,6 +376,7 @@ export { localStorageAvailable };
 const createImgThumbnail = (opts={}) => {
     
     if(!opts.url) return;
+    
 
     // todo: price
     // FPDUtil.setItemPrice($thumbnail, fpdInstance);
@@ -323,7 +388,7 @@ const createImgThumbnail = (opts={}) => {
     if(opts.title) {
         thumbnail.dataset.title = opts.title;
         thumbnail.setAttribute('aria-label', opts.title);
-        thumbnail.classList.add('fpd-tooltip');
+        thumbnail.classList.add('fpd-hover-thumbnail');
     }
         
     

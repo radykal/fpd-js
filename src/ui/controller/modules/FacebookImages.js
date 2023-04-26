@@ -64,22 +64,26 @@ export default class FacebookImagesModule extends EventTarget {
                 //add all albums to select
                 const albums = response.data;
                 
-                albums.forEach(album => {
+                if(albums) {
                     
-                    const albumItem = document.createElement('span');
-                    albumItem.className = 'fpd-item';
-                    albumItem.dataset.albumid = album.id;
-                    albumItem.innerText = album.name;
-                    albumItem.addEventListener('click', (evt) => {
+                    albums.forEach(album => {
+                    
+                        const albumItem = document.createElement('span');
+                        albumItem.className = 'fpd-item';
+                        albumItem.dataset.albumid = album.id;
+                        albumItem.innerText = album.name;
+                        albumItem.addEventListener('click', (evt) => {
+                            
+                            this.dropdown.setAttribute('value', evt.currentTarget.innerText);
+                            this.#selectAlbum(evt.currentTarget.dataset.albumid);
+                            
+                        })
                         
-                        this.dropdown.setAttribute('value', evt.currentTarget.innerText);
-                        this.#selectAlbum(evt.currentTarget.dataset.albumid);
+                        this.dropdownList.append(albumItem);
                         
                     })
-                    
-                    this.dropdownList.append(albumItem);
-                    
-                })
+
+                }
                     
                 removeElemClasses(
                     this.dropdown,

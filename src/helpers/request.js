@@ -35,15 +35,18 @@ export { getJSON };
 const postJSON = (props) => {
     
     let url = props.url;
+
+    let headers = {
+        'Accept': 'application/json'
+    };
+    if(!props.body instanceof FormData)
+        headers['Content-Type'] = 'application/json';
         
     return fetch(url, {
         method: 'POST',
         redirect: 'follow',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(props.body)
+        headers: headers,
+        body: props.body instanceof FormData ? props.body : JSON.stringify(props.body)
     })
     .then((response) => response.json())
     .then((data) => {

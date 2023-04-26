@@ -38,6 +38,7 @@ export default class Mainbar extends EventTarget {
         
         this.contentElem = this.container.querySelector('.fpd-module-content');
         this.navElem = this.container.querySelector('.fpd-navigation');
+        this.secContent = this.container.querySelector('.fpd-secondary-content');
         
         this.currentModules = fpdInstance.mainOptions.mainBarModules;
         
@@ -305,6 +306,17 @@ export default class Mainbar extends EventTarget {
     }
     
     callModule(name, dynamicDesignsId=null) {
+
+        //hide secondary content
+        removeElemClasses(
+            this.secContent,
+            ['fpd-active']
+        );
+
+        removeElemClasses(
+            this.contentElem,
+            ['fpd-hidden']
+        );
         
         //unselect current module
         removeElemClasses(
@@ -338,16 +350,54 @@ export default class Mainbar extends EventTarget {
                 ['fpd-active']
             );
             
-            
+            const selectedModule = this.contentElem.querySelector('fpd-module-'+name);
             addElemClasses(
-                this.contentElem.querySelector('fpd-module-'+name),
+                selectedModule,
                 ['fpd-active']
             );
+            
+            //focus textarea when text module is selected
+            if(name == 'text')
+                selectedModule.querySelector('textarea').focus();            
                         
         }
                 
         this.toggleContentDisplay();
         this.currentModuleKey = name;
+        
+    }
+
+    callSecondary(name) {
+        
+        //deselect main modules
+        removeElemClasses(
+            this.navElem.querySelectorAll('.fpd-nav-item'), 
+            ['fpd-active']
+        );
+        
+        addElemClasses(
+            this.contentElem,
+            ['fpd-hidden']
+        );
+                
+        addElemClasses(
+            this.secContent,
+            ['fpd-active']
+        );
+
+        addElemClasses(
+            this.secContent.querySelector('.fpd-'+name),
+            ['fpd-active']
+        );
+        
+        this.fpdInstance.dispatchEvent(
+            new CustomEvent('secondaryModuleCalled', {
+                detail: {
+                    moduleName: name
+                }
+            })
+        );
+
         
     }
     
@@ -356,32 +406,6 @@ export default class Mainbar extends EventTarget {
         const fpdContainer = this.fpdInstance.container;
         
         return this.#offCanvasEnabled || this.#draggableDialogEnabled || fpdContainer.classList.contains('fpd-layout-small');
-        
-    }
-    
-    callSecondary() {
-        
-        this.callModule('secondary');
-        
-        // instance.$content.children('.fpd-secondary-module').children('.'+className).addClass('fpd-active')
-        // .siblings().removeClass('fpd-active');
-        // 
-        // var label = null;
-        // if(className === 'fpd-upload-zone-adds-panel') {
-        //     instance.$content.find('.fpd-upload-zone-adds-panel .fpd-bottom-nav > :not(.fpd-hidden)').first().click();
-        // }
-        // else if(className === 'fpd-saved-designs-panel') {
-        //     label = fpdInstance.getTranslation('actions', 'load')
-        // }
-        // 
-        // if(fpdInstance.mainOptions.uiTheme !== 'doyle' && instance.$content.parent('.fpd-draggable-dialog').length > 0 && label) {
-        // 
-        //     $draggableDialog.addClass('fpd-active')
-        //     .find('.fpd-dialog-title').text(label);
-        // 
-        // }
-        // 
-        // fpdInstance.$container.trigger('secondaryModuleCalled', [className, instance.$content.children('.fpd-secondary-module').children('.fpd-active')]);
         
     }
     
@@ -466,47 +490,52 @@ export default class Mainbar extends EventTarget {
                 
     }
     
-    toggleUploadZonePanel(toggle=true) {
+    toggleUploadZonePanel(toggle=true, customAdds={}) {
                     
         //do nothing when custom image is loading
         if(this.fpdInstance.loadingCustomImage) {
             return;
         }
+
+        toggleElemClasses(this.secContent, ['fpd-active'], toggle);
     
         if(toggle) {
-            this.callSecondary('fpd-upload-zone-adds-panel');
+
+            toggleElemClasses(
+                this.uploadZoneNavItems.find(navItem => navItem.classList.contains('fpd-add-image')),
+                ['fpd-hidden'],
+                !Boolean(customAdds.uploads)
+            )
+
+            toggleElemClasses(
+                this.uploadZoneNavItems.find(navItem => navItem.classList.contains('fpd-add-text')),
+                ['fpd-hidden'],
+                !Boolean(customAdds.texts)
+            )
+
+            toggleElemClasses(
+                this.uploadZoneNavItems.find(navItem => navItem.classList.contains('fpd-add-design')),
+                ['fpd-hidden'],
+                !Boolean(customAdds.designs)
+            )
+                        
+            if(this.fpdInstance.UZmoduleInstance_designs) {
+                this.fpdInstance.UZmoduleInstance_designs.toggleCategories();
+            }
+            
+            //select first visible nav item
+            const firstVisibleNavItem = this.uploadZoneNavItems.find(navItem => !navItem.classList.contains('fpd-hidden'))
+            if(firstVisibleNavItem)
+                firstVisibleNavItem.click();   
+        
+
+            this.callSecondary('upload-zone-panel');
         }
         else {
     
             this.fpdInstance.currentViewInstance.currentUploadZone = null;
-            this.toggleContentDisplay(false);
     
         }
-    
-    }
-    
-    toggleUploadZoneAdds(customAdds) {
-    
-    //     var $uploadZoneAddsPanel = instance.$content.find('.fpd-upload-zone-adds-panel');
-    // 
-    //     $uploadZoneAddsPanel.find('.fpd-add-image').toggleClass('fpd-hidden', !Boolean(customAdds.uploads));
-    //     $uploadZoneAddsPanel.find('.fpd-add-text').toggleClass('fpd-hidden', !Boolean(customAdds.texts));
-    //     $uploadZoneAddsPanel.find('.fpd-add-design').toggleClass('fpd-hidden', !Boolean(customAdds.designs));
-    // 
-    //     if(fpdInstance.currentElement.price) {
-    //         $uploadZoneAddsPanel.find('[data-module="text"] .fpd-btn > .fpd-price')
-    //         .html(' - '+fpdInstance.formatPrice(fpdInstance.currentElement.price));
-    //     }
-    //     else {
-    //         $uploadZoneAddsPanel.find('[data-module="text"] .fpd-btn > .fpd-price').html('');
-    //     }
-    // 
-    //     if(fpdInstance.UZmoduleInstance_designs) {
-    //         fpdInstance.UZmoduleInstance_designs.toggleCategories();
-    //     }
-    // 
-    //     //select first visible add panel
-    //     $uploadZoneAddsPanel.find('.fpd-off-canvas-nav > :not(.fpd-hidden)').first().click();
     
     }
     
@@ -533,14 +562,20 @@ export default class Mainbar extends EventTarget {
         }
         
         navElem.innerHTML = this.contentElem.innerHTML = '';
+
+        if(FancyProductDesigner.additionalModules) {
+
+            Object.keys(FancyProductDesigner.additionalModules).forEach((moduleKey) => {
+                modules.push(moduleKey);
+            })
+
+        }
         
         //add selected modules
-        modules.forEach((moduleType) => {
+        modules.forEach((moduleKey) => {
         
-                let dynamicDesignId = null,
-                    navItemTitle = '';
-                        
-            const moduleWrapper = new ModuleWrapper(this.fpdInstance, this.contentElem, moduleType);
+            let navItemTitle = '';        
+            const moduleWrapper = new ModuleWrapper(this.fpdInstance, this.contentElem, moduleKey);
             
             if(!moduleWrapper.moduleInstance)
                 return;
@@ -548,7 +583,7 @@ export default class Mainbar extends EventTarget {
             //create nav item element            
             const navItemElem = document.createElement('div');
             navItemElem.classList.add('fpd-nav-item');
-            navItemElem.dataset.module = moduleType;
+            navItemElem.dataset.module = moduleKey;
             navItemElem.addEventListener('click', this.#navItemSelect.bind(this));
             navElem.appendChild(navItemElem);
             
@@ -611,6 +646,48 @@ export default class Mainbar extends EventTarget {
         if(!this.contentClosable) {
             navElem.querySelector(`[data-module="${selectedModule}"]`).click()
         }
+
+        //upload zone panel
+        this.uploadZoneContent = this.secContent.querySelector('.fpd-upload-zone-content');
+        this.uploadZoneNavItems = Array.from(this.secContent.querySelectorAll('.fpd-upload-zone-panel .fpd-bottom-nav > div'));
+        
+        const imagesModuleWrapper = new ModuleWrapper(this.fpdInstance, this.uploadZoneContent, 'images');
+        this.fpdInstance['UZmoduleInstance_images'] = imagesModuleWrapper.moduleInstance;
+        
+        const textModuleWrapper = new ModuleWrapper(this.fpdInstance, this.uploadZoneContent, 'text');
+        this.fpdInstance['UZmoduleInstance_text'] = textModuleWrapper.moduleInstance;
+
+        const designModuleWrapper = new ModuleWrapper(this.fpdInstance, this.uploadZoneContent, 'designs');
+        this.fpdInstance['UZmoduleInstance_designs'] = designModuleWrapper.moduleInstance;
+
+        addEvents(
+            this.uploadZoneNavItems,
+            'click',
+            (evt) => {
+
+                removeElemClasses(
+                    this.uploadZoneNavItems,
+                    ['fpd-active']
+                )
+
+                addElemClasses(
+                    evt.currentTarget,
+                    ['fpd-active']
+                )
+
+                removeElemClasses(
+                    Array.from(this.uploadZoneContent.children),
+                    ['fpd-active']
+                )
+                                
+                addElemClasses(
+                    this.uploadZoneContent.querySelector('fpd-module-'+evt.currentTarget.dataset.module),
+                    ['fpd-active']
+                );                
+
+            }
+        )
+        
         
     }
 

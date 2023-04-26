@@ -9,8 +9,6 @@ import {
     getFileExtension
 } from '/src/helpers/utils';
 
-
-
 export default class UploadsModule extends EventTarget {
     
     #allowedFileTypes;
@@ -24,12 +22,7 @@ export default class UploadsModule extends EventTarget {
         super();
                 
         this.fpdInstance = fpdInstance;
-        
-        const ajaxSettings = fpdInstance.mainOptions.customImageAjaxSettings;
-        this.postUrl = ajaxSettings.url;
-        this.uploadsDir = (ajaxSettings.data && ajaxSettings.data.uploadsDir) ? ajaxSettings.data.uploadsDir : '';
-        this.uploadsDirURL = (ajaxSettings.data && ajaxSettings.data.uploadsDirURL) ? ajaxSettings.data.uploadsDirURL : '';
-                
+                        
         this.container = document.createElement("fpd-module-uploads");
         wrapper.append(this.container);
         
@@ -254,8 +247,6 @@ export default class UploadsModule extends EventTarget {
     #uploadImage(file, addToStage=false) {
         
         const mainOptions = this.fpdInstance.mainOptions;
-        const ajaxSettings = mainOptions.customImageAjaxSettings;
-        const saveOnServer = ajaxSettings.data && ajaxSettings.data.saveOnServer ? 1 : 0;
         
         //load image with FileReader
         const reader = new FileReader();
@@ -316,7 +307,7 @@ export default class UploadsModule extends EventTarget {
                 file.name
             );
             
-            if(saveOnServer) {
+            if(this.fpdInstance.uploadsToServer) {
                 
                 thumbnail.classList.add('fpd-loading');
                 thumbnail.insertAdjacentHTML(
@@ -338,11 +329,11 @@ export default class UploadsModule extends EventTarget {
         
                 if(checkImageDimensions(this.fpdInstance, imageW, imageH)) {
                     
-                    if(saveOnServer) {
+                    if(this.fpdInstance.uploadsToServer) {
                         
                         var formData = new FormData();
-                        formData.append('uploadsDir', this.uploadsDir);
-                        formData.append('uploadsDirURL', this.uploadsDirURL);
+                        formData.append('uploadsDir', this.fpdInstance.uploadsDir);
+                        formData.append('uploadsDirURL', this.fpdInstance.uploadsDirURL);
                         formData.append('images[]', file);
                         
                         const xhr = new XMLHttpRequest();
@@ -403,7 +394,7 @@ export default class UploadsModule extends EventTarget {
                         
                         };
                         
-                        xhr.open('POST', this.postUrl);
+                        xhr.open('POST', this.fpdInstance.uploadsURL);
                         xhr.send(formData);
                         
                         thumbnail.xhr = xhr;
@@ -446,8 +437,8 @@ export default class UploadsModule extends EventTarget {
         );
         
         const formData = new FormData();
-        formData.append('uploadsDir', this.uploadsDir);
-        formData.append('uploadsDirURL', this.uploadsDirURL);
+        formData.append('uploadsDir', this.fpdInstance.uploadsDir);
+        formData.append('uploadsDirURL', this.fpdInstance.uploadsDirURL);
         formData.append('pdf', file);
         
         const xhr = new XMLHttpRequest();
@@ -501,7 +492,7 @@ export default class UploadsModule extends EventTarget {
         
         };
         
-        xhr.open('POST', this.postUrl);
+        xhr.open('POST', this.fpdInstance.uploadsURL);
         xhr.send(formData);
         
     }
@@ -528,7 +519,7 @@ export default class UploadsModule extends EventTarget {
         const thumbnail = createImgThumbnail({
                 url: imgUrl,
                 title: title,
-                price: this.fpdInstance.formatPrice(this.fpdInstance.currentViewInstance.options.customImageParameters.price),
+                price: this.fpdInstance.formatPrice(this.fpdInstance.mainOptions.customImageParameters.price),
                 removable: true
         });
         

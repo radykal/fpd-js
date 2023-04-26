@@ -50,4 +50,8 @@ const getScalingByDimesions = (imgW, imgH, resizeToW, resizeToH, mode='fit') => 
 
 export { getScalingByDimesions };
 
+const drawCirclePath = (cx,cy,r) => {
+    return "M" + cx + "," + cy + "m" + (-r) + ",0a" + r + "," + r + " 0 1,0 " + (r * 2) + ",0a" + r + "," + r + " 0 1,0 " + (-r * 2) + ",0";
+}
 
+export { drawCirclePath };

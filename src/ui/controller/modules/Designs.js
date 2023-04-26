@@ -153,6 +153,7 @@ export default class DesignsModule extends EventTarget {
                             
         const gridItem = document.createElement('div');
         gridItem.className = 'fpd-category fpd-item';
+        gridItem.dataset.title = category.title;
         gridItem.dataset.search = category.title.toLowerCase();
         
         if(category.thumbnail) {
@@ -176,8 +177,7 @@ export default class DesignsModule extends EventTarget {
             let targetItem = evt.currentTarget,
                 index = Array.from(this.gridElem.querySelectorAll('.fpd-item')).indexOf(targetItem),
                 selectedCategory = this.#currentCategories[index];
-                
-            
+                    
             if(selectedCategory.category) {
             
                 this.#categoryLevelIndexes.push(index);
@@ -249,6 +249,7 @@ export default class DesignsModule extends EventTarget {
     };
     
     toggleCategories() {
+        
     
         if(!this.#categoriesUsed) {
             return;
@@ -268,14 +269,15 @@ export default class DesignsModule extends EventTarget {
         if(this.#dynamicDesignsId) {
             catTitles = this.fpdInstance.mainOptions.dynamicDesigns[this.#dynamicDesignsId].categories;
         }
-        
+                
         if(this.fpdInstance.currentViewInstance) {
     
-            var element = this.fpdInstance.currentViewInstance.currentElement;
+            const element = this.fpdInstance.currentElement;
     
-            //element (upload zone) has design categories
+            //element (upload zone) has design categories            
             if(element && element.uploadZone && element.designCategories) {
-                catTitles = this.fpdInstance.currentViewInstance.currentElement.designCategories;
+                catTitles = this.fpdInstance.currentElement.designCategories;
+                
             }
             //enabled for the view
             else {
@@ -288,10 +290,10 @@ export default class DesignsModule extends EventTarget {
         var allCatElems = this.container.querySelectorAll('.fpd-category');
         if(catTitles.length > 0) {
             
-            const visibleCats = [];
+            let visibleCats = [];
             for (let item of allCatElems) {
                                 
-                if(catTitles.includes(item.dataset.search)) {
+                if(catTitles.includes(item.dataset.title)) {
                     item.classList.remove('fpd-hidden');
                     visibleCats.push(item);
                 }
@@ -302,7 +304,7 @@ export default class DesignsModule extends EventTarget {
                 
             }
             
-            //when only one category is enabled, open it
+            //when only one category is enabled, open it            
             if(visibleCats.length === 1) {
                 this.container.classList.add('fpd-single-cat');
                 visibleCats[0].click();

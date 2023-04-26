@@ -12,8 +12,8 @@ fpd-main-bar {
                 
         > .fpd-nav-item {
             
-            margin: 7px;
-            padding: 4px;
+            margin: 15px 6px;
+            padding: 5px 0;;
             text-align: center;
             cursor: pointer;
             border-radius: var(--fpd-border-radius);
@@ -40,13 +40,29 @@ fpd-main-bar {
             }
             
             &.fpd-active {
-                opacity: 1;
-                background: var(--fpd-mainbar-nav-bg-active);
-                
+
+                position: relative;
+                opacity: 1 !important;
+                color: var(--fpd-secondary-color);
+
                 .fpd-nav-icon:before {
+                    color: var(--fpd-secondary-color);
                 }
-                
+
                 svg * {
+                    fill: var(--fpd-secondary-color);
+                }
+
+                &:before {
+                    position: absolute;
+                    content: '';
+                    top: 5%;
+                    left: 5%;
+                    width: 90%;
+                    height: 100%;
+                    background: var(--fpd-secondary-color);
+                    opacity: 0.1;
+                    border-radius: var(--fpd-border-radius);
                 }
                 
             }
@@ -57,8 +73,55 @@ fpd-main-bar {
         
     }
 
-        
-    .fpd-navigation 
+    .fpd-secondary-content {
+
+        display: none;
+        flex: 1;
+
+        &.fpd-active {
+            display: block;
+        }
+
+        > * {
+
+            display: none;
+
+            &.fpd-active {
+                display: block;
+            }
+        }
+
+        .fpd-upload-zone-panel {
+
+            display: flex;
+            flex-flow: column;
+            height: 100%;
+
+            > .fpd-upload-zone-content {
+                flex-basis: 100%;
+
+                > * {
+                    display: none;
+
+                    &.fpd-active {
+                        display: block;
+                    }
+
+                }
+
+            }
+
+            > .fpd-bottom-nav {
+
+                > div {
+                    padding: 11px;
+                    font-size: 22px;
+                }
+
+            }
+        }
+
+    }
         
 } 
 
@@ -109,16 +172,17 @@ fpd-main-bar {
                 order: 2;
                 align-self: flex-end;
                 
-                > div {
+                > .fpd-nav-item {
                     
                     flex: 1 0 auto;
                     white-space: nowrap;
-                    padding: 0 20px;
+                    padding: 5px 20px;
+                    margin: 5px 0 8px;
                     
-                    > span:first-child {
-                        height: 55px;
-                        padding-top: 18px;
-                        padding-bottom: 5px;
+                    > .fpd-nav-icon {
+                        height: 45px;
+                        padding-top: 10px;
+                        padding-bottom: 0;
                     }
                     
                 }
@@ -178,6 +242,7 @@ fpd-main-bar {
 .fpd-sidebar {
     
     .fpd-navigation {
+
         min-height: var(--fpd-container-min-height);
         flex: 0 0 var(--fpd-sidebar-nav-width);
         overflow: auto;
@@ -192,7 +257,7 @@ fpd-main-bar {
             display: block;
             font-size: 12px;
             line-height: 14px;
-            padding-top: 0;
+            padding: 0;
             word-break: break-word;
         }
         
@@ -208,7 +273,7 @@ fpd-main-bar {
     fpd-main-bar {
         
         flex-basis: 100%;
-        order: 1;
+        order: 2;
         height: auto !important;
                 
         .fpd-navigation {
@@ -335,8 +400,6 @@ fpd-main-bar {
         display: block;
     }
     
-    
-    
 }
 
 /* DRAGGABLE DIALOG */
@@ -406,6 +469,9 @@ fpd-main-bar {
 }
 
 
+
+
+
 /* Main Bar Container */
 
 .fpd-container.fpd-main-bar-container fpd-main-bar {
@@ -416,91 +482,4 @@ fpd-main-bar {
 
 .fpd-container.fpd-main-bar-container .fpd-navigation {
 	overflow-x: auto;
-}
-
-
-
-/* Secondary Module */
-
-.fpd-secondary-module > div {
-	display: none;
-	height: 100%;
-}
-
-.fpd-secondary-module > div.fpd-active {
-	display: block;
-}
-
-
-/* Module Top Nav */
-
-.fpd-module .fpd-bottom-nav {
-	display: flex;
-	bottom: 0;
-	top: auto;
-	position: absolute;
-	width: 100%;
-	color: #fff;
-	cursor: pointer;
-	height: 40px;
-	font-size: 20px;
-	z-index: 10;
-}
-
-.fpd-bottom-nav> div {
-	padding-top: 10px;
-}
-
-.fpd-bottom-nav > div {
-	flex: 1;
-	text-align: center;
-}
-
-.fpd-bottom-nav > div:hover {
-	background: rgba(0, 0, 0, 0.1);
-}
-
-.fpd-bottom-nav > div.fpd-active {
-	background: #fff;
-}
-
-/* Upload Zone */
-
-.fpd-upload-zone-adds-panel .fpd-upload-zone-content {
-	height: ~"calc(100% - 40px)";
-}
-
-.fpd-upload-zone-content > div {
-	display: none;
-}
-
-.fpd-upload-zone-content > div.fpd-active {
-	display: block;
-}
-
-/* Saved Designs */
-
-.fpd-secondary-module .fpd-saved-designs-panel {
-	margin: 0 10px;
-}
-
-.fpd-secondary-module .fpd-saved-designs-panel > .fpd-empty-saved-designs {
-	margin: 10px 0;
-	opacity: 0.8;
-}
-
-.fpd-saved-designs-panel .fpd-item:hover .fpd-remove-design {
-	display: block;
-}
-
-.fpd-saved-designs-panel .fpd-remove-design {
-	font-size: 20px;
-	display: none;
-	position: absolute;
-	right: 2px;
-	top: 0;
-}
-
-.fpd-saved-designs-panel .mCSB_outside+.mCSB_scrollTools {
-	right: -10px;
 }

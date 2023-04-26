@@ -1,11 +1,13 @@
-import TextView from '/src/ui/view/modules/Text';
+import '/src/ui/view/modules/Text';
 
-import { deepMerge, addEvents } from '/src/helpers/utils';
+import { 
+    deepMerge, 
+    addEvents,
+    objectGet
+} from '/src/helpers/utils';
 
 export default class TextsModule extends EventTarget {
-    
-    #currentViewOptions;
-    
+        
     constructor(fpdInstance, wrapper) {
         
         super();
@@ -15,11 +17,6 @@ export default class TextsModule extends EventTarget {
         this.container = document.createElement("fpd-module-text");
         wrapper.append(this.container);
         
-        if(!Boolean(fpdInstance.mainOptions.setTextboxWidth)) {
-            this.container.querySelector('.fpd-textbox-wrapper')
-            .classList.add('fpd-hidden');
-        }
-        
         this.container.querySelector('.fpd-btn')
         .addEventListener('click', (evt) => {
         
@@ -28,25 +25,20 @@ export default class TextsModule extends EventTarget {
                 
             if(fpdInstance.currentViewInstance && text.length > 0) {
                 
-                const textBoxWidthElem = this.container.querySelector('.fpd-textbox-width');
-                const textboxWidth = parseInt(textBoxWidthElem.value);
-                textBoxWidthElem.value = '';
+                const currentViewOptions = fpdInstance.currentViewInstance.options;
         
                 let textParams = deepMerge(
                     currentViewOptions.customTextParameters, 
                     {
+                        textBox: true,
+                        resizable: true,
                         isCustom: true, 
-                        _addToUZ: fpdInstance.currentViewInstance.currentUploadZone
+                        _addToUZ: fpdInstance.currentViewInstance.currentUploadZone,
+                        _calcWidth: true
                     }
                 );
         
-                if(!isNaN(textboxWidth)) {
-                    textParams.textBox = true;
-                    textParams.width = textboxWidth;
-                    textParams.resizable = true;
-                }
-        
-                fpdInstance.addElement(
+                fpdInstance.currentViewInstance.fabricCanvas.addElement(
                     'text',
                     text,
                     text,
@@ -63,10 +55,12 @@ export default class TextsModule extends EventTarget {
             this.container.querySelector('textarea'),
             ['input', 'change'],
             (evt) => {
+
+                const currentViewOptions = fpdInstance.currentViewInstance.options;
                 
                 let text = evt.currentTarget.value,
-                    maxLength = this.#currentViewOptions ? this.#currentViewOptions.customTextParameters.maxLength : 0,
-                    maxLines = this.#currentViewOptions ? this.#currentViewOptions.customTextParameters.maxLines : 0;
+                    maxLength = currentViewOptions.customTextParameters.maxLength,
+                    maxLines = currentViewOptions.customTextParameters.maxLines;
                                     
                 text = text.replace(FancyProductDesigner.forbiddenTextChars, '');
                 
@@ -77,10 +71,12 @@ export default class TextsModule extends EventTarget {
                     text = text.replace(String.fromCharCode(65039), ""); 
                 }
                 
+                //max. characters
                 if(maxLength != 0 && text.length > maxLength) {
                     text = text.substr(0, maxLength);
                 }
                 
+                // max. lines
                 if(maxLines != 0 && text.split("\n").length > maxLines) {
                     text = text.replace(/([\s\S]*)\n/, "$1");
                 }
@@ -89,11 +85,47 @@ export default class TextsModule extends EventTarget {
 
             }
         )
+
+        addEvents(
+            fpdInstance,
+            ['viewSelect', 'secondaryModuleCalled'], 
+            (evt) => {
+
+                if(!fpdInstance.currentViewInstance) return;
+            
+                const currentViewOptions = fpdInstance.currentViewInstance.options;
+                let price = null;
+                
+                //get upload zone price
+                if(fpdInstance.currentViewInstance.currentUploadZone 
+                    && this.container.parentNode.classList.contains('fpd-upload-zone-content')
+                ) { 
+                
+                    const uploadZone = fpdInstance.currentViewInstance.fabricCanvas.getUploadZone(
+                                        fpdInstance.currentViewInstance.currentUploadZone
+                                    );
+                                    
+                    if(objectGet(uploadZone, 'price')) {
+                        price = uploadZone.price;
+                    }
+                
+                }
+
+                const viewTextPrice = objectGet(currentViewOptions, 'customTextParameters.price', 0);
+                if(price == null && viewTextPrice) {
+                    price = viewTextPrice;
+                }
+
+                const priceElem = this.container.querySelector('.fpd-btn > .fpd-price');
+                if(priceElem)
+                    priceElem.innerHTML = price ? (' - '+fpdInstance.formatPrice(price)) : '';
+        
+            }
+        );
                 
         if(Array.isArray(fpdInstance.mainOptions.textTemplates)) {
         
             var textTemplatesGridElem = this.container.querySelector('.fpd-text-templates .fpd-grid');
-            
         
             fpdInstance.mainOptions.textTemplates.forEach((item) => {
         
@@ -105,26 +137,28 @@ export default class TextsModule extends EventTarget {
                 //create text template element
                 const textTemplateElem = document.createElement('div');
                 textTemplateElem.className = 'fpd-item';
-                textTemplateElem.dataset.props = JSON.stringify(item.properties);
-                textTemplateElem.dataset.text = item.text;
                 textTemplateElem.addEventListener('click', (evt) => {
                     
-                    //todo check
                     if(fpdInstance.currentViewInstance) {
-                        
-                        let templateProps = JSON.parse(evt.currentTarget.dataset.props);
+
+                        const currentViewOptions = fpdInstance.currentViewInstance.options;
+                                                
+                        let templateProps = {...item.properties};                        
                         templateProps.isCustom = true;
+                        templateProps.textBox = true;
+                        templateProps.resizable = true;
                         templateProps._addToUZ = fpdInstance.currentViewInstance.currentUploadZone;
+                        templateProps._calcWidth = true;
                         
                         let textParams = deepMerge(
                             currentViewOptions.customTextParameters,
                             templateProps
                         );
                         
-                        fpdInstance.addElement(
+                        fpdInstance.currentViewInstance.fabricCanvas.addElement(
                             'text',
-                            this.dataset.text,
-                            this.dataset.text,
+                            item.text,
+                            item.text,
                             textParams
                         );
                     
@@ -144,24 +178,6 @@ export default class TextsModule extends EventTarget {
         
         }
         
-        //todo check
-        fpdInstance.addEventListener('viewSelect', (evt) => {
-            
-        //     const detail = evt.detail;
-        //     this.#currentViewOptions = detail.viewInstance.options;
-        // 
-        //     if(currentViewOptions.customTextParameters && currentViewOptions.customTextParameters.price) {
-        //         var price = fpdInstance.formatPrice(currentViewOptions.customTextParameters.price);
-        //         $module.find('.fpd-btn > .fpd-price').html(' - '+price);
-        //     }
-        //     else {
-        //         $module.find('.fpd-btn > .fpd-price').html('');
-        //     }
-        
-        });
-
-        
     }
-
 
 }

@@ -5,6 +5,12 @@ import MainWrapper from './controller/MainWrapper.js';
 import ActionsBar from './controller/ActionsBar.js';
 import ViewsWrapper from './controller/ViewsWrapper.js';
 
+import { 
+    addEvents,
+    addElemClasses,
+    toggleElemClasses
+} from '/src/helpers/utils';
+
 export default class UIManager extends EventTarget {
     
     #currentWindowWidth = 0;
@@ -20,6 +26,7 @@ export default class UIManager extends EventTarget {
     init() {
         
         this.#updateResponsive();
+        this.#hoverThumbnail();
         this.#setMainTooltip();
         
         this.fpdInstance.container.classList.add('fpd-container');
@@ -78,6 +85,108 @@ export default class UIManager extends EventTarget {
             this.fpdInstance.container.classList.add('fpd-layout-large');
         }
         
+    }
+
+    #hoverThumbnail() {
+
+        const context = document.body;
+
+        let thumbnailPreview;
+        thumbnailPreview = document.createElement('div');
+        thumbnailPreview.className = "fpd-thumbnail-preview fpd-shadow-1 fpd-hidden";
+        thumbnailPreview.innerHTML = '<picture></picture>';
+
+        const titleElem = document.createElement('div');
+        titleElem.className = "fpd-preview-title";
+        thumbnailPreview.append(titleElem);
+
+        const priceElem = document.createElement('div');
+        priceElem.className = "fpd-preview-price";
+        thumbnailPreview.append(priceElem);
+
+        context.append(thumbnailPreview);
+
+        addEvents(
+            context,
+            ['mouseover', 'mouseout', 'mousemove', 'click'],
+            (evt) => {
+                
+                const target = evt.target;
+                let price = null;
+
+                //todo
+                // if(instance.currentViewInstance && instance.currentViewInstance.currentUploadZone
+                //     && $(evt.target).parents('.fpd-upload-zone-adds-panel').length > 0) {
+    
+                //     var uploadZone = instance.currentViewInstance.getUploadZone(instance.currentViewInstance.currentUploadZone);
+                //     if(uploadZone && uploadZone.price) {
+                //         price = uploadZone.price;
+                //     }
+    
+                // }
+                                
+                if(target.classList.contains('fpd-hover-thumbnail') 
+                    && thumbnailPreview.classList.contains('fpd-hidden')
+                    && evt.type === 'mouseover' 
+                    && target.dataset.source
+                ) {
+                    
+                    thumbnailPreview.querySelector('picture').style.backgroundImage = `url("${target.dataset.source}")`
+
+                    if(target.dataset.title) {
+                        titleElem.innerText = target.dataset.title;
+                    }
+                    toggleElemClasses(
+                        titleElem,
+                        ['fpd-hidden'],
+                        !target.dataset.title
+                    )
+
+                    toggleElemClasses(
+                        thumbnailPreview,
+                        ['fpd-title-enabled'],
+                        target.dataset.title
+                    )
+                    
+                    const targetPrice = target.querySelector('.fpd-price');
+                    
+                    if(targetPrice) {
+                        let price = Number(targetPrice.innerText.replace(/[^0-9.-]+/g,""))
+
+                        if(!isNaN(price)) {                            
+                            priceElem.innerHTML = this.fpdInstance.formatPrice(price);
+                        }
+                        
+                    }
+
+                    toggleElemClasses(
+                        priceElem,
+                        ['fpd-hidden'],
+                        !targetPrice
+                    )
+                    
+                    thumbnailPreview.classList.remove('fpd-hidden');
+                    
+                }
+                                
+                if(!thumbnailPreview.classList.contains('fpd-hidden') 
+                    && (evt.type === 'mousemove' || evt.type === 'mouseover')) 
+                {
+                                        
+                    const leftPos = evt.pageX + 10 + thumbnailPreview.offsetWidth > window.innerWidth ? window.innerWidth - thumbnailPreview.offsetWidth : evt.pageX + 10;
+                    thumbnailPreview.style.left = leftPos+'px';
+                    thumbnailPreview.style.top = (evt.pageY + 10)+'px';
+
+                }
+                else if(evt.type === 'mouseout' || evt.type == 'click') {
+                                            
+                    thumbnailPreview.classList.add('fpd-hidden');
+
+                }
+
+            }
+        )
+
     }
     
     #setMainTooltip() {
