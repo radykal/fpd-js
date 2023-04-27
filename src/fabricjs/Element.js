@@ -1,17 +1,13 @@
-import { 
-    removeUrlParams
-} from '/src/helpers/utils';
-
-import {
-    drawCirclePath
-} from './utils.js';
-
 import './objects/Controls';
 import './objects/Image';
 import './objects/Group';
 import './objects/Text';
 import './objects/IText';
 import './objects/Textbox';
+
+import { 
+    removeUrlParams
+} from '/src/helpers/utils';
 
 fabric.Object.propertiesToInclude = ['_isInitial', 'lockMovementX', 'lockMovementY', 'lockRotation', 'lockScalingX', 'lockScalingY', 'lockScalingFlip', 'lockUniScaling', 'resizeType', 'clipTo', 'clippingRect', 'boundingBox', 'boundingBoxMode', 'selectable', 'evented', 'title', 'editable', 'cornerColor', 'cornerIconColor', 'borderColor', 'isEditable', 'hasUploadZone', 'cornerSize'];
 
@@ -24,22 +20,6 @@ fabric.Object.prototype.initialize = (function(originalFn) {
 })(fabric.Object.prototype.initialize);
 
 fabric.Object.prototype._elementInit = function() {
-
-    const _updateFontSize = (elem) => {
-        
-        if(elem.getType() === 'text' && !elem.curved && !elem.uniScalingUnlockable) {
-            
-            var newFontSize = elem.fontSize * elem.scaleX;
-        
-            newFontSize = parseFloat(Number(newFontSize).toFixed(0));
-            elem.scaleX = 1;
-            elem.scaleY = 1;
-            elem._clearCache();
-            
-            elem.set('fontSize', newFontSize);
-        
-        }
-    }
     
     this.on({
         'added': () => {
@@ -47,11 +27,6 @@ fabric.Object.prototype._elementInit = function() {
             if(this.isCustom && !this.hasUploadZone && !this.replace) {                
 				this.copyable = this.originParams.copyable = true;
 			}
-            
-        },
-        'modified': (opts) => {
-                        
-            _updateFontSize(this);
             
         },
         'moving': () => {
@@ -88,7 +63,7 @@ fabric.Object.prototype._elementInit = function() {
                 tr: this.removable,
                 tl: this.copyable,
                 mtr: this.rotatable,
-                br: this.resizable,
+                br: this.resizable && !this.curved,
             });
             
         }

@@ -1,10 +1,9 @@
-import InstagramImagesView from '/src/ui/view/modules/InstagramImages';
+import '/src/ui/view/modules/InstagramImages';
 
 import { getJSON } from '/src/helpers/request';
 import { 
     addEvents, 
-    addElemClasses, 
-    removeElemClasses, 
+    getItemPrice, 
     createImgThumbnail,
     localStorageAvailable,
     isEmpty
@@ -169,7 +168,7 @@ export default class InstgramImagesModule extends EventTarget {
                                         url: item.media_url, 
                                         thumbnailUrl: item.thumbnail_url ? item.thumbnail_url : item.media_url, 
                                         title: item.id,
-                                        price: this.fpdInstance.formatPrice(this.fpdInstance.currentViewInstance.options.customImageParameters.price)    
+                                        price: getItemPrice(this.fpdInstance, this.container) 
                             });
                             
                             addEvents(

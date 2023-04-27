@@ -1,4 +1,4 @@
-import MainBarHTML from '../html/mainbar.html';
+import html from '../html/mainbar.html';
 
 class Mainbar extends HTMLElement {
     
@@ -10,10 +10,7 @@ class Mainbar extends HTMLElement {
 
     connectedCallback() {
         
-        const templateElem = document.createElement("template");
-        templateElem.innerHTML = MainBarHTML;
-        
-        this.append(templateElem.content.cloneNode(true));  
+        this.innerHTML = html; 
 
     }
 

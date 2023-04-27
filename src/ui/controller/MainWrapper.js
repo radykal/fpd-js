@@ -1,4 +1,4 @@
-import MainWrapperView from '../view/MainWrapper.js';
+import '../view/MainWrapper.js';
 
 export default class MainWrapper {
     

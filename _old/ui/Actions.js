@@ -426,55 +426,6 @@ var FPDActions = function(fpdInstance, $actions) {
 			}
 
 		}
-		else if(action === 'qr-code') {
-
-			var $internalModal = FPDUtil.showModal($this.children('.fpd-modal-context').clone(), false, '', fpdInstance.$modalContainer),
-				$colorPickers = $internalModal.find('.fpd-qrcode-colors input').spectrum({
-					preferredFormat: "hex",
-					showInput: true,
-					showInitial: true,
-					showButtons: false,
-					replacerClassName: 'fpd-spectrum-replacer',
-				});
-
-			$internalModal.find('.fpd-add-qr-code').click(function() {
-
-				var text = $internalModal.find('.fpd-modal-context > input').val();
-
-				if(text && text.length !== 0) {
-
-					var $qrcodeWrapper = $internalModal.find('.fpd-qrcode-wrapper').empty(),
-						qrcode = new QRCode($qrcodeWrapper.get(0), {
-					    text: text,
-					    width: 256,
-					    height: 256,
-					    colorDark : $colorPickers.filter('.fpd-qrcode-color-dark').spectrum('get').toHexString(),
-					    colorLight : $colorPickers.filter('.fpd-qrcode-color-light').spectrum('get').toHexString(),
-					    correctLevel : QRCode.CorrectLevel.H
-					});
-
-					$qrcodeWrapper.find('img').on('load', function() {
-
-						fpdInstance.addElement(
-							'image',
-							this.src,
-							'QR-Code - '+text,
-							fpdInstance.currentViewInstance.options.qrCodeProps
-						);
-
-						$internalModal.find('.fpd-modal-close').click();
-
-					});
-
-				}
-
-			});
-
-			$internalModal.on('modalRemove', function() {
-				$colorPickers.spectrum('destroy');
-			});
-
-		}
 		else if(action === 'zoom') {
 
 			if(!$this.hasClass('fpd-active')) {

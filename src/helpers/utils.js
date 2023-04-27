@@ -376,10 +376,6 @@ export { localStorageAvailable };
 const createImgThumbnail = (opts={}) => {
     
     if(!opts.url) return;
-    
-
-    // todo: price
-    // FPDUtil.setItemPrice($thumbnail, fpdInstance);
 
     const thumbnail = document.createElement('div');
     thumbnail.className = 'fpd-item';
@@ -390,18 +386,15 @@ const createImgThumbnail = (opts={}) => {
         thumbnail.setAttribute('aria-label', opts.title);
         thumbnail.classList.add('fpd-hover-thumbnail');
     }
-        
-    
+
     const picElem = document.createElement('picture');
     picElem.dataset.img = opts.thumbnailUrl ? opts.thumbnailUrl : opts.url;
     thumbnail.append(picElem);
     
-    if(opts.price) {
-        const priceElem = document.createElement('span');
-        priceElem.className = "fpd-price";
-        priceElem.innerHTML = opts.price;
-        thumbnail.append(priceElem);
-    }
+    const priceElem = document.createElement('span');
+    priceElem.className = "fpd-price";
+    priceElem.innerHTML = opts.price;
+    thumbnail.append(priceElem);
     
     if(opts.removable) {
         const removeElem = document.createElement('span');
@@ -415,6 +408,41 @@ const createImgThumbnail = (opts={}) => {
 };
 
 export { createImgThumbnail };
+
+const getItemPrice = (fpdInstance, container, price=null) => {
+        
+    if(!fpdInstance.currentViewInstance) return '';
+                
+    let currentViewOptions = fpdInstance.currentViewInstance.options;
+            
+    //get price from upload zone if module is inside upload-zone-content
+    if(fpdInstance.container.querySelector('.fpd-upload-zone-content').contains(container)
+        && fpdInstance.currentViewInstance.currentUploadZone
+    ) { 
+    
+        const uploadZone = fpdInstance.currentViewInstance.fabricCanvas.getUploadZone(
+                            fpdInstance.currentViewInstance.currentUploadZone
+                        );
+                        
+        if(uploadZone && uploadZone.price) {
+            price = uploadZone.price;
+            
+        }
+    
+    }
+    
+    //only apply general price if null    
+    if(price == null) {
+        price = objectGet(currentViewOptions, 'customImageParameters.price', 0);        
+    }
+    
+    const priceStr = price ? fpdInstance.formatPrice(price) : ''; 
+
+    return priceStr;
+
+};
+
+export { getItemPrice };
 
 /**
  * Checks if the dimensions of an image is within the allowed range set in the customImageParameters of the view options.
@@ -431,11 +459,10 @@ const checkImageDimensions = (fpdInstance, imageW, imageH) => {
     const viewInst = fpdInstance.currentViewInstance;
     let imageRestrictions = viewInst.options.customImageParameters;
     
-    //todo
-    // const uploadZone = viewInst.getUploadZone(viewInst.currentUploadZone);
-    // if(uploadZone) {
-    //     imageRestrictions = deepMerge( imageRestrictions, uploadZone );
-    // }
+    const uploadZone = viewInst.fabricCanvas.getUploadZone(viewInst.currentUploadZone); 
+    if(uploadZone) {
+        imageRestrictions = deepMerge( imageRestrictions, uploadZone );
+    }    
 
     if(imageW > imageRestrictions.maxW ||
     imageW < imageRestrictions.minW ||
@@ -466,6 +493,7 @@ const checkImageDimensions = (fpdInstance, imageW, imageH) => {
                     .replace('%maxH', imageRestrictions.maxH);
         
         Modal(sizeAlert);
+        
         return false;
 
     }

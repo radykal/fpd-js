@@ -1,10 +1,11 @@
-import FacebookImagesView from '/src/ui/view/modules/FacebookImages';
+import '/src/ui/view/modules/FacebookImages';
 
 import { 
     addEvents, 
     addElemClasses, 
     removeElemClasses, 
-    createImgThumbnail 
+    createImgThumbnail,
+    getItemPrice
 } from '/src/helpers/utils';
 
 export default class FacebookImagesModule extends EventTarget {
@@ -131,8 +132,8 @@ export default class FacebookImagesModule extends EventTarget {
                                     url: photoLargest, 
                                     thumbnailUrl: photoThumbnail, 
                                     title: photo.id,
-                                    price: this.fpdInstance.formatPrice(this.fpdInstance.currentViewInstance.options.customImageParameters.price)    
-                            });
+                                    price: getItemPrice(this.fpdInstance, this.container)
+                            });                            
                             
                             addEvents(
                                 thumbnail,

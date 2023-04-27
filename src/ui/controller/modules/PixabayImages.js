@@ -1,11 +1,12 @@
-import PixabayImagesView from '/src/ui/view/modules/PixabayImages';
+import '/src/ui/view/modules/PixabayImages';
 
 import { getJSON } from '/src/helpers/request';
 import { 
     addEvents, 
     addElemClasses, 
     removeElemClasses, 
-    createImgThumbnail 
+    createImgThumbnail,
+    getItemPrice
 } from '/src/helpers/utils';
 
 export default class PixabayImagesModule extends EventTarget {
@@ -106,7 +107,7 @@ export default class PixabayImagesModule extends EventTarget {
                                     url: item.imageURL ? item.imageURL : item.webformatURL, 
                                     thumbnailUrl: item.webformatURL, 
                                     title: item.id ? item.id : item.id_hash,
-                                    price: this.fpdInstance.formatPrice(this.fpdInstance.currentViewInstance.options.customImageParameters.price)    
+                                    price: getItemPrice(this.fpdInstance, this.container)
                         });
                         
                         addEvents(
@@ -140,51 +141,7 @@ export default class PixabayImagesModule extends EventTarget {
                 
             }
         });
-        
-        return;
-        $.getJSON(url, function(data) {
-    
-            $pixabayScrollArea.prevAll('.fpd-loader-wrapper:first').addClass('fpd-hidden');
-    
-            if (data.hits.length > 0) {
-    
-                data.hits.forEach(function(item) {
-                    
-                    const thumbnail = createImgThumbnail({
-                                url: item.media_url, 
-                                thumbnailUrl: item.thumbnail_url ? item.thumbnail_url : item.media_url, 
-                                title: item.id,
-                                price: this.fpdInstance.formatPrice(this.fpdInstance.currentViewInstance.options.customImageParameters.price)    
-                    });
-                    
-                    this.gridElem.append(thumbnail);
-                    this.fpdInstance.lazyBackgroundObserver.observe(thumbnail.querySelector('picture'));
-    
-                    var source = item.imageURL ? item.imageURL : item.webformatURL,
-                        $lastItem = $('<div/>', {
-                                'class': 'fpd-item '+lazyClass,
-                                'data-title': (item.id ? item.id : item.id_hash),
-                                'data-source': source,
-                                'data-thumbnail': item.webformatURL,
-                                'html': '<picture data-img="'+item.webformatURL+'"></picture><span class="fpd-price"></span>'
-                            }).appendTo($pixabayGrid);
-    
-                    FPDUtil.setItemPrice($lastItem, fpdInstance);
-    
-                });
-    
-            }
-    
-            loadingStack = false;
-    
-        })
-        .fail(function(data, textStatus, jqXHR) {
-            $pixabayScrollArea.prevAll('.fpd-loader-wrapper:first').addClass('fpd-hidden');
-            FPDUtil.log(textStatus);
-        });
     
     };
     
-    
-
 }

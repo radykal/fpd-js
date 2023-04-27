@@ -7,7 +7,6 @@ import ViewsWrapper from './controller/ViewsWrapper.js';
 
 import { 
     addEvents,
-    addElemClasses,
     toggleElemClasses
 } from '/src/helpers/utils';
 
@@ -100,10 +99,6 @@ export default class UIManager extends EventTarget {
         titleElem.className = "fpd-preview-title";
         thumbnailPreview.append(titleElem);
 
-        const priceElem = document.createElement('div');
-        priceElem.className = "fpd-preview-price";
-        thumbnailPreview.append(priceElem);
-
         context.append(thumbnailPreview);
 
         addEvents(
@@ -112,18 +107,6 @@ export default class UIManager extends EventTarget {
             (evt) => {
                 
                 const target = evt.target;
-                let price = null;
-
-                //todo
-                // if(instance.currentViewInstance && instance.currentViewInstance.currentUploadZone
-                //     && $(evt.target).parents('.fpd-upload-zone-adds-panel').length > 0) {
-    
-                //     var uploadZone = instance.currentViewInstance.getUploadZone(instance.currentViewInstance.currentUploadZone);
-                //     if(uploadZone && uploadZone.price) {
-                //         price = uploadZone.price;
-                //     }
-    
-                // }
                                 
                 if(target.classList.contains('fpd-hover-thumbnail') 
                     && thumbnailPreview.classList.contains('fpd-hidden')
@@ -131,6 +114,12 @@ export default class UIManager extends EventTarget {
                     && target.dataset.source
                 ) {
                     
+                    if(thumbnailPreview.querySelector('.fpd-price'))
+                        thumbnailPreview.querySelector('.fpd-price').remove();
+
+                    if(thumbnailPreview.querySelector('.fpd-image-quality-ratings'))
+                        thumbnailPreview.querySelector('.fpd-image-quality-ratings').remove();
+
                     thumbnailPreview.querySelector('picture').style.backgroundImage = `url("${target.dataset.source}")`
 
                     if(target.dataset.title) {
@@ -148,23 +137,23 @@ export default class UIManager extends EventTarget {
                         target.dataset.title
                     )
                     
-                    const targetPrice = target.querySelector('.fpd-price');
-                    
+                    const targetPrice = target.querySelector('.fpd-price');                    
                     if(targetPrice) {
-                        let price = Number(targetPrice.innerText.replace(/[^0-9.-]+/g,""))
-
-                        if(!isNaN(price)) {                            
-                            priceElem.innerHTML = this.fpdInstance.formatPrice(price);
-                        }
-                        
+                        thumbnailPreview.append(targetPrice.cloneNode(true));
                     }
 
-                    toggleElemClasses(
-                        priceElem,
-                        ['fpd-hidden'],
-                        !targetPrice
-                    )
-                    
+                    const targetRatings = target.querySelector('.fpd-image-quality-ratings');                                        
+                    if(targetRatings) {
+
+                        const clonedRatings = targetRatings.cloneNode(true);
+                        const ratingLabel = document.createElement('span');
+                        ratingLabel.className = "fpd-image-quality-rating-label";
+                        ratingLabel.innerText = targetRatings.dataset.qualityLabel;
+                        clonedRatings.prepend(ratingLabel);
+                        thumbnailPreview.append(clonedRatings);
+
+                    }
+
                     thumbnailPreview.classList.remove('fpd-hidden');
                     
                 }

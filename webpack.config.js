@@ -15,8 +15,9 @@ module.exports = (env, argv) => {
             path: path.resolve(__dirname, 'test'),
             publicPath: '',
         },
+        watch: true,
         watchOptions: {
-            ignored: ['/data/uploads/**/', '/node_modules/', '/dist/**'],
+            ignored: ['/_uploads/', '/node_modules/', '/dist/**'],
         },
         devServer: {
             https: true,  
@@ -40,6 +41,7 @@ module.exports = (env, argv) => {
                 { 
                     directory: path.join(__dirname, '_uploads'),
                     publicPath: '/_uploads',
+                    watch: false
                 },                
             ]     
         },

@@ -1,5 +1,5 @@
+import '/src/fabricjs/Canvas';
 import Modal from '/src/ui/view/comps/Modal';
-import Canvas from '/src/fabricjs/Canvas';
 
 import { 
     deepMerge

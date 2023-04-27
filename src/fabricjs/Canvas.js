@@ -1,6 +1,6 @@
-import Element from './Element';
-import History from './canvas/History';
-import ZoomPan from './canvas/ZoomPan';
+import './Element';
+import './canvas/History';
+import './canvas/ZoomPan';
 
 import {
     deepMerge,
@@ -1437,8 +1437,8 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 
     //set pattern
     if (parameters.pattern !== undefined) {
-        //todo
         element.setPattern(parameters.pattern)
+        //todo
         // _setColorPrice(element, parameters.pattern);
     }
 

@@ -1,6 +1,11 @@
-import DesignsView from '/src/ui/view/modules/Designs';
+import '/src/ui/view/modules/Designs';
 
-import { deepMerge, addEvents, createImgThumbnail } from '/src/helpers/utils';
+import { 
+    deepMerge, 
+    addEvents,
+    getItemPrice, 
+    createImgThumbnail 
+} from '/src/helpers/utils';
 
 export default class DesignsModule extends EventTarget {
     
@@ -12,7 +17,7 @@ export default class DesignsModule extends EventTarget {
     
     constructor(fpdInstance, wrapper, dynamicDesignsId=null) {
         
-                super();
+        super();
         
         this.#searchInLabel = fpdInstance.translator.getTranslation('modules', 'designs_search_in').toUpperCase();        
         this.fpdInstance = fpdInstance;
@@ -58,71 +63,84 @@ export default class DesignsModule extends EventTarget {
         
         });
         
-        this.headElem.querySelector('.fpd-back')
-        .addEventListener('click', (evt) => {
-        
-            if(this.gridElem.querySelectorAll('.fpd-category').length > 0) {
-                this.#categoryLevelIndexes.pop(); //remove last level index
-            }
-        
-            //loop through design categories to receive parent category
-            let displayCategories = this.fpdInstance.designs,
-                parentCategory;
-        
-            this.#categoryLevelIndexes.forEach((levelIndex) => {
-        
-                parentCategory = displayCategories[levelIndex];
-                displayCategories = parentCategory.category;
-        
-            });
-        
-            this.#currentCategories = displayCategories;
-        
-            if(displayCategories) { //display first level categories
-                this.#displayCategories(this.#currentCategories, parentCategory);
-            }
-        
-            //only toggle categories for top level
-            if(parentCategory === undefined) {
-                this.toggleCategories();
-            }
-        
-        });
-        
-        //when adding a product after products are set with productsSetup()
-        fpdInstance.addEventListener('designsSet', (evt) => {
+        addEvents(
+            this.headElem.querySelector('.fpd-back'),
+            'click',
+            (evt) => {
+                
+                if(this.gridElem.querySelectorAll('.fpd-category').length > 0) {
+                    this.#categoryLevelIndexes.pop(); //remove last level index
+                }
             
-            const designs = fpdInstance.designs;
+                //loop through design categories to receive parent category
+                let displayCategories = this.fpdInstance.designs,
+                    parentCategory;
             
-            if(!Array.isArray(designs) || designs.length === 0) {
-                return;
-            }
-        
-            if(designs[0].hasOwnProperty('source')) { //check if first object is a design image
-        
-                this.container.classList.add('fpd-single-cat');
-                this.#displayDesigns(designs);
-        
-            }
-            else {
-        
-                if(designs.length > 1 || designs[0].category) { //display categories
-                    this.#categoriesUsed = true;
+                this.#categoryLevelIndexes.forEach((levelIndex) => {
+            
+                    parentCategory = displayCategories[levelIndex];
+                    displayCategories = parentCategory.category;
+            
+                });
+            
+                this.#currentCategories = displayCategories;
+            
+                if(displayCategories) { //display first level categories
+                    this.#displayCategories(this.#currentCategories, parentCategory);
+                }
+            
+                //only toggle categories for top level
+                if(parentCategory === undefined) {
                     this.toggleCategories();
                 }
-                else if(designs.length === 1 && designs[0].designs) { //display designs in category, if only one category exists
-                    this.container.classList.add('fpd-single-cat');
-                    this.#displayDesigns(designs[0].designs);
-                }
-        
-        
-            }
-        
-        })
-        // .on('viewSelect', function() {
-        //     instance.toggleCategories();
-        // })
 
+            }
+        )
+        
+        //when adding a product after products are set with productsSetup()
+        addEvents(
+            fpdInstance,
+            'designsSet',
+            (evt) => {
+
+                const designs = fpdInstance.designs;
+            
+                if(!Array.isArray(designs) || designs.length === 0) {
+                    return;
+                }
+            
+                if(designs[0].hasOwnProperty('source')) { //check if first object is a design image
+            
+                    this.container.classList.add('fpd-single-cat');
+                    this.#displayDesigns(designs);
+            
+                }
+                else {
+            
+                    if(designs.length > 1 || designs[0].category) { //display categories
+                        this.#categoriesUsed = true;
+                        this.toggleCategories();
+                    }
+                    else if(designs.length === 1 && designs[0].designs) { //display designs in category, if only one category exists
+                        this.container.classList.add('fpd-single-cat');
+                        this.#displayDesigns(designs[0].designs);
+                    }
+            
+            
+                }
+
+            }
+        )
+
+        addEvents(
+            fpdInstance,
+            'viewSelect',
+            () => {
+
+                this.toggleCategories();
+                
+            }
+        )
         
     }
     
@@ -224,7 +242,7 @@ export default class DesignsModule extends EventTarget {
                 url: design.source,
                 thumbnailUrl: design.thumbnail,
                 title: design.title,
-                price: this.fpdInstance.formatPrice(design.parameters.price),
+                price: getItemPrice(this.fpdInstance, this.container, design.parameters.price),
         });
         
         thumbnailItem.dataset.search = design.title.toLowerCase();

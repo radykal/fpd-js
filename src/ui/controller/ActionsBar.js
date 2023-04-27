@@ -1,7 +1,6 @@
-import ActionsBarView from '../view/ActionsBar.js';
+import '../view/ActionsBar.js';
 
 export default class ActionsBar extends EventTarget {
-    
 
     constructor(fpdInstance) {
         

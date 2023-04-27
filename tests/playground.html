@@ -63,7 +63,7 @@
 
             const appOptions = {
                 langJson: 'data/langs/default.json',
-                initialActiveModule: 'text',
+                initialActiveModule: 'images',
                 responsiveBreakpoints: {
                 },
                 mainBarModules: [
@@ -184,7 +184,7 @@
                     resizable: true,
                     autoCenter: true,
                     price: 10,
-                    maxSize: 1,
+                    maxSize: 10,
                     autoSelect: true
                 },
                 customTextParameters: {
@@ -203,7 +203,13 @@
                 cornerControlsStyle: 'advanced',
                 multiSelection: false,
                 disableTextEmojis: true,
-                editorMode: false
+                editorMode: false,
+                autoFillUploadZones: false,
+                imageQualityRatings: {
+                    low: [200, 300],
+                    mid: [1000, 1000],
+                    high: [2000, 2000]
+                },
             }
                 
             const fpd = new FancyProductDesigner(document.getElementById('fpd-target'), appOptions);

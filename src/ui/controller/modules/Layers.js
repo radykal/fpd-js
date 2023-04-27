@@ -1,4 +1,4 @@
-import LayersView from '/src/ui/view/modules/Layers';
+import '/src/ui/view/modules/Layers';
 
 import { 
     addEvents, 

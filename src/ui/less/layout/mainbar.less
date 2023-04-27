@@ -98,13 +98,22 @@ fpd-main-bar {
             height: 100%;
 
             > .fpd-upload-zone-content {
+
                 flex-basis: 100%;
+                overflow: hidden;
 
                 > * {
+                    height: 100%;
                     display: none;
 
                     &.fpd-active {
                         display: block;
+                    }
+
+                    > div {
+                        height: 100%;
+                        display: flex;
+                        flex-flow: column;
                     }
 
                 }
@@ -467,9 +476,6 @@ fpd-main-bar {
     top: 0 !important;
     height: ~"calc(100% - 40px)" !important;
 }
-
-
-
 
 
 /* Main Bar Container */

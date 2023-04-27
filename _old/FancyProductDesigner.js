@@ -17,14 +17,6 @@ var FancyProductDesigner = function(elem, opts) {
 		$draggedImage,
 
 	/**
-	 * jQuery object pointing on the tooltip for the current selected element.
-	 *
-	 * @property $elementTooltip
-	 * @type jQuery
-	 */
-	this.$elementTooltip = null;
-
-	/**
 	 * URL to the watermark image if one is set via options.
 	 *
 	 * @property watermarkImg
@@ -202,11 +194,6 @@ var FancyProductDesigner = function(elem, opts) {
 					instance.resetZoom();
 				}
 
-			}
-
-			//deselect element if one is selected and active element is not input (FB browser fix)
-			if(instance.currentElement && $(document.activeElement).is(':not(input)') && $(document.activeElement).is(':not(textarea)')) {
-				instance.deselectElement();
 			}
 
 			if((instance.currentElement && instance.currentElement.isEditing) || instance.mainOptions.editorMode) {

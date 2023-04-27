@@ -1,4 +1,4 @@
-import MainWrapperHTML from '../html/main-wrapper.html';
+import html from '../html/main-wrapper.html';
 
 class MainWrapper extends HTMLElement {
     
@@ -10,10 +10,7 @@ class MainWrapper extends HTMLElement {
 
     connectedCallback() {
         
-        const templateElem = document.createElement("template");
-        templateElem.innerHTML = MainWrapperHTML;
-        
-        this.append(templateElem.content.cloneNode(true));  
+        this.innerHTML = html; 
         
     }
 

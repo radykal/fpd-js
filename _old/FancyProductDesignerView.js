@@ -10,14 +10,7 @@
  */
 var FancyProductDesignerView = function($productStage, view, callback, fabricCanvasOptions) {
 
-	'use strict';
-
-	$ = jQuery;
-
-	fabricCanvasOptions = typeof fabricCanvasOptions === 'undefined' ? {} : fabricCanvasOptions;
-
 		mouseDownStage = false,
-		initialElementsLoaded = false,
 		tempModifiedParameters = null,
 		modifiedType = null,
 		limitModifyParameters = {},

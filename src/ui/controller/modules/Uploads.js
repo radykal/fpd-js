@@ -1,10 +1,11 @@
-import UploadsView from '/src/ui/view/modules/Uploads';
+import '/src/ui/view/modules/Uploads';
 import Modal from '/src/ui/view/comps/Modal';
 import Snackbar from '/src/ui/view/comps/Snackbar';
 import { 
     addEvents, 
     localStorageAvailable, 
     createImgThumbnail, 
+    getItemPrice,
     checkImageDimensions,
     getFileExtension
 } from '/src/helpers/utils';
@@ -27,7 +28,7 @@ export default class UploadsModule extends EventTarget {
         wrapper.append(this.container);
         
         this.gridElem = this.container.querySelector('.fpd-grid');
-        const uploadZone = this.container.querySelector('.fpd-upload-zone');
+        const uploadZone = this.container.querySelector('.fpd-upload-image');
         
         //setup for allowed file types
         this.#allowedFileTypes = fpdInstance.mainOptions.allowedImageTypes;
@@ -190,18 +191,17 @@ export default class UploadsModule extends EventTarget {
         this.#uploadCounter = 0;
         this.#totalUploadFiles = files.length;
         
-        //todo
-    //     for(var i=0; i < fpdInstance.currentViews.length; ++i) {
-    // 
-    //         fpdInstance.getElements(i).forEach(function(elem) {
-    // 
-    //             if(elem.uploadZone) {
-    //                 allUploadZones.push({uz: elem.title, viewIndex: i});
-    //             }
-    // 
-    //         });
-    // 
-    //     }
+        for(var i=0; i < this.fpdInstance.viewInstances.length; ++i) {
+    
+            this.fpdInstance.getElements(i).forEach((elem) => {
+
+                if(elem.uploadZone) {
+                    this.#allUploadZones.push({uz: elem.title, viewIndex: i});
+                }
+    
+            });
+    
+        }
         
         this.fpdInstance.loadingCustomImage = true;        
         Array.from(files).forEach((file, i) => {
@@ -212,7 +212,7 @@ export default class UploadsModule extends EventTarget {
             
         })
         
-        this.container.querySelector('.fpd-upload-zone')
+        this.container.querySelector('.fpd-upload-image')
         .classList.remove('fpd-hover');
     
     }
@@ -515,13 +515,15 @@ export default class UploadsModule extends EventTarget {
     }
     
     #addGridItem(imgUrl, title) {
-        
+                
         const thumbnail = createImgThumbnail({
                 url: imgUrl,
                 title: title,
-                price: this.fpdInstance.formatPrice(this.fpdInstance.mainOptions.customImageParameters.price),
+                price: getItemPrice(this.fpdInstance, this.container),
                 removable: true
-        });
+        });  
+        
+        this.#imageQualityRatings(thumbnail, imgUrl);
         
         this.gridElem.append(thumbnail);
         this.fpdInstance
@@ -599,58 +601,69 @@ export default class UploadsModule extends EventTarget {
     
     }
     
-    //todo
-    #imageQualityRatings($thumbnail, imgUrl) {
+    #imageQualityRatings(thumbnail, imgUrl) {
         
-        const opts = this.fpdInstance.mainOptions.imageQualityRatings;
+        const opts = this.fpdInstance.mainOptions.imageQualityRatings;        
         
         if(opts && typeof opts == 'object') {
     
-            var low = opts.low ? opts.low : null,
+            let low = opts.low ? opts.low : null,
                 mid = opts.mid ? opts.mid : null,
                 high = opts.high ? opts.high : null,
                 icon = 'fpd-icon-star',
                 iconOutline = 'fpd-icon-star-outline';
     
-            var image = new Image();
-            image.onload = function() {
+            const image = new Image();
+            image.onload = () => {
+
+                const ratingsWrapper = document.createElement('div');
+                ratingsWrapper.className = 'fpd-image-quality-ratings';
+                thumbnail.append(ratingsWrapper);
     
-                var $ratingsWrapper = $thumbnail.append('<div class="fpd-image-quality-ratings"></div>').children('.fpd-image-quality-ratings'),
-                    qualityLabel;
-    
+                let qualityLabel;
+                                
                 if(low && low.length == 2) {
-                    var lowIcon = this.width < Number(low[0]) || this.height < Number(low[1]) ? iconOutline : icon;
-                    $ratingsWrapper.append('<span class="'+lowIcon+'"></span>');
+
+                    const lowIcon = image.width < Number(low[0]) || image.height < Number(low[1]) ? iconOutline : icon;
+                    const lowElem = document.createElement('span');
+                    lowElem.className = lowIcon;
+                    ratingsWrapper.append(lowElem);
     
                     if(lowIcon == icon) {
-                        qualityLabel = fpdInstance.getTranslation('misc', 'image_quality_rating_low');
+                        qualityLabel = this.fpdInstance.translator.getTranslation('misc', 'image_quality_rating_low');
                     }
     
                 }
     
                 if(mid && mid.length == 2) {
-                    var midIcon = this.width < Number(mid[0]) || this.height < Number(mid[1]) ? iconOutline : icon;
-                    $ratingsWrapper.append('<span class="'+midIcon+'"></span>');
+
+                    const midIcon = image.width < Number(mid[0]) || image.height < Number(mid[1]) ? iconOutline : icon;
+                    const midElem = document.createElement('span');
+                    midElem.className = midIcon;
+                    ratingsWrapper.append(midElem);
     
                     if(midIcon == icon) {
-                        qualityLabel = fpdInstance.getTranslation('misc', 'image_quality_rating_mid');
+                        qualityLabel = this.fpdInstance.translator.getTranslation('misc', 'image_quality_rating_mid');
                     }
     
                 }
     
                 if(high && high.length == 2) {
-                    var highIcon = this.width < Number(high[0]) || this.height < Number(high[1]) ? iconOutline : icon;
-                    $ratingsWrapper.append('<span class="'+highIcon+'"></span>');
+                    
+                    const highIcon = image.width < Number(high[0]) || image.height < Number(high[1]) ? iconOutline : icon;
+                    const highElem = document.createElement('span');
+                    highElem.className = highIcon;
+                    ratingsWrapper.append(highElem);
     
                     if(highIcon == icon) {
-                        qualityLabel = fpdInstance.getTranslation('misc', 'image_quality_rating_high');
+                        qualityLabel = this.fpdInstance.translator.getTranslation('misc', 'image_quality_rating_high');
                     }
     
     
                 }
     
                 if(qualityLabel) {
-                    $ratingsWrapper.data('quality-label', qualityLabel)
+                    ratingsWrapper.dataset.qualityLabel = qualityLabel;
                 }
     
             }

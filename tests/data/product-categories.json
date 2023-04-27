@@ -330,6 +330,9 @@
                             "uploads": true,
                             "texts": true,
                             "designs": true
+                        },
+                        "customImageParameters": {
+                            "price": 0
                         }
                     },
                     "elements": [
@@ -404,7 +407,6 @@
                                     "texts": true
                                 },
                                 "designCategories": [
-                                    "Love"
                                 ]
                             }
                         },

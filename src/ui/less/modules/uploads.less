@@ -1,21 +1,18 @@
 fpd-module-uploads {
     
-    .fpd-upload-zone {
-        border: 2px dashed @secondaryModuleColor;
-        color: @secondaryModuleTextColor;
-        height: 80px;
+    .fpd-upload-image {
+        
+        border: 2px dashed var(--fpd-border-color);
+        background: var(--fpd-module-secondary-color);
+        color: var(-fpd-module-secondary-text-color);
         position: relative;
         cursor: pointer;
-        border-radius: 5px;
-        margin: 10px;
+        border-radius: var(--fpd-border-radius);
+        margin: var(--fpd-module-content-padding);
+        padding: 10px;
         
         > div {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 100%;
             text-align: center;
-            transform: translateY(-50%);
             
             > span {
                 display: block;
@@ -24,21 +21,15 @@ fpd-module-uploads {
             }
             
             > span:first-child {
-                font-size: 22px;
+                padding-bottom: 5px;
                 margin-bottom: 5px;
+                position: relative;
             }
             
-            > span {
-                opacity: 0.7;
-            }
-            
-            > span:first-child {
-                opacity: 1;
-            }
-            
-            > span.fpd-price {
+            > .fpd-price {
                 font-size: 12px;
-                line-height: 1.3;
+                line-height: 1;
+                margin-top: 10px;
             }
             
         }
@@ -68,25 +59,19 @@ fpd-module-uploads {
             width: 0;
         }
         
-        .fpd-delete {
-            position: absolute;
-            font-size: 18px;
-            top: 3px;
-            left: 5px;
-            cursor: pointer;
-        }
-        
     }
     
     .fpd-image-quality-ratings {
+
         position: absolute;
-        right: 2px;
-        bottom: 2px;
+        left: 5px;
+        top: 5px;
+        line-height: 1;
     
         > span {
-            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
-            color: #fff !important;
-            font-size: 16px;
+            color: var(--fpd-image-quality-start-color);
+            text-shadow: 0px 0px 1px rgba(0, 0, 0, 0.7);
+            font-size: 18px;
         }
     
     }

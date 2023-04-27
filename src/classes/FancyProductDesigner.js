@@ -1367,7 +1367,7 @@ export default class FancyProductDesigner extends EventTarget {
      * @param {number} index The requested view by an index value. 0 will load the first view.
      */
     selectView(index=0) {
-        
+                
         if(this.viewInstances.length <= 0) {return;}
         
         if(this.currentViewInstance && this.currentViewInstance.fabricCanvas)

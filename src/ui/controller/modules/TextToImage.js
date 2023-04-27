@@ -1,4 +1,4 @@
-import TextToImageView from '/src/ui/view/modules/TextToImage';
+import '/src/ui/view/modules/TextToImage';
 
 import { isEmpty } from '/src/helpers/utils';
 

@@ -6,6 +6,17 @@
         box-shadow: none !important;
         background: none;
         padding: 0;
+
+        &.popup {
+            width: 200px;
+            max-width: 200px;
+            padding: 10px;
+            display: flex;
+            min-height: 200px;
+            background: #F6F6F6;
+            margin: 0;
+            transform: translate(-50%, 10px);
+        }
         
         > * {
             margin: 0 0 10px;
@@ -63,8 +74,8 @@
         .picker_editor {
             
             width: auto;
-            flex: 1 1 auto;
-            margin-right: 10px;
+            flex: 0 80%;
+            max-width: 100px;
             
             input {
                 font-size: 16px;
@@ -97,7 +108,8 @@
             
         }
         
-        .picker_done {
+        .picker_done,
+        .picker_arrow {
             display: none;
         }
         

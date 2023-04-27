@@ -1,4 +1,4 @@
-import ViewsWrapperView from '../view/ViewsWrapper.js';
+import '../view/ViewsWrapper.js';
 
 export default class ViewsWrapper extends EventTarget {
     
@@ -14,8 +14,7 @@ export default class ViewsWrapper extends EventTarget {
         else {
             fpdInstance.mainWrapper.container.append(this.container);
         }
-        
-        
+          
     }
 
 }

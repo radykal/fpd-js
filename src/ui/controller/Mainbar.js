@@ -1,5 +1,5 @@
-import MainbarView from '../view/Mainbar.js';
-import UIManager from '../UIManager';
+import '../view/Mainbar.js';
+import '../UIManager';
 import ModuleWrapper from './ModuleWrapper';
 
 import { 
@@ -90,34 +90,6 @@ export default class Mainbar extends EventTarget {
             'viewSelect',
             this.#viewSelected.bind(this)
         )
-                
-        // fpdInstance.$container.on('viewSelect', function() {
-        // 
-        //     if(instance.$selectedModule) {
-        // 
-        //         if(instance.$selectedModule.filter('[data-module="manage-layers"]').length > 0) {
-        //             FPDLayersModule.createList(fpdInstance, instance.$selectedModule);
-        //         }
-        //         else if(instance.$selectedModule.filter('[data-module="text-layers"]').length > 0) {
-        //             FPDTextLayersModule.createList(fpdInstance, instance.$selectedModule);
-        //         }
-        //         //PLUS
-        //         else if(typeof FPDNamesNumbersModule !== 'undefined'
-        //             && instance.$selectedModule.filter('[data-module="names-numbers"]').length > 0) {
-        //             FPDNamesNumbersModule.setup(fpdInstance, instance.$selectedModule);
-        //         }
-        // 
-        //     }
-        // 
-        //     /**
-        //      * Gets fired as soon as the list with the layers has been updated. Is fired when a view is selected or an object has been added/removed.
-        //      *
-        //      * @event FancyProductDesigner#layersListUpdate
-        //      * @param {Event} event
-        //      */
-        //     fpdInstance.$container.trigger('layersListUpdate');
-        // 
-        // });
         
         if(fpdContainer.classList.contains('fpd-off-canvas')) {
             

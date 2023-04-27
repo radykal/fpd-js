@@ -33,11 +33,19 @@
             background-position: center center;
             background-repeat: no-repeat;
         }
+
+        > .fpd-delete {
+            position: absolute;
+            font-size: 18px;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+        }
         
         > .fpd-price {
             position: absolute;
             right: 5px;
-            top: 5px;
+            bottom: 5px;
             background: rgba(0,0,0, 0.7);
             color: #fff;
             font-size: 10px;
@@ -60,12 +68,18 @@
     &.fpd-grid-contain > .fpd-item > picture {
         background-size: contain;
     }
-    
-    &.fpd-photo-grid > .fpd-item > picture {
-        width: ~"calc(100% - 2px)";
-        height: ~"calc(100% - 2px)";
+
+    &.fpd-photo-grid {
+        gap: 6px;
+
+        > .fpd-item > picture {
+            width: 100%;
+            height: 100%;
+            border-radius: var(--fpd-border-radius);
+        }
+
     }
-    
+        
     &.fpd-padding {
         gap: 20px 5px; 
     }

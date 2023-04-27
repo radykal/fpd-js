@@ -1,15 +1,17 @@
-import ImagesView from '/src/ui/view/modules/Images';
+import '/src/ui/view/modules/Images';
 import UploadsModule from './Uploads';
 import FacebookImagesModule from './FacebookImages';
 import InstagramImagesModule from './InstagramImages';
 import PixabayImagesModule from './PixabayImages';
+import QRCodeModule from './QRCode';
 
 import { 
     addEvents, 
     isEmpty, 
     addElemClasses, 
     removeElemClasses,
-    objectGet
+    toggleElemClasses,
+    getItemPrice
 } from '/src/helpers/utils';
 
 export default class ImagesModule extends EventTarget {
@@ -17,7 +19,7 @@ export default class ImagesModule extends EventTarget {
     constructor(fpdInstance, wrapper) {
         
         super();
-        
+                
         this.fpdInstance = fpdInstance;
         
         this.container = document.createElement("fpd-module-images");
@@ -28,7 +30,7 @@ export default class ImagesModule extends EventTarget {
         );
         const tabContents = Array.from(
             this.container.querySelectorAll('.fpd-module-tabs-content > div')
-        );
+        );        
         
         let instaInstance = null,
             pixabayInstance = null;
@@ -84,34 +86,24 @@ export default class ImagesModule extends EventTarget {
             ['viewSelect', 'secondaryModuleCalled'],
             (evt) => {
                                 
-                if(!fpdInstance.currentViewInstance) return;
-                
-                let currentViewOptions = fpdInstance.currentViewInstance.options,
-                    price = null;
-                
-                //get upload zone price
-                if(this.container.parentNode.classList.contains('fpd-upload-zone-content') 
-                    && fpdInstance.currentViewInstance.currentUploadZone
-                ) { 
-                
-                    const uploadZone = fpdInstance.currentViewInstance.fabricCanvas.getUploadZone(
-                                        fpdInstance.currentViewInstance.currentUploadZone
-                                    );
-                                    
-                    if(uploadZone && uploadZone.price) {
-                        price = uploadZone.price;
-                    }
-                
+                const priceStr = getItemPrice(fpdInstance, this.container); 
+                const priceElems = this.container.querySelectorAll('.fpd-price');
+
+                if(priceElems) {
+
+                    //hide prices when empty or 0
+                    toggleElemClasses(
+                        priceElems,
+                        ['fpd-hidden'],
+                        !Boolean(priceStr)
+                    );
+    
+                    priceElems.forEach(elem => {
+                        elem.innerHTML = priceStr;
+                    })
+
                 }
-                
-                const viewImagePrice = objectGet(currentViewOptions, 'customTextParameters.price', 0);
-                if(price == null && viewImagePrice) {
-                    price = viewImagePrice;
-                }
-                                
-                const priceElem = this.container.querySelector('.fpd-upload-zone .fpd-price');
-                if(priceElem)
-                    priceElem.innerHTML = price ? fpdInstance.formatPrice(price) : '';
+                    
                 
             }
         );
@@ -151,6 +143,11 @@ export default class ImagesModule extends EventTarget {
             .classList.remove('fpd-hidden');
             
         }
+
+        new QRCodeModule(
+            fpdInstance,
+            tabContents.find( t => t.dataset.context == 'qr-code' )
+        )
         
         //hide tabs if only one tab is available
         if(tabs.filter( t => !t.classList.contains('fpd-hidden')).length < 2) {
