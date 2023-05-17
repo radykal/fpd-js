@@ -1,5 +1,6 @@
 .fpd-container .fpd-btn,
-.fpd-modal-wrapper .fpd-btn {
+.fpd-modal-inner .fpd-btn {
+
     background: var(--fpd-btn-primary-color);
     color: var(--fpd-btn-primary-text-color);
     cursor: pointer;
@@ -9,7 +10,7 @@
     line-height: 24px;
     margin: 10px 0;
     text-transform: uppercase;
-    border-radius: 2px;
+    border-radius: var(--fpd-btn-border-radius);
     transition: all 200ms ease-out;
     
     &:hover {

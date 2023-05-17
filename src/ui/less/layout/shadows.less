@@ -1,110 +1,105 @@
-/* SHADOWS */
-
 .fpd-shadow-1 {
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
 
 .fpd-shadow-2 {
-  box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .fpd-shadow-3 {
-  box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+	box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
 }
 
 .fpd-shadow-4 {
-  box-shadow: 0 16px 28px 0 rgba(0, 0, 0, 0.22), 0 25px 55px 0 rgba(0, 0, 0, 0.21);
+	box-shadow: 0 16px 28px 0 rgba(0, 0, 0, 0.22), 0 25px 55px 0 rgba(0, 0, 0, 0.21);
 }
 
 .fpd-shadow-5 {
-  box-shadow: 0 27px 24px 0 rgba(0, 0, 0, 0.2), 0 40px 77px 0 rgba(0, 0, 0, 0.22);
+	box-shadow: 0 27px 24px 0 rgba(0, 0, 0, 0.2), 0 40px 77px 0 rgba(0, 0, 0, 0.22);
 }
 
-.fpd-shadow-6:before, .fpd-shadow-6:after {
-  z-index: -1;
-  position: absolute;
-  content: "";
-  bottom: 15px;
-  left: 10px;
-  width: 50%;
-  top: 80%;
-  max-width:300px;
-  background: #777;
-  -webkit-box-shadow: 0 15px 10px #777;
-  box-shadow: 0 15px 10px #777;
-  -webkit-transform: rotate(-3deg);
-  -ms-transform: rotate(-3deg);
-  transform: rotate(-3deg);
-}
+.fpd-shadow-6:before,
 .fpd-shadow-6:after {
-  -webkit-transform: rotate(3deg);
-  -ms-transform: rotate(3deg);
-  transform: rotate(3deg);
-  right: 10px;
-  left: auto;
+	z-index: -1;
+	position: absolute;
+	content: "";
+	bottom: 15px;
+	left: 10px;
+	width: 50%;
+	top: 80%;
+	max-width: 300px;
+	background: #777;
+	box-shadow: 0 15px 10px #777;
+	transform: rotate(-3deg);
+}
+
+.fpd-shadow-6:after {
+	transform: rotate(3deg);
+	right: 10px;
+	left: auto;
 }
 
 .fpd-shadow-7 {
-  	position:relative;
-    box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+	position: relative;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
 }
-.fpd-shadow-7:before, .fpd-shadow-7:after {
-	content:"";
-    position:absolute;
-    z-index:-1;
-    box-shadow:0 0 20px rgba(0,0,0,0.8);
-    top:50%;
-    bottom:0;
-    left:10px;
-    right:10px;
-    border-radius:100px / 10px;
+
+.fpd-shadow-7:before,
+.fpd-shadow-7:after {
+	content: "";
+	position: absolute;
+	z-index: -1;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+	top: 50%;
+	bottom: 0;
+	left: 10px;
+	right: 10px;
+	border-radius: 100px / 10px;
 }
 
 .fpd-shadow-8 {
-  	position:relative;
-    box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+	position: relative;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
 }
 
-.fpd-shadow-8:before, .fpd-shadow-8:after {
-	content:"";
-    position:absolute;
-    z-index:-1;
-    box-shadow:0 0 20px rgba(0,0,0,0.8);
-    top:0;
-    bottom:0;
-    left:10px;
-    right:10px;
-    border-radius:100px / 10px;
+.fpd-shadow-8:before,
+.fpd-shadow-8:after {
+	content: "";
+	position: absolute;
+	z-index: -1;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+	top: 0;
+	bottom: 0;
+	left: 10px;
+	right: 10px;
+	border-radius: 100px / 10px;
 }
 
-.fpd-shadow-8:after
-{
-	right:10px;
-    left:auto;
-    -webkit-transform:skew(8deg) rotate(3deg);
-        -ms-transform:skew(8deg) rotate(3deg);
-            transform:skew(8deg) rotate(3deg);
+.fpd-shadow-8:after {
+	right: 10px;
+	left: auto;
+	transform: skew(8deg) rotate(3deg);
 }
 
 .fpd-shadow-9 {
-    box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
 }
 
-.fpd-shadow-9:before, .fpd-shadow-9:after {
-	content:"";
-    position:absolute;
-    z-index:-1;
-    box-shadow:0 0 20px rgba(0,0,0,0.8);
-    top:10px;
-    bottom:10px;
-    left:0;
-    right:0;
-    border-radius:100px / 10px;
-}
+.fpd-shadow-9:before,
 .fpd-shadow-9:after {
-	right:10px;
-    left:auto;
-    -webkit-transform:skew(8deg) rotate(3deg);
-        -ms-transform:skew(8deg) rotate(3deg);
-            transform:skew(8deg) rotate(3deg);
+	content: "";
+	position: absolute;
+	z-index: -1;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+	top: 10px;
+	bottom: 10px;
+	left: 0;
+	right: 0;
+	border-radius: 100px / 10px;
+}
+
+.fpd-shadow-9:after {
+	right: 10px;
+	left: auto;
+	transform: skew(8deg) rotate(3deg);
 }

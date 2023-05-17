@@ -1,10 +1,5 @@
 var FPDPricingRules = function($elem, fpdInstance) {
 
-	'use strict';
-
-	$ = jQuery;
-
-	// @@include('../../envato/evilDomain.js')
 
 	var instance = this,
 		unitFormat = fpdInstance.mainOptions.dynamicViewsOptions ? fpdInstance.mainOptions.dynamicViewsOptions.unit : 'mm';

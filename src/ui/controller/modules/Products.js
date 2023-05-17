@@ -1,8 +1,7 @@
-import ProductsView from '/src/ui/view/modules/Products';
+import '/src/ui/view/modules/Products';
 import Modal from '/src/ui/view/comps/Modal';
 import { 
-    addEvents,
-    loadGridImage 
+    addEvents
 } from '/src/helpers/utils';
 
 export default class ProductsModule extends EventTarget {

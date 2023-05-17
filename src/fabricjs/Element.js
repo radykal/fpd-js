@@ -1,5 +1,4 @@
 import './objects/Controls';
-import './objects/Image';
 import './objects/Group';
 import './objects/Text';
 import './objects/IText';
@@ -9,7 +8,7 @@ import {
     removeUrlParams
 } from '/src/helpers/utils';
 
-fabric.Object.propertiesToInclude = ['_isInitial', 'lockMovementX', 'lockMovementY', 'lockRotation', 'lockScalingX', 'lockScalingY', 'lockScalingFlip', 'lockUniScaling', 'resizeType', 'clipTo', 'clippingRect', 'boundingBox', 'boundingBoxMode', 'selectable', 'evented', 'title', 'editable', 'cornerColor', 'cornerIconColor', 'borderColor', 'isEditable', 'hasUploadZone', 'cornerSize'];
+fabric.Object.propertiesToInclude = ['_isInitial', 'lockMovementX', 'lockMovementY', 'lockRotation', 'lockScalingX', 'lockScalingY', 'lockScalingFlip', 'lockUniScaling', 'resizeType', 'boundingBox', 'boundingBoxMode', 'selectable', 'evented', 'title', 'editable', 'cornerColor', 'cornerIconColor', 'borderColor', 'isEditable', 'hasUploadZone', 'cornerSize'];
 
 fabric.Object.prototype.initialize = (function(originalFn) {
     return function(...args) {
@@ -50,7 +49,7 @@ fabric.Object.prototype._elementInit = function() {
             if(this.textBox)
                 widthControls = true;
             
-            if(this.canvas.viewOptions.cornerControlsStyle == 'basic') {
+            if(this.canvas && this.canvas.viewOptions.cornerControlsStyle == 'basic') {
                 this.controls.mtr.offsetX = 0;
                 this.cornerSize = 16;
             }
@@ -219,7 +218,7 @@ fabric.Object.prototype.changeColor = function (colorData, colorLinking=true) {
             
             this.applyFilters();
             this.canvas.renderAll();
-            this.canvas.fire('elementColorChange', { target: this, colorLinking: colorLinking});
+            this.canvas.fire('elementColorChange', { element: this, colorLinking: colorLinking});
             this.fill = colorData;
     
         }
@@ -228,7 +227,7 @@ fabric.Object.prototype.changeColor = function (colorData, colorLinking=true) {
             
             this.set('fill', colorData);
             this.canvas.renderAll();
-            this.canvas.fire('elementColorChange', { target: this, colorLinking: colorLinking });
+            this.canvas.fire('elementColorChange', { element: this, colorLinking: colorLinking });
     
         }
     
@@ -314,71 +313,6 @@ fabric.Object.prototype.getZIndex = function() {
 }
 
 /**
- * Returns the bounding box of an element.
- *
- * @method getBoundingBoxCoords
- * @param {fabric.Object} element A fabric object
- * @return {Object | Boolean} The bounding box object with x,y,width and height or false.
- */
-fabric.Object.prototype.getBoundingBoxCoords = function() {
-
-    if(this.boundingBox || this.uploadZone) {
-
-        if(typeof this.boundingBox == "object") {
-
-
-            if( this.boundingBox.hasOwnProperty('x') &&
-                this.boundingBox.hasOwnProperty('y') &&
-                this.boundingBox.width &&
-                this.boundingBox.height
-            ) {
-                return {
-                    left: this.boundingBox.x,
-                    top: this.boundingBox.y,
-                    width: this.boundingBox.width,
-                    height: this.boundingBox.height
-                };
-            }
-            else {
-                return false;
-            }
-
-        }
-        else {
-
-            var objects = this.canvas.getObjects();
-
-            for(var i=0; i < objects.length; ++i) {
-
-                //get all layers from first view
-                var object = objects[i];
-                if(this.boundingBox == object.title) {
-
-                    var topLeftPoint = object.getPointByOrigin('left', 'top');
-
-                    return {
-                        left: topLeftPoint.x,
-                        top: topLeftPoint.y,
-                        width: object.width * object.scaleX,
-                        height: object.height * object.scaleY,
-                        angle: object.angle || 0,
-                        cp: object.getCenterPoint()
-                    };
-
-                    break;
-                }
-
-            }
-
-        }
-
-    }
-
-    return false;
-
-}
-
-/**
  * Centers an element horizontal or/and vertical.
  *
  * @method centerElement
@@ -426,7 +360,7 @@ fabric.Object.prototype.centerElement = function(hCenter=true, vCenter=true) {
 //checks if an element is in its containment (bounding box)
 fabric.Object.prototype._checkContainment = function() {
     
-    if(this.canvas.currentBoundingObject && !this.hasUploadZone) {
+    if(this.canvas && this.canvas.currentBoundingObject && !this.hasUploadZone) {
 
         this.setCoords();
 
@@ -541,31 +475,132 @@ fabric.Object.prototype._checkContainment = function() {
 
     }
 
-    this.canvas.renderAll();
+}
+
+/**
+ * Returns the bounding box of an element.
+ *
+ * @method getBoundingBoxCoords
+ * @param {fabric.Object} element A fabric object
+ * @return {Object | Boolean} The bounding box object with x,y,width and height or false.
+ */
+fabric.Object.prototype.getBoundingBoxCoords = function() {
+
+    if(this.boundingBox || this.uploadZone) {
+
+        if(typeof this.boundingBox == "object") {
+
+
+            if( this.boundingBox.hasOwnProperty('x') &&
+                this.boundingBox.hasOwnProperty('y') &&
+                this.boundingBox.width &&
+                this.boundingBox.height
+            ) {
+                return {
+                    left: this.boundingBox.x,
+                    top: this.boundingBox.y,
+                    width: this.boundingBox.width,
+                    height: this.boundingBox.height
+                };
+            }
+            else {
+                return false;
+            }
+
+        }
+        else {
+
+            const targetObject = this.canvas.getElementByTitle(this.boundingBox);
+
+            if(targetObject) {
+                
+                const topLeftPoint = targetObject.getPointByOrigin('left', 'top');
+                return {
+                    left: topLeftPoint.x,
+                    top: topLeftPoint.y,
+                    width: targetObject.width * targetObject.scaleX,
+                    height: targetObject.height * targetObject.scaleY,
+                    angle: targetObject.angle || 0,
+                    cp: targetObject.getCenterPoint()
+                };
+
+            }
+
+        }
+
+    }
+
+    return false;
 
 }
 
-//defines the clipping area
+fabric.Object.prototype.getClippingObject = function() {
+
+    if(this.boundingBox || this.uploadZone) {
+
+        if(typeof this.boundingBox == "object") {
+            return this.getBoundingBoxCoords();
+        }
+        else {
+
+            const targetObject = this.canvas.getElementByTitle(this.boundingBox);
+
+            if(targetObject) {
+
+                if(targetObject.type == 'image') {
+                    return this.getBoundingBoxCoords();
+                }
+                else {
+                    return targetObject;
+                }
+                
+            }
+
+        }
+
+    }
+
+    return false;
+
+}
+
 fabric.Object.prototype._clipElement = function() {
+    
+    var clippingObj = this.getClippingObject();
 
-    var bbCoords = this.getBoundingBoxCoords() || this.clippingRect;
-    if(bbCoords) {
+    if(clippingObj) {
+        
+        if(clippingObj.type) {
+            
+            clippingObj.clone((clonedPath) => {
+                
+                clonedPath.set({
+                    absolutePositioned: true,
+                    opacity: 1,
+                })
+                
+                this.clipPath = clonedPath;
+                
+            })
 
-        this.clippingRect = bbCoords;
+        }
+        else {
 
-        const clipRect = new fabric.Rect({
-            originX: 'left',
-            originY: 'top',
-            angle: bbCoords.angle || 0,
-            left: bbCoords.left,
-            top: bbCoords.top,
-            width: bbCoords.width,
-            height: bbCoords.height,
-            fill: '#DDD',
-            absolutePositioned: true,
-        });
+            const clipRect = new fabric.Rect({
+                originX: 'left',
+                originY: 'top',
+                angle: clippingObj.angle || 0,
+                left: clippingObj.left,
+                top: clippingObj.top,
+                width: clippingObj.width,
+                height: clippingObj.height,
+                fill: '#DDD',
+                absolutePositioned: true,
+            });
 
-        this.clipPath = clipRect;
+            this.clipPath = clipRect;
+
+        }
 
     }
 
@@ -609,7 +644,6 @@ fabric.Object.prototype.getElementJSON = function(addPropertiesToInclude=false, 
     propertyKeys.push('height');
     propertyKeys.push('isEditable');
     propertyKeys.push('hasUploadZone');
-    propertyKeys.push('clippingRect');
     propertyKeys.push('evented');
     propertyKeys.push('isCustom');
     propertyKeys.push('currentColorPrice');

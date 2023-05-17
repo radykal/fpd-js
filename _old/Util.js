@@ -5,22 +5,7 @@
  * @class FPDUtil
  */
 var FPDUtil =  {	
-
-	/**
-	 * If pop-up blocker is enabled, the user will get a notification modal.
-	 *
-	 * @method popupBlockerAlert
-	 * @param {window} popup The target popup window.
-	 * @static
-	 */
-	popupBlockerAlert : function(popup, fpdInstance) {
-
-		if (popup == null || typeof(popup)=='undefined') {
-			FPDUtil.showModal(fpdInstance.getTranslation('misc', 'popup_blocker_alert'));
-		}
-
-	},
-
+	
 	/**
 	 * Adds a thousand separator and returns it.
 	 *
@@ -116,26 +101,6 @@ var FPDUtil =  {
 		}
 
 	},
-
-    setItemPrice: function($item, fpdInstance) {
-
-	    if(!fpdInstance.currentViewInstance)
-	    	return;
-
-	    var currentViewOptions = fpdInstance.currentViewInstance.options,
-	    	price = null;
-
-	    if(fpdInstance.currentViewInstance && fpdInstance.currentViewInstance.currentUploadZone
-			&& $item.parents('.fpd-upload-zone-adds-panel').length > 0) {
-
-			var uploadZone = fpdInstance.currentViewInstance.getUploadZone(fpdInstance.currentViewInstance.currentUploadZone);
-			if(uploadZone && uploadZone.price) {
-				price = uploadZone.price;
-			}
-
-		}
-
-    },
 
     //smartphone (not tablets)
     isMobile : function() {

@@ -4,6 +4,9 @@ import DesignsModule from './modules/Designs';
 import TextToImageModule from './modules/TextToImage';
 import ImagesModule from './modules/Images';
 import LayersModule from './modules/Layers';
+import SaveLoadModule from './modules/SaveLoad';
+import TextLayersModule from './modules/TextLayers';
+import LayoutsModule from './modules/Layouts';
 
 import { isEmpty } from '/src/helpers/utils';
 
@@ -65,14 +68,21 @@ export default class ModuleWrapper extends EventTarget {
         else if(moduleKey === 'manage-layers') {
             moduleInstance = new LayersModule(fpdInstance, wrapper);
         }
-        // else if(moduleKey === 'layouts') {
-        //     moduleInstance = new FPDLayoutsModule(this.fpdInstance, $moduleClone);
-        // }
+        else if(moduleKey === 'save-load') {
+            moduleInstance = new SaveLoadModule(fpdInstance, wrapper);            
+        }
+        else if(moduleKey === 'text-layers') {
+            moduleInstance = new TextLayersModule(fpdInstance, wrapper);            
+        }
+        else if(moduleKey === 'layouts') {
+            moduleInstance = new LayoutsModule(fpdInstance, wrapper);
+        }
         // else if(moduleKey === 'drawing') {
         //     moduleInstance = new FPDDrawingModule(this.fpdInstance, $moduleClone);
         // }
 
         //additional custom modules: add your own modules
+        //example: FancyProductDesigner.additionalModules = {'module-key': ModuleClass}
         if(FancyProductDesigner.additionalModules && !moduleInstance) {
 
             const ClassModule = FancyProductDesigner.additionalModules[moduleKey];            

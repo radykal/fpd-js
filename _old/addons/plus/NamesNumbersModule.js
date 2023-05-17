@@ -4,8 +4,6 @@ var FPDNamesNumbersModule = {
 
 		var $lastSelectedRow = null;
 
-		$module.off().find('.fpd-list').empty();
-
 		var _setPlaceholderText = function(number, name) {
 
 			if(fpdInstance.currentViewInstance.numberPlaceholder && typeof number == 'string') {

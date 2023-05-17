@@ -1,38 +1,50 @@
-import DropdownHTML from '/src/ui/html/comps/dropdown.html';
+import html from '/src/ui/html/comps/dropdown.html';
 
 class FPD_Dropdown extends HTMLElement {
     
     placeholder = '';
     value = '';
     searchable = false;
+    inputElem = null;
+    listElem = null;
     
     constructor() {
         
         super();
-        this.innerHTML = DropdownHTML;
-        
+    
     }
     
     connectedCallback() {
+
+        this.innerHTML = html;
+        this.inputElem = this.querySelector('input.fpd-dropdown-current');
+        this.listElem = this.querySelector('.fpd-dropdown-list');
         
         this.addEventListener('click', () => {
+
+            this.#updatePosition();
             this.classList.toggle('fpd-active');
+            
+
         });
         
         this.querySelector('.fpd-dropdown-arrow').addEventListener('click', (evt) => {
             
             evt.stopPropagation();
+            this.#updatePosition();
             this.classList.toggle('fpd-active');
             
-        });
+            
+        });        
         
-        this.querySelector('input.fpd-dropdown-current')
+        this.inputElem
         .addEventListener('keyup', (evt) => {
             
             if(this.searchable) {
                 
                 const searchStr = evt.currentTarget.value;
-                this.querySelectorAll('.fpd-dropdown-list .fpd-item').forEach((item) => {
+                
+                this.listElem.querySelectorAll('.fpd-item').forEach((item) => {
                     
                     if(searchStr.length == 0) {
                         item.classList.remove('fpd-hidden');
@@ -48,6 +60,28 @@ class FPD_Dropdown extends HTMLElement {
             }
             
         })
+
+        window.addEventListener('scroll', () => {
+            this.#updatePosition();
+        })
+
+        const anyParentScrolled = (elem) => {
+
+            var parentElem = elem.parentNode;
+
+            if(parentElem) {
+
+                elem.addEventListener('scroll', () => {
+                    this.#updatePosition();
+                })
+                anyParentScrolled(parentElem);
+                
+            }
+        }
+        anyParentScrolled(this)
+
+        this.inputElem.setAttribute('placeholder', this.getAttribute('placeholder') || '');
+        this.#updatePosition();
         
     }
     
@@ -60,21 +94,40 @@ class FPD_Dropdown extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
         
         if (oldValue !== newValue) {
+                        
+            if(this.inputElem) {
+
+                if(name === 'placeholder') {
+
+                    this.inputElem.setAttribute('placeholder', newValue);
+
+                }
+                else if(name === 'value') {
+
+                    this.inputElem.value = newValue;
+
+                }
+
+            }
             
-            if(name === 'placeholder') {
-                this.querySelector('input.fpd-dropdown-current')
-                .setAttribute('placeholder', newValue);
-            }
-            else if(name === 'value') {
-                this.querySelector('input.fpd-dropdown-current')
-                .value = newValue;
-            }
-            else if(name === 'searchable') {
+            if(name === 'searchable') {
+
                 this.searchable = this.hasAttribute('searchable');
+                
             }
             
         }
         
+    }
+
+    #updatePosition() {
+
+        const bounding = this.getBoundingClientRect();
+
+        this.listElem.style.width = bounding.width+'px';
+        this.listElem.style.left = bounding.left+'px';
+        this.listElem.style.top = (bounding.top+bounding.height)+'px';
+
     }
 
 }

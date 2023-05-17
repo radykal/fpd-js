@@ -2,8 +2,11 @@ import '/src/fabricjs/Canvas';
 import Modal from '/src/ui/view/comps/Modal';
 
 import { 
-    deepMerge
+    deepMerge,
+    objectHasKeys
 } from '/src/helpers/utils';
+
+import { parseFontsToEmbed } from '/src/helpers/fonts-loader';
 
 /**
  * Creates a new FancyProductDesigner.
@@ -56,7 +59,10 @@ export default class FancyProductDesignerView extends EventTarget {
         'boundingBoxProps',
         'highlightEditableObjects',
         'multiSelection',
-        'multiSelectionColor'
+        'multiSelectionColor',
+        'mobileGesturesBehaviour',
+        'smartGuides',
+        'snapGridSize'
     ];
     
     /**
@@ -101,6 +107,9 @@ export default class FancyProductDesignerView extends EventTarget {
         this.thumbnail = viewData.thumbnail;
         this.options = viewData.options;
         
+        fabric.Canvas.prototype.snapGridSize = this.options.snapGridSize;
+        fabric.Canvas.prototype.snapToObjects = this.options.smartGuides;
+        
         const selectedColor = this.options.selectedColor;
         fabric.Object.prototype.borderColor = selectedColor;
         fabric.Object.prototype.cornerColor = selectedColor;
@@ -116,7 +125,7 @@ export default class FancyProductDesignerView extends EventTarget {
             centeredScaling: true,
             allowTouchScrolling: true,
             preserveObjectStacking: true
-        }, fabricCanvasOptions);
+        }, fabricCanvasOptions);        
         
         this.fabricOptions = fabricCanvasOptions;
         
@@ -181,83 +190,7 @@ export default class FancyProductDesignerView extends EventTarget {
     
     #afterSetup() {
 
-        this.onCreatedCallback(this);
-
-        let modifiedType = null;
-        this.fabricCanvas.on({
-            'mouse:up': (opts) => {
-                
-                //todo
-                //$productStage.siblings('.fpd-snap-line-v, .fpd-snap-line-h').hide();
-    
-            },
-            'object:moving': opts => {
-    
-                modifiedType = 'moving';
-    
-                if(!opts.target.lockMovementX || !opts.target.lockMovementY) {
-    
-                    //todo
-                    //_snapToGrid(opts.target);
-    
-                    if(this.options.smartGuides) {
-                        //todo
-                        //_smartGuides(opts.target);
-                    }
-    
-                }
-    
-            },
-            'object:modified': opts => {
-                
-                //todo: add these lines in canvas if possible
-                const element = opts.target;
-    
-                if(modifiedType !== null) {
-    
-                    let modifiedParameters = {};
-    
-                    switch(modifiedType) {
-                        case 'moving':
-                            modifiedParameters.left = Number(element.left);
-                            modifiedParameters.top = Number(element.top);
-                        break;
-                        case 'scaling':
-                            if(element.getType() === 'text' && element.type !== 'curvedText' && !element.uniScalingUnlockable) {
-                                modifiedParameters.fontSize = parseInt(element.fontSize);
-                            }
-                            else {
-                                modifiedParameters.scaleX = parseFloat(element.scaleX);
-                                modifiedParameters.scaleY = parseFloat(element.scaleY);
-                            }
-                        break;
-                        case 'rotating':
-                            modifiedParameters.angle = element.angle;
-                        break;
-                    }
-    
-                    /**
-                     * Gets fired when an element is modified.
-                     *
-                     * @event FancyProductDesignerView#elementModify
-                     * @param {Event} event
-                     * @param {fabric.Object} element - The fabricJS object.
-                     * @param {Object} modifiedParameters - The modified parameters.
-                     */                    
-                    this.dispatchEvent(
-                        new CustomEvent('elementModify', {
-                            detail: {
-                                element: element,
-                                properties: modifiedParameters
-                            }
-                        })
-                    );
-                }
-    
-                modifiedType = null;
-    
-            }
-        });    
+        this.onCreatedCallback(this);  
         
         this.dispatchEvent(
             new CustomEvent('priceChange', {
@@ -269,6 +202,225 @@ export default class FancyProductDesignerView extends EventTarget {
         );
     
     }
+
+    /**
+	 * Creates a data URL of the view.
+	 *
+	 * @method toDataURL
+	 * @param {Function} callback A function that will be called when the data URL is created. The function receives the data URL.
+	 * @param {String} [backgroundColor=transparent] The background color as hexadecimal value. For 'png' you can also use 'transparent'.
+	 * @param {Object} [options] See fabricjs documentation http://fabricjs.com/docs/fabric.Canvas.html#toDataURL.
+	 * @param {Boolean} [options.onlyExportable=false] If true elements with excludeFromExport=true are not exported in the image.
+	 * @param {fabric.Image} [watermarkImg=null] A fabricJS image that includes the watermark image.
+	 * @param {Boolean} [deselectElement=true] Deselect current selected element.
+	 */
+	toDataURL(callback, backgroundColor='transparent', options={}, watermarkImg=null, deselectElement=true) {
+
+		callback = callback === undefined ? function() {} : callback;
+		options.onlyExportable = options.onlyExportable === undefined ? false : options.onlyExportable;
+		options.multiplier = options.multiplier === undefined ? 1 : options.multiplier;
+		options.enableRetinaScaling = options.enableRetinaScaling === undefined ? false : options.enableRetinaScaling;
+
+		let hiddenObjs = [],
+			tempHighlightEditableObjects = this.options.highlightEditableObjects;
+
+		this.options.highlightEditableObjects = 'transparent';
+		this.fabricCanvas.getObjects().forEach((obj) => {
+
+			if(obj.excludeFromExport && options.onlyExportable) {
+
+				obj.visible = false;
+				hiddenObjs.push(obj);
+
+			}
+
+		});
+
+		if(deselectElement) {
+			this.fabricCanvas.deselectElement();
+		}
+
+		let tempDevicePixelRatio = fabric.devicePixelRatio;
+		fabric.devicePixelRatio = 1;
+
+		this.fabricCanvas.setDimensions({width: this.options.stageWidth, height: this.options.stageHeight}).setZoom(1);
+
+		//scale view mask to multiplier
+        //todo
+		// if(this.fabricCanvas.maskObject && this.fabricCanvas.maskObject._originParams) {
+		// 	instance.maskObject.left = instance.maskObject._originParams.left * options.multiplier;
+		// 	instance.maskObject.top = instance.maskObject._originParams.top * options.multiplier;
+		// 	instance.maskObject.scaleX = instance.maskObject._originParams.scaleX * options.multiplier;
+		// 	instance.maskObject.scaleY = instance.maskObject._originParams.scaleY * options.multiplier;
+		// 	instance.maskObject.setCoords();
+		// }
+
+		this.fabricCanvas.setBackgroundColor(backgroundColor, () => {
+
+			if(watermarkImg) {
+				this.fabricCanvas.add(watermarkImg);
+				watermarkImg.center();
+				watermarkImg.bringToFront();
+			}
+
+			//get data url
+			callback(this.fabricCanvas.toDataURL(options));
+
+			if(watermarkImg) {
+				this.fabricCanvas.remove(watermarkImg);
+			}
+
+			if(this.fabricCanvas.wrapperEl.offsetParent) {
+				this.fabricCanvas.resetSize();
+			}
+
+			this.fabricCanvas.setBackgroundColor('transparent', () => {
+				this.fabricCanvas.renderAll();
+			});
+
+			for(var i=0; i<hiddenObjs.length; ++i) {
+				hiddenObjs[i].visible = true;
+			}
+
+			this.fabricCanvas.renderAll();
+
+			fabric.devicePixelRatio = tempDevicePixelRatio;
+			this.options.highlightEditableObjects = tempHighlightEditableObjects;
+
+		});
+
+	}
+
+    /**
+	 * Returns the view as SVG.
+	 *
+	 * @method toSVG
+	 * @param {Object} options See fabricjs documentation http://fabricjs.com/docs/fabric.Canvas.html#toSVG
+	 * @param {Function} reviver See fabricjs documentation http://fabricjs.com/docs/fabric.Canvas.html#toSVG
+	 * @param {Boolean} respectPrintingBox Only generate SVG from printing box
+	 * @param {fabric.Image} [watermarkImg=null] A fabricJS image that includes the watermark image.
+	 * @param {Array} [fontsToEmbed=[]] Aan array containing fonts to embed in the SVG. You can use <a href="https://jquerydoc.fancyproductdesigner.com/classes/FancyProductDesigner.html#method_getUsedColors" target="_blank">getUsedFonts method</a>
+	 * @return {String} A XML representing a SVG.
+	 */
+	toSVG(options={}, reviver, respectPrintingBox=false, watermarkImg=null, fontsToEmbed=[]) {
+
+		let svg;
+
+        this.fabricCanvas.deselectElement();
+        
+		if(respectPrintingBox && objectHasKeys(this.options.printingBox, ['left','top','width','height'])) {
+
+			let offsetX = 0,
+				offsetY = 0;
+
+			if(objectHasKeys(this.options.output, ['bleed', 'width', 'height'])) {
+				offsetX = (this.options.output.bleed / this.options.output.width) * this.options.printingBox.width,
+				offsetY = (this.options.output.bleed / this.options.output.height) * this.options.printingBox.height;
+			}
+
+			options.viewBox = {
+				x: this.options.printingBox.left - offsetX,
+				y: this.options.printingBox.top - offsetY,
+				width: this.options.printingBox.width + (offsetX * 2),
+				height: this.options.printingBox.height  + (offsetY * 2)
+			};
+
+			this.fabricCanvas.setDimensions({
+                width: this.options.printingBox.width, 
+                height: this.options.printingBox.height
+            })
+            .setZoom(1);
+		}
+		else {
+
+			this.fabricCanvas.setDimensions({
+                width: this.options.stageWidth, 
+                height: this.options.stageHeight
+            }).setZoom(1);
+
+		}
+
+		//remove background, otherwise unneeeded rect is added in the svg
+		let tempCanvasBackground = this.fabricCanvas['backgroundColor'];
+		if(tempCanvasBackground == 'transparent') {
+			this.fabricCanvas['backgroundColor'] = false;
+		}
+
+		if(watermarkImg) {
+			this.fabricCanvas.add(watermarkImg);
+			watermarkImg.center();
+			watermarkImg.bringToFront();
+		}
+
+		svg = this.fabricCanvas.toSVG(options, reviver);
+
+		if(watermarkImg) {
+			this.fabricCanvas.remove(watermarkImg);
+		}
+
+		this.fabricCanvas['backgroundColor'] = tempCanvasBackground;
+
+        if(this.fabricCanvas.wrapperEl.offsetParent) {
+            this.fabricCanvas.resetSize();
+        }
+
+        const tempSVG = document.createElement('div');
+        tempSVG.innerHTML = svg;
+
+        const defsTag = tempSVG.querySelector('defs');
+
+        const clipPaths = tempSVG.querySelectorAll('clipPath');
+        // Move each clipPath to the defs element
+        clipPaths.forEach(clipPath => {
+            defsTag.appendChild(clipPath);
+        });
+
+        const styleTag = document.createElement('style');
+
+        let googleFontsUrl = '',
+            customFontsStr = '';
+
+        fontsToEmbed.forEach((fontItem) => {
+
+            if(fontItem.hasOwnProperty('url')) {
+
+                if(fontItem.url == 'google') {
+                    googleFontsUrl += fontItem.name.replace(/\s/g, "+") + ':ital,wght@0,400;0,700;1,700&';
+                }
+                else {
+                    customFontsStr += parseFontsToEmbed(fontItem);
+                }
+
+            }
+        })
+
+        if(googleFontsUrl.length > 0) {
+
+            styleTag.insertAdjacentHTML(
+                'beforeend', 
+                '@import url("https://fonts.googleapis.com/css2?family='+googleFontsUrl.replace(/&/g, "&amp;")+'display=swap");'
+            )
+        }
+
+        if(customFontsStr.length > 0) {
+
+            styleTag.insertAdjacentHTML(
+                'beforeend', 
+                customFontsStr
+            )
+        }
+
+        defsTag.appendChild(styleTag);
+
+        let svgString = tempSVG.innerHTML;
+
+		svgString = svgString
+			//replace all newlines
+			.replace(/(?:\r\n|\r|\n)/g, '')
+
+		return svgString;
+
+	}
     
 }
 

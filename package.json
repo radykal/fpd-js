@@ -31,6 +31,7 @@
     "gulp-babel": "^8.0.0",
     "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.1",
+    "gulp-file": "^0.4.0",
     "gulp-less": "^5.0.0",
     "gulp-sourcemaps": "^3.0.0",
     "gulp-uglify": "^3.0.2",
@@ -42,6 +43,7 @@
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.11.1",
-    "webpack-stream": "^7.0.0"
+    "webpack-stream": "^7.0.0",
+    "yargs": "^17.7.2"
   }
 }

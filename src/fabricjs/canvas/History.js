@@ -133,7 +133,7 @@ fabric.Canvas.prototype._loadHistory = function (history, event, callback) {
         that.renderAll();
         that.fire(event);
         that.historyProcessing = false;
-
+        
         if (callback && typeof callback === 'function')
             callback();
     });

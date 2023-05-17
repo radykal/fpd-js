@@ -94,39 +94,3 @@ fabric.IText.prototype.setCurvedTextPosition = function() {
     }
 
 }
-
-
-// fabric.IText.prototype.setCurvedTextPathScale = function() {
-
-//     if(this.curved && this.path) {
-//         this.path.set({
-//             scaleX: this.scaleX,
-//             scaleY: this.scaleY
-//         });
-//         this.scaleX = 1;
-//         this.scaleY = 1;
-
-//         this.path.set(
-//             'path', 
-//             fabric.util.transformPath(this.path.path, this.path.calcTransformMatrix())
-//         );
-
-//         const dims = this.path._calcDimensions();        
-//         this.path.set({
-//             width: dims.width,
-//             height: dims.height,
-//             pathOffset: {
-//                 x: dims.width / 2 + dims.left,
-//                 y: dims.height / 2 + dims.top
-//             },
-//             dirty: true,
-//             scaleX: 1,
-//             scaleY: 1,
-//             angle: 0
-//         });
-//         this.path.setCoords();
-//         this.set('path', this.path);
-        
-//     }
-
-// }

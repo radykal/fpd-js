@@ -1,6 +1,8 @@
 import './Element';
 import './canvas/History';
-import './canvas/ZoomPan';
+import ZoomPan from './canvas/ZoomPan';
+import Snap from './canvas/Snap';
+import Ruler from './canvas/Ruler';
 
 import {
     deepMerge,
@@ -10,8 +12,7 @@ import {
     isEmpty
 } from '/src/helpers/utils';
 import {
-    getScalingByDimesions,
-    drawCirclePath
+    getScaleByDimesions
 } from './utils.js';
 
 
@@ -27,14 +28,34 @@ fabric.Canvas.prototype._canvasCreated = false;
 fabric.Canvas.prototype.currentCurvedTextPath = false;
 
 fabric.Canvas.prototype.initialize = (function (originalFn) {
+
     return function (...args) {
         originalFn.call(this, ...args);
         this._fpdCanvasInit();
         return this;
     };
+
 })(fabric.Canvas.prototype.initialize);
 
-fabric.Canvas.prototype._fpdCanvasInit = function () {
+fabric.Canvas.prototype._onTouchStart = (function (originalFn) {
+    return function (e) {
+
+        const target = this.findTarget(e); 
+        
+        if (this.allowTouchScrolling && !target && !this.isDrawingMode) { 
+            return; 
+        } 
+
+        originalFn.call(this, e);
+        
+    };
+})(fabric.Canvas.prototype._onTouchStart);
+
+fabric.Canvas.prototype._fpdCanvasInit = function () {    
+
+    if(this.containerClass.includes('fpd-hidden-canvas')) return;
+
+    let modifiedType = null;    
 
     this.on({
         'after:render': () => {
@@ -42,7 +63,7 @@ fabric.Canvas.prototype._fpdCanvasInit = function () {
             if (!this._canvasCreated) {
                 this._onCreated();
             }
-
+            
             if (this.viewOptions && this.viewOptions.highlightEditableObjects.length > 3) {
 
                 this.contextContainer.strokeStyle = this.viewOptions.highlightEditableObjects;
@@ -69,15 +90,17 @@ fabric.Canvas.prototype._fpdCanvasInit = function () {
 
                 });
 
-            }
+            }            
 
         },
         'object:added': ({ target }) => {
-
-            this._bringToppedElementsToFront();
+            
+            this._bringToppedElementsToFront();            
 
         },
         'object:moving': ({ target }) => {
+
+            modifiedType = 'moving';
 
             /**
              * Gets fired as soon as an element is selected.
@@ -91,12 +114,53 @@ fabric.Canvas.prototype._fpdCanvasInit = function () {
         },
         'object:rotating': ({ target }) => {
 
+            modifiedType = 'rotating';
+
             this.fire('elementChange', { type: 'rotating', element: target })
 
         },
         'object:scaling': ({ target }) => {
 
+            modifiedType = 'scaling';
+
             this.fire('elementChange', { type: 'scaling', element: target })
+
+        },
+        'object:modified': ({target}) => {
+            
+            const element = target;
+            
+            if(modifiedType !== null) {
+
+                let modifiedProps = {};
+
+                switch(modifiedType) {
+                    case 'moving':
+                        modifiedProps.left = Number(element.left);
+                        modifiedProps.top = Number(element.top);
+                    break;
+                    case 'scaling':
+                        if(element.getType() === 'text' 
+                            && !element.curved 
+                            && !element.uniScalingUnlockable
+                        ) {
+                            modifiedProps.fontSize = parseInt(element.fontSize);
+                        }
+                        else {
+                            modifiedProps.scaleX = parseFloat(element.scaleX);
+                            modifiedProps.scaleY = parseFloat(element.scaleY);
+                        }
+                    break;
+                    case 'rotating':
+                        modifiedProps.angle = element.angle;
+                    break;
+                }
+                
+                this.fire('elementModify', { element: element, options: modifiedProps })                
+        
+            }
+
+            modifiedType = null;
 
         },
         'selection:created': ({ selected }) => {
@@ -127,7 +191,7 @@ fabric.Canvas.prototype._fpdCanvasInit = function () {
             }
 
         },
-        'mouse:down': function (opts) {
+        'mouse:down': (opts) => {
 
             //fix: when editing text via textarea and doing a modification via corner controls
             if (opts.target && opts.target.__corner && typeof opts.target.exitEditing === 'function') {
@@ -139,13 +203,34 @@ fabric.Canvas.prototype._fpdCanvasInit = function () {
             }
 
         },
-    });
+        'elementAdd': () => {
 
+            this.forEachObject((obj) => {
+
+                //render clipping
+                if (!obj.clipPath && ((obj.boundingBox && obj.boundingBoxMode === 'clipping') || obj.hasUploadZone)) {                                        
+                    obj._clipElement();
+                }
+
+            })
+    
+
+        }
+    });    
+    
 }
 
 fabric.Canvas.prototype._onCreated = function () {
 
     this._canvasCreated = true;
+    
+    if(this.viewOptions.mobileGesturesBehaviour != 'none') {
+        ZoomPan(this, this.viewOptions.mobileGesturesBehaviour);
+    }
+
+    Snap(this);
+    Ruler(this);
+
     this._renderPrintingBox();
 
 }
@@ -362,12 +447,6 @@ fabric.Canvas.prototype._bringToppedElementsToFront = function () {
         this.printingBoxObject.bringToFront();
     }
 
-    //todo
-    // var snapLinesGroup = instance.getElementByID('_snap_lines_group');
-    // if(snapLinesGroup) {
-    //     snapLinesGroup.bringToFront();
-    // }
-
     this.renderAll();
 
 }
@@ -475,9 +554,9 @@ fabric.Canvas.prototype.addElements = function (elements, callback) {
  * @param {string} title Only required for image elements.
  * @param {object} [parameters] An object with the parameters, you would like to apply on the element.
  */
-fabric.Canvas.prototype.addElement = function (type, source, title, params = {}) {
+fabric.Canvas.prototype.addElement = function (type, source, title, params = {}) {    
 
-    if (type === undefined || source === undefined || title === undefined) return;
+    if (type === undefined || source === undefined || title === undefined) return;    
 
     /**
      * Gets fired as soon as an element will be added (before its added to canvas).
@@ -631,7 +710,7 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
              * @event fabric.Canvas#elementAdd
              * @param {Event} event
              * @param {fabric.Object} object - The fabric object.
-             */
+             */            
             this.fire('elementAdd', { element: fabricImage });
 
         };
@@ -674,7 +753,6 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
                 }
 
 
-                delete fabricParams['clippingRect'];
                 delete fabricParams['boundingBox'];
                 delete fabricParams['originParams'];
                 delete fabricParams['colors'];
@@ -829,7 +907,6 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
         this.setElementOptions(fabricParams, fabricText);
 
         fabricText.originParams = deepMerge(fabricText.toJSON(), fabricText.originParams);
-        delete fabricText.originParams['clipTo'];
         fabricText.originParams.z = fabricText.getZIndex();
 
         this.fire('elementAdd', { element: fabricText });
@@ -901,11 +978,13 @@ fabric.Canvas.prototype.resetSize = function () {
 
     this.responsiveScale = parseFloat(Number(this.responsiveScale.toFixed(7)));
     this.responsiveScale = Math.min(this.responsiveScale, 1);
-
+        
     if (!this.viewOptions.responsive) {
         this.responsiveScale = 1;
+        widthScale = scaleHeight = 1;
     }
 
+    //todo
     // if(!instance.viewOptions.editorMode && instance.maskObject && instance.maskObject._originParams) {
     //     instance.maskObject.left = instance.maskObject._originParams.left * instance.responsiveScale;
     //     instance.maskObject.top = instance.maskObject._originParams.top * instance.responsiveScale;
@@ -919,13 +998,13 @@ fabric.Canvas.prototype.resetSize = function () {
 
 
     this
-        .setDimensions({
-            width: widthScale * this.viewOptions.stageWidth,
-            height: this.viewOptions.stageHeight * this.responsiveScale
-        })
-        .setZoom(this.responsiveScale)
-        .calcOffset()
-        .renderAll();
+    .setDimensions({
+        width: widthScale * this.viewOptions.stageWidth,
+        height: this.viewOptions.stageHeight * this.responsiveScale
+    })
+    .setZoom(this.responsiveScale)
+    .calcOffset()
+    .renderAll();    
 
     this.fire('sizeUpdate', {
         responsiveScale: this.responsiveScale,
@@ -935,6 +1014,27 @@ fabric.Canvas.prototype.resetSize = function () {
     return this.responsiveScale;
 
 }
+
+/**
+	 * Sets the zoom of the stage. 1 is equal to no zoom.
+	 *
+	 * @method setResZoom
+	 * @param {number} value The zoom value.
+	 */
+fabric.Canvas.prototype.setResZoom = function(value) {
+
+    this.deselectElement();
+    
+    var point = new fabric.Point(this.getWidth() * 0.5, this.getHeight() * 0.5);
+
+    this.zoomToPoint(point, value * this.responsiveScale);
+
+    if(value == 1) {
+        this.resetZoom();
+    }
+
+
+};
 
 fabric.Canvas.prototype.resetZoom = function () {
 
@@ -1067,7 +1167,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 
     element = typeof element === 'undefined' ? this.getActiveObject() : element;
 
-    if (!element || parameters === undefined) return false;
+    if (!element || parameters === undefined) return false;    
 
     //if element is string, get by title
     if (typeof element == 'string') {
@@ -1089,7 +1189,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
             scaleToWidth = isNaN(scaleToWidth) ? (parseFloat(scaleToWidth) / 100) * this.viewOptions.stageWidth : parseInt(scaleToWidth);
             scaleToHeight = isNaN(scaleToHeight) ? (parseFloat(scaleToHeight) / 100) * this.viewOptions.stageHeight : parseInt(scaleToHeight);
 
-            scale = getScalingByDimesions(
+            scale = getScaleByDimesions(
                 element.width,
                 element.height,
                 scaleToWidth,
@@ -1101,7 +1201,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
         else if (element.boundingBox) {
 
             const bb = element.getBoundingBoxCoords();
-            scale = getScalingByDimesions(
+            scale = getScaleByDimesions(
                 element.width,
                 element.height,
                 bb.width,
@@ -1117,7 +1217,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
             if ((element.width * element.scaleX) + iconTolerance > this.viewOptions.stageWidth
                 || (element.height * element.scaleY) + iconTolerance > this.viewOptions.stageHeight) {
 
-                scale = getScalingByDimesions(
+                scale = getScaleByDimesions(
                     element.width,
                     element.height,
                     this.viewOptions.stageWidth - iconTolerance,
@@ -1142,7 +1242,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 
         if (element.getType() == 'image') {
 
-            scale = getScalingByDimesions(
+            scale = getScaleByDimesions(
                 element.width,
                 element.height,
                 uploadZoneObj.width * uploadZoneObj.scaleX,
@@ -1416,11 +1516,6 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 
     }
 
-    //clip element
-    if ((element.boundingBox && parameters.boundingBoxMode === 'clipping') || parameters.hasUploadZone) {
-        element._clipElement();
-    }
-
     if (parameters.autoCenter) {
         element.centerElement();
     }
@@ -1502,8 +1597,16 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
     element.setCoords();
     this.renderAll().calcOffset();
 
-    element._checkContainment();
+    /**
+     * Gets fired as soon as an element is selected.
+     *
+     * @event FancyProductDesignerView#elementSelect
+     * @param {Event} event
+     * @param {fabric.Object} currentElement - The current selected element.
+     */
+    this.fire('elementModify', { element: element, options: parameters })
 
+    element._checkContainment();
 
     if (parameters.autoSelect
         && element.isEditable

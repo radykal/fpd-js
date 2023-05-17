@@ -75,6 +75,8 @@ const renderRectX = (ctx, left, top, styleOverride, fabricObject) => {
     
 }
 
+fabric.Control.prototype.touchSizeX = 60;
+fabric.Control.prototype.touchSizeY = 60;
 fabric.Object.prototype.transparentCorners = false;
 
 //copy

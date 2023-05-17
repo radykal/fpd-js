@@ -165,40 +165,11 @@ export default class Options {
 		/**
 		* An object that contains the settings for the AJAX post when a custom added image is added to the canvas (Uploaded Images, Facebook/Instagram Photos). This allows to send the URL of the image to a custom-built script, that returns the data URI of the image or uploads the image to your server and returns the new URL on your server. By default the URL is send to php/custom-image-handler.php. See the official jQuery.ajax documentation for more information. The data object has a reserved property called url, which is the image URL that will send to the script. The success function is also reserved.
 		*
-		* @property customImageAjaxSettings
+		* @property fileServerURL
 		* @memberof Options.defaults
-		* @type {Object}
-		* @example
-		*customImageAjaxSettings: {<br />  url: 'src/php/custom-image-handler.php',<br />  data: {<br/>   saveOnServer: 1, //image is uploaded to your server <br/>   uploadsDir: '/path/to/uploads_dir', //into this directory <br/>   uploadsDirURL: 'http://yourdomain.com/uploads_dir' //and returns the new URL from this location <br />}}
+		* @type {String}
 		*/
-		customImageAjaxSettings: {
-			/**
-			* The URL to the custom-image-handler.php
-			*
-			* @property url
-			* @type {String}
-			* @memberof Options.defaults.customImageAjaxSettings
-			* @default 'php/custom-image-handler.php'
-			*/
-			url: 'php/custom-image-handler.php',
-			/**
-			* The data object sent to the server.
-			*
-			* @property data
-			* @type {Object}
-			* @memberof Options.defaults.customImageAjaxSettings
-			* @default {
-				saveOnServer: 0, - use integer as boolean value. 0=false, 1=true
-				uploadsDir: './uploads', - if saveOnServer is 1, you need to specify the directory path where the images are saved
-				uploadsDirURL: 'http://yourdomain.com/uploads' - if saveOnServer is 1, you need to specify the directory URL where the images are saved
-			}
-			*/
-			data: {
-				saveOnServer: 0, //use integer as boolean value. 0=false, 1=true
-				uploadsDir: './uploads', //if saveOnServer is true, you need to specify the directory path where the images are saved
-				uploadsDirURL: 'http://yourdomain.com/uploads' //if saveOnServer is true, you need to specify the directory URL where the images are saved
-			}
-		},
+		fileServerURL: null,
 		/**
 		* Make the canvas and the elements in the canvas responsive.
 		*
@@ -650,15 +621,6 @@ export default class Options {
 		*/
 		pixabayLang: 'en',
 		/**
-		* Display the internal modals (info, qr-code etc.) in the product designer instead in the whole page.
-		*
-		* @property openModalInDesigner
-		* @memberof Options.defaults
-		* @type {Boolean}
-		* @default false
-		*/
-		openModalInDesigner: false,
-		/**
 		* Shows the current image size in pixels in a tooltip above the image element when its selected.
 		*
 		* @property imageSizeTooltip
@@ -901,10 +863,10 @@ export default class Options {
         /**
         * The maximum canvas height related to the window height. A number between 0 and 1, e.g. 0.8 will set a maximum canvas height of 80% of the window height. A value of 1 will disable a calculation of a max. height.
         *
-        * @property maxCanvasHeight
+        * @property canvasHeight
         * @memberof Options.defaults
         * @type {Number}
-        * @default 1
+        * @default 'auto'
         * @version 6.0.0
         */
         canvasHeight: 'auto',

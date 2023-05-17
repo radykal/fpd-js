@@ -1,3 +1,5 @@
+import html from '/src/ui/html/actions-bar.html';
+
 class ActionsBar extends HTMLElement {
     
     constructor() {
@@ -8,7 +10,7 @@ class ActionsBar extends HTMLElement {
 
     connectedCallback() {
         
-        
+        this.innerHTML = html; 
         
     }
 

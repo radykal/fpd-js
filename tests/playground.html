@@ -19,7 +19,7 @@
         }
         
         #fpd-target {
-            margin-top: 40px;
+            margin-top: 100px;
         }
         
     </style>
@@ -35,24 +35,28 @@
                     <div id="fpd-target" class="fpd-sidebar fpd-shadow-2 fpd-views-inside-left"></div>
                     <!-- <div id="fpd-target" class="fpd-off-canvas fpd-shadow-2 fpd-views-inside-right"></div> -->
                     <!-- <div id="fpd-target" class="fpd-topbar fpd-shadow-2 fpd-views-inside-right"></div> -->
+
+                    <div id="custom-mainbar-container"></div>
             </div>
+
+            
             
             <div class="column">
                 <select id="main-layout" class="ui selection dropdown">
                     <option value="sidebar">Sidebar</option>
                     <option value="topbar">Topbar</option>
-                    <option value="off-canvas">Off-Canvas</option>
+                    <!-- <option value="off-canvas">Off-Canvas</option> -->
                 </select>
             </div>
             
-            <div class="column">
+            <div class="column" style="margin-bottom: 1000px;">
                 <h5>Test API</h5>
                 <div id="test-api">
                     <button id="undo" class="ui button" data-tooltip="test">Undo</button>
                     <button id="redo" class="ui button">Redo</button>
                     <button id="test" class="ui button">Test</button>
                     <button id="toSVG" class="ui button">toSVG</button>
-                    <input type="range" id="range-test" min="0" max="360">
+                    <button id="open-modal" class="ui button">Open Modal</button>
                 </div>
                 <div id="editor-box-wrapper"></div>
                 <div id="svg-display"></div>
@@ -60,22 +64,23 @@
             
         </div>
         <script>
+            
 
             const appOptions = {
                 langJson: 'data/langs/default.json',
-                initialActiveModule: 'images',
+                initialActiveModule: 'products',
                 responsiveBreakpoints: {
                 },
                 mainBarModules: [
                     'products',
                     'images',
                     'text',
-                    'text-to-image',
                     'designs',
                     'designs_love',
                     'manage-layers',
                     'text-layers',
                     'layouts',
+                    'save-load',
                 ],
                 fonts: [
                     {name: 'Pacifico', url: 'google'},
@@ -134,7 +139,7 @@
                         }
                     },
                     {
-                        text: "This is\nmy world",
+                        text: "This is\nmy world vccx vcxv cxvxcvcx",
                         properties: {
                             fontSize: 30,
                             fontFamily: "Lobster"
@@ -155,18 +160,11 @@
                         categories: ['love']
                     }
                 },
-                customImageAjaxSettings: {
-                    url: 'https://radykal.dep/fpd-js/server/php/custom-image-handler.php',
-                    data: {
-                        saveOnServer: 1,
-                        uploadsDir: '/Users/rady/htdocs/fpd-js/_uploads',
-                        uploadsDirURL: this.location.origin + '/_uploads'
-                    }
-                },
+                fileServerURL: 'https://radykal.dep/fpd-js-server/php/file-handler.php',
                 facebookAppId: '893957135155898',
                 instagramClientId: '6748682918479320',
                 instagramRedirectUri: 'https://localhost:8080/data/html/instagram_auth.html',
-                instagramTokenUri: 'https://radykal.dep/fpd-js/server/php/instagram-token.php',
+                instagramTokenUri: 'https://radykal.dep/fpd-js-server/php/instagram-token.php',
                 uploadAgreementModal: false,
                 swapProductConfirmation: false,
                 pixabayApiKey: '7571591-cf8ff820ec635edeb4e8c6af7',
@@ -185,15 +183,15 @@
                     autoCenter: true,
                     price: 10,
                     maxSize: 10,
-                    autoSelect: true
+                    autoSelect: true,
+                    replace: 'test',
+                    replaceInAllViews: true
                 },
                 customTextParameters: {
                     autoCenter: true,
                     draggable: true,
                     removable: true,
                     colors: true,
-                    maxLines: 3,
-                    maxLength: 10
                 },
                 canvasHeight: 'auto',
                 maxCanvasHeight: 0.8,
@@ -210,6 +208,33 @@
                     mid: [1000, 1000],
                     high: [2000, 2000]
                 },
+                dragDropImagesToUploadZones: true,
+                hideDialogOnAdd: true,
+                imageSizeTooltip: true,
+                mobileGesturesBehaviour: 'pinchPanCanvas',
+                textLinkGroupProps: ['fontSize', 'fontFamily', 'fontStyle', 'fill'],
+                fabricCanvasOptions: {
+                    allowTouchScrolling: true
+                },
+                layouts: 'data/layouts/data.json',
+                smartGuides: true,
+                snapGridSize: [40, 40],
+                actions:  {
+                    left: ['info', 'download', 'print', 'preview-lightbox', 'reset-product', 'snap'],
+                    center: ['undo','redo', 'previous-view', 'next-view'],
+                    right: ['zoom', 'ruler', 'guided-tour'],
+                },
+                guidedTour: {
+                    '#gt-test': 'hello',
+                    'module:products': '<h4>Last Step</h4>Here you can add some text and bla.',
+                    '#thsirt-price': '<h4>Third Step</h4>The price element',
+                    'module:products': '<h4>First Step</h4>Here you can add some text and bla.',
+                    'action:download': '<h4>Second Step</h4>Here you can add some text and bla.',
+                    'module:textt': '<h4>Third Step</h4>Here you can add some text and bla.',
+                },
+                autoOpenInfo: false
+                //modalMode: '#open-modal',
+                //mainBarContainer: '#custom-mainbar-container'
             }
                 
             const fpd = new FancyProductDesigner(document.getElementById('fpd-target'), appOptions);
@@ -234,6 +259,12 @@
                 })
                 
             })
+
+            fpd.addEventListener('productsSet', () => {
+                
+                fpd.selectProduct(1)
+                
+            })
             
             fpd.addEventListener('productAdd', (evt, details) => {
                 //console.log(evt.detail);              
@@ -254,9 +285,21 @@
             
             testApiWrapper.querySelector('#test')
             .addEventListener('click', (evt) => {
-                let elem = fpd.currentViewInstance.fabricCanvas.getElementByTitle('Design Me');
-                elem.set('text', "haha");
-                elem.canvas.renderAll();
+                
+                // let elem = fpd.currentViewInstance.fabricCanvas.getElementByTitle('Base');
+
+                // fpd.currentViewInstance.fabricCanvas.snapToGrid = !fpd.currentViewInstance.fabricCanvas.snapToGrid;
+                
+                // elem.canvas.renderAll();
+
+                console.log(fpd.getUsedFonts());
+                
+                let test = fpd.currentViewInstance.toSVG({}, null, false, null, fpd.getUsedFonts());
+
+                // fpd.getProductDataURL((dataURL) => {
+                // console.log("🚀 ~ file: playground.html:288 ~ fpd.getProductDataURL ~ dataURL:", dataURL)
+
+                // })
             })
 
             testApiWrapper.querySelector('#toSVG')
@@ -264,14 +307,6 @@
 
                 let svgStr = fpd.currentViewInstance.fabricCanvas.toSVG();
                 document.querySelector('#svg-display').innerHTML = svgStr;
-                
-            })
-
-            testApiWrapper.querySelector('#range-test')
-            .addEventListener('input', (evt) => {
-                
-                let elem = fpd.currentViewInstance.fabricCanvas.getElementByTitle('Design Me');
-                fpd.currentViewInstance.fabricCanvas.setElementOptions({curveRadius: parseInt(evt.currentTarget.value)}, elem);
                 
             })
             

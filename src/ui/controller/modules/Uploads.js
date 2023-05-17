@@ -115,7 +115,7 @@ export default class UploadsModule extends EventTarget {
         
         //window.localStorage.removeItem('fpd_uploaded_images');
         //get stored uploaded images from browser storage
-        if(localStorageAvailable && window.localStorage.getItem('fpd_uploaded_images')) {
+        if(localStorageAvailable() && window.localStorage.getItem('fpd_uploaded_images')) {
         
             const storageImages = JSON.parse(window.localStorage.getItem('fpd_uploaded_images'));
         
@@ -306,8 +306,14 @@ export default class UploadsModule extends EventTarget {
                 imgDataURI,
                 file.name
             );
-            
-            if(this.fpdInstance.uploadsToServer) {
+                        
+            if(FancyProductDesigner.uploadsToServer) {
+
+                if(!mainOptions.fileServerURL) {
+                    thumbnail.remove();
+                    alert('You need to set the fileServerURL in the option, otherwise file uploading does not work!')
+                    return;
+                }
                 
                 thumbnail.classList.add('fpd-loading');
                 thumbnail.insertAdjacentHTML(
@@ -329,11 +335,9 @@ export default class UploadsModule extends EventTarget {
         
                 if(checkImageDimensions(this.fpdInstance, imageW, imageH)) {
                     
-                    if(this.fpdInstance.uploadsToServer) {
+                    if(FancyProductDesigner.uploadsToServer) {
                         
                         var formData = new FormData();
-                        formData.append('uploadsDir', this.fpdInstance.uploadsDir);
-                        formData.append('uploadsDirURL', this.fpdInstance.uploadsDirURL);
                         formData.append('images[]', file);
                         
                         const xhr = new XMLHttpRequest();
@@ -394,7 +398,7 @@ export default class UploadsModule extends EventTarget {
                         
                         };
                         
-                        xhr.open('POST', this.fpdInstance.uploadsURL);
+                        xhr.open('POST', this.fpdInstance.mainOptions.fileServerURL);
                         xhr.send(formData);
                         
                         thumbnail.xhr = xhr;
@@ -437,8 +441,6 @@ export default class UploadsModule extends EventTarget {
         );
         
         const formData = new FormData();
-        formData.append('uploadsDir', this.fpdInstance.uploadsDir);
-        formData.append('uploadsDirURL', this.fpdInstance.uploadsDirURL);
         formData.append('pdf', file);
         
         const xhr = new XMLHttpRequest();
@@ -492,14 +494,14 @@ export default class UploadsModule extends EventTarget {
         
         };
         
-        xhr.open('POST', this.fpdInstance.uploadsURL);
+        xhr.open('POST', this.fpdInstance.mainOptions.fileServerURL);
         xhr.send(formData);
         
     }
     
     #storeUploadedImage(url, title) {
     
-        if(localStorageAvailable) {
+        if(localStorageAvailable()) {
     
             var savedLocalFiles = window.localStorage.getItem('fpd_uploaded_images') ? JSON.parse(window.localStorage.getItem('fpd_uploaded_images')) : [],
                 imgObj = {
@@ -535,7 +537,12 @@ export default class UploadsModule extends EventTarget {
             (evt) => {
                 
                 if(!this.fpdInstance.loadingCustomImage) {
-                    this.fpdInstance._addGridItemToCanvas(evt.currentTarget);
+                    this.fpdInstance._addGridItemToCanvas(
+                        evt.currentTarget,
+                        {},
+                        undefined,
+                        false
+                    );
                 }
                 
             }
@@ -585,14 +592,20 @@ export default class UploadsModule extends EventTarget {
                 this.fpdInstance._addGridItemToCanvas(
                     item,
                     {_addToUZ: targetUploadzone.uz},
-                    targetUploadzone.viewIndex
+                    targetUploadzone.viewIndex,
+                    false
                 );
     
             }
     
         }
         else if(addToStage) {
-            this.fpdInstance._addGridItemToCanvas(item);
+            this.fpdInstance._addGridItemToCanvas(
+                item,
+                {},
+                undefined,
+                false
+            );
         }
     
         if(this.#uploadCounter == this.#totalUploadFiles-1) {

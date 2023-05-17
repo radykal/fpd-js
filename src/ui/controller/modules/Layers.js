@@ -9,9 +9,8 @@ import {
     addElemClasses
 } from '/src/helpers/utils';
 
-import ColorPicker from '/src/ui/view/comps/ColorPicker';
 import ColorPalette from '/src/ui/view/comps/ColorPalette';
-import Patterns from '/src/ui/view/comps/Patterns';
+import ColorPanel from '/src/ui/view/comps/ColorPanel';
 
 export default class LayersModule extends EventTarget {
     
@@ -44,6 +43,27 @@ export default class LayersModule extends EventTarget {
                 if(fpdInstance.productCreated) {
                     this.#updateList();
                 }
+            }
+        )
+
+        addEvents(
+            fpdInstance,
+            'elementColorChange', 
+            (evt) => {
+                
+                if(fpdInstance.productCreated) {
+
+                    const element = evt.detail.element;
+                    const rowElem = this.listElem.querySelector('.fpd-list-row[id="'+element.id+'"]');
+
+                    if(rowElem && rowElem.querySelector('.fpd-current-color')) {
+                        //todo: do same for pattern, test with toolbar
+                        rowElem.querySelector('.fpd-current-color').style.backgroundColor = element.fill;
+                        
+                    }
+                    
+                }
+                
             }
         )
         
@@ -296,11 +316,11 @@ export default class LayersModule extends EventTarget {
         
         this.listElem.append(rowElem);        
         
+        let colorPanel;
+
         if(availableColors) {
             
-            const colorPanel = document.createElement('div');
-            colorPanel.className = 'fpd-cell-full';
-            rowElem.append(colorPanel);
+            colorPanel = document.createElement('div');
                         
             //color panel for object group(multi-paths)
             if(element.type === 'group' && element.getObjects().length > 1) {
@@ -350,67 +370,37 @@ export default class LayersModule extends EventTarget {
             }
             //color panel for text, png, svg with one path, path
             else {
-                
-                if(availableColors.length === 1) {
-                    
-                    const colorPicker = ColorPicker({
-                        initialColor: availableColors[0],
-                        colorNames: this.fpdInstance.mainOptions.hexNames,
-                        palette: this.fpdInstance.mainOptions.colorPickerPalette,
-                        onMove: (hexColor) => {
-                            
-                            this.#updateElementColor(element, hexColor);
-                            
-                        },
-                        onChange: (hexColor) => {
-                            
-                            this.#setElementColor(element, rowElem, hexColor);
-                            
-                        }
-                    });
-                    
-                    colorPanel.append(colorPicker);
-                                    
-                }
-                else {
-                    
-                    const colorPalette = ColorPalette({
-                        colors: availableColors, 
-                        colorNames: this.fpdInstance.mainOptions.hexNames,
-                        palette: this.fpdInstance.mainOptions.colorPickerPalette,
-                        onChange: (hexColor) => {
-                            
-                            this.#setElementColor(element, rowElem, hexColor);
-                            
-                        }
-                    });
-                    
-                    colorPanel.append(colorPalette);
-                    
-                    let patterns = [];
-                    if(Array.isArray(element.patterns) && (element.isSVG() || element.getType() === 'text')) {
+
+                colorPanel = ColorPanel(this.fpdInstance, {
+                    colors: availableColors,
+                    patterns: Array.isArray(element.patterns) && (element.isSVG() || element.getType() === 'text') ? element.patterns : null,
+                    onMove: (hexColor) => {
+                                                
+                        this.#updateElementColor(element, hexColor);
                         
-                        const patternsPanel = Patterns({
-                            images: element.patterns,
-                            onChange: (patternImg) => {
-                                
-                                rowElem.querySelector('.fpd-current-color')
-                                .style.backgroundImage = `url("${patternImg}")`;
-                                
-                                this.fpdInstance.currentViewInstance.fabricCanvas.setElementOptions({pattern: patternImg}, element);
-                                
-                            }
-                        });
+                    },
+                    onChange: (hexColor) => {
                         
-                        colorPanel.append(patternsPanel);
+                        this.#setElementColor(element, hexColor);
                         
+                    },
+                    onPatternChange: (patternImg) => {
+
+                        rowElem.querySelector('.fpd-current-color')
+                        .style.backgroundImage = `url("${patternImg}")`;
+                        
+                        this.fpdInstance.currentViewInstance.fabricCanvas.setElementOptions(
+                            {pattern: patternImg}, 
+                            element
+                        );
+
                     }
-                    
-                }
+                })
                 
             }
-            
-            
+
+            addElemClasses(colorPanel, ['fpd-cell-full'])
+            rowElem.append(colorPanel);
             
             //show color options
             addEvents(
@@ -467,10 +457,16 @@ export default class LayersModule extends EventTarget {
         
     }
     
-    #setElementColor(element, rowElem, hexColor) {
-        
-        rowElem.querySelector('.fpd-current-color').style.backgroundColor = hexColor;
-        
+    #setElementColor(element, hexColor) {
+
+        const rowElem = this.listElem.querySelector('.fpd-list-row[id="'+element.id+'"]');
+
+        if(rowElem && rowElem.querySelector('.fpd-current-color')) {
+            //todo: do same for pattern, test with toolbar
+            rowElem.querySelector('.fpd-current-color').style.backgroundColor = element.fill;
+            
+        }
+                
         this.fpdInstance.currentViewInstance.fabricCanvas.setElementOptions({fill: hexColor}, element);
         
     }

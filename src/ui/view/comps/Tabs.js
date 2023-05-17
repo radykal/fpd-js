@@ -7,12 +7,6 @@ class FPD_Tabs extends HTMLElement {
     constructor() {
         
         super();
-        
-        // this.addEventListener('click', () => {
-        //     
-        //     this.classList.toggle('fpd-active');
-        //     
-        // })
                 
     }
 

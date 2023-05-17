@@ -78,15 +78,16 @@ export default class Translator extends EventTarget {
             else {
                 objString = htmlElem.innerText;
             }
+                        
+            let keys = objString.toLowerCase().split('.'),
+                rootObject = this.langJSON[keys[0]];
+                            
+            if(rootObject) { //check if object exists
     
-            var keys = objString.split('.'),
-                firstObject = this.langJSON[keys[0]];
-    
-            if(firstObject) { //check if object exists
-    
-                label = firstObject[keys[1]];
-    
+                label = rootObject[keys[1]];
+                
                 if(label === undefined) { //if label does not exist in JSON, take default text
+                    console.log("FPD label not found: "+htmlElem.dataset.defaulttext);             
                     label = htmlElem.dataset.defaulttext;
                 }
     
@@ -96,10 +97,11 @@ export default class Translator extends EventTarget {
             }
     
         }
+        //no json labels
         else {
             label = htmlElem.dataset.defaulttext;
         }
-    
+                
         if(htmlElem.getAttribute('placeholder')) {
             htmlElem.setAttribute('placeholder', label);
             htmlElem.innerText = '';

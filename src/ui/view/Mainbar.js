@@ -1,4 +1,4 @@
-import html from '../html/mainbar.html';
+import html from '/src/ui/html/mainbar.html';
 
 class Mainbar extends HTMLElement {
     

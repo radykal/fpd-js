@@ -1,13 +1,17 @@
-import Dropdown from './view/comps/Dropdown';
+import './view/comps/Dropdown';
+import './view/comps/RangeSlider';
 import MainLoaderHTML from './html/main-loader.html';
 import Mainbar from './controller/Mainbar.js';
 import MainWrapper from './controller/MainWrapper.js';
 import ActionsBar from './controller/ActionsBar.js';
 import ViewsWrapper from './controller/ViewsWrapper.js';
+import GuidedTour from '/src/ui/controller/addons/GuidedTour';
 
 import { 
     addEvents,
-    toggleElemClasses
+    toggleElemClasses,
+    addElemClasses,
+    removeElemClasses
 } from '/src/helpers/utils';
 
 export default class UIManager extends EventTarget {
@@ -23,6 +27,100 @@ export default class UIManager extends EventTarget {
     }
     
     init() {
+
+        //add product designer into modal
+		if(this.fpdInstance.mainOptions.modalMode) {
+
+            this.fpdInstance.mainOptions.maxCanvasHeight = 0.85;
+            this.fpdInstance.mainOptions.fabricCanvasOptions.allowTouchScrolling = false;
+
+            let modalProductDesignerOnceOpened = false;
+
+            addElemClasses(
+                document.body,
+                ['fpd-modal-mode-active']
+            )
+
+            removeElemClasses(
+                this.fpdInstance.container,
+                ['fpd-off-canvas', 'fpd-topbar']
+            )
+
+            addElemClasses(
+                this.fpdInstance.container,
+                ['fpd-sidebar']
+            )
+
+            const modalWrapper = document.createElement('div');
+            modalWrapper.className = 'fpd-modal-product-designer fpd-modal-overlay fpd-fullscreen';
+            document.body.append(modalWrapper);
+            this.fpdInstance.modalWrapper = modalWrapper;
+
+            const modalInner = document.createElement('div');
+            modalInner.className = 'fpd-modal-inner';
+            modalInner.append(this.fpdInstance.container);
+            modalWrapper.append(modalInner);
+
+            //get modal opener
+            const modalOpener = document.querySelector(this.fpdInstance.mainOptions.modalMode);
+            addEvents(
+                modalOpener,
+                'click',
+                (evt) => {
+
+                    evt.preventDefault();
+
+                    addElemClasses(
+                        document.body,
+                        ['fpd-overflow-hidden', 'fpd-modal-designer-visible']
+                    )
+
+                    addElemClasses(
+                        modalWrapper,
+                        ['fpd-show']
+                    )
+                    
+                    this.fpdInstance.selectView(0);
+
+                    if(this.fpdInstance.currentViewInstance) {
+
+                        this.fpdInstance.currentViewInstance.fabricCanvas.resetZoom();
+
+                        if(!modalProductDesignerOnceOpened) {
+                            this.fpdInstance.doAutoSelect();
+                        }
+
+                    }
+
+                    modalProductDesignerOnceOpened = true;
+
+                    /**
+                     * Gets fired when the modal with the product designer opens.
+                     *
+                     * @event FancyProductDesigner#modalDesignerOpen
+                     * @param {Event} event
+                     */
+                    this.fpdInstance.dispatchEvent(
+                        new CustomEvent('modalDesignerOpen')
+                    );
+
+                }
+            )
+
+            addEvents(
+                this.fpdInstance,
+                'modalDesignerClose',
+                () => {
+
+                    removeElemClasses(
+                        document.body,
+                        ['fpd-overflow-hidden', 'fpd-modal-designer-visible']
+                    )
+                    
+                }
+            )
+
+		}
         
         this.#updateResponsive();
         this.#hoverThumbnail();
@@ -43,6 +141,12 @@ export default class UIManager extends EventTarget {
         this.fpdInstance.mainWrapper = new MainWrapper(this.fpdInstance);
         this.fpdInstance.productStage = this.fpdInstance.mainWrapper.container.querySelector('.fpd-product-stage');
         this.fpdInstance.viewsWrapper = new ViewsWrapper(this.fpdInstance);
+
+        if(this.fpdInstance.mainOptions.guidedTour && Object.keys(this.fpdInstance.mainOptions.guidedTour).length > 0) {
+
+            this.fpdInstance.guidedTour = new GuidedTour(this.fpdInstance);
+            
+        }
         
         Array.from(this.fpdInstance.container.querySelectorAll('[data-defaulttext]'))
         .forEach(item => {
@@ -53,7 +157,7 @@ export default class UIManager extends EventTarget {
             );
             
         })
-        
+
         this.dispatchEvent(
             new CustomEvent('ready')
         );
@@ -105,9 +209,14 @@ export default class UIManager extends EventTarget {
             context,
             ['mouseover', 'mouseout', 'mousemove', 'click'],
             (evt) => {
-                
+
+                if(this.fpdInstance.draggedPlaceholder) {
+                    thumbnailPreview.classList.add('fpd-hidden');
+                    return;
+                };
+
                 const target = evt.target;
-                                
+                            
                 if(target.classList.contains('fpd-hover-thumbnail') 
                     && thumbnailPreview.classList.contains('fpd-hidden')
                     && evt.type === 'mouseover' 

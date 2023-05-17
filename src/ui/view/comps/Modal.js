@@ -22,7 +22,7 @@ const Modal = (htmlContent='', fullscreen=false, type='', container=document.bod
     }
     
     let html = `
-        <div class="fpd-modal-wrapper fpd-shadow-3">
+        <div class="fpd-modal-inner fpd-shadow-3">
             <div class="fpd-modal-close">
                 <span class="fpd-icon-close"></span>
             </div>

@@ -19,7 +19,7 @@
     z-index: 10000000000;
 }
 
-.fpd-modal-overlay > .fpd-modal-wrapper {
+.fpd-modal-overlay > .fpd-modal-inner {
     background: #fff;
     width: 450px;
     max-width: 100%;
@@ -32,16 +32,18 @@
     max-width: 100%;
     transform: translateX(-50%);
     box-sizing: border-box;
+    border-radius: var(--fpd-border-radius);
 }
 
-.fpd-modal-overlay.fpd-fullscreen > .fpd-modal-wrapper {
+.fpd-modal-overlay.fpd-fullscreen > .fpd-modal-inner {
     width: 100%;
     height: 100%;
     top: 0;
     overflow: auto;
+    border-radius: 0;
 }
 
-.fpd-modal-wrapper > .fpd-modal-close {
+.fpd-modal-inner > .fpd-modal-close {
     position: absolute;
     right: 15px;
     top: 15px;
@@ -51,11 +53,11 @@
     transition: opacity 200ms ease-out;
 }
 
-.fpd-modal-wrapper > .fpd-modal-close:hover {
+.fpd-modal-inner > .fpd-modal-close:hover {
     opacity: 1;
 }
 
-.fpd-modal-wrapper > .fpd-modal-content {
+.fpd-modal-inner > .fpd-modal-content {
     color: rgba(0,0,0,0.7);
     line-height: 22px;
     margin-top: 20px;
@@ -113,16 +115,49 @@
 
 /* Modal Product Designer */
 
-.fpd-modal-product-designer.fpd-modal-overlay > .fpd-modal-wrapper {
-    padding: 60px 40px 40px;
+.fpd-modal-product-designer {
+
+    display: none;
+    pointer-events: none;
+    overflow: hidden !important;
+
+    &.fpd-show {
+        display: block;
+        pointer-events: all;
+    }
+
+    .fpd-modal-inner {
+
+        padding: 0;
+
+        > .fpd-wrapper {
+            margin: 0 0 !important;
+            height: 100%;
+            box-shadow: none !important;
+
+            fpd-main-bar {
+                height: ~"calc(100% - var(--fpd-actions-bar-height))" !important;
+            }
+
+            &.fpd-layout-small {
+
+                fpd-main-wrapper {
+                    height: ~"calc(100% - var(--fpd-actions-bar-height) - var(--fpd-sidebar-nav-width))" !important;
+                }
+
+            }
+        }
+
+    }
+
 }
 
-.fpd-modal-product-designer.fpd-modal-overlay .fpd-done {
-    margin: 20px 0 0;
-    color: #fff;
+body:not([class^="fpd-modal-designer-visible"]) {
+
+    .fpd-element-toolbar,
+    .fpd-draggable-dialog {
+        display: none !important;
+    }
+
 }
 
-.fpd-modal-mode-active .fpd-element-toolbar,
-.fpd-modal-mode-active .fpd-draggable-dialog {
-    display: none !important;
-}

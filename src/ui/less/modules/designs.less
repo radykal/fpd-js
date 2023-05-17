@@ -1,14 +1,15 @@
-fpd-module-designs {
+.fpd-container fpd-module-designs {
+
+    padding: var(--fpd-module-content-padding); 
     
     .fpd-head {
-        border-radius: 0 0 2px 2px;
         display: none;
     }
     
     &.fpd-head-visible .fpd-head,
     &.fpd-single-cat .fpd-head {
         display: block;
-        padding: 10px;
+        margin-bottom: 10px;
     }
     
     &.fpd-single-cat .fpd-back {
@@ -19,12 +20,12 @@ fpd-module-designs {
         width: 100%;
     }
     
-    .fpd-scroll-area {
+    .fpd-grid {
         
-        > .fpd-grid {
-            gap: 2px 2px;
+        .fpd-item {
+            border-radius: var(--fpd-border-radius);
         }
-        
+
     }
     
 }

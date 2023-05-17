@@ -1,37 +1,28 @@
-fpd-module-uploads {
+.fpd-container fpd-module-uploads {
     
     .fpd-upload-image {
         
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
         border: 2px dashed var(--fpd-border-color);
         background: var(--fpd-module-secondary-color);
-        color: var(-fpd-module-secondary-text-color);
-        position: relative;
-        cursor: pointer;
+        color: var(--fpd-module-secondary-text-color);
         border-radius: var(--fpd-border-radius);
-        margin: var(--fpd-module-content-padding);
-        padding: 10px;
+        padding: 10px 10px 0;
+        cursor: pointer;
+        margin-bottom: 10px;
         
-        > div {
-            text-align: center;
-            
-            > span {
-                display: block;
-                font-size: 10px;
-                text-transform: uppercase;
-            }
-            
-            > span:first-child {
-                padding-bottom: 5px;
-                margin-bottom: 5px;
-                position: relative;
-            }
-            
-            > .fpd-price {
-                font-size: 12px;
-                line-height: 1;
-                margin-top: 10px;
-            }
-            
+        > span {
+            display: block;
+            font-size: 10px;
+            text-transform: uppercase;
+            margin: 0 0 15px !important;
+        }
+        
+        > .fpd-price {
+            font-size: 12px;
+            line-height: 1;
         }
                 
         &.fpd-hover {

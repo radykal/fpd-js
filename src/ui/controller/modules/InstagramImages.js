@@ -14,6 +14,7 @@ export default class InstgramImagesModule extends EventTarget {
     accessToken = null;
     nextStack = null;
     loadingStack = false;
+    scrollArea = null;
     
     constructor(fpdInstance, wrapper) {
         
@@ -25,25 +26,10 @@ export default class InstgramImagesModule extends EventTarget {
         wrapper.append(this.container);
         
         this.gridElem = this.container.querySelector('.fpd-grid');
-        const scrollArea = this.container.querySelector('.fpd-scroll-area');
+        this.scrollArea = this.container.querySelector('.fpd-scroll-area');
         
         //infinite scroll and load next stack of instagram images
-        scrollArea
-        .addEventListener('scroll', (evt) => {
-            
-            const offset = 100;
-            let areaHeight = scrollArea.scrollHeight;
-            let currentScroll = scrollArea.clientHeight + scrollArea.scrollTop;
-            
-            if(currentScroll+offset > areaHeight) {
-                
-                if(this.nextStack !== null && !this.loadingStack) {
-                    this.#loadImages(this.nextStack, false);
-                }
-                
-            }
-            
-        });
+        this.scrollArea.addEventListener('scroll', this.#nextStack.bind(this));
            
     }
     
@@ -194,6 +180,7 @@ export default class InstgramImagesModule extends EventTarget {
                 
                 this.fpdInstance.toggleSpinner(false);
                 this.loadingStack = false;
+                this.#nextStack();
                 
             },
             onError: ( xhr) => {
@@ -228,6 +215,22 @@ export default class InstgramImagesModule extends EventTarget {
         
         getJSON(getOpts);
     
-    };
+    }
+
+    #nextStack() {
+
+        const offset = 100;
+        let areaHeight = this.scrollArea.scrollHeight;
+        let currentScroll = this.scrollArea.clientHeight + this.scrollArea.scrollTop;
+                
+        if(currentScroll+offset > areaHeight || this.gridElem.clientHeight < areaHeight) {
+            
+            if(this.nextStack !== null && !this.loadingStack) {
+                this.#loadImages(this.nextStack, false);
+            }
+            
+        }
+
+    }
 
 }

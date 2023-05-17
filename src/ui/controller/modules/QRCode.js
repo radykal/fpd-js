@@ -1,7 +1,8 @@
 import '/src/ui/view/modules/QRCode';
 import { 
-    addEvents 
-} from '../../../helpers/utils';
+    addEvents,
+    deepMerge 
+} from '/src/helpers/utils';
 
 export default class QRCodeModule extends EventTarget {
 
@@ -72,9 +73,12 @@ export default class QRCodeModule extends EventTarget {
                     
                     qrCodeWrapper.querySelector('img').onload = ((evt) => {
 
-                        const options = {
-                            _addToUZ: fpdInstance.currentViewInstance.currentUploadZone
-                        };
+                        const options = deepMerge(
+                            fpdInstance.mainOptions.qrCodeProps,
+                            {
+                                _addToUZ: fpdInstance.currentViewInstance.currentUploadZone
+                            }
+                        );
 
                         fpdInstance._addCanvasImage(
                             evt.currentTarget.src,

@@ -1,0 +1,241 @@
+.fpd-container fpd-actions-bar {
+
+    background: var(--fpd-actions-bar-bg-color);
+    height: var(--fpd-actions-bar-height);
+    flex: 1 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    color: var(--fpd-primary-text-color);
+    align-items: center;
+    padding: 0 5px;
+    justify-content: space-between;
+
+    > div {
+        flex: 1;
+        font-size: 16px;
+        white-space: nowrap;
+
+        > .fpd-btn {
+
+            span {
+                margin-left: 5px;
+            }
+
+        }
+
+    }
+
+    > [data-pos="center"] {
+        text-align: center;
+
+        .fpd-btn span {
+            display: none;
+        }
+    }
+
+    > [data-pos="right"] {
+        text-align: right;
+
+        .fpd-dropdown-menu {
+            text-align: left;
+            right: 0;
+            left: auto;
+        }
+    }
+
+    > [data-pos="modal"] {
+        display: none;
+    }
+
+    .fpd-dropdown-btn,
+    .fpd-btn {
+
+        display: inline-block;
+        position: relative;
+        cursor: pointer;
+        padding: 7px 12px;
+        margin: 0 0 0 5px;
+        border-radius: var(--fpd-border-radius);
+        line-height: 1;
+        text-transform: capitalize;
+        background: transparent;
+
+        &:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        > * {
+            pointer-events: none;
+            line-height: 1;
+            vertical-align: middle;
+        }
+
+        > i {
+            font-size: 18px;
+        }
+
+        &.fpd-btn-fill {
+            background: rgba(255,255,255, 0.1);
+
+            > span {
+                display: inline-flex;
+            }
+        }
+
+    }
+
+    .fpd-dropdown-menu {
+
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        min-width: max-content;
+        z-index: 10000;
+        background: #fff;
+        border-radius: var(--fpd-border-radius);
+        transform: translateY(5px);
+        padding: 5px 0;
+        
+        > .fpd-btn {
+            display: flex;
+            color: var(--fpd-text-color);
+            min-width: 150px;
+            margin: 5px 10px;
+            font-size: 16px;
+            padding: 0;
+            border-radius: var(--fpd-border-radius);
+
+            &:hover {
+                background: rgba(0, 0, 0, 0.05)
+            }
+
+            > * {
+                pointer-events: auto;
+                margin: 10px;
+            }
+
+            > i {
+                flex: 0;
+                margin-right: 0;
+            }
+
+            > span {
+                flex: 1;
+            }
+
+            > .fpd-switch {
+                margin-left: 40px;
+            }
+        }
+
+        &.fpd-show {
+            display: block;
+        }
+    }
+
+
+}
+
+.fpd-topbar,
+.fpd-off-canvas {
+    
+    fpd-actions-bar {
+        background: rgba(0,0,0,0.8);
+        order: 1;
+        display: flex;
+    }
+    
+}
+
+.fpd-off-canvas {
+    
+    fpd-actions-bar {
+        order: 1 !important;
+    }
+    
+}
+
+.fpd-container {
+
+    .fpd-modal-download {
+
+        text-align: center;
+    
+        > span {
+            font-size: 60px;
+            cursor: pointer;
+        }
+    
+    }
+
+
+    .fpd-zoom-wrapper {
+
+        display: flex;
+        width: 150px;
+        background: #fff;
+        border-radius: var(--fpd-border-radius);
+        position: absolute;
+        left: 50%;
+        bottom: 40px;
+        transform: translate(-50%, 50%);
+        padding: 10px;
+
+        > .fpd-stage-pan {
+            margin-left: 10px;
+            font-size: 14px;
+            cursor: pointer;
+
+            &.fpd-active {
+                color: var(--fpd-secondary-color);
+            }
+        }
+    }
+
+}
+
+
+
+.fpd-modal-product-designer {
+
+    fpd-actions-bar {
+
+        justify-content: stretch;
+
+        [data-pos="right"] {
+            margin-left: auto;
+        }
+
+        [data-pos="modal"] {
+            flex: 0;
+            text-align: right;
+            display: block !important;
+        }
+
+    } 
+
+}
+
+.fpd-layout-small {
+
+    fpd-actions-bar {
+
+        > * {
+            flex: 0;
+
+            > .fpd-btn,
+            > .fpd-dropdown-btn {
+
+                > span {
+                    display: none !important;
+                }
+        
+            }
+        }
+
+    }
+
+}
+

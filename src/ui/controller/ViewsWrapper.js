@@ -8,7 +8,7 @@ export default class ViewsWrapper extends EventTarget {
         
         this.container = document.createElement("fpd-views-wrapper");
         
-        if(fpdInstance.container.classList.contains('fpd-views-outside') || fpdInstance.mainOptions.modalMode) {
+        if(fpdInstance.container.classList.contains('fpd-views-outside') && !fpdInstance.mainOptions.modalMode) {
             fpdInstance.container.after(this.container);
         }
         else {

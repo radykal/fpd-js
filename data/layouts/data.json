@@ -1,0 +1,125 @@
+[
+    {
+       "title":"My View Layout",
+       "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_front-1.png",
+       "elements":[
+          {
+             "type":"image",
+             "source": "https://dek8oqj8xxsl6.cloudfront.net/img/humans/professions/construction_worker.svg",
+             "title":"Large Image",
+             "parameters":{
+                "price":50.05,
+                "left":150,
+                "top":300,
+                "scaleX":0.1,
+                "scaleY":0.1,
+                "autoCenter":false,
+                "zChangeable":true,
+                "removable":false,
+                "draggable":true,
+                "rotatable":true,
+                "resizable":true,
+                "copyable":true,
+                "autoSelect":false,
+                "uniScalingUnlockable":true,
+                "flipX":false,
+                "originX":"left",
+                "originY":"top",
+                "advancedEditing":true,
+                "colors":"#000"
+             }
+          },
+          {
+             "type":"text",
+             "source":"Last\nName",
+             "title":"Enter your last name",
+             "parameters":{
+                "zChangeable":true,
+                "removable":true,
+                "draggable":true,
+                "rotatable":true,
+                "resizable":true,
+                "colors":"#ffffff",
+                "fontSize":30,
+                "minFontSize":5,
+                "maxFontSize":100,
+                "patternable":true,
+                "fontStyle":"normal",
+                "fontWeight":"bold",
+                "lineHeight":1.5,
+                "letterSpacing":1,
+                "textAlign":"left",
+                "fill":"#990000",
+                "editable":true,
+                "left":200,
+                "fontFamily":"Lobster",
+                "top":500,
+                "maxLines":1,
+                "textPlaceholder":true
+             }
+          }
+       ]
+    },
+    {
+       "title":"My Second Layout",
+       "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_front-1.png",
+       "elements":[
+          {
+             "type":"image",
+             "source": "https://dek8oqj8xxsl6.cloudfront.net/img/humans/professions/construction_worker.svg",
+             "title":"Whie Text",
+             "parameters":{
+                "left":150,
+                "top":300,
+                "scaleX":0.1,
+                "scaleY":0.1,
+                "autoCenter":false,
+                "zChangeable":true,
+                "removable":false,
+                "draggable":true,
+                "rotatable":true,
+                "resizable":true,
+                "copyable":true,
+                "autoSelect":false,
+                "uniScalingUnlockable":true,
+                "flipX":false,
+                "originX":"left",
+                "originY":"top",
+                "advancedEditing":true,
+                "colors":"#000"
+             }
+          }
+       ]
+    },
+    {
+       "title":"My Third Layout",
+       "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_front-1.png",
+       "elements":[
+          {
+             "type":"image",
+             "source": "https://dek8oqj8xxsl6.cloudfront.net/img/humans/professions/construction_worker.svg",
+             "title":"Whie Text",
+             "parameters":{
+                "left":150,
+                "top":300,
+                "scaleX":0.1,
+                "scaleY":0.1,
+                "autoCenter":false,
+                "zChangeable":true,
+                "removable":false,
+                "draggable":true,
+                "rotatable":true,
+                "resizable":true,
+                "copyable":true,
+                "autoSelect":false,
+                "uniScalingUnlockable":true,
+                "flipX":false,
+                "originX":"left",
+                "originY":"top",
+                "advancedEditing":true,
+                "colors":"#000"
+             }
+          }
+       ]
+    }
+ ]

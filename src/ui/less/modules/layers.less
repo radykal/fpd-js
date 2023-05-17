@@ -1,4 +1,6 @@
-fpd-module-manage-layers {
+.fpd-container fpd-module-manage-layers {
+
+    padding: var(--fpd-module-content-padding);
     
     .fpd-list {
 
@@ -8,7 +10,7 @@ fpd-module-manage-layers {
         .fpd-list-row {
             
             flex-wrap: wrap;
-            margin: 10px;
+            margin: 10px 5px 10px 0;
             align-items: center;
             border: 1px solid transparent;
             border-radius: var(--fpd-border-radius);
@@ -92,10 +94,6 @@ fpd-module-manage-layers {
                     display: none;
                     
                     > .fpd-scroll-area {
-                        
-                        height: auto;
-                        max-height: 100px;
-                        margin-bottom: 10px;
                         
                         &.fpd-has-subpanel {
                             max-height: none;

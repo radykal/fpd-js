@@ -20,7 +20,7 @@ export default class FacebookImagesModule extends EventTarget {
         wrapper.append(this.container);
         
         this.dropdown = this.container.querySelector('fpd-dropdown');
-        this.dropdownList = this.container.querySelector('.fpd-dropdown-list');
+        this.dropdownList = this.container.querySelector('.fpd-dropdown-list > .fpd-scroll-area');
         this.gridElem = this.container.querySelector('.fpd-grid');
         
         this.#authenticate();
@@ -74,7 +74,7 @@ export default class FacebookImagesModule extends EventTarget {
                         albumItem.dataset.albumid = album.id;
                         albumItem.innerText = album.name;
                         albumItem.addEventListener('click', (evt) => {
-                            
+                                                        
                             this.dropdown.setAttribute('value', evt.currentTarget.innerText);
                             this.#selectAlbum(evt.currentTarget.dataset.albumid);
                             

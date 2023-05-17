@@ -1,0 +1,24 @@
+/* Drag Image */
+.fpd-dragged-image {
+
+	position: absolute;
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #fff;
+	width: 200px;
+	height: 200px;
+	top: 0;
+	left: 0;
+	cursor: move;
+	transition: transform 100ms ease-in-out;
+	transform-origin: center center;
+	transform: scale(0);
+	z-index: 100000000000;
+	pointer-events: none;
+
+	&.fpd-animate {
+		transform: scale(1);
+	}
+
+}

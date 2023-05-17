@@ -40,6 +40,12 @@
             
             > .fpd-view-stage {
                 background: rgba(255,255,255, 0.7);
+
+                textarea {
+                    left: -10000px !important;
+                    top: 50% !important;
+                }
+
             }
             
             > .fpd-zoom-image {
@@ -57,35 +63,4 @@
         
     }
             
-}
-
-/* Snap Lines */
-
-fpd-main-wrapper > .fpd-snap-line-h,
-fpd-main-wrapper > .fpd-snap-line-v {
-    position: absolute;
-    z-index: 100;
-    display: none;
-    pointer-events: none;
-}
-
-fpd-main-wrapper > .fpd-snap-line-h {
-    border-top: 1px dashed @snapLineColor;
-    width: 100%;
-    height: 2px;
-    top: 10px;
-    left: 0;
-}
-
-fpd-main-wrapper > .fpd-snap-line-v {
-    border-left: 1px dashed @snapLineColor;
-    width: 2px;
-    height: 100%;
-    top: 0;
-    left: 10px;
-}
-
-.fpd-view-stage textarea {
-    left: -10000px !important;
-    top: 50% !important;
 }

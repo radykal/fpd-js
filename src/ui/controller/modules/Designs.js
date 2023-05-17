@@ -147,7 +147,6 @@ export default class DesignsModule extends EventTarget {
     #displayCategories(categories, parentCategory) {
             
         this.gridElem.innerHTML = '';
-        this.gridElem.classList.remove('fpd-padding');
         this.headElem.querySelector('.fpd-input-search input').value = '';
         this.container.classList.remove('fpd-designs-active');
         this.container.classList.add('fpd-categories-active');
@@ -219,7 +218,6 @@ export default class DesignsModule extends EventTarget {
     #displayDesigns(designObjects, categoryParameters={}) {
         
         this.gridElem.innerHTML = '';
-        this.gridElem.classList.add('fpd-padding');
         this.headElem.querySelector('.fpd-input-search input').value = '';
         this.container.classList.remove('fpd-categories-active')
         this.container.classList.add('fpd-designs-active', 'fpd-head-visible');

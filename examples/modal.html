@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Framework | Testing all web components</title>
+    <script src='../dist/fabric-5.3.1.js'></script>
+    <script src='../dist/js/vendor.js'></script>
+    <script src='../dist/js/FancyProductDesigner.js'></script>
+    <link href="../dist/css/vendor.css" rel="stylesheet" type="text/css">
+    <link href="../dist/css/FancyProductDesigner.css?test=122" rel="stylesheet" type="text/css">
+    <style>
+        
+        body {
+            font-size: 12px;
+            font-family: Helvetica;
+        }
+        
+        body > .container {
+            max-width: 1200px;
+            margin: auto;
+            padding-top: 80px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <button id="open-modal" class="ui button">Open Modal</button>
+        <div 
+            id="fpd-target" 
+            class="fpd-sidebar fpd-shadow-2 fpd-views-inside-left"
+        >
+        </div>
+        
+        <script>
+            
+            const appOptions = {
+                langJson: '../data/langs/default.json',
+                initialActiveModule: 'images',
+                responsiveBreakpoints: {
+                },
+                mainBarModules: [
+                    'products',
+                    'images',
+                    'text',
+                    'text-to-image',
+                    'designs',
+                    'designs_love',
+                    'manage-layers',
+                    'text-layers',
+                    'save-load',
+                ],
+                fonts: [
+                    {name: 'Pacifico', url: 'google'},
+                    {name: 'Lobster', url: 'google'},
+                    {name: 'Aller', url: 'fonts/Aller.ttf', variants: {
+                            'n7': 'fonts/Aller__bold.ttf',
+                            'i4': 'fonts/Aller__italic.ttf',
+                            'i7': 'fonts/Aller__bolditalic.ttf'
+                        }
+                    },
+                    {name: 'Pacifico', url: 'fonts/Pacifico.ttf'},
+                ],
+                productsJSON: './product-categories.json',
+                designsJSON: '../data/designs/design-categories.json',
+                textTemplates: [
+                    {
+                        text: "This is\nmy world",
+                        properties: {
+                            fontSize: 30,
+                            fontFamily: "Lobster"
+                        }
+                    },
+                    {
+                        text: "This is my crazy world.",
+                        properties: {
+                            fontSize: 50,
+                            fontFamily: "Lobster"
+                        }
+                    },
+                    {
+                        text: "This is\nmy world",
+                        properties: {
+                            fontSize: 30,
+                            fontFamily: "Lobster"
+                        }
+                    },
+                    {
+                        text: "This is my crazy world.",
+                        properties: {
+                            fontSize: 50,
+                            fontFamily: "Lobster"
+                        }
+                    },
+                    {
+                        text: "This is\nmy world",
+                        properties: {
+                            fontSize: 30,
+                            fontFamily: "Lobster"
+                        }
+                    },
+                    {
+                        text: "This is my crazy world.",
+                        properties: {
+                            fontSize: 50,
+                            fontFamily: "Lobster"
+                        }
+                    },
+                    {
+                        text: "This is\nmy world",
+                        properties: {
+                            fontSize: 30,
+                            fontFamily: "Lobster"
+                        }
+                    },
+                    {
+                        text: "This is my crazy world.",
+                        properties: {
+                            fontSize: 50,
+                            fontFamily: "Lobster"
+                        }
+                    }
+                ],
+                dynamicDesigns: {
+                    "love": {
+                        name: "Love",
+                        icon: "https://dek8oqj8xxsl6.cloudfront.net/img/humans/silhouettes/silhouette_10.svg",
+                        categories: ['love']
+                    }
+                },
+                fileServerURL: 'https://radykal.dep/fpd-js/server/php/custom-image-handler.php',
+                facebookAppId: '893957135155898',
+                instagramClientId: '6748682918479320',
+                instagramRedirectUri: 'https://localhost:8080/data/html/instagram_auth.html',
+                instagramTokenUri: 'https://radykal.dep/fpd-js/server/php/instagram-token.php',
+                customImageParameters: {
+                    price: 10,
+                    maxSize: 1,
+                },
+                colorPickerPalette: ["#000", "#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc", '#5f27cd', '#222f3e', '#10ac84',"#000", "#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc", '#5f27cd', '#222f3e', '#10ac84',"#000", "#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc", '#5f27cd', '#222f3e', '#10ac84',"#000", "#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc", '#5f27cd', '#222f3e', '#10ac84'],
+                hexNames: {'000': 'black', ffffff:'white',FFFFFF:'white',990000:'red',cccccc:'grey', "83635c": 'Chestnut', f4cccc: 'Redder'},
+                elementParameters: {
+                    patterns: ['images/patterns/carbon.png', 'images/patterns/grune_2.png', 'images/patterns/grunge_1.png', 'images/patterns/lines_green.png', 'images/patterns/lines_purple.png', 'images/patterns/lines_red.png', 'images/patterns/wood_1.png', 'images/patterns/wood_2.png', 'images/patterns/wood_3.png', 'images/patterns/carbon.png','images/patterns/carbon.png', 'images/patterns/grune_2.png', 'images/patterns/grunge_1.png', 'images/patterns/lines_green.png', 'images/patterns/lines_purple.png', 'images/patterns/lines_red.png', 'images/patterns/wood_1.png', 'images/patterns/wood_2.png', 'images/patterns/wood_3.png', 'images/patterns/carbon.png']
+                },
+                uploadAgreementModal: false,
+                swapProductConfirmation: true,
+                pixabayApiKey: '7571591-cf8ff820ec635edeb4e8c6af7',
+                pixabayLang: 'de',
+                pixabayHighResImages: false,
+                modalMode: '#open-modal',
+            }
+                
+            const fpd = new FancyProductDesigner(document.getElementById('fpd-target'), appOptions);
+            
+        </script>
+    </div>
+</body>
+</html>

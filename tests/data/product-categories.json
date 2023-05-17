@@ -23,7 +23,320 @@
                         "customTextParameters": {
                             "price": 12
                         },
-                        "usePrintingBoxAsBounding": true,
+                        "usePrintingBoxAsBounding": false,
+                        "output": {
+                            "width": 240,
+                            "height": 400,
+                            "bleed": 0
+                        },
+                        "customAdds": {
+                            "uploads": true,
+                            "texts": true,
+                            "designs": true
+                        }
+                    },
+                    "elements": [
+                        {
+                            "type": "image",
+                            "source": "images/group.svg",
+                            "title": "SVG Group",
+                            "parameters": {
+                                "originX": "left",
+                                "originY": "top",
+                                "left": 0,
+                                "top": 0,
+                                "scaleX": 0.5,
+                                "scaleY": 0.5,
+                                "autoCenter": false,
+                                "removable": true,
+                                "draggable": true,
+                                "zChangeable": true,
+                                "resizable": true,
+                                "scale": 0.3,
+                                "topped": false,
+                                "rotatable": true,
+                                "colors": "#000",
+                                "angle": 0,
+                                "copyable": true,
+                                "lockUniScaling": true,
+                                "uploadZone": 1
+                            }
+                        },
+                        {
+                            "type": "image",
+                            "source": "images/uz_square.png",
+                            "title": "UZ Potrait",
+                            "parameters": {
+                                "angle": 0,
+                                "originX": "left",
+                                "originY": "top",
+                                "autoCenter": true,
+                                "zChangeable": true,
+                                "draggable": true,
+                                "rotatable": true,
+                                "resizable": true,
+                                "copyable": true,
+                                "uniScalingUnlockable": false,
+                                "lockUniScaling": true,
+                                "uploadZone": true,
+                                "scaleMode": "contain",
+                                "colors": "#000",
+                                "price": 1200,
+                                "uploadZoneMovable": false,
+                                "advancedEditing": true,
+                                "uploadZoneRemovable": false,
+                                "autoSelect": false,
+                                "customAdds": {
+                                    "uploads": true,
+                                    "designs": true,
+                                    "texts": true
+                                },
+                                "designCategories": [
+                                ]
+                            }
+                        },
+                        {
+                            "title": "Design Me",
+                            "source": "Design Me",
+                            "type": "text",
+                            "parameters": {
+                                "left": 300,
+                                "top": 330,
+                                "originX": "center",
+                                "originY": "center",
+                                "z": -1,
+                                "fill": "#ccc",
+                                "colors": [
+                                    "#990000",
+                                    "#ccc"
+                                ],
+                                "colorLinkGroup": false,
+                                "draggable": 1,
+                                "rotatable": 1,
+                                "resizable": 1,
+                                "removable": 1,
+                                "flipX": false,
+                                "flipY": false,
+                                "zChangeable": 1,
+                                "scaleX": 1,
+                                "scaleY": 1,
+                                "uniScalingUnlockable": false,
+                                "angle": 0,
+                                "price": 0,
+                                "autoCenter": false,
+                                "replace": "test",
+                                "autoSelect": false,
+                                "topped": false,
+                                "boundingBoxMode": "inside",
+                                "opacity": 1,
+                                "excludeFromExport": false,
+                                "locked": false,
+                                "showInColorSelection": false,
+                                "boundingBox": false,
+                                "fixed": false,
+                                "fontFamily": "Lobster",
+                                "fontSize": 30,
+                                "minFontSize": 20,
+                                "maxFontSize": 50,
+                                "editable": true,
+                                "lineHeight": 1,
+                                "textDecoration": "normal",
+                                "maxLength": 20,
+                                "fontWeight": "normal",
+                                "fontStyle": "normal",
+                                "textAlign": "left",
+                                "curvable": 1,
+                                "curved": false,
+                                "curveRadius": 100,
+                                "curveReverse": true,
+                                "stroke": null,
+                                "strokeWidth": 0,
+                                "maxLines": 3,
+                                "letterSpacing": 2,
+                                "chargeAfterEditing": false,
+                                "textTransform": "none",
+                                "widthFontSize": 0,
+                                "textBox": false,
+                                "shadowBlur": 0,
+                                "shadowOffsetX": 0,
+                                "shadowOffsetY": 0
+                            }
+                        }
+                    ]
+                },
+                {
+                    "title": "Back",
+                    "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_back-1.png",
+                    "mask": {},
+                    "options": {
+                        "stageWidth": 600,
+                        "stageHeight": 1860,
+                        "printingBox": {
+                            "left": 190,
+                            "top": 150,
+                            "width": 224,
+                            "height": 374,
+                            "visibility": false
+                        },
+                        "usePrintingBoxAsBounding": false,
+                        "output": {
+                            "width": 240,
+                            "height": 400,
+                            "bleed": 0
+                        },
+                        "customAdds": {
+                            "uploads": true,
+                            "texts": true,
+                            "designs": true
+                        },
+                        "customImageParameters": {
+                            "price": 0
+                        }
+                    },
+                    "elements": [
+                        {
+                            "title": "Base",
+                            "source": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/Tshirt2-Back-Base.svg",
+                            "type": "image",
+                            "parameters": {
+                                "left": 300,
+                                "top": 330,
+                                "originX": "center",
+                                "originY": "center",
+                                "z": -1,
+                                "fill": "#252525",
+                                "colors": 1,
+                                "colorLinkGroup": "color-shirt",
+                                "draggable": 0,
+                                "rotatable": 0,
+                                "resizable": 0,
+                                "removable": 0,
+                                "zChangeable": 0,
+                                "scaleX": 0.7605120391495467,
+                                "scaleY": 0.7605120391495467,
+                                "lockUniScaling": false,
+                                "uniScalingUnlockable": 0,
+                                "angle": 0,
+                                "price": 0,
+                                "autoCenter": 0,
+                                "replace": "test",
+                                "autoSelect": 0,
+                                "topped": 0,
+                                "boundingBoxMode": "none",
+                                "opacity": 1,
+                                "excludeFromExport": 0,
+                                "locked": 0,
+                                "showInColorSelection": 0,
+                                "resizeToW": 0,
+                                "resizeToH": 0,
+                                "filter": 0,
+                                "scaleMode": "fit",
+                                "minScaleLimit": 0.01,
+                                "advancedEditing": 0
+                            }
+                        },
+                        {
+                            "type": "image",
+                            "source": "images/uz_square.png",
+                            "title": "UZ Potrait",
+                            "parameters": {
+                                "angle": 0,
+                                "originX": "left",
+                                "originY": "top",
+                                "autoCenter": true,
+                                "zChangeable": true,
+                                "draggable": true,
+                                "rotatable": true,
+                                "resizable": true,
+                                "copyable": true,
+                                "uniScalingUnlockable": false,
+                                "lockUniScaling": true,
+                                "uploadZone": true,
+                                "scaleMode": "contain",
+                                "colors": "#000",
+                                "price": 1200,
+                                "uploadZoneMovable": false,
+                                "advancedEditing": true,
+                                "uploadZoneRemovable": false,
+                                "autoSelect": false,
+                                "customAdds": {
+                                    "uploads": true,
+                                    "designs": true,
+                                    "texts": true
+                                },
+                                "designCategories": [
+                                ]
+                            }
+                        },
+                        {
+                            "title": "Overlay",
+                            "source": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/Tshirt2-Back.png",
+                            "type": "image",
+                            "parameters": {
+                                "left": 300,
+                                "top": 330,
+                                "originX": "center",
+                                "originY": "center",
+                                "z": -1,
+                                "fill": false,
+                                "colors": 0,
+                                "colorLinkGroup": 0,
+                                "draggable": 0,
+                                "rotatable": 0,
+                                "resizable": 0,
+                                "removable": 0,
+                                "zChangeable": false,
+                                "scaleX": 0.7629521477015825,
+                                "scaleY": 0.7629521477015825,
+                                "lockUniScaling": false,
+                                "uniScalingUnlockable": 0,
+                                "angle": 0,
+                                "price": 0,
+                                "autoCenter": 0,
+                                "replaceInAllViews": 0,
+                                "autoSelect": 0,
+                                "topped": 1,
+                                "boundingBoxMode": "none",
+                                "opacity": 1,
+                                "excludeFromExport": 1,
+                                "locked": 1,
+                                "showInColorSelection": 0,
+                                "boundingBox": 0,
+                                "resizeToW": 0,
+                                "resizeToH": 0,
+                                "filter": 0,
+                                "scaleMode": "fit",
+                                "minScaleLimit": 0.01,
+                                "advancedEditing": 0,
+                                "uploadZone": 0,
+                                "uploadZoneMovable": 0
+                            }
+                        }
+                    ]
+                }
+            ],
+            [
+                {
+                    "productThumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_front-1.png",
+                    "productTitle": "Men Standard",
+                    "product_id": 9,
+                    "title": "Front",
+                    "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_front-1.png",
+                    "mask": {},
+                    "options": {
+                        "stageWidth": 600,
+                        "stageHeight": 660,
+                        "printingBox": {
+                            "left": 178,
+                            "top": 139,
+                            "width": 243,
+                            "height": 404,
+                            "visibility": false
+                        },
+                        "customTextParameters": {
+                            "price": 12
+                        },
+                        "usePrintingBoxAsBounding": 1,
                         "output": {
                             "width": 240,
                             "height": 400,
@@ -128,7 +441,7 @@
                             }
                         },
                         {
-                            "title": "Design Me",
+                            "title": "Design Me Hello",
                             "source": "Design Me",
                             "type": "text",
                             "parameters": {
@@ -143,9 +456,10 @@
                                     "#ccc"
                                 ],
                                 "colorLinkGroup": false,
+                                "textLinkGroup": "sam",
                                 "draggable": 1,
                                 "rotatable": 1,
-                                "resizable": 1,
+                                "resizable": true,
                                 "removable": 1,
                                 "flipX": false,
                                 "flipY": false,
@@ -167,7 +481,7 @@
                                 "boundingBox": false,
                                 "fixed": false,
                                 "fontFamily": "Lobster",
-                                "fontSize": 40,
+                                "fontSize": 30,
                                 "editable": true,
                                 "lineHeight": 1,
                                 "textDecoration": "normal",
@@ -181,11 +495,11 @@
                                 "curveReverse": true,
                                 "stroke": null,
                                 "strokeWidth": 0,
-                                "maxLines": 3,
+                                "maxLines": 1,
                                 "letterSpacing": 2,
                                 "chargeAfterEditing": false,
-                                "minFontSize": 1,
-                                "maxFontSize": 200,
+                                "minFontSize": 10,
+                                "maxFontSize": 50,
                                 "textTransform": "none",
                                 "widthFontSize": 0,
                                 "textBox": false,
@@ -209,6 +523,7 @@
                                     "#990000"
                                 ],
                                 "colorLinkGroup": false,
+                                "textLinkGroup": "same",
                                 "draggable": 1,
                                 "rotatable": 1,
                                 "resizable": 1,
@@ -242,7 +557,7 @@
                                 "fontStyle": "normal",
                                 "textAlign": "left",
                                 "curvable": 1,
-                                "curved": true,
+                                "curved": false,
                                 "curveRadius": 100,
                                 "curveReverse": false,
                                 "stroke": null,
@@ -318,9 +633,9 @@
                             "top": 150,
                             "width": 224,
                             "height": 374,
-                            "visibility": false
+                            "visibility": true
                         },
-                        "usePrintingBoxAsBounding": false,
+                        "usePrintingBoxAsBounding": 0,
                         "output": {
                             "width": 240,
                             "height": 400,

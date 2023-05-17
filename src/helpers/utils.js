@@ -1,4 +1,5 @@
 import Modal from '/src/ui/view/comps/Modal';
+import Snackbar from '/src/ui/view/comps/Snackbar';
 
 const isPlainObject = (value) => {
     return Object.prototype.toString.call(value) === '[object Object]';
@@ -8,13 +9,13 @@ export { isPlainObject };
 
 const objectHasKeys = (obj, keys) => {
 
-    if(obj && typeof obj === 'object') {
+    if (obj && typeof obj === 'object') {
 
         let hasAllKeys = true;
-        for(var i=0; i < keys.length; ++i) {
+        for (var i = 0; i < keys.length; ++i) {
 
             var key = keys[i];
-            if(!obj.hasOwnProperty(key)) {
+            if (!obj.hasOwnProperty(key)) {
                 hasAllKeys = false;
                 break;
             }
@@ -56,29 +57,29 @@ const objectsAreEqual = (obj1, obj2) => {
 export { objectsAreEqual };
 
 const deepMerge = (obj1, obj2) => {
-    
+
     // Create a new object that combines the properties of both input objects
     const merged = {
         ...obj1,
         ...obj2
     };
-    
-    if(Object.keys(obj2).length) {
-        
+
+    if (Object.keys(obj2).length) {
+
         // Loop through the properties of the merged object
-        for(const key of Object.keys(merged)) {
-            
+        for (const key of Object.keys(merged)) {
+
             // Check if the property is an object
             if (isPlainObject(merged[key])) {
-                if(obj1[key] && obj2[key]) {
+                if (obj1[key] && obj2[key]) {
                     merged[key] = deepMerge(obj1[key], obj2[key]);
                 }
-                
+
             }
         }
-        
+
     }
-    
+
     return merged;
 }
 
@@ -93,8 +94,8 @@ const objectGet = (obj, path, defValue) => {
     const pathArray = Array.isArray(path) ? path : path.match(/([^[.\]])+/g)
     // Find value
     const result = pathArray.reduce(
-    (prevObj, key) => prevObj && prevObj[key],
-    obj
+        (prevObj, key) => prevObj && prevObj[key],
+        obj
     )
     // If found value is undefined return default value; otherwise return the value
     return result === undefined ? defValue : result;
@@ -137,9 +138,9 @@ export { removeUrlParams };
 const arrayUnique = (array) => {
 
     var a = array.concat();
-    for(var i=0; i<a.length; ++i) {
-        for(var j=i+1; j<a.length; ++j) {
-            if(a[i] === a[j])
+    for (var i = 0; i < a.length; ++i) {
+        for (var j = i + 1; j < a.length; ++j) {
+            if (a[i] === a[j])
                 a.splice(j--, 1);
         }
     }
@@ -158,7 +159,7 @@ export { arrayUnique };
  * @return {Array} Returns the edited array.
  * @static
  */
-const removeFromArray  = (array, element) => {
+const removeFromArray = (array, element) => {
 
     var index = array.indexOf(element);
     if (index > -1) {
@@ -179,140 +180,144 @@ const isZero = (value) => {
 
 export { isZero };
 
-const addEvents = (elements, events=[], listener=()=>{}, useCapture=false) => {
-    
-    events = typeof events == 'string' ? [events] : events; 
-    
+const addEvents = (elements, events = [], listener = () => { }, useCapture = false) => {
+
+    events = typeof events == 'string' ? [events] : events;
+
     events.forEach(eventType => {
-        
-        if(elements instanceof HTMLElement) {
-            
+
+        if (elements instanceof HTMLElement) {
+
             elements.addEventListener(eventType, listener, useCapture);
-            
+
         }
-        else if(Array.from(elements).length) {
-            
-            elements.forEach(elem => {
-                elem.addEventListener(eventType, listener, useCapture);
-            })
-            
+        else if (Array.from(elements).length) {
+
+            if (elements) {
+
+                elements.forEach(elem => {
+                    elem.addEventListener(eventType, listener, useCapture);
+                })
+
+            }
+
         }
         else {
             elements.addEventListener(eventType, listener, useCapture);
         }
-        
+
     })
-        
+
 }
 
 export { addEvents };
 
-const addElemClasses = (elements=[], classes=[]) => {
-    
-    if(elements) {
-        
-        if(elements instanceof HTMLElement) {
-            
+const addElemClasses = (elements = [], classes = []) => {
+
+    if (elements) {
+
+        if (elements instanceof HTMLElement) {
+
             classes.forEach(c => {
                 elements.classList.add(c);
             })
-            
+
         }
         else {
-            
+
             elements.forEach(elem => {
                 classes.forEach(c => {
                     elem.classList.add(c);
                 })
             })
-            
+
         }
-        
+
     }
-    
+
     return elements;
-    
+
 }
 
 export { addElemClasses };
 
-const removeElemClasses = (elements=[], classes=[]) => {
-    
-    if(elements) {
-        
-        if(elements instanceof HTMLElement) {
-            
+const removeElemClasses = (elements = [], classes = []) => {
+
+    if (elements) {
+
+        if (elements instanceof HTMLElement) {
+
             classes.forEach(c => {
                 elements.classList.remove(c);
             })
-            
+
         }
         else {
-            
+
             elements.forEach(elem => {
                 classes.forEach(c => {
                     elem.classList.remove(c);
                 })
-            
+
             })
-            
+
         }
-        
-         
+
+
     }
-    
+
     return elements;
-    
+
 }
 
 export { removeElemClasses };
 
-const toggleElemClasses = (elements=[], classes=[], toggle=true) => {
-    
-    if(elements) {
-        
-        if(elements instanceof HTMLElement) {
-            
+const toggleElemClasses = (elements = [], classes = [], toggle = true) => {
+
+    if (elements) {
+
+        if (elements instanceof HTMLElement) {
+
             classes.forEach(c => {
                 elements.classList.toggle(c, toggle);
             })
-            
+
         }
         else {
-            
+
             elements.forEach(elem => {
                 classes.forEach(c => {
                     elem.classList.toggle(c, toggle);
                 })
             })
-            
+
         }
-        
+
     }
-    
+
     return elements;
-    
+
 }
 
 export { toggleElemClasses };
 
-const loadGridImage = (pictureElem, source=null) => {
+const loadGridImage = (pictureElem, source = null) => {
 
-    if(pictureElem) {
-        
+    if (pictureElem) {
+
         pictureElem.classList.add('fpd-on-loading');
-        
+
         var image = new Image();
         image.src = source ? source : pictureElem.dataset.img;
-        
-        image.onload = function() {
+
+        image.onload = function () {
             pictureElem.dataset.originwidth = this.width;
             pictureElem.dataset.originheight = this.height;
             pictureElem.classList.remove('fpd-on-loading');
-            pictureElem.style.backgroundImage =  'url("'+this.src+'")';
+            pictureElem.style.backgroundImage = 'url("' + this.src + '")';
         };
-        
-        image.onerror = function() {
+
+        image.onerror = function () {
             pictureElem.parentNode.remove();
 
         }
@@ -325,15 +330,15 @@ export { loadGridImage };
 
 const isEmpty = (value) => {
 
-    if (value === undefined) 
+    if (value === undefined)
         return true;
 
-    if (value == null)  
+    if (value == null)
         return true;
 
     if (typeof value === 'string')
         return !value.trim().length;
-    
+
     if (Array.isArray(value))
         return !value.length;
 
@@ -362,7 +367,7 @@ const localStorageAvailable = () => {
         window.localStorage.setItem('fpd-storage', 'just-testing');
         //window.localStorage.clear();
     }
-    catch(error) {
+    catch (error) {
         localStorageAvailable = false;
         //In Safari, the most common cause of this is using "Private Browsing Mode". You are not able to save products in your browser.
     }
@@ -373,70 +378,75 @@ const localStorageAvailable = () => {
 
 export { localStorageAvailable };
 
-const createImgThumbnail = (opts={}) => {
-    
-    if(!opts.url) return;
+const createImgThumbnail = (opts = {}) => {
+
+    if (!opts.url) return;
 
     const thumbnail = document.createElement('div');
-    thumbnail.className = 'fpd-item';
+    thumbnail.className = 'fpd-item fpd-hover-thumbnail';
     thumbnail.dataset.source = opts.url;
-    
-    if(opts.title) {
+
+    if (!opts.disableDraggable) {
+        thumbnail.classList.add('fpd-draggable');
+    }
+
+    if (opts.title) {
         thumbnail.dataset.title = opts.title;
         thumbnail.setAttribute('aria-label', opts.title);
-        thumbnail.classList.add('fpd-hover-thumbnail');
     }
 
     const picElem = document.createElement('picture');
     picElem.dataset.img = opts.thumbnailUrl ? opts.thumbnailUrl : opts.url;
     thumbnail.append(picElem);
-    
-    const priceElem = document.createElement('span');
-    priceElem.className = "fpd-price";
-    priceElem.innerHTML = opts.price;
-    thumbnail.append(priceElem);
-    
-    if(opts.removable) {
+
+    if (!opts.disablePrice) {
+        const priceElem = document.createElement('span');
+        priceElem.className = "fpd-price";
+        priceElem.innerHTML = opts.price;
+        thumbnail.append(priceElem);
+    }
+
+    if (opts.removable) {
         const removeElem = document.createElement('span');
         removeElem.className = 'fpd-delete fpd-icon-remove';
         thumbnail.append(removeElem);
     }
-    
-    
+
+
     return thumbnail;
 
 };
 
 export { createImgThumbnail };
 
-const getItemPrice = (fpdInstance, container, price=null) => {
-        
-    if(!fpdInstance.currentViewInstance) return '';
-                
+const getItemPrice = (fpdInstance, container, price = null) => {
+
+    if (!fpdInstance.currentViewInstance) return '';
+
     let currentViewOptions = fpdInstance.currentViewInstance.options;
-            
+
     //get price from upload zone if module is inside upload-zone-content
-    if(fpdInstance.container.querySelector('.fpd-upload-zone-content').contains(container)
+    if (fpdInstance.mainBar.container.querySelector('.fpd-upload-zone-content').contains(container)
         && fpdInstance.currentViewInstance.currentUploadZone
-    ) { 
-    
+    ) {
+
         const uploadZone = fpdInstance.currentViewInstance.fabricCanvas.getUploadZone(
-                            fpdInstance.currentViewInstance.currentUploadZone
-                        );
-                        
-        if(uploadZone && uploadZone.price) {
+            fpdInstance.currentViewInstance.currentUploadZone
+        );
+
+        if (uploadZone && uploadZone.price) {
             price = uploadZone.price;
-            
+
         }
-    
+
     }
-    
+
     //only apply general price if null    
-    if(price == null) {
-        price = objectGet(currentViewOptions, 'customImageParameters.price', 0);        
+    if (price == null) {
+        price = objectGet(currentViewOptions, 'customImageParameters.price', 0);
     }
-    
-    const priceStr = price ? fpdInstance.formatPrice(price) : ''; 
+
+    const priceStr = price ? fpdInstance.formatPrice(price) : '';
 
     return priceStr;
 
@@ -455,45 +465,45 @@ export { getItemPrice };
  * @static
  */
 const checkImageDimensions = (fpdInstance, imageW, imageH) => {
-    
+
     const viewInst = fpdInstance.currentViewInstance;
     let imageRestrictions = viewInst.options.customImageParameters;
-    
-    const uploadZone = viewInst.fabricCanvas.getUploadZone(viewInst.currentUploadZone); 
-    if(uploadZone) {
-        imageRestrictions = deepMerge( imageRestrictions, uploadZone );
-    }    
 
-    if(imageW > imageRestrictions.maxW ||
-    imageW < imageRestrictions.minW ||
-    imageH > imageRestrictions.maxH ||
-    imageH < imageRestrictions.minH) {
+    const uploadZone = viewInst.fabricCanvas.getUploadZone(viewInst.currentUploadZone);
+    if (uploadZone) {
+        imageRestrictions = deepMerge(imageRestrictions, uploadZone);
+    }
+
+    if (imageW > imageRestrictions.maxW ||
+        imageW < imageRestrictions.minW ||
+        imageH > imageRestrictions.maxH ||
+        imageH < imageRestrictions.minH) {
 
         fpdInstance.loadingCustomImage = false;
-        
-        if(fpdInstance.mainBar) {
-            
+
+        if (fpdInstance.mainBar) {
+
             fpdInstance.mainBar.toggleContentDisplay(false);
 
-            if(viewInst.currentUploadZone) {
+            if (viewInst.currentUploadZone) {
                 fpdInstance.mainBar.toggleUploadZonePanel(false);
             }
 
         }
-        
+
         let sizeAlert = fpdInstance.translator.getTranslation(
-            'misc', 
+            'misc',
             'uploaded_image_size_alert'
         );
-        
+
         sizeAlert = sizeAlert
-                    .replace('%minW', imageRestrictions.minW)
-                    .replace('%minH', imageRestrictions.minH)
-                    .replace('%maxW', imageRestrictions.maxW)
-                    .replace('%maxH', imageRestrictions.maxH);
-        
+            .replace('%minW', imageRestrictions.minW)
+            .replace('%minH', imageRestrictions.minH)
+            .replace('%maxW', imageRestrictions.maxW)
+            .replace('%maxH', imageRestrictions.maxH);
+
         Modal(sizeAlert);
-        
+
         return false;
 
     }
@@ -524,25 +534,25 @@ export { getFileExtension }
 const elementAvailableColors = (element, fpdInstance) => {
 
     var availableColors = [];
-    if(element.type == 'group') {
-        
+    if (element.type == 'group') {
+
         const paths = element.getObjects();
-        if(paths.length === 1) {
+        if (paths.length === 1) {
             availableColors = element.colors;
         }
         else {
             availableColors = [];
             paths.forEach((path) => {
-                
+
                 const color = tinycolor(path.fill);
                 availableColors.push(color.toHexString());
-                
+
             })
 
         }
 
     }
-    else if(element.colorLinkGroup && fpdInstance.colorLinkGroups[element.colorLinkGroup]) {
+    else if (element.colorLinkGroup && fpdInstance.colorLinkGroups[element.colorLinkGroup]) {
         availableColors = fpdInstance.colorLinkGroups[element.colorLinkGroup].colors;
     }
     else {
@@ -560,15 +570,15 @@ const getBgCssFromElement = (element) => {
     let currentFill = element.fill;
 
     //fill: hex
-    if(typeof currentFill === 'string') {
+    if (typeof currentFill === 'string') {
         return currentFill;
     }
     //fill: pattern or svg fill
-    else if(typeof currentFill === 'object') {
+    else if (typeof currentFill === 'object') {
 
-        if(currentFill.source) { //pattern
+        if (currentFill.source) { //pattern
             currentFill = currentFill.source.src;
-            return 'url('+currentFill+')';
+            return 'url(' + currentFill + ')';
         }
         else { //svg has fill
             return currentFill[0];
@@ -576,11 +586,11 @@ const getBgCssFromElement = (element) => {
 
     }
     //element: svg
-    else if(element.colors === true && element.type === 'group') {
+    else if (element.colors === true && element.type === 'group') {
         return tinycolor(element.getObjects()[0].fill);
     }
     //no fill, only colors set
-    else if(currentFill === false && element.colors && element.colors[0]) {
+    else if (currentFill === false && element.colors && element.colors[0]) {
         return element.colors[0];
     }
 
@@ -619,3 +629,42 @@ const getPrevSibling = (elem, selector) => {
 };
 
 export { getPrevSibling };
+
+const popupBlockerAlert = (popup, msg) => {
+
+    if (popup == null || typeof (popup) == 'undefined') {
+        Snackbar(msg);
+    }
+
+};
+
+export { popupBlockerAlert }
+
+const getScript = (src) => {
+
+    return new Promise(function (resolve, reject) {
+
+        console.log(document.querySelector("script[src='" + src + "']"));
+        
+        if (document.querySelector("script[src='" + src + "']") === null ) {
+
+            var script = document.createElement('script');
+            script.onload = () => {
+                resolve();
+            };
+            script.onerror = () => {
+                reject();
+            };
+
+            script.src = src;
+            document.body.appendChild(script);
+            
+        } else {
+            resolve();
+        }
+
+    });
+
+}
+
+export { getScript }

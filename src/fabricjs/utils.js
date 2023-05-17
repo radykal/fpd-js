@@ -1,17 +1,4 @@
-
-
-/**
- * Returns the scale value calculated with the passed image dimensions and the defined "resize-to" dimensions.
- *
- * @method getScalingByDimesions
- * @param {Number} imgW The width of the image.
- * @param {Number} imgH The height of the image.
- * @param {Number} resizeToW The maximum width for the image.
- * @param {Number} resizeToH The maximum height for the image.
- * @return {Number} The scale value to resize an image to a desired dimension.
-  * @static
- */
-const getScalingByDimesions = (imgW, imgH, resizeToW, resizeToH, mode='fit') => {
+const getScaleByDimesions = (imgW, imgH, resizeToW=0, resizeToH=0, mode='fit') => {
 
     resizeToW = typeof resizeToW !== 'number' ? 0 : resizeToW;
     resizeToH = typeof resizeToH !== 'number' ? 0 : resizeToH;
@@ -22,7 +9,7 @@ const getScalingByDimesions = (imgW, imgH, resizeToW, resizeToH, mode='fit') => 
 
     if(mode === 'cover') { //cover whole area
 
-        var dW = resizeToW - imgW,
+        let dW = resizeToW - imgW,
             dH =  resizeToH - imgH;
 
         if (dW < dH) { //scale width
@@ -48,7 +35,7 @@ const getScalingByDimesions = (imgW, imgH, resizeToW, resizeToH, mode='fit') => 
 
 }
 
-export { getScalingByDimesions };
+export { getScaleByDimesions };
 
 const drawCirclePath = (cx,cy,r) => {
     return "M" + cx + "," + cy + "m" + (-r) + ",0a" + r + "," + r + " 0 1,0 " + (r * 2) + ",0a" + r + "," + r + " 0 1,0 " + (-r * 2) + ",0";

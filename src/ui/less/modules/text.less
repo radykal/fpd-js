@@ -1,4 +1,4 @@
-fpd-module-text {
+.fpd-container fpd-module-text {
             
     .fpd-add-text {
         
@@ -20,13 +20,14 @@ fpd-module-text {
     .fpd-text-templates {
                 
         .fpd-grid {
-            gap: 2px;
+
+            padding: var(--fpd-module-content-padding);
             
             .fpd-item {
                 background: var(--fpd-module-secondary-color);
                 text-align: center;
                 position: relative;
-                border-radius: 2px;
+                border-radius: var(--fpd-border-radius);
             
                 > div {
                     font-size: 16px;

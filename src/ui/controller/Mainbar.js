@@ -34,7 +34,39 @@ export default class Mainbar extends EventTarget {
         const fpdContainer = fpdInstance.container;
                 
         this.container = document.createElement("fpd-main-bar");
-        fpdContainer.append(this.container);
+        if(fpdInstance.mainOptions.mainBarContainer && fpdInstance.mainOptions.modalMode === false) {
+
+            const mainBarWrapper = document.querySelector(fpdInstance.mainOptions.mainBarContainer);
+            if(mainBarWrapper) {
+
+                removeElemClasses(
+                    fpdContainer,
+                    ['fpd-off-canvas', 'fpd-topbar']
+                )
+
+                addElemClasses(
+                    fpdContainer,
+                    ['fpd-main-bar-container-enabled', 'fpd-sidebar']
+                )
+
+                addElemClasses(
+                    mainBarWrapper,
+                    ['fpd-container', 'fpd-main-bar-container', 'fpd-sidebar']
+                )
+
+                mainBarWrapper.append(this.container);
+            }
+            else {
+                console.log("DOM element for mainbar container not found.");
+                fpdContainer.append(this.container);
+            }
+
+        }
+        else {
+            fpdContainer.append(this.container);
+        }
+
+        
         
         this.contentElem = this.container.querySelector('.fpd-module-content');
         this.navElem = this.container.querySelector('.fpd-navigation');
@@ -80,8 +112,8 @@ export default class Mainbar extends EventTarget {
         )
         
         addEvents(
-            this.container.querySelector('.fpd-close-off-canvas'),
-            'click',
+            this.container.querySelector('.fpd-close'),
+            ['click', 'touchmove'],
             this.#closeDialog.bind(this)
         )
         
@@ -221,10 +253,12 @@ export default class Mainbar extends EventTarget {
         
     }
     
-    #closeDialog() {
+    #closeDialog(evt) {
+
+        evt.preventDefault();
                 
         if(this.fpdInstance.currentViewInstance && this.fpdInstance.currentViewInstance.currentUploadZone) {
-            this.fpdInstance.currentViewInstance.deselectElement();
+            this.fpdInstance.currentViewInstance.fabricCanvas.deselectElement();
         }
         
         this.toggleContentDisplay(false);
@@ -361,6 +395,10 @@ export default class Mainbar extends EventTarget {
             this.secContent.querySelector('.fpd-'+name),
             ['fpd-active']
         );
+
+        addElemClasses(
+            this.fpdInstance.container, ['fpd-secondary-visible']
+        );
         
         this.fpdInstance.dispatchEvent(
             new CustomEvent('secondaryModuleCalled', {
@@ -385,6 +423,7 @@ export default class Mainbar extends EventTarget {
         
         const fpdContainer = this.fpdInstance.container;
         
+        removeElemClasses(fpdContainer, ['fpd-secondary-visible']);
         toggleElemClasses(fpdContainer, ['fpd-module-visible'], toggle);
         
         if(this.contentClosable) {
@@ -615,8 +654,9 @@ export default class Mainbar extends EventTarget {
                                 
         });
         
-        if(!this.contentClosable) {
-            navElem.querySelector(`[data-module="${selectedModule}"]`).click()
+        const selectedNav = navElem.querySelector(`[data-module="${selectedModule}"]`);      
+        if(!this.contentClosable && selectedNav) {
+            selectedNav.click()
         }
 
         //upload zone panel

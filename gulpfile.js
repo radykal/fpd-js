@@ -5,6 +5,8 @@ const concat = require('gulp-concat');
 const cleanCSS = require('gulp-clean-css');
 const webpack = require('webpack-stream');
 
+const { createModule } = require('./gulp-tasks/createModule');
+
 
 function buildVendorJS() {
     
@@ -75,3 +77,4 @@ exports.minifyJS = minifyJS;
 exports.buildCSS = buildCSS;
 exports.buildVendors = series(buildVendorJS, buildVendorCSS);
 exports.default = series(buildVendorJS, buildJS, minifyJS, buildCSS);
+exports.createModule = createModule;
