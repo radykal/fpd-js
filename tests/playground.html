@@ -1,46 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Framework | Testing all web components</title>
     <!-- <script src="//code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script> -->
     <link rel="stylesheet" type="text/css" href="css/semantic.min.css">
-    
+
     <script src='./dist/fabric-5.3.1.js'></script>
     <script src='./dist/js/vendor.js'></script>
     <link href="./dist/css/vendor.css" rel="stylesheet" type="text/css">
     <script src='js/FancyProductDesigner.js'></script>
-    
+
     <style>
-        
         body {
             font-size: 12px;
         }
-        
+
         #fpd-target {
             margin-top: 100px;
         }
-        
     </style>
 </head>
-<body>
-    
-    <div class="ui container">
-        
-        <div class="ui one column grid" style="padding-top: 20px;">
-            
-            <div class="column">
-                
-                    <div id="fpd-target" class="fpd-sidebar fpd-shadow-2 fpd-views-inside-left"></div>
-                    <!-- <div id="fpd-target" class="fpd-off-canvas fpd-shadow-2 fpd-views-inside-right"></div> -->
-                    <!-- <div id="fpd-target" class="fpd-topbar fpd-shadow-2 fpd-views-inside-right"></div> -->
 
-                    <div id="custom-mainbar-container"></div>
+<body>
+
+    <div class="ui container">
+
+        <div class="ui one column grid" style="padding-top: 20px;">
+
+            <div class="column">
+
+                <div id="fpd-target" class="fpd-sidebar fpd-shadow-2"></div>
+                <!-- <div id="fpd-target" class="fpd-off-canvas fpd-shadow-2 fpd-views-inside-right"></div> -->
+                <!-- <div id="fpd-target" class="fpd-topbar fpd-shadow-2 fpd-views-inside-right"></div> -->
+
+                <div id="custom-mainbar-container"></div>
             </div>
 
-            
-            
+
+
             <div class="column">
                 <select id="main-layout" class="ui selection dropdown">
                     <option value="sidebar">Sidebar</option>
@@ -48,7 +48,7 @@
                     <!-- <option value="off-canvas">Off-Canvas</option> -->
                 </select>
             </div>
-            
+
             <div class="column" style="margin-bottom: 1000px;">
                 <h5>Test API</h5>
                 <div id="test-api">
@@ -61,10 +61,10 @@
                 <div id="editor-box-wrapper"></div>
                 <div id="svg-display"></div>
             </div>
-            
+
         </div>
         <script>
-            
+
 
             const appOptions = {
                 langJson: 'data/langs/default.json',
@@ -83,15 +83,18 @@
                     'save-load',
                 ],
                 fonts: [
-                    {name: 'Pacifico', url: 'google'},
-                    {name: 'Lobster', url: 'google'},
-                    {name: 'Aller', url: 'fonts/Aller.ttf', variants: {
+                    { name: 'Kanit', url: 'google' },
+                    { name: 'Tourney', url: 'google' },
+                    { name: 'Grandstander', url: 'google' },
+                    { name: 'Lobster', url: 'google' },
+                    {
+                        name: 'Aller', url: 'fonts/Aller.ttf', variants: {
                             'n7': 'fonts/Aller__bold.ttf',
                             'i4': 'fonts/Aller__italic.ttf',
                             'i7': 'fonts/Aller__bolditalic.ttf'
                         }
                     },
-                    {name: 'Pacifico', url: 'fonts/Pacifico.ttf'},
+                    { name: 'Pacifico', url: 'fonts/Pacifico.ttf' },
                 ],
                 productsJSON: './data/product-categories.json',
                 designsJSON: 'data/designs/design-categories.json',
@@ -171,10 +174,10 @@
                 pixabayLang: 'de',
                 pixabayHighResImages: false,
                 fitImagesInCanvas: true,
-                colorPickerPalette: ["#000", "#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc", '#5f27cd', '#222f3e', '#10ac84',"#000", "#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc", '#5f27cd', '#222f3e', '#10ac84',"#000", "#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc", '#5f27cd', '#222f3e', '#10ac84',"#000", "#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc", '#5f27cd', '#222f3e', '#10ac84'],
-                hexNames: {'000': 'black', ffffff:'white',FFFFFF:'white',990000:'red',cccccc:'grey', "83635c": 'Chestnut', f4cccc: 'Redder'},
+                colorPickerPalette: ["#000", "#f4cccc", "#fce5cd", "#fff2cc", "#d9ead3", "#d0e0e3", "#cfe2f3", "#d9d2e9", "#ead1dc", '#5f27cd', '#222f3e', '#10ac84', "#000", "#f4cccc", "#fce5cd", "#fff2cc", "#d9ead3", "#d0e0e3", "#cfe2f3", "#d9d2e9", "#ead1dc", '#5f27cd', '#222f3e', '#10ac84', "#000", "#f4cccc", "#fce5cd", "#fff2cc", "#d9ead3", "#d0e0e3", "#cfe2f3", "#d9d2e9", "#ead1dc", '#5f27cd', '#222f3e', '#10ac84', "#000", "#f4cccc", "#fce5cd", "#fff2cc", "#d9ead3", "#d0e0e3", "#cfe2f3", "#d9d2e9", "#ead1dc", '#5f27cd', '#222f3e', '#10ac84'],
+                hexNames: { '000': 'black', ffffff: 'white', FFFFFF: 'white', 990000: 'red', cccccc: 'grey', "83635c": 'Chestnut', f4cccc: 'Redder' },
                 elementParameters: {
-                    patterns: ['images/patterns/carbon.png', 'images/patterns/grune_2.png', 'images/patterns/grunge_1.png', 'images/patterns/lines_green.png', 'images/patterns/lines_purple.png', 'images/patterns/lines_red.png', 'images/patterns/wood_1.png', 'images/patterns/wood_2.png', 'images/patterns/wood_3.png', 'images/patterns/carbon.png','images/patterns/carbon.png', 'images/patterns/grune_2.png', 'images/patterns/grunge_1.png', 'images/patterns/lines_green.png', 'images/patterns/lines_purple.png', 'images/patterns/lines_red.png', 'images/patterns/wood_1.png', 'images/patterns/wood_2.png', 'images/patterns/wood_3.png', 'images/patterns/carbon.png']
+                    patterns: ['images/patterns/carbon.png', 'images/patterns/grune_2.png', 'images/patterns/grunge_1.png', 'images/patterns/lines_green.png', 'images/patterns/lines_purple.png', 'images/patterns/lines_red.png', 'images/patterns/wood_1.png', 'images/patterns/wood_2.png', 'images/patterns/wood_3.png', 'images/patterns/carbon.png', 'images/patterns/carbon.png', 'images/patterns/grune_2.png', 'images/patterns/grunge_1.png', 'images/patterns/lines_green.png', 'images/patterns/lines_purple.png', 'images/patterns/lines_red.png', 'images/patterns/wood_1.png', 'images/patterns/wood_2.png', 'images/patterns/wood_3.png', 'images/patterns/carbon.png']
                 },
                 customImageParameters: {
                     removable: true,
@@ -194,7 +197,7 @@
                     colors: true,
                 },
                 canvasHeight: 'auto',
-                maxCanvasHeight: 0.8,
+                maxCanvasHeight: 0.7,
                 highlightEditableObjects: '',
                 inCanvasTextEditing: true,
                 replaceInitialElements: true,
@@ -219,9 +222,9 @@
                 layouts: 'data/layouts/data.json',
                 smartGuides: true,
                 snapGridSize: [40, 40],
-                actions:  {
+                actions: {
                     left: ['info', 'download', 'print', 'preview-lightbox', 'reset-product', 'snap'],
-                    center: ['undo','redo', 'previous-view', 'next-view'],
+                    center: ['undo', 'redo', 'previous-view', 'next-view'],
                     right: ['zoom', 'ruler', 'guided-tour'],
                 },
                 guidedTour: {
@@ -232,85 +235,107 @@
                     'action:download': '<h4>Second Step</h4>Here you can add some text and bla.',
                     'module:textt': '<h4>Third Step</h4>Here you can add some text and bla.',
                 },
-                autoOpenInfo: false
+                autoOpenInfo: false,
+                unsavedProductAlert: false,
+                watermark: 'https://localhost:8080/examples/images/watermark.png',
+                enableDynamicViews: true,
+                toolbarPlacement: 'smart',
+                maxValues: {fontSize: 100},
+                dynamicViewsOptions: {
+                    unit: 'mm',
+                    pricePerArea: 0.0001,
+                    minWidth: 4,
+                    maxWidth: 40,
+                    minHeight: 4,
+                    maxHeight: 40,
+                    formats: [
+                        [100, 100],
+                        [500, 500],
+                        [1000, 1000],
+                        [1050, 600],
+                        [450, 1050],
+                        [513, 369]
+                    ]
+                },
                 //modalMode: '#open-modal',
                 //mainBarContainer: '#custom-mainbar-container'
             }
-                
+
             const fpd = new FancyProductDesigner(document.getElementById('fpd-target'), appOptions);
             window.fpd = fpd;
-            
-            const updateMainLayout = (layout='sidebar') => {
-                
+
+            const updateMainLayout = (layout = 'sidebar') => {
+
                 fpd.container.classList.remove('fpd-topbar');
                 fpd.container.classList.remove('fpd-sidebar');
                 fpd.container.classList.remove('fpd-off-canvas');
-                
-                fpd.container.classList.add('fpd-'+layout);
+
+                fpd.container.classList.add('fpd-' + layout);
                 fpd.mainBar.updateContentWrapper();
-                
+
             }
-            
+
             fpd.addEventListener('ready', () => {
-                
+
                 document.querySelector('#main-layout')
-                .addEventListener('change', (evt) => {
-                    updateMainLayout(evt.currentTarget.value);
-                })
-                
+                    .addEventListener('change', (evt) => {
+                        updateMainLayout(evt.currentTarget.value);
+                    })
+
             })
 
             fpd.addEventListener('productsSet', () => {
-                
+
                 fpd.selectProduct(1)
-                
+
             })
-            
+
             fpd.addEventListener('productAdd', (evt, details) => {
                 //console.log(evt.detail);              
             })
-            
+
             const testApiWrapper = document.body.querySelector('#test-api');
-            
+
             testApiWrapper.querySelector('#undo')
-            .addEventListener('click', (evt) => {
-                console.log(fpd.currentViewInstance.fabricCanvas.historyUndo);
-                fpd.currentViewInstance.fabricCanvas.undo();
-            })
-            
+                .addEventListener('click', (evt) => {
+                    console.log(fpd.currentViewInstance.fabricCanvas.historyUndo);
+                    fpd.currentViewInstance.fabricCanvas.undo();
+                })
+
             testApiWrapper.querySelector('#redo')
-            .addEventListener('click', (evt) => {
-                fpd.currentViewInstance.fabricCanvas.redo();
-            })
-            
+                .addEventListener('click', (evt) => {
+                    fpd.currentViewInstance.fabricCanvas.redo();
+                })
+
             testApiWrapper.querySelector('#test')
-            .addEventListener('click', (evt) => {
-                
-                // let elem = fpd.currentViewInstance.fabricCanvas.getElementByTitle('Base');
+                .addEventListener('click', (evt) => {
 
-                // fpd.currentViewInstance.fabricCanvas.snapToGrid = !fpd.currentViewInstance.fabricCanvas.snapToGrid;
-                
-                // elem.canvas.renderAll();
+                    // let elem = fpd.currentViewInstance.fabricCanvas.getElementByTitle('Base');
 
-                console.log(fpd.getUsedFonts());
-                
-                let test = fpd.currentViewInstance.toSVG({}, null, false, null, fpd.getUsedFonts());
+                    // fpd.currentViewInstance.fabricCanvas.snapToGrid = !fpd.currentViewInstance.fabricCanvas.snapToGrid;
 
-                // fpd.getProductDataURL((dataURL) => {
-                // console.log("🚀 ~ file: playground.html:288 ~ fpd.getProductDataURL ~ dataURL:", dataURL)
+                    // elem.canvas.renderAll();
 
-                // })
-            })
+                    console.log(fpd.removeView());
+
+                    let test = fpd.currentViewInstance.toSVG({}, null, false, null, fpd.getUsedFonts());
+
+                    // fpd.getProductDataURL((dataURL) => {
+                    // console.log("🚀 ~ file: playground.html:288 ~ fpd.getProductDataURL ~ dataURL:", dataURL)
+
+                    // })
+                })
 
             testApiWrapper.querySelector('#toSVG')
-            .addEventListener('click', (evt) => {
+                .addEventListener('click', (evt) => {
 
-                let svgStr = fpd.currentViewInstance.fabricCanvas.toSVG();
-                document.querySelector('#svg-display').innerHTML = svgStr;
-                
-            })
-            
+                    let svgStr = fpd.currentViewInstance.fabricCanvas.toSVG();
+                    document.querySelector('#svg-display').innerHTML = svgStr;
+
+                })
+
         </script>
     </div>
 </body>
+
 </html>

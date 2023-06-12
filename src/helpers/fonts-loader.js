@@ -40,7 +40,7 @@ export { parseFontsToEmbed }
 
 const loadFonts = (fpdInstance, callback) => {
     
-    const fonts = fpdInstance.mainOptions.fonts;
+    let fonts = fpdInstance.mainOptions.fonts;
             
     if(fonts && fonts.length > 0 && typeof fonts[0] === 'object') {
         
@@ -60,7 +60,7 @@ const loadFonts = (fpdInstance, callback) => {
             //same
             return 0;
         });
-    
+            
         let googleFonts = [],
             customFonts = [],
             fontStateCount = 0;
@@ -102,7 +102,7 @@ const loadFonts = (fpdInstance, callback) => {
             }
     
             if(fontStateCount == (googleFonts.length + customFonts.length)-1) {
-                callback();
+                callback(fonts);
             }
     
             fontStateCount++;
@@ -131,13 +131,13 @@ const loadFonts = (fpdInstance, callback) => {
             WebFont.load(WebFontOpts);
         }
         else {
-            callback();
+            callback(fonts);
         }
     
     
     }
     else {
-        callback();
+        callback(fonts);
     }
     
 }

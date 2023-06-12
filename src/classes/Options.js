@@ -739,6 +739,16 @@ export default class Options {
 			maxHeight: 10000
 		},
 		/**
+		* Enable dynamic views, so the user can remove, duplicate and add own views. 
+		*
+		* @property enableDynamicViews
+		* @memberof Options.defaults
+		* @type {Object}
+		* @default {}
+		* @version 6.0.0
+		*/
+		enableDynamicViews: false,
+		/**
 		* Emojis in text elements will be removed when changing or adding text.
 		*
 		* @property disableTextEmojis
@@ -757,7 +767,7 @@ export default class Options {
 		* @default false
 		* @version 4.7.7
 		*/
-		smartGuides: false,
+		smartGuides: true,
 		/**
 		* If a printing box has been defined for a view and the element has no individual bounding box, the printing box will be used as bounding box.
 		*

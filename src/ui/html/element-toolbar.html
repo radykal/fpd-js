@@ -1,0 +1,485 @@
+<div class="fpd-close-sub-panel">
+    <span class="fpd-icon-back"></span>
+</div>
+
+<div class="fpd-close">
+    <span class="fpd-icon-close"></span>
+</div>
+
+<div class="fpd-tools-nav fpd-scroll-area fpd-scrollbar-hidden">
+
+    <div class="fpd-tool-color" data-panel="color">
+        <span class="fpd-current-fill"></span>
+        <span class="fpd-label" data-defaulttext="Edit Text">toolbar.color</span>
+    </div>
+    <div class="fpd-tool-edit-text" data-panel="edit-text">
+        <span class="fpd-icon-text-input"></span>
+        <span class="fpd-label" data-defaulttext="Edit Text">toolbar.edit_text</span>
+    </div>
+    <div class="fpd-tool-edit-text" data-panel="text-size">
+        <span class="fpd-icon-font-size"></span>
+        <span class="fpd-label" data-defaulttext="Size & Spacing">toolbar.text_size_spacing</span>
+    </div>
+    <div class="fpd-tool-font-family" data-panel="font-family">
+        <span class="fpd-icon-font"></span>
+        <span class="fpd-label" data-defaulttext="Font">toolbar.font</span>
+    </div>
+    <div class="fpd-tool-font-family" data-panel="text-format">
+        <span class="fpd-icon-font"></span>
+        <span class="fpd-label" data-defaulttext="Format">toolbar.text_format</span>
+    </div>
+    <div class="fpd-tool-transform" data-panel="transform">
+        <span class="fpd-icon-transform"></span>
+        <span class="fpd-label" data-defaulttext="Transform">toolbar.transform</span>
+    </div>
+    <div class="fpd-tool-position" data-panel="position">
+        <span class="fpd-icon-alignment"></span>
+        <span class="fpd-label" data-defaulttext="Position">toolbar.position</span>
+    </div>
+    
+    <div class="fpd-tool-curved-text" data-panel="curved-text">
+        <span class="fpd-icon-curved-text"></span>
+        <span class="fpd-label" data-defaulttext="Curved Text">toolbar.curved_text</span>
+    </div>
+    <div class="fpd-tool-advanced-editing">
+        <span class="fpd-icon-advanced-editing"></span>
+        <span class="fpd-label" data-defaulttext="Edit Image">toolbar.advanced_editing</span>
+    </div>
+    <div class="fpd-tool-reset">
+        <span class="fpd-icon-reset"></span>
+        <span class="fpd-label" data-defaulttext="Reset">toolbar.reset</span>
+    </div>
+    <div class="fpd-tool-duplicate">
+        <span class="fpd-icon-copy"></span>
+        <span class="fpd-label" data-defaulttext="Duplicate">toolbar.duplicate</span>
+    </div>
+    <div class="fpd-tool-remove">
+        <span class="fpd-icon-bin"></span>
+        <span class="fpd-label" data-defaulttext="Remove">toolbar.remove</span>
+    </div>
+
+</div>
+<div class="fpd-sub-panel">
+
+    <div class="fpd-panel-color">
+
+        <div class="fpd-panel-tabs">
+            <span data-tab="fill" data-defaulttext="Fill" class="fpd-active">toolbar.fill</span>
+            <span data-tab="stroke" data-defaulttext="Stroke" class="fpd-tool-text-stroke">toolbar.stroke</span>
+            <span data-tab="shadow" data-defaulttext="Shadow" class="fpd-tool-text-shadow">toolbar.shadow</span>
+        </div>
+
+        <div class="fpd-panel-tabs-content fpd-scroll-area">
+
+            <div data-id="fill" class="fpd-active">
+
+                <div class="fpd-color-wrapper"></div>
+
+                <div class="fpd-tool-fill-opacity fpd-input">
+                    <span class="fpd-label" data-defaulttext="Transparency">toolbar.transparency</span>
+                    <fpd-range-slider 
+                        class="fpd-progress"
+                        value="1" 
+                        step="0.01" 
+                        min="0" 
+                        max="1"
+                        data-control="opacity"
+                    ></fpd-range-slider>
+                    <input 
+                        class="fpd-slider-number fpd-number" 
+                        type="number" 
+                        value="1" 
+                        step="0.01" 
+                        min="0" 
+                        max="1"
+                        data-control="opacity" 
+                    />
+                </div>
+
+            </div>
+
+            <div data-id="stroke">
+
+                <div class="fpd-stroke-color-wrapper"></div>
+                
+                <div class="fpd-tool-stroke-width fpd-input">
+                    <span class="fpd-label" data-defaulttext="Stroke Width">toolbar.stroke_width</span>
+                    <fpd-range-slider 
+                        class="fpd-progress"
+                        value="0" 
+                        step="1" 
+                        min="0" 
+                        max="20"
+                        data-control="strokeWidth"
+                    ></fpd-range-slider>
+                    <input 
+                        class="fpd-slider-number fpd-number" 
+                        type="number" 
+                        value="0" 
+                        step="1" 
+                        min="0" 
+                        max="20"
+                        data-control="strokeWidth" 
+                    />
+                </div>
+
+            </div>
+
+            <div data-id="shadow">
+
+                <div class="fpd-shadow-color-wrapper"></div>
+
+                <div class="fpd-tool-shadow-blur fpd-input">
+                    <span class="fpd-label" data-defaulttext="Blur">toolbar.shadow_blur</span>
+                    <fpd-range-slider 
+                        class="fpd-progress"
+                        value="0" 
+                        step="1" 
+                        min="0" 
+                        max="200"
+                        data-control="shadowBlur"
+                    ></fpd-range-slider>
+                    <input 
+                        class="fpd-slider-number fpd-number" 
+                        type="number" 
+                        value="0" 
+                        step="1" 
+                        min="0" 
+                        max="200"
+                        data-control="shadowBlur" 
+                    />
+                </div>
+
+                <div class="fpd-tool-shadow-offsetX fpd-input">
+                    <span class="fpd-label" data-defaulttext="Offset X">toolbar.shadow_offset_x</span>
+                    <fpd-range-slider 
+                        class="fpd-progress"
+                        value="0" 
+                        step="1" 
+                        min="-100" 
+                        max="100"
+                        data-control="shadowOffsetX"
+                    ></fpd-range-slider>
+                    <input 
+                        class="fpd-slider-number fpd-number" 
+                        type="number" 
+                        value="0" 
+                        step="1" 
+                        min="-100" 
+                        max="100"
+                        data-control="shadowOffsetX" 
+                    />
+                </div>
+
+                <div class="fpd-tool-shadow-offsetY fpd-input">
+                    <span class="fpd-label" data-defaulttext="Offset Y">toolbar.shadow_offset_y</span>
+                    <fpd-range-slider 
+                        class="fpd-progress"
+                        value="0" 
+                        step="1" 
+                        min="-100" 
+                        max="100"
+                        data-control="shadowOffsetY"
+                    ></fpd-range-slider>
+                    <input 
+                        class="fpd-slider-number fpd-number" 
+                        type="number" 
+                        value="0" 
+                        step="1" 
+                        min="-100" 
+                        max="100"
+                        data-control="shadowOffsetY" 
+                    />
+                </div>
+
+                <div class="fpd-btn fpd-secondary fpd-remove-shadow" data-defaulttext="Remove Shadow">toolbar.remove_shadow</div>
+
+            </div>
+
+        </div>
+
+    </div><!-- Fill Panel -->
+
+    <div class="fpd-panel-edit-text fpd-padding">
+
+        <textarea data-control="text"></textarea>
+
+    </div><!-- Edit-Text Panel -->
+
+    <div class="fpd-panel-text-size fpd-padding">
+        <div class="fpd-tool-text-size fpd-input">
+            <span class="fpd-label" data-defaulttext="Font Size">toolbar.font_size</span>
+            <fpd-range-slider 
+                class="fpd-progress"
+                value="12" 
+                step="1" 
+                min="1" 
+                max="200"
+                data-control="fontSize"
+            ></fpd-range-slider>
+            <input 
+                class="fpd-slider-number fpd-number" 
+                type="number" 
+                value="12" 
+                step="1" 
+                min="1" 
+                max="200"
+                data-control="fontSize" 
+            />
+        </div>
+        <div class="fpd-tool-text-line-spacing fpd-input">
+            <span class="fpd-label" data-defaulttext="Line Spacing">toolbar.line_spacing</span>
+            <fpd-range-slider 
+                class="fpd-progress"
+                value="1" 
+                step="0.1" 
+                min="-2" 
+                max="3"
+                data-control="lineHeight"
+            ></fpd-range-slider>
+            <input 
+                class="fpd-slider-number fpd-number" 
+                type="number" 
+                value="1" 
+                step="0.1" 
+                min="-2" 
+                max="3"
+                data-control="lineHeight" 
+            />
+        </div>
+        <div class="fpd-tool-text-letter-spacing fpd-input">
+            <span class="fpd-label" data-defaulttext="Letter Spacing">toolbar.letter_spacing</span>
+            <fpd-range-slider 
+                class="fpd-progress"
+                value="0" 
+                step="1" 
+                min="-30" 
+                max="30"
+                data-control="letterSpacing"
+            ></fpd-range-slider>
+            <input 
+                class="fpd-slider-number fpd-number" 
+                type="number" 
+                value="0" 
+                step="1" 
+                min="-30" 
+                max="30"
+                data-control="letterSpacing" 
+            />
+        </div>
+    </div><!-- Text-Size & Spacing Panel -->
+
+    <div class="fpd-panel-text-format fpd-padding">
+
+        <div class="fpd-tools-group">
+
+            <div class="fpd-tool-text-bold fpd-toggle" data-defaulttext="Bold" data-control="fontWeight"
+                data-enabled="bold" data-disabled="normal" title="toolbar.bold">
+                <span class="fpd-icon-format-bold"></span>
+            </div>
+            <div class="fpd-tool-text-italic fpd-toggle" data-defaulttext="Italic" data-control="fontStyle"
+                data-enabled="italic" data-disabled="normal" title="toolbar.italic">
+                <span class="fpd-icon-format-italic"></span>
+            </div>
+            <div class="fpd-tool-text-underline fpd-toggle" data-defaulttext="Underline"
+                data-control="textDecoration" data-enabled="underline" data-disabled="normal" title="toolbar.underline">
+                <span class="fpd-icon-format-underline"></span>
+            </div>
+            <div class="fpd-tool-text-transform fpd-btn-options" data-control="textTransform"
+                data-options='{"none": "fpd-icon-text-transform", "uppercase": "fpd-icon-uppercase", "lowercase": "fpd-icon-lowercase"}'
+                data-defaulttext="Text Transform" title="toolbar.text_transform">
+                <span class="fpd-icon-text-transform"></span>
+            </div>
+
+        </div>
+        <div class="fpd-tool-text-align fpd-btn-group" data-control="textAlign">
+            <span class="fpd-icon-format-align-left" data-option="left"></span>
+            <span class="fpd-icon-format-align-center" data-option="center"></span>
+            <span class="fpd-icon-format-align-right" data-option="right"></span>
+            <span class="fpd-icon-format-align-justify" data-option="justify"></span>
+        </div>
+
+    </div><!-- Text-Format Panel -->
+
+    <div class="fpd-panel-font-family fpd-padding" data-control="fontFamily">
+        <input type="text" data-defaulttext="Search Fonts" placeholder="toolbar.font_family_search" />
+        <div class="fpd-scroll-area">
+            <div class="fpd-fonts-list"></div>
+        </div>
+    </div><!-- Font Panel -->
+
+    <div class="fpd-panel-curved-text fpd-padding">
+
+        <div class="fpd-curved-options">
+            <span data-value="normal">Normal</span>
+            <span data-value="curved">Curved Top</span>
+            <span data-value="curveReverse">Curved Bottom</span>
+        </div>
+
+        <div class="fpd-tool-curved-text-radius fpd-input">
+            <span class="fpd-label" data-defaulttext="Radius">toolbar.radius</span>
+            <fpd-range-slider 
+                class="fpd-progress"
+                value="80" 
+                step="1" 
+                min="0" 
+                max="400"
+                data-control="curveRadius"
+            ></fpd-range-slider>
+            <input 
+                class="fpd-slider-number fpd-number" 
+                type="number" 
+                value="80" 
+                step="1" 
+                min="0" 
+                max="400"
+                data-control="curveRadius" 
+            />
+        </div>
+
+    </div><!-- Curved Text -->
+
+    <div class="fpd-panel-transform fpd-padding">
+
+        <div class="fpd-tool-angle fpd-input">
+            <span class="fpd-label" data-defaulttext="Rotate">toolbar.rotate</span>
+            <fpd-range-slider 
+                class="fpd-progress"
+                value="1" 
+                step="1" 
+                min="0" 
+                max="359"
+                data-control="angle"
+            ></fpd-range-slider>
+            <input 
+                class="fpd-slider-number fpd-number" 
+                type="number" 
+                value="1" 
+                step="1" 
+                min="0" 
+                max="359"
+                data-control="angle" 
+            />
+        </div>
+
+        <div class="fpd-tool-scaleX fpd-tool-scale fpd-input">
+                <span class="fpd-label" data-defaulttext="Scale X">toolbar.scaleX</span>
+                <fpd-range-slider 
+                    class="fpd-progress"
+                    value="1" 
+                    step="0.01" 
+                    min="0" 
+                    max="5"
+                    data-control="scaleX"
+                ></fpd-range-slider>
+                <input 
+                    class="fpd-slider-number fpd-number" 
+                    type="number" 
+                    value="1" 
+                    step="0.01" 
+                    min="0" 
+                    max="5"
+                    data-control="scaleX" 
+                />
+        </div>
+
+        <div 
+            class="fpd-tool-uniscaling-locker fpd-tool-scale fpd-toggle" 
+            data-control="lockUniScaling"
+            data-enabled="true" 
+            data-disabled="false"
+        >
+            <span class="fpd-icon-unlocked"></span>
+        </div>
+
+        <div class="fpd-tool-scaleY fpd-tool-scale fpd-input">
+            <span class="fpd-label" data-defaulttext="Scale Y">toolbar.scaleY</span>
+            <fpd-range-slider 
+                class="fpd-progress"
+                value="1" 
+                step="0.01" 
+                min="0" 
+                max="5"
+                data-control="scaleY"
+            ></fpd-range-slider>
+            <input 
+                class="fpd-slider-number fpd-number" 
+                type="number" 
+                value="1" 
+                step="0.01" 
+                min="0" 
+                max="5"
+                data-control="scaleY" 
+            />
+        </div>
+
+        <div class="fpd-tool-flip fpd-tools-group">
+            <div data-do="flip-x">
+                <span class="fpd-icon-flip-horizontal"></span>
+                <span data-defaulttext="Flip Horizontal">toolbar.flip_h</span>
+            </div>
+            <div data-do="flip-y">
+                <span class="fpd-icon-flip-vertical"></span>
+                <span data-defaulttext="Flip Vertical">toolbar.flip_v</span>
+            </div>
+        </div>
+
+    </div><!-- Transform Panel -->
+
+    <div class="fpd-panel-position">
+
+        <div class="fpd-panel-tabs">
+            <span data-tab="arrange" data-defaulttext="Arrange" class="fpd-active">toolbar.arrange</span>
+            <span data-tab="align" data-defaulttext="Align" class="fpd-tool-text-stroke">toolbar.align</span>
+        </div>
+
+        <div class="fpd-panel-tabs-content fpd-scroll-area">
+            <div data-id="arrange">
+
+                <div class="fpd-tool-layer-depth fpd-tools-group">
+                    <div data-do="layer-up">
+                        <span class="fpd-icon-move-up"></span>
+                        <span data-defaulttext="Move Up">toolbar.move_up</span>
+                    </div>
+                    <div data-do="layer-down">
+                        <span class=" fpd-icon-move-down"></span>
+                        <span data-defaulttext="Move Down">toolbar.move_down</span>
+                    </div>
+                </div>
+                
+            </div>
+            <div data-id="align">
+
+                <div class="fpd-tool-position-align fpd-tools-group">
+                    <div data-do="align-top">
+                        <span class="fpd-icon-align-top"></span>
+                        <span data-defaulttext="Top">toolbar.align_top</span>
+                    </div>
+                    <div data-do="align-middle">
+                        <span class="fpd-icon-align-horizontal-middle"></span>
+                        <span data-defaulttext="Middle">toolbar.center_h</span>
+                    </div>
+                    <div data-do="align-bottom">
+                        <span class="fpd-icon-align-bottom"></span>
+                        <span data-defaulttext="Bottom">toolbar.align_bottom</span>
+                    </div>
+                    <div data-do="align-left">
+                        <span class="fpd-icon-align-left"></span>
+                        <span data-defaulttext="Left">toolbar.align_left</span>
+                    </div>
+                    <div data-do="align-center">
+                        <span class="fpd-icon-align-vertical-middle"></span>
+                        <span data-defaulttext="Center">toolbar.center_v</span>
+                    </div>
+                    <div data-do="align-right">
+                        <span class="fpd-icon-align-right"></span>
+                        <span data-defaulttext="Right">toolbar.align_right</span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+    </div><!-- Position Panel -->
+
+</div>

@@ -4,7 +4,9 @@ import MainLoaderHTML from './html/main-loader.html';
 import Mainbar from './controller/Mainbar.js';
 import MainWrapper from './controller/MainWrapper.js';
 import ActionsBar from './controller/ActionsBar.js';
-import ViewsWrapper from './controller/ViewsWrapper.js';
+import ViewsNav from './controller/ViewsNav.js';
+import ViewsGrid from './controller/ViewsGrid.js';
+import ElementToolbar from './controller/ElementToolbar';
 import GuidedTour from '/src/ui/controller/addons/GuidedTour';
 
 import { 
@@ -17,6 +19,7 @@ import {
 export default class UIManager extends EventTarget {
     
     #currentWindowWidth = 0;
+    #currentLayout = '';
     
     constructor(fpdInstance) {
         
@@ -122,10 +125,6 @@ export default class UIManager extends EventTarget {
 
 		}
         
-        this.#updateResponsive();
-        this.#hoverThumbnail();
-        this.#setMainTooltip();
-        
         this.fpdInstance.container.classList.add('fpd-container');
         this.fpdInstance.container.classList.add('fpd-wrapper');
         
@@ -140,7 +139,9 @@ export default class UIManager extends EventTarget {
         
         this.fpdInstance.mainWrapper = new MainWrapper(this.fpdInstance);
         this.fpdInstance.productStage = this.fpdInstance.mainWrapper.container.querySelector('.fpd-product-stage');
-        this.fpdInstance.viewsWrapper = new ViewsWrapper(this.fpdInstance);
+        this.fpdInstance.viewsNav = new ViewsNav(this.fpdInstance);
+        this.fpdInstance.viewsGrid = new ViewsGrid(this.fpdInstance);
+        this.fpdInstance.toolbar = new ElementToolbar(this.fpdInstance);
 
         if(this.fpdInstance.mainOptions.guidedTour && Object.keys(this.fpdInstance.mainOptions.guidedTour).length > 0) {
 
@@ -148,7 +149,13 @@ export default class UIManager extends EventTarget {
             
         }
         
-        Array.from(this.fpdInstance.container.querySelectorAll('[data-defaulttext]'))
+        //all labels
+        const labels = new Set([
+            ...this.fpdInstance.container.querySelectorAll('[data-defaulttext]'),
+            ...this.fpdInstance.toolbar.container.querySelectorAll('[data-defaulttext]')
+        ])
+
+        Array.from(labels)
         .forEach(item => {
             
             this.fpdInstance.translator.translateElement(
@@ -163,6 +170,10 @@ export default class UIManager extends EventTarget {
         );
         
         window.addEventListener("resize", this.#updateResponsive.bind(this));
+
+        this.#updateResponsive();
+        this.#hoverThumbnail();
+        this.#setMainTooltip();
         
     }
     
@@ -172,20 +183,45 @@ export default class UIManager extends EventTarget {
         
         this.#currentWindowWidth = window.innerWidth;
         
+        let currentLayout;
         if(this.#currentWindowWidth < breakpoints.small) {
             this.fpdInstance.container.classList.remove('fpd-layout-medium');
             this.fpdInstance.container.classList.remove('fpd-layout-large');
             this.fpdInstance.container.classList.add('fpd-layout-small');
+            currentLayout = 'small';
         }
         else if(this.#currentWindowWidth < breakpoints.medium) {
             this.fpdInstance.container.classList.remove('fpd-layout-small');
             this.fpdInstance.container.classList.remove('fpd-layout-large');
             this.fpdInstance.container.classList.add('fpd-layout-medium');
+            currentLayout = 'medium';
         }
         else {
             this.fpdInstance.container.classList.remove('fpd-layout-medium');
             this.fpdInstance.container.classList.remove('fpd-layout-small');
             this.fpdInstance.container.classList.add('fpd-layout-large');
+            currentLayout = 'large';
+        }
+
+        if(currentLayout != this.#currentLayout) {
+
+            this.#currentLayout = currentLayout;
+
+            /**
+             * Gets fired when the UI layout changes.
+             *
+             * @event uiLayoutChange
+             * @param {CustomEvent} event
+             * @param {Array} event.detail.layout - The current layout: small, medium or large.
+             */
+            this.fpdInstance.dispatchEvent(
+                new CustomEvent('uiLayoutChange', {
+                    detail: {
+                        layout: currentLayout,
+                    }
+                })
+            );
+            
         }
         
     }

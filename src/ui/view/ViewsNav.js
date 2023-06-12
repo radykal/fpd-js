@@ -1,6 +1,6 @@
-import html from '/src/ui/html/views-wrapper.html';
+import html from '/src/ui/html/views-nav.html';
 
-class ViewsWrapper extends HTMLElement {
+class ViewsNav extends HTMLElement {
     
     constructor() {
         
@@ -16,4 +16,4 @@ class ViewsWrapper extends HTMLElement {
 
 }
 
-customElements.define( 'fpd-views-wrapper', ViewsWrapper );
+customElements.define( 'fpd-views-nav', ViewsNav );

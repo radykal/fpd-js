@@ -27,7 +27,7 @@ fabric.Canvas.prototype.dispose = (function (originalFn) {
  */
 fabric.Canvas.prototype._historyNext = function () {
 
-    let propertyKeys = Options.getParameterKeys();
+    let propertyKeys = Options.getParameterKeys();    
     propertyKeys = propertyKeys.concat(fabric.Object.propertiesToInclude);
 
     let jsonObj = this.toJSON(propertyKeys);
@@ -46,9 +46,9 @@ fabric.Canvas.prototype._historyNext = function () {
  */
 fabric.Canvas.prototype._historyEvents = function () {
     return {
-        'elementAdd': this._historySaveAction,
-        'elementRemove': this._historySaveAction,
-        'object:modified': this._historySaveAction,
+        'elementAdd': this.historySaveAction,
+        'elementRemove': this.historySaveAction,
+        'object:modified': this.historySaveAction,
     }
 }
 
@@ -73,7 +73,7 @@ fabric.Canvas.prototype._historyDispose = function () {
 /**
  * It pushes the state of the canvas into history stack
  */
-fabric.Canvas.prototype._historySaveAction = function () {
+fabric.Canvas.prototype.historySaveAction = function () {
 
     if (this.historyProcessing)
         return;
@@ -154,7 +154,7 @@ fabric.Canvas.prototype.clearHistory = function () {
 fabric.Canvas.prototype.onHistory = function () {
     this.historyProcessing = false;
 
-    this._historySaveAction();
+    this.historySaveAction();
 }
 
 /**

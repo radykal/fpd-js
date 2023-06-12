@@ -26,6 +26,7 @@ fabric.Canvas.prototype.isCustomized = false;
 fabric.Canvas.prototype.printingBoxObject = null;
 fabric.Canvas.prototype._canvasCreated = false;
 fabric.Canvas.prototype.currentCurvedTextPath = false;
+fabric.Canvas.prototype._doHistory = false;
 
 fabric.Canvas.prototype.initialize = (function (originalFn) {
 
@@ -447,8 +448,6 @@ fabric.Canvas.prototype._bringToppedElementsToFront = function () {
         this.printingBoxObject.bringToFront();
     }
 
-    this.renderAll();
-
 }
 
 /**
@@ -537,7 +536,7 @@ fabric.Canvas.prototype.addElements = function (elements, callback) {
     else {
 
         if (typeof callback !== 'undefined') {
-            callback.call(callback, instance);
+            callback.call(callback, this);
         }
 
         this.initialElementsLoaded = true;
@@ -934,8 +933,7 @@ fabric.Canvas.prototype.deselectElement = function (discardActiveObject = true) 
     }
 
     this.currentElement = null;
-    this.renderAll().calcOffset();
-
+    
     this.fire('elementSelect', { element: null })
 
 }
@@ -946,6 +944,8 @@ fabric.Canvas.prototype.deselectElement = function (discardActiveObject = true) 
  * @method resetSize
  */
 fabric.Canvas.prototype.resetSize = function () {
+
+    if(!this.wrapperEl.parentNode) return;
 
     const viewStage = this.wrapperEl;
     const viewStageWidth = viewStage.parentNode.clientWidth;
@@ -984,19 +984,6 @@ fabric.Canvas.prototype.resetSize = function () {
         widthScale = scaleHeight = 1;
     }
 
-    //todo
-    // if(!instance.viewOptions.editorMode && instance.maskObject && instance.maskObject._originParams) {
-    //     instance.maskObject.left = instance.maskObject._originParams.left * instance.responsiveScale;
-    //     instance.maskObject.top = instance.maskObject._originParams.top * instance.responsiveScale;
-    //     instance.maskObject.scaleX = instance.maskObject._originParams.scaleX * instance.responsiveScale;
-    //     instance.maskObject.scaleY = instance.maskObject._originParams.scaleY * instance.responsiveScale;
-    // 
-    // }
-    // else if(instance.maskObject) {
-    //     instance.maskObject.setCoords();
-    // }
-
-
     this
     .setDimensions({
         width: widthScale * this.viewOptions.stageWidth,
@@ -1032,7 +1019,6 @@ fabric.Canvas.prototype.setResZoom = function(value) {
     if(value == 1) {
         this.resetZoom();
     }
-
 
 };
 
@@ -1452,39 +1438,31 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 
         }
 
-        if ((parameters.shadowColor || parameters.shadowBlur || parameters.shadowOffsetX || parameters.shadowOffsetY) && !element.shadow) {
-
-            let shadowObj = {
-                color: parameters.shadowColor ? parameters.shadowColor : 'rgba(0,0,0,0)'
-            }
-
-            element.setShadow(shadowObj);
-
-        }
-
-        if (element.shadow && parameters.hasOwnProperty('shadowColor')) {
-
-            if (parameters.shadowColor) {
-                element.shadow.color = parameters.shadowColor;
+        if( parameters.hasOwnProperty('shadowColor') 
+            || parameters.hasOwnProperty('shadowBlur') 
+            || parameters.hasOwnProperty('shadowOffsetX') 
+            || parameters.hasOwnProperty('shadowOffsetY')
+        ) {
+            
+            if(parameters.shadowColor === null) {
+                element.set('shadow', null);
             }
             else {
-                element.setShadow(null);
-            }
 
-        }
+                let currentShadow = {};
+                if(element.shadow) {
+                    currentShadow = element.shadow.toObject();
+                }
+                            
+                let shadowObj = {
+                    color: parameters.hasOwnProperty('shadowColor') ? parameters.shadowColor : currentShadow.color,
+                    blur: parameters.hasOwnProperty('shadowBlur') ? parameters.shadowBlur : currentShadow.blur,
+                    offsetX: parameters.hasOwnProperty('shadowOffsetX') ? parameters.shadowOffsetX : currentShadow.offsetX,
+                    offsetY: parameters.hasOwnProperty('shadowOffsetY') ? parameters.shadowOffsetY : currentShadow.offsetY,
+                }
+                
+                element.set('shadow', shadowObj);
 
-        if (element.shadow) {
-
-            if (parameters.shadowBlur) {
-                element.shadow.blur = parameters.shadowBlur;
-            }
-
-            if (parameters.shadowOffsetX) {
-                element.shadow.offsetX = parameters.shadowOffsetX;
-            }
-
-            if (parameters.shadowOffsetY) {
-                element.shadow.offsetY = parameters.shadowOffsetY;
             }
 
         }
@@ -1519,6 +1497,9 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
     if (parameters.autoCenter) {
         element.centerElement();
     }
+
+    if(parameters.hasOwnProperty('lockUniScaling'))
+        element._elementControls();
 
     //change element color
     if (parameters.fill !== undefined || parameters.svgFill !== undefined) {
@@ -1558,17 +1539,37 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
         this._bringToppedElementsToFront();
     }
     
-    if(element.curved) {
+    if(parameters.hasOwnProperty('curved')) {
 
-        if(parameters.curveRadius) {
+        if(parameters.curved) {
+
             element.setCurvedTextPath();
-        }
+                
+            if(element == this.getActiveObject()) {
+                element.path.visible = true;   
+            }
+    
+            //replace new lines in curved text
+            if(parameters.text) {
+                element.set('text', element.text.replace(/(?:\r\n|\r|\n)/g, ''));
+                element.setCurvedTextPosition();            
+            }   
 
-        //replace new lines in curved text
-        if(parameters.text) {
-            element.set('text', element.text.replace(/(?:\r\n|\r|\n)/g, ''));
-            element.setCurvedTextPosition();            
-        }        
+        } 
+        else {
+            element.set('path', null);
+        }    
+
+    }
+
+    if(parameters.hasOwnProperty('curveRadius')) {
+
+        element.setCurvedTextPath();
+
+        if(element == this.getActiveObject()) {
+            element.path.visible = true;   
+        }
+        
 
     }
     
@@ -1598,15 +1599,19 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
     this.renderAll().calcOffset();
 
     /**
-     * Gets fired as soon as an element is selected.
+     * Gets fired as soon as an element is modified.
      *
-     * @event FancyProductDesignerView#elementSelect
+     * @event FancyProductDesignerView#elementModify
      * @param {Event} event
      * @param {fabric.Object} currentElement - The current selected element.
      */
     this.fire('elementModify', { element: element, options: parameters })
 
     element._checkContainment();
+
+    if(this._doHistory) {
+        this.historySaveAction();
+    }
 
     if (parameters.autoSelect
         && element.isEditable
@@ -1660,6 +1665,73 @@ fabric.Canvas.prototype.getUploadZone = function (title) {
             break;
         }
 
+    }
+
+};
+
+/**
+ * Use a SVG image as mask for the whole view. The image needs to be a SVG file with only one path. The method toSVG() does not include the mask.
+ *
+ * @method setMask
+ * @param {Object|Null} maskOptions An object containing the URL to the svg. Optional: scaleX, scaleY, left and top.
+ */
+fabric.Canvas.prototype.setMask = function(maskOptions={}, callback=() => {}) {
+
+    if(maskOptions && maskOptions.url && maskOptions.url.includes('.svg')) {
+
+        const maskURL = FancyProductDesigner.proxyFileServer + maskOptions.url;
+
+        fabric.loadSVGFromURL(maskURL, (objects, options) => {            
+
+            let svgGroup = null;
+            if(objects) {
+                //if objects is null, svg is loaded from external server with cors disabled
+                svgGroup = objects ? fabric.util.groupSVGElements(objects, options) : null;
+
+                svgGroup.setOptions({
+                    left: maskOptions.left ? Number(maskOptions.left) :  0,
+                    top: maskOptions.top ? Number(maskOptions.top) :  0,
+                    scaleX: maskOptions.scaleX ? Number(maskOptions.scaleX) :  1,
+                    scaleY: maskOptions.scaleY ? Number(maskOptions.scaleY) :  1,
+                    selectable: true,
+                    evented: false,
+                    resizable: true,
+                    lockUniScaling: false,
+                    lockRotation: true,
+                    borderColor: 'transparent',
+                    fill: 'rgba(0,0,0,0)',
+                    transparentCorners: true,
+                    cornerColor: this.viewOptions.selectedColor,
+                    cornerIconColor: this.viewOptions.cornerIconColor,
+                    cornerSize: 24,
+                    originX: 'left',
+                    originY: 'top',
+                    name: "view-mask",
+                    objectCaching: false,
+                    excludeFromExport: true,
+                    _ignore: true,
+                    _originParams: {
+                        left: maskOptions.left ? Number(maskOptions.left) :  0,
+                        top: maskOptions.top ? Number(maskOptions.top) :  0,
+                        scaleX: maskOptions.scaleX ? Number(maskOptions.scaleX) :  1,
+                        scaleY: maskOptions.scaleY ? Number(maskOptions.scaleY) :  1,
+                    }
+                })
+
+                this.clipPath = svgGroup;
+                this.renderAll();
+
+                this.resetSize();
+
+            }
+
+            callback(svgGroup);
+
+        });
+
+    }
+    else {
+        this.clipPath = null;
     }
 
 };

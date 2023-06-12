@@ -196,7 +196,7 @@ var FPDPricingRules = function($elem, fpdInstance) {
 
 	}
 
-	$elem.on('elementModify productCreate elementAdd elementRemove viewCreate viewRemove viewSizeChange _doPricingRules elementColorChange', function(evt) {
+	$elem.on('elementModify productCreate elementAdd elementRemove viewCreate viewRemove _doPricingRules elementColorChange', function(evt) {
 
 		if(fpdInstance.productCreated) {
 			instance.doPricingRules();

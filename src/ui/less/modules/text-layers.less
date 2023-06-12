@@ -1,19 +1,19 @@
 .fpd-container fpd-module-text-layers {
 
-    padding: var(--fpd-module-content-padding);
+    
     
     .fpd-list {
 
         position: relative;
         min-height: 100%;
-        padding-right: 4px;
+        padding: var(--fpd-module-content-padding);
 
         .fpd-list-row {
             
             flex-wrap: wrap;
             margin: 0 0 10px;
-            background: var(--fpd-module-secondary-color);
             border-radius: var(--fpd-border-radius);
+            box-shadow: 0px 0px 10px rgba(110, 111, 114, 0.2);
 
             > div {
                 margin: 10px 8px;
@@ -27,12 +27,20 @@
 
             }
 
+            > .fpd-cell-1 {
+
+                fpd-dropdown {
+                    height: 35px;
+                }
+
+            }
+
             > .fpd-cell-2 {
                 flex: 0 0 60px;
 
                 > input {
                     text-align: center;
-                    height: 40px;
+                    height: 35px;
                 }
             }
             
@@ -46,8 +54,8 @@
 
             .fpd-clear-text {
                 position: absolute;
-                right: 0;
-                top: 0;
+                right: 1px;
+                top: 1px;
                 font-size: 11px;
                 line-height: 1;
                 padding: 3px 4px;
@@ -55,15 +63,13 @@
                 background: var(--fpd-module-secondary-color);
                 border-bottom-left-radius: 2px;
                 cursor: pointer;
+                border-top-right-radius: var(--fpd-border-radius);
             }
 
             input, textarea {
                 margin: 0 !important;
                 padding: 8px;
-            }
-
-            fpd-dropdown {
-                box-shadow: 0px 0px 4px rgba(110, 111, 114, 0.22);
+                width: 100%;
             }
             
         }

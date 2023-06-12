@@ -16,7 +16,7 @@ const getScaleByDimesions = (imgW, imgH, resizeToW=0, resizeToH=0, mode='fit') =
             scaling = rwSet ? Math.max(resizeToW / imgW,  resizeToH / imgH) : 1;
         }
         else { //scale height
-              scaling = rhSet ? Math.max(resizeToW / imgW,  resizeToH / imgH) : 1;
+            scaling = rhSet ? Math.max(resizeToW / imgW,  resizeToH / imgH) : 1;
         }
 
     }

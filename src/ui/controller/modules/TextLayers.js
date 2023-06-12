@@ -22,18 +22,23 @@ export default class TextLayersModule extends EventTarget {
         
         addEvents(
             fpdInstance,
-            'viewSelect', 
-            () => {
-                this.#updateList();
-            }
-        )
-        
-        addEvents(
-            fpdInstance,
-            ['elementAdd', 'elementRemove'], 
+            ['elementAdd', 'elementRemove', 'viewSelect', 'productCreate'], 
             (evt) => {
                 
                 if(fpdInstance.productCreated) {
+                    this.#updateList();
+                }
+            }
+        )
+
+        addEvents(
+            fpdInstance,
+            ['historyAction'], 
+            (evt) => {
+                
+                const { type } = evt.detail;
+                
+                if(type == 'undo' || type == 'redo') {
                     this.#updateList();
                 }
             }
@@ -94,7 +99,7 @@ export default class TextLayersModule extends EventTarget {
         
         this.listElem.innerHTML = '';
         
-        this.fpdInstance.getElements(this.fpdInstance.currentViewIndex)
+        this.fpdInstance.getElements(this.fpdInstance.currentViewIndex, 'all', false)
         .forEach((element) => {
             
             if(element.checkEditable() && element.getType() == 'text') {

@@ -5,7 +5,7 @@ const isPlainObject = (value) => {
     return Object.prototype.toString.call(value) === '[object Object]';
 }
 
-export { isPlainObject };
+export { isPlainObject }
 
 const objectHasKeys = (obj, keys) => {
 
@@ -31,7 +31,7 @@ const objectHasKeys = (obj, keys) => {
 
 }
 
-export { objectHasKeys };
+export { objectHasKeys }
 
 const objectsAreEqual = (obj1, obj2) => {
 
@@ -54,7 +54,7 @@ const objectsAreEqual = (obj1, obj2) => {
     return true;
 }
 
-export { objectsAreEqual };
+export { objectsAreEqual }
 
 const deepMerge = (obj1, obj2) => {
 
@@ -83,7 +83,7 @@ const deepMerge = (obj1, obj2) => {
     return merged;
 }
 
-export { deepMerge };
+export { deepMerge }
 
 
 const objectGet = (obj, path, defValue) => {
@@ -101,7 +101,7 @@ const objectGet = (obj, path, defValue) => {
     return result === undefined ? defValue : result;
 }
 
-export { objectGet };
+export { objectGet }
 
 
 /**
@@ -119,13 +119,13 @@ const isUrl = (s) => {
 
 }
 
-export { isUrl };
+export { isUrl }
 
 const removeUrlParams = (url) => {
     return url.replace(/\?.*$/, '');
 }
 
-export { removeUrlParams };
+export { removeUrlParams }
 
 /**
  * Makes an unique array.
@@ -148,7 +148,7 @@ const arrayUnique = (array) => {
     return a;
 }
 
-export { arrayUnique };
+export { arrayUnique }
 
 /**
  * Removes an element from an array by value.
@@ -170,7 +170,7 @@ const removeFromArray = (array, element) => {
 
 }
 
-export { removeFromArray };
+export { removeFromArray }
 
 const isZero = (value) => {
 
@@ -178,7 +178,7 @@ const isZero = (value) => {
 
 }
 
-export { isZero };
+export { isZero }
 
 const addEvents = (elements, events = [], listener = () => { }, useCapture = false) => {
 
@@ -210,7 +210,7 @@ const addEvents = (elements, events = [], listener = () => { }, useCapture = fal
 
 }
 
-export { addEvents };
+export { addEvents }
 
 const addElemClasses = (elements = [], classes = []) => {
 
@@ -239,7 +239,7 @@ const addElemClasses = (elements = [], classes = []) => {
 
 }
 
-export { addElemClasses };
+export { addElemClasses }
 
 const removeElemClasses = (elements = [], classes = []) => {
 
@@ -270,7 +270,7 @@ const removeElemClasses = (elements = [], classes = []) => {
 
 }
 
-export { removeElemClasses };
+export { removeElemClasses }
 
 const toggleElemClasses = (elements = [], classes = [], toggle = true) => {
 
@@ -326,7 +326,7 @@ const loadGridImage = (pictureElem, source = null) => {
 
 }
 
-export { loadGridImage };
+export { loadGridImage }
 
 const isEmpty = (value) => {
 
@@ -347,9 +347,9 @@ const isEmpty = (value) => {
 
     return false;
 
-};
+}
 
-export { isEmpty };
+export { isEmpty }
 
 /**
  * Checks if the browser local storage is available.
@@ -376,7 +376,7 @@ const localStorageAvailable = () => {
 
 }
 
-export { localStorageAvailable };
+export { localStorageAvailable }
 
 const createImgThumbnail = (opts = {}) => {
 
@@ -415,9 +415,9 @@ const createImgThumbnail = (opts = {}) => {
 
     return thumbnail;
 
-};
+}
 
-export { createImgThumbnail };
+export { createImgThumbnail }
 
 const getItemPrice = (fpdInstance, container, price = null) => {
 
@@ -450,9 +450,9 @@ const getItemPrice = (fpdInstance, container, price = null) => {
 
     return priceStr;
 
-};
+}
 
-export { getItemPrice };
+export { getItemPrice }
 
 /**
  * Checks if the dimensions of an image is within the allowed range set in the customImageParameters of the view options.
@@ -610,7 +610,7 @@ const getNextSibling = (elem, selector) => {
         sibling = sibling.nextElementSibling
     }
 
-};
+}
 
 export { getNextSibling };
 
@@ -626,7 +626,7 @@ const getPrevSibling = (elem, selector) => {
         sibling = sibling.nextElementSibling
     }
 
-};
+}
 
 export { getPrevSibling };
 
@@ -636,15 +636,13 @@ const popupBlockerAlert = (popup, msg) => {
         Snackbar(msg);
     }
 
-};
+}
 
 export { popupBlockerAlert }
 
 const getScript = (src) => {
 
     return new Promise(function (resolve, reject) {
-
-        console.log(document.querySelector("script[src='" + src + "']"));
         
         if (document.querySelector("script[src='" + src + "']") === null ) {
 
@@ -668,3 +666,39 @@ const getScript = (src) => {
 }
 
 export { getScript }
+
+const unitToPixel = (length, unit, dpi=72) => {
+
+    const ppi = length * dpi;
+
+    if(unit == 'cm') {
+        return Math.round(ppi / 2.54);
+    }
+    else if(unit == 'mm') {
+        return Math.round(ppi / 25.4);
+    }
+    else {
+        return Math.round(ppi);
+    }
+
+}
+
+export { unitToPixel }
+
+const pixelToUnit = (pixel, unit, dpi=72) => {
+
+    const inches = pixel / dpi;
+
+    if(unit == 'cm') {
+        return Math.round(inches * 2.54);
+    }
+    else if(unit == 'mm') {
+        return Math.round(inches * 25.4);
+    }
+    else {
+        return Math.round(inches);
+    }
+
+}
+
+export { pixelToUnit }

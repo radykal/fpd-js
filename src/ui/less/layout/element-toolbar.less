@@ -1,0 +1,391 @@
+fpd-element-toolbar {
+
+    display: none;
+    overflow: hidden;
+
+    &.fpd-show {
+        display: flex !important;
+    }
+
+    >.fpd-tools-nav {
+
+        display: flex;
+
+        >div {
+            flex: 1;
+            padding: 0 20px;
+            white-space: nowrap;
+            text-align: center;
+            cursor: pointer;
+
+            >span[class^=fpd-icon-] {
+                display: block;
+                font-size: 16px;
+                line-height: 28px;
+            }
+
+            >.fpd-label {
+                margin-top: 5px;
+                display: inline-block;
+            }
+
+            >.fpd-current-fill {
+                display: block;
+                width: 28px;
+                height: 28px;
+                border-radius: 50%;
+                border: 2px solid rgba(0, 0, 0, .1);
+            }
+
+            &.fpd-active {
+                color: var(--fpd-secondary-color);
+            }
+
+        }
+    }
+
+    .fpd-sub-panel {
+
+        flex: 1;
+
+        > div {
+
+            display: none;
+            height: 100%;
+            width: 100%;
+
+            > * {
+                margin-bottom: 10px;
+
+                &:last-child {
+                    margin: 0;
+                }
+            }
+
+            &.fpd-active {
+                display: flex;
+                flex-flow: column nowrap;
+            }
+
+            &.fpd-padding {
+                padding: 15px;
+            }
+
+            .fpd-input {
+                flex-flow: row wrap;
+                box-shadow: none;
+                overflow: visible;
+
+                > span, input {
+                    flex: 1;
+                    border: none;
+                }
+
+                > span {
+                    padding: 0;
+                }
+
+                fpd-range-slider {
+                    order: 3;
+                }
+            }
+
+            .fpd-panel-tabs {
+
+                display: flex;
+                align-items: center;
+                height: 30px;
+                background: var(--fpd-module-secondary-color);
+                color: var(--fpd-module-secondary-text-color);
+
+                > span {
+                    flex: 1;
+                    text-align: center;
+                    padding: 8px 0;
+                    cursor: pointer;
+                    
+                    &.fpd-active {
+                        background: var(--fpd-primary-fg-color);
+                        color: var(--fpd-secondary-color);
+                    }
+                }
+            }
+
+            .fpd-panel-tabs-content {
+
+                > div {
+
+                    display: none;
+                    padding: 10px;
+
+                    &.fpd-active {
+                        display: block;
+                    }
+
+                    > * {
+                        margin-bottom: 20px;
+                    }
+                }
+
+            }
+
+            .fpd-tools-group,
+            .fpd-btn-group {
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                gap: 4px;
+                flex-flow: row wrap;
+
+                > * {
+
+                    flex: 1;
+                    border: 1px solid var(--fpd-border-color);
+                    border-radius: var(--fpd-border-radius);
+                    font-size: 14px;
+                    padding: 5px 0;
+                    cursor: pointer;
+
+                    &:hover {
+                        background: var(--fpd-light-bg-color);
+                    }
+                }
+            }
+
+            .fpd-btn-group {
+
+                border: 1px solid var(--fpd-border-color);
+
+                > * {
+                    border: none;
+                    border-radius: 0;
+
+                    &.fpd-active {
+                        color: var(--fpd-secondary-color);
+                    }
+                }
+
+            }
+
+            .fpd-toggle {
+
+                &.fpd-enabled {
+                    color: var(--fpd-secondary-color)
+                }
+
+            }
+
+            .fpd-tool-position-align {
+
+                > div {
+                    flex: 1 0 32%;
+                }
+
+            }
+
+            .fpd-tool-uniscaling-locker {
+
+                font-size: 18px;
+                text-align: right;
+            }
+
+            .fpd-curved-options {
+
+                > span {
+                    display: inline-block;
+                    cursor: pointer;
+                    height: 60px;
+                    background: var(--fpd-light-bg-color);
+                }
+
+            }
+            
+        }
+
+        .fpd-panel-color {
+
+            > .fpd-scroll-area {
+                overflow: visible;
+            }
+
+            .fpd-colorpicker-wrapper {
+                padding: 0;
+            }
+
+        }
+
+        .fpd-panel-font-family {
+
+            flex-flow: column nowrap;
+            height: 100%;
+
+            .fpd-fonts-list {
+                display: flex;
+                flex-flow: column nowrap;
+                height: 100%;
+                gap: 20px;
+
+                > .fpd-item {
+                    cursor: pointer;
+                    font-size: 16px;
+                    transition: all 200ms ease-in-out;
+
+                    &.fpd-active {
+                        color: var(--fpd-secondary-color)
+                    }
+
+                    &:hover {
+                        padding-left: 5px;
+                    }
+                }
+            }
+
+        }
+            
+
+    }
+
+}
+
+fpd-element-toolbar.fpd-smart {
+
+    display: none;
+    background: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 375px;
+    border-radius: var(--fpd-border-radius);
+    transform: translateX(-50%);
+    z-index: 10000000000;
+    box-shadow: 0px 2px 4px rgba(110, 111, 114, 0.2);
+    min-width: inherit;
+    min-height: 100px;
+    overflow: visible;
+
+
+    > .fpd-tools-nav {
+
+        >div {
+            margin: 20px 0;
+        }
+    }
+
+    > .fpd-sub-panel {
+        display: none;
+        width: 100%;
+    }
+
+    &.fpd-panel-visible {
+
+        .fpd-close {
+            display: none !important;
+        }
+
+        > .fpd-tools-nav {
+            display: none !important;
+        }
+
+        > .fpd-sub-panel {
+
+            display: flex;
+
+            .fpd-panel-tabs-content.fpd-scroll-area {
+                overflow: auto;
+                max-height: 200px;
+            }
+
+            .fpd-panel-font-family .fpd-fonts-list {
+                max-height: 100px;
+            }
+
+        }
+
+    }
+
+    .fpd-close,
+    .fpd-close-sub-panel {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 35px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        cursor: pointer;
+        background: #fff;
+        font-size: 20px;
+        transform: translateY(-100%);
+        box-shadow: 0px -1px 2px rgba(110, 111, 114, 0.2);
+        border-top-left-radius: var(--fpd-border-radius);
+    }
+
+    &.fpd-layout-small {
+        position: fixed;
+        left: 0 !important;
+        bottom: 0 !important;
+        top: auto !important;
+        width: 100%;
+        transform: none;
+        border-radius: 0;
+        box-shadow: 0px -1px 8px rgba(110, 111, 114, 0.2);
+        padding-bottom: env(safe-area-inset-bottom);
+        max-width: none;
+
+        &.fpd-show {
+
+            > .fpd-close {
+                display: block;
+            }
+
+        }
+
+        &.fpd-panel-visible {
+
+            > .fpd-close-sub-panel {
+                display: block;
+            }
+
+        }
+    }
+
+}
+
+fpd-main-bar {
+
+    > fpd-element-toolbar {
+
+        background: var(--fpd-primary-fg-color);
+        position: absolute;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100%;
+        flex-flow: row nowrap;
+
+        >.fpd-tools-nav {
+            flex: 0 80px;
+            flex-flow: column;
+            align-items: center;
+            border-right: 1px solid var(--fpd-border-color);
+
+            >div {
+
+                flex: 0;
+                margin: 10px 0;
+                padding: 0 3px;
+
+                .fpd-label {
+                    white-space: normal;
+                }
+            }
+
+
+        }
+
+    }
+
+}

@@ -141,6 +141,7 @@ fpd-main-bar {
         height: 100%;
         flex: 0 var(--fpd-sidebar-width);
         overflow: hidden;
+        border-right: 1px solid var(--fpd-border-color);
         
         .fpd-navigation {
             border-right: 1px solid var(--fpd-border-color);
@@ -150,6 +151,10 @@ fpd-main-bar {
             flex: 1;
         }
         
+    }
+
+    &.fpd-layout-medium {
+        --fpd-sidebar-width: 350px;
     }
     
     &.fpd-layout-small {
@@ -171,6 +176,7 @@ fpd-main-bar {
             left: 0;
             bottom: 0;
             overflow: visible;
+            border: none;
             
             > .fpd-navigation {
 

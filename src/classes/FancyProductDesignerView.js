@@ -7,13 +7,17 @@ import {
 } from '/src/helpers/utils';
 
 import { parseFontsToEmbed } from '/src/helpers/fonts-loader';
+import { toggleElemClasses } from '../helpers/utils';
 
 /**
- * Creates a new FancyProductDesigner.
+ * Creates a new FancyProductDesignerView.
  *
- * @class FancyProductDesigner
- * @param  {HTMLElement} elem - The container for the Fancy Product Designer.
- * @param  {Object} [opts={}] - {@link Options Options for configuration}.
+ * @class FancyProductDesignerView
+ * @param  {HTMLElement} container - The container for the Fancy Product Designer View.
+ * @param  {Object} [viewData={}] - The initial view data.
+ * @param  {Function} [callback] - Callback when view is created.
+ * @param  {Object} [fabricCanvasOptions={}] - Options for fabricJS canvas.
+ * @extends EventTarget
  */
 export default class FancyProductDesignerView extends EventTarget {
     
@@ -22,8 +26,7 @@ export default class FancyProductDesignerView extends EventTarget {
      *
      * @type Array
      * @static
-     * @instance
-     * @memberof FancyProductDesigner
+     * @memberof FancyProductDesignerView
      */
     static relevantOptions = [
         'stageWidth',
@@ -68,32 +71,47 @@ export default class FancyProductDesignerView extends EventTarget {
     /**
      * The total price for the view without max. price.
      *
-     * @property totalPrice
      * @type Number
      * @default 0
+     * @memberof FancyProductDesignerView
      */
     totalPrice = 0;
     /**
      * The total price for the view including max. price and corrert formatting.
      *
-     * @property truePrice
      * @type Number
      * @default 0
+     * @memberof FancyProductDesignerView
      */
     truePrice = 0;
     /**
      * Additional price for the view.
      *
-     * @property additionalPrice
      * @type Number
      * @default 0
+     * @memberof FancyProductDesignerView
      */
     additionalPrice = 0;
+    /**
+     * The locked state of the view.
+     *
+     * @type Boolean
+     * @default false
+     */
+    locked = false;
     viewData;
     onCreatedCallback;
     title;
     thumbnail;
     options;
+    /**
+     * The properties for the mask object (url, left, top, width, height).
+     *
+     * @type Object
+     * @default null
+     * @memberof FancyProductDesignerView
+     */
+    mask = null;
     canvasElem = null;
     fabricCanvas = null;
     
@@ -106,6 +124,7 @@ export default class FancyProductDesignerView extends EventTarget {
         this.title = viewData.title;
         this.thumbnail = viewData.thumbnail;
         this.options = viewData.options;
+        this.mask = viewData.mask;
         
         fabric.Canvas.prototype.snapGridSize = this.options.snapGridSize;
         fabric.Canvas.prototype.snapToObjects = this.options.smartGuides;
@@ -156,11 +175,15 @@ export default class FancyProductDesignerView extends EventTarget {
     
             }
         });
+
+        if(viewData.options.optionalView) {
+            this.toggleLock(Boolean(viewData.locked));
+        }
                 
     }
     
     /**
-     * This method needs to be called after the instance of {{#crossLink "FancyProductDesignerView"}}{{/crossLink}} is set.
+     * This method needs to be called to initialize the generation.
      *
      * @method init
      */
@@ -190,7 +213,14 @@ export default class FancyProductDesignerView extends EventTarget {
     
     #afterSetup() {
 
-        this.onCreatedCallback(this);  
+        this.fabricCanvas._doHistory = true;
+
+        if(this.mask) {
+			this.fabricCanvas.setMask(this.mask);
+		}
+
+        if(this.onCreatedCallback)
+            this.onCreatedCallback(this);  
         
         this.dispatchEvent(
             new CustomEvent('priceChange', {
@@ -208,19 +238,20 @@ export default class FancyProductDesignerView extends EventTarget {
 	 *
 	 * @method toDataURL
 	 * @param {Function} callback A function that will be called when the data URL is created. The function receives the data URL.
-	 * @param {String} [backgroundColor=transparent] The background color as hexadecimal value. For 'png' you can also use 'transparent'.
 	 * @param {Object} [options] See fabricjs documentation http://fabricjs.com/docs/fabric.Canvas.html#toDataURL.
 	 * @param {Boolean} [options.onlyExportable=false] If true elements with excludeFromExport=true are not exported in the image.
-	 * @param {fabric.Image} [watermarkImg=null] A fabricJS image that includes the watermark image.
+     * @param {String} [options.backgroundColor="transparent"] The background color as hexadecimal value. For 'png' you can also use 'transparent'.
+	 * @param {fabric.Image} [options.watermarkImg] A fabricJS image that includes the watermark image.
 	 * @param {Boolean} [deselectElement=true] Deselect current selected element.
 	 */
-	toDataURL(callback, backgroundColor='transparent', options={}, watermarkImg=null, deselectElement=true) {
+	toDataURL(callback, options={}, deselectElement=true) {
 
 		callback = callback === undefined ? function() {} : callback;
 		options.onlyExportable = options.onlyExportable === undefined ? false : options.onlyExportable;
 		options.multiplier = options.multiplier === undefined ? 1 : options.multiplier;
-		options.enableRetinaScaling = options.enableRetinaScaling === undefined ? false : options.enableRetinaScaling;
-
+        options.backgroundColor = options.backgroundColor === undefined ? 'transparent' : options.backgroundColor;
+        options.watermarkImg = options.watermarkImg === undefined ? null : options.watermarkImg;
+        
 		let hiddenObjs = [],
 			tempHighlightEditableObjects = this.options.highlightEditableObjects;
 
@@ -243,31 +274,23 @@ export default class FancyProductDesignerView extends EventTarget {
 		let tempDevicePixelRatio = fabric.devicePixelRatio;
 		fabric.devicePixelRatio = 1;
 
-		this.fabricCanvas.setDimensions({width: this.options.stageWidth, height: this.options.stageHeight}).setZoom(1);
+		this.fabricCanvas
+        .setDimensions({width: this.options.stageWidth, height: this.options.stageHeight})
+        .setZoom(1);
 
-		//scale view mask to multiplier
-        //todo
-		// if(this.fabricCanvas.maskObject && this.fabricCanvas.maskObject._originParams) {
-		// 	instance.maskObject.left = instance.maskObject._originParams.left * options.multiplier;
-		// 	instance.maskObject.top = instance.maskObject._originParams.top * options.multiplier;
-		// 	instance.maskObject.scaleX = instance.maskObject._originParams.scaleX * options.multiplier;
-		// 	instance.maskObject.scaleY = instance.maskObject._originParams.scaleY * options.multiplier;
-		// 	instance.maskObject.setCoords();
-		// }
+		this.fabricCanvas.setBackgroundColor(options.backgroundColor, () => {
 
-		this.fabricCanvas.setBackgroundColor(backgroundColor, () => {
-
-			if(watermarkImg) {
-				this.fabricCanvas.add(watermarkImg);
-				watermarkImg.center();
-				watermarkImg.bringToFront();
+			if(options.watermarkImg) {
+				this.fabricCanvas.add(options.watermarkImg);
+				options.watermarkImg.center();
+				options.watermarkImg.bringToFront();
 			}
 
 			//get data url
 			callback(this.fabricCanvas.toDataURL(options));
 
-			if(watermarkImg) {
-				this.fabricCanvas.remove(watermarkImg);
+			if(options.watermarkImg) {
+				this.fabricCanvas.remove(options.watermarkImg);
 			}
 
 			if(this.fabricCanvas.wrapperEl.offsetParent) {
@@ -295,20 +318,23 @@ export default class FancyProductDesignerView extends EventTarget {
 	 * Returns the view as SVG.
 	 *
 	 * @method toSVG
-	 * @param {Object} options See fabricjs documentation http://fabricjs.com/docs/fabric.Canvas.html#toSVG
-	 * @param {Function} reviver See fabricjs documentation http://fabricjs.com/docs/fabric.Canvas.html#toSVG
-	 * @param {Boolean} respectPrintingBox Only generate SVG from printing box
-	 * @param {fabric.Image} [watermarkImg=null] A fabricJS image that includes the watermark image.
+	 * @param {Object} [options] See fabricjs documentation http://fabricjs.com/docs/fabric.Canvas.html#toSVG
+     * @param {fabric.Image} [options.watermarkImg] A fabricJS image that includes the watermark image.
+	 * @param {Function} [options.reviver] See fabricjs documentation http://fabricjs.com/docs/fabric.Canvas.html#toSVG
+	 * @param {Boolean} [options.respectPrintingBox=false] Only generate SVG from printing box
 	 * @param {Array} [fontsToEmbed=[]] Aan array containing fonts to embed in the SVG. You can use <a href="https://jquerydoc.fancyproductdesigner.com/classes/FancyProductDesigner.html#method_getUsedColors" target="_blank">getUsedFonts method</a>
 	 * @return {String} A XML representing a SVG.
 	 */
-	toSVG(options={}, reviver, respectPrintingBox=false, watermarkImg=null, fontsToEmbed=[]) {
+	toSVG(options={}, fontsToEmbed=[]) {
+
+        options.respectPrintingBox = options.respectPrintingBox === undefined ? false : options.respectPrintingBox;
+        options.watermarkImg = options.watermarkImg === undefined ? null : options.watermarkImg;
 
 		let svg;
 
         this.fabricCanvas.deselectElement();
         
-		if(respectPrintingBox && objectHasKeys(this.options.printingBox, ['left','top','width','height'])) {
+		if(options.respectPrintingBox && objectHasKeys(this.options.printingBox, ['left','top','width','height'])) {
 
 			let offsetX = 0,
 				offsetY = 0;
@@ -346,16 +372,16 @@ export default class FancyProductDesignerView extends EventTarget {
 			this.fabricCanvas['backgroundColor'] = false;
 		}
 
-		if(watermarkImg) {
-			this.fabricCanvas.add(watermarkImg);
-			watermarkImg.center();
-			watermarkImg.bringToFront();
+		if(options.watermarkImg) {
+			this.fabricCanvas.add(options.watermarkImg);
+			options.watermarkImg.center();
+			options.watermarkImg.bringToFront();
 		}
 
-		svg = this.fabricCanvas.toSVG(options, reviver);
+		svg = this.fabricCanvas.toSVG(options, options.reviver);
 
-		if(watermarkImg) {
-			this.fabricCanvas.remove(watermarkImg);
+		if(options.watermarkImg) {
+			this.fabricCanvas.remove(options.watermarkImg);
 		}
 
 		this.fabricCanvas['backgroundColor'] = tempCanvasBackground;
@@ -414,6 +440,7 @@ export default class FancyProductDesignerView extends EventTarget {
 
         let svgString = tempSVG.innerHTML;
 
+        //todo: check if required
 		svgString = svgString
 			//replace all newlines
 			.replace(/(?:\r\n|\r|\n)/g, '')
@@ -421,6 +448,30 @@ export default class FancyProductDesignerView extends EventTarget {
 		return svgString;
 
 	}
+
+    /**
+	 * Toggles the lockment of view. If the view is locked, the price of the view will not be added to the total product price.
+	 *
+	 * @method toggleLock
+	 * @param {Boolean} toggle The toggle state.
+	 * @return {Boolean} The toggle state.
+	 */
+	toggleLock(locked=true) {
+
+		this.locked = locked;
+
+        toggleElemClasses(
+            this.fabricCanvas.wrapperEl,
+            ['fpd-disabled'],
+            locked
+        )
+        
+        //todo
+		//$this.trigger('priceChange', [0, instance.truePrice]);
+
+		return locked;
+
+	};
     
 }
 

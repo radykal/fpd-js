@@ -151,8 +151,26 @@
                 uploadAgreementModal: false,
                 swapProductConfirmation: true,
                 pixabayApiKey: '7571591-cf8ff820ec635edeb4e8c6af7',
-                 pixabayLang: 'de',
+                pixabayLang: 'de',
                 pixabayHighResImages: false,
+                layouts: './layouts.json',
+                enableDynamicViews: true,
+                dynamicViewsOptions: {
+                    unit: 'mm',
+                    pricePerArea: 0.0001,
+                    minWidth: 4,
+                    maxWidth: 40,
+                    minHeight: 4,
+                    maxHeight: 40,
+                    formats: [
+                        [100, 100],
+                        [500, 500],
+                        [1000, 1000],
+                        [1050, 600],
+                        [450, 1050],
+                        [513, 369]
+                    ]
+                },
             }
                 
             const fpd = new FancyProductDesigner(document.getElementById('fpd-target'), appOptions);

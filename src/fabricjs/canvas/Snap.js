@@ -91,11 +91,7 @@ const Snap = (canvas) => {
 
         }
 
-        if (!canvas.snapToObjects || canvas.snapToGrid) return;
-
-        // canvasObjects = canvasObjects.filter((t) => {
-        //     return t.hasRotatingPoint;
-        // });            
+        if (!canvas.snapToObjects || canvas.snapToGrid) return;     
 
         if (!transform) return;
 

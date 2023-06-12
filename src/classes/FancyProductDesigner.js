@@ -30,6 +30,7 @@ import {
  * @class FancyProductDesigner
  * @param  {HTMLElement} elem - The container for the Fancy Product Designer.
  * @param  {Object} [opts={}] - {@link Options Options for configuration}.
+ * @extends EventTarget
  */
 export default class FancyProductDesigner extends EventTarget {
     
@@ -40,11 +41,10 @@ export default class FancyProductDesigner extends EventTarget {
     /**
      * You can register your own modules and add them in this static property.
      *
+     * @public additionalModules
      * @type {Object}
      * @readonly
      * @static
-     * @instance
-     * @memberof FancyProductDesigner
      * @default {}
      * @example {'my-module': ModuleClass}
      */
@@ -55,8 +55,6 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type {HTMLElement}
      * @readonly
-     * @instance
-     * @memberof FancyProductDesigner
      * @default null
      */
     container = null;
@@ -66,8 +64,6 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type Object
      * @readonly
-     * @instance
-     * @memberof FancyProductDesigner
      * @default {}
      */
     mainOptions = {};
@@ -77,8 +73,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type {FancyProductDesignerView}
      * @readonly
-     * @instance
-     * @memberof FancyProductDesigner
+
+
      */
     currentViewInstance = null;
     
@@ -87,8 +83,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type Number
      * @default 0
-     * @instance
-     * @memberof FancyProductDesigner
+
+
      */
     currentViewIndex = 0;
     
@@ -97,8 +93,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type {Array}
      * @readonly
-     * @instance
-     * @memberof FancyProductDesigner
+
+
      */
     products = [];
     
@@ -107,8 +103,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type {Array}
      * @readonly
-     * @instance
-     * @memberof FancyProductDesigner
+
+
      */
     designs = [];
     
@@ -117,8 +113,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type HTMLElement
      * @default document.body
-     * @instance
-     * @memberof FancyProductDesigner
+
+
      */
     modalContainer = document.body;
     
@@ -127,8 +123,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type Number
      * @default 0
-     * @instance
-     * @memberof FancyProductDesigner
+
+
      */
     currentCategoryIndex = 0;
     
@@ -137,8 +133,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type Number
      * @default 0
-     * @instance
-     * @memberof FancyProductDesigner
+
+
      */
     currentProductIndex = 0;
     
@@ -147,20 +143,20 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type Array
      * @default []
-     * @instance
-     * @memberof FancyProductDesigner
+
+
      */
     viewInstances = [];
     
     /**
-     * The current views.
+     * The initial views of the current product.
      *
      * @type Array
      * @default null
-     * @instance
-     * @memberof FancyProductDesigner
+
+
      */
-    currentViews = null;
+    productViews = null;
     
     /**
      * The current selected element.
@@ -176,8 +172,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type Boolean
      * @default false
-     * @instance
-     * @memberof FancyProductDesigner
+
+
      */
     productCreated = false;
     
@@ -186,8 +182,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type Object
      * @default {}
-     * @instance
-     * @memberof FancyProductDesigner
+
+
      */
     colorLinkGroups = {};
     
@@ -196,8 +192,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type Array
      * @default []
-     * @instance
-     * @memberof FancyProductDesigner
+
+
      */
     globalCustomElements = [];
     
@@ -206,8 +202,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type Boolean
      * @default false
-     * @instance
-     * @memberof FancyProductDesigner
+
+
      */
     doUnsavedAlert = false;
     
@@ -246,6 +242,15 @@ export default class FancyProductDesigner extends EventTarget {
 	 * @default null
 	 */
 	watermarkImg = null;
+
+    /**
+	 * An array with the current layouts.
+	 *
+	 * @property currentLayouts
+	 * @type Array
+	 * @default []
+	 */
+    currentLayouts = [];
     
     loadingCustomImage = false;
     lazyBackgroundObserver = null;
@@ -265,8 +270,7 @@ export default class FancyProductDesigner extends EventTarget {
             console.log("No DOM element found for FPD.");  
             return;
         }
-        
-        
+    
         this.lazyBackgroundObserver = new IntersectionObserver((entries, observer) => {
 
             entries.forEach((entry) => {
@@ -295,34 +299,22 @@ export default class FancyProductDesigner extends EventTarget {
     }
     
     #langLoaded() {
+
+        loadFonts(this, (fonts) => {
+
+            this.mainOptions.fonts = fonts;
         
-        this.uiManager = new UIManager(this);
-        
-        this.uiManager.addEventListener('ready', (event) => {
-            this.#loadFonts();
-        });
-        
-        this.uiManager.init();
-        
-    }
-    
-    #loadFonts() {
-        
-        loadFonts(this, () => {
-            
             //timeout when no language json file is loaded
             setTimeout(() => {
-                
-                this.dispatchEvent(
-                    new CustomEvent('uiSet')
-                );
 
-                this.#ready();
-                
+                this.uiManager = new UIManager(this);
+                this.uiManager.addEventListener('ready', this.#ready.bind(this));                
+                this.uiManager.init();
+
             }, 1)
             
-        })
-        
+        })    
+    
     }
     
     #ready() {
@@ -447,6 +439,30 @@ export default class FancyProductDesigner extends EventTarget {
             )
         
         }
+
+        //load watermark image
+		if(this.mainOptions.watermark) {
+
+			fabric.Image.fromURL(this.mainOptions.watermark, (fabricImg, error) => {
+                
+                if(!error)
+				    this.watermarkImg = fabricImg;
+
+			}, {crossOrigin: "anonymous"});
+
+		}
+
+        if(this.mainOptions.unsavedProductAlert) {
+
+			window.onbeforeunload = () => {
+                
+				if(this.doUnsavedAlert) {
+					return '';
+				}
+
+			};
+
+		}
         
         //window resize handler
         let currentWindowWidth = 0;
@@ -511,17 +527,6 @@ export default class FancyProductDesigner extends EventTarget {
 
             }
         )
-        
-        //todo
-        //store a boolean to detect if the text in textarea (toolbar) was selected, then dont deselect
-		let _fixSelectionTextarea = false;
-        addEvents(
-            document.body,
-            'mousedown',
-            (evt) => {
-
-            }
-        )
 
         addEvents(
             document.body,
@@ -545,16 +550,11 @@ export default class FancyProductDesigner extends EventTarget {
                 const clickedWithinContainer = Boolean(fpdContainers.find((container) => container.contains(evt.target)));
                 
                 //deselect element if click outside of a fpd-container
-                if(!clickedWithinContainer 
-                    && this.mainOptions.deselectActiveOnOutside 
-                    && !_fixSelectionTextarea
-                ) {
+                if(!clickedWithinContainer && this.mainOptions.deselectActiveOnOutside) {
                     
                     this.deselectElement();
 
                 }
-
-                _fixSelectionTextarea = false;
 
             },
             true
@@ -668,27 +668,32 @@ export default class FancyProductDesigner extends EventTarget {
 
                 const fpdElement = object.element;
 
-                let propertyKeys = Object.keys(this.mainOptions.elementParameters);
-                if(fpdElement.getType() === 'text') {
-                    propertyKeys = propertyKeys.concat(Object.keys(this.mainOptions.textParameters));
-                }
-                else {
-                    propertyKeys = propertyKeys.concat(Object.keys(this.mainOptions.imageParameters));
-                }
+                //if element exists, do not add
+                if(!viewInstance.fabricCanvas.getElementByTitle(fpdElement.title)) {
 
-                let elementProps = fpdElement.getElementJSON(false, propertyKeys);
+                    let propertyKeys = Object.keys(this.mainOptions.elementParameters);
+                    if(fpdElement.getType() === 'text') {
+                        propertyKeys = propertyKeys.concat(Object.keys(this.mainOptions.textParameters));
+                    }
+                    else {
+                        propertyKeys = propertyKeys.concat(Object.keys(this.mainOptions.imageParameters));
+                    }
 
-                //delete old printing box to fetch printing box from current view
-                if(elementProps._printingBox) {
-                    delete elementProps.boundingBox;
+                    let elementProps = fpdElement.getElementJSON(false, propertyKeys);
+
+                    //delete old printing box to fetch printing box from current view
+                    if(elementProps._printingBox) {
+                        delete elementProps.boundingBox;
+                    }
+                    
+                    viewInstance.fabricCanvas.addElement(
+                        fpdElement.getType(),
+                        fpdElement.source,
+                        fpdElement.title,
+                        elementProps
+                    );
+
                 }
-
-                viewInstance.fabricCanvas.addElement(
-                    fpdElement.getType(),
-                    fpdElement.source,
-                    fpdElement.title,
-                    elementProps
-                );
 
             }
             else {
@@ -758,7 +763,7 @@ export default class FancyProductDesigner extends EventTarget {
         /**
          * Gets fired as soon as products are set.
          *
-         * @event FancyProductDesigner#productsSet
+         * @event productsSet
          * @param {CustomEvent} event
          */
         this.dispatchEvent(
@@ -780,7 +785,7 @@ export default class FancyProductDesigner extends EventTarget {
         /**
          * Gets fired as soon as the designs are set.
          *
-         * @event FancyProductDesigner#designsSet
+         * @event designsSet
          * @param {CustomEvent} event
          */
         this.dispatchEvent(
@@ -819,7 +824,7 @@ export default class FancyProductDesigner extends EventTarget {
         /**
          * Gets fired when a product is added.
          *
-         * @event FancyProductDesigner#productAdd
+         * @event productAdd
          * @param {CustomEvent} event
          * @param {Array} event.detail.views - The product views.
          * @param {String} event.detail.category - The category title.
@@ -862,21 +867,6 @@ export default class FancyProductDesigner extends EventTarget {
         
         const product = productsObj[this.currentProductIndex];
         
-        /**
-         * Gets fired when a product is selected.
-         *
-         * @event FancyProductDesigner#productSelect
-         * @param {CustomEvent} event
-         * @param {Object} event.detail.product - An object containing the product (views).
-         */
-        this.dispatchEvent(
-            new CustomEvent('productSelect', {
-                detail: {
-                    product: product
-                }
-            })
-        );
-        
         this.loadProduct(
             product, 
             this.mainOptions.replaceInitialElements
@@ -895,6 +885,21 @@ export default class FancyProductDesigner extends EventTarget {
     loadProduct(views, replaceInitialElements=false, mergeMainOptions=false) {
         
         if(!views) { return; }
+
+        /**
+         * Gets fired when a product is selected.
+         *
+         * @event productSelect
+         * @param {CustomEvent} event
+         * @param {Object} event.detail.product - An object containing the product (views).
+         */
+        this.dispatchEvent(
+            new CustomEvent('productSelect', {
+                detail: {
+                    product: views
+                }
+            })
+        );
         
         this.toggleSpinner(true);
         
@@ -922,7 +927,7 @@ export default class FancyProductDesigner extends EventTarget {
     
         }
     
-        this.currentViews = views;
+        this.productViews = views;
     
         this.#totalProductElements = this.#productElementLoadingIndex = 0;
         views.forEach((view, i) => {
@@ -949,30 +954,6 @@ export default class FancyProductDesigner extends EventTarget {
      * @param {object} view An object with title, thumbnail and elements properties.
      */
     addView(view) {
-    
-        const viewImageURL = FancyProductDesigner.proxyFileServer ? FancyProductDesigner.proxyFileServer + view.thumbnail : view.thumbnail;
-        
-        //create view selection item
-        const viewSelectonItem = document.createElement('div');
-        viewSelectonItem.className = 'fpd-shadow-1 fpd-item';
-        viewSelectonItem.title = view.title;
-        viewSelectonItem.innerHTML = '<picture style="background-image: url('+viewImageURL+');"></picture>';
-        
-        this.viewsWrapper.container
-        .querySelector('.fpd-views-selection')
-        .append(viewSelectonItem);
-        
-        addEvents(
-            viewSelectonItem,
-            'click', 
-            (evt) => {
-                
-                const itemIndex = Array.from(this.viewsWrapper.container.querySelectorAll('.fpd-views-selection > div')).indexOf(viewSelectonItem);
-                                
-                this.selectView(itemIndex);
-                
-            }
-        )
     
         //get relevant view options
         let relevantMainOptions = {};
@@ -1017,7 +998,7 @@ export default class FancyProductDesigner extends EventTarget {
                 /**
                  * Gets fired when an element is added.
                  *
-                 * @event FancyProductDesigner#beforeElementAdd
+                 * @event beforeElementAdd
                  * @param {Event} event
                  * @param {fabric.Object} element
                  */
@@ -1112,7 +1093,7 @@ export default class FancyProductDesigner extends EventTarget {
                 /**
                  * Gets fired when an element is added.
                  *
-                 * @event FancyProductDesigner#elementAdd
+                 * @event elementAdd
                  * @param {Event} event
                  * @param {fabric.Object} element
                  */
@@ -1135,10 +1116,19 @@ export default class FancyProductDesigner extends EventTarget {
             },
             'elementRemove': ({element}) => {
 
+                //delete fixed element
+                const deleteIndex = this.fixedElements.findIndex((item) => {
+                    return item.element.title == element.title
+                })
+        
+                if(deleteIndex != -1) {
+                    this.fixedElements.splice(deleteIndex, 1);
+                }
+
                 /**
                  * Gets fired as soon as an element has been removed.
                  *
-                 * @event FancyProductDesigner#elementRemove
+                 * @event elementRemove
                  * @param {Event} event
                  * @param {fabric.Object} element - The fabric object that has been removed.
                  */
@@ -1163,6 +1153,7 @@ export default class FancyProductDesigner extends EventTarget {
             'elementSelect': ({element}) => {
                 
                 this.currentElement = element;
+                
                 this.#updateElementTooltip();
                 
                 if(element && !element._ignore && this.currentViewInstance) {
@@ -1191,23 +1182,17 @@ export default class FancyProductDesigner extends EventTarget {
                     }
 
                     //TODO:
-                    //instance.toolbar.update(element);
 
                     // if(instance.mainOptions.openTextInputOnSelect && FPDUtil.getType(element.type) === 'text' && element.editable) {
                     //     $elementToolbar.find('.fpd-tool-edit-text:first').click();
                     // }
 
                 }
-                else {
-                    //TODO:
-                    // instance.toolbar.toggle(false);
-
-                }
 
                 /**
                  * Gets fired when an element is selected.
                  *
-                 * @event FancyProductDesigner#elementSelect
+                 * @event elementSelect
                  * @param {Event} event
                  */
                 this.dispatchEvent(
@@ -1253,7 +1238,7 @@ export default class FancyProductDesigner extends EventTarget {
                 /**
                  * Gets fired when the color of an element is changed.
                  *
-                 * @event FancyProductDesigner#elementColorChange
+                 * @event elementColorChange
                  * @param {Event} event
                  * @param {fabric.Object} element
                  * @param {String} hex Hexadecimal color string.
@@ -1302,7 +1287,15 @@ export default class FancyProductDesigner extends EventTarget {
                             element: element
                         }
                     })
-                )
+                );
+
+                this.dispatchEvent(
+                    new CustomEvent('viewCanvasUpdate', {
+                        detail: {
+                            viewInstance: viewInstance
+                        }
+                    })
+                );
 
             },
             'text:changed': ({target}) => {
@@ -1310,29 +1303,14 @@ export default class FancyProductDesigner extends EventTarget {
                 this.applyTextLinkGroup(target, {text: target.text});         
 
             },
-            'history:append': this.#toggleUndoRedoBtns,
-            'history:clear': this.#toggleUndoRedoBtns,
-            'history:undo': this.#toggleUndoRedoBtns,
-            'history:redo': this.#toggleUndoRedoBtns
+            'history:append': () => { this.#historyAction('append') },
+            'history:clear': () => { this.#historyAction('clear') },
+            'history:undo': () => { this.#historyAction('undo') },
+            'history:redo': () => { this.#historyAction('redo') },
         })
-
-        
-    //     
+    
+        // todo
     //     $(viewInstance)
-
-    //     .on('elementModify', function(evt, element, parameters) {
-    // 
-    // 
-    //         /**
-    //          * Gets fired when an element is modified.
-    //          *
-    //          * @event FancyProductDesigner#viewCanvasUpdate
-    //          * @param {Event} event
-    //          * @param {FancyProductDesignerView} viewInstance
-    //          */
-    //         $elem.trigger('viewCanvasUpdate', [viewInstance]);
-    // 
-    //     })
     //     .on('priceChange', function(evt, price, viewPrice) {
     // 
     //         var truePrice = instance.calculatePrice();
@@ -1340,7 +1318,7 @@ export default class FancyProductDesigner extends EventTarget {
     //         /**
     //          * Gets fired as soon as the price changes in a view.
     //          *
-    //          * @event FancyProductDesigner#priceChange
+    //          * @event priceChange
     //          * @param {Event} event
     //          * @param {number} elementPrice - The price of the element.
     //          * @param {number} totalPrice - The true price of all views with quantity.
@@ -1348,18 +1326,6 @@ export default class FancyProductDesigner extends EventTarget {
     //          */
     //         $elem.trigger('priceChange', [price, truePrice, instance.singleProductPrice]);
     // 
-    //     })
-    //     .on('elementRemove', function(evt, element) {
-    // 
-    //         //delete fixed element
-    //         var deleteIndex = instance.fixedElements.findIndex(function(item) {
-    //             return item.element.title == element.title
-    //         })
-    // 
-    //         if(deleteIndex != -1) {
-    //             instance.fixedElements.splice(deleteIndex, 1);
-    //         }
-
     //     })
     //     .on('textEditEnter', function() {
     // 
@@ -1376,9 +1342,9 @@ export default class FancyProductDesigner extends EventTarget {
     #onViewCreated() {
             
         //add all views of product till views end is reached
-        if(this.viewInstances.length < this.currentViews.length) {
+        if(this.viewInstances.length < this.productViews.length) {
     
-            this.addView(this.currentViews[this.viewInstances.length]);
+            this.addView(this.productViews[this.viewInstances.length]);
     
         }
         //all views added
@@ -1400,11 +1366,40 @@ export default class FancyProductDesigner extends EventTarget {
             }
     
             this.productCreated = true;
+
+            const productLayouts = this.productViews[0].options.layouts;
+
+            if(typeof productLayouts == 'string') {
+
+                getJSON({
+                    url: productLayouts,
+                    onSuccess: (data) => {
+    
+                        this.currentLayouts = data;
+                        this.dispatchEvent(
+                            new CustomEvent('layoutsSet')
+                        );
+    
+                    },
+                    onError: () => {
+                        alert('Layouts JSON could not be loaded. Please check that your URL is correct! URL: '+this.mainOptions.layouts);
+                    } 
+                });  
+    
+            }
+            else if(Array.isArray(productLayouts)) {
+
+                this.currentLayouts = productLayouts;
+                this.dispatchEvent(
+                    new CustomEvent('layoutsSet')
+                );
+
+            }
         
             /**
              * Gets fired as soon as a product has been fully added to the designer.
              *
-             * @event FancyProductDesigner#productCreate
+             * @event productCreate
              * @param {Event} event
              */
             this.dispatchEvent(
@@ -1415,21 +1410,51 @@ export default class FancyProductDesigner extends EventTarget {
     
     }
 
-    #toggleUndoRedoBtns() {        
+    #historyAction(type) {        
 
-        if(this.historyUndo) {
+        /**
+         * Gets fired as soon as any action for canvas history is executed.
+         *
+         * @event historyAction
+         * @param {Event} event
+         */
+        this.dispatchEvent(
+            new CustomEvent('historyAction', {
+                detail: {
+                    type: type
+                }
+            })
+        );
 
-            toggleElemClasses(
-                document.body.querySelectorAll('.fpd-btn[data-action="undo"]'),
-                ['fpd-disabled'],
-                this.historyUndo.length == 0
-            )
+        this.#toggleUndoRedoBtns();
 
-            toggleElemClasses(
-                document.body.querySelectorAll('.fpd-btn[data-action="redo"]'),
-                ['fpd-disabled'],
-                this.historyRedo.length == 0
-            )
+    }
+
+    #toggleUndoRedoBtns() {   
+
+        if(this.currentViewInstance) {
+            
+            const historyUndo = this.currentViewInstance.fabricCanvas.historyUndo;
+            const historyRedo = this.currentViewInstance.fabricCanvas.historyRedo;
+
+            if(historyUndo.length)
+                this.doUnsavedAlert = true;
+                
+            if(historyUndo) {
+
+                toggleElemClasses(
+                    document.body.querySelectorAll('.fpd-btn[data-action="undo"]'),
+                    ['fpd-disabled'],
+                    historyUndo.length == 0
+                )
+
+                toggleElemClasses(
+                    document.body.querySelectorAll('.fpd-btn[data-action="redo"]'),
+                    ['fpd-disabled'],
+                    historyRedo.length == 0
+                )
+
+            }
 
         }
 
@@ -1469,14 +1494,19 @@ export default class FancyProductDesigner extends EventTarget {
             ({canvasHeight}) => {
                 
                 let mainHeight = canvasHeight+'px';
-                
+
                 this.productStage.style.height = mainHeight;
                 
                 const mainBarClasslist = this.container.classList;
                 if(mainBarClasslist.contains('fpd-sidebar')) {
+
                     this.mainBar.container.style.height = mainHeight;
-                }
-                
+
+                    //if main wrapper has a different height, adjust main bar height to that height
+                    if(canvasHeight != this.mainWrapper.container.offsetHeight)
+                        this.mainBar.container.style.height = this.mainWrapper.container.offsetHeight+'px';
+
+                }                
                 
             }
         )
@@ -1484,7 +1514,7 @@ export default class FancyProductDesigner extends EventTarget {
         /**
          * Gets fired when a view is created.
          *
-         * @event FancyProductDesigner#viewCreate
+         * @event viewCreate
          * @param {Event} event
          * @param {FancyProductDesignerView} viewInstance
          */
@@ -1648,14 +1678,9 @@ export default class FancyProductDesigner extends EventTarget {
             this.currentViewIndex = this.viewInstances.length-1; 
         }                
         
-        if(this.currentViewInstance) {
-            
-            if(this.currentViewInstance.fabricCanvas) {
-                this.currentViewInstance.fabricCanvas.clearHistory();
-            }
-
+        if(this.currentViewInstance && this.currentViewInstance.fabricCanvas)    
+            this.currentViewInstance.fabricCanvas.clearHistory();
         
-        }
         
         this.currentViewInstance = this.viewInstances[this.currentViewIndex];
         
@@ -1672,17 +1697,25 @@ export default class FancyProductDesigner extends EventTarget {
             viewStages.item(this.currentViewIndex),
             ['fpd-hidden']
         );
-                
+
+        //toggle next/previous view buttons
+        toggleElemClasses(
+            document.body.querySelectorAll('.fpd-btn[data-action="previous-view"], .fpd-btn[data-action="next-view"], fpd-views-nav'),
+            ['fpd-hidden'],
+            this.viewInstances.length <= 1
+        )
+
+        toggleElemClasses(
+            document.body.querySelectorAll('.fpd-btn[data-action="previous-view"], .fpd-view-prev'),
+            ['fpd-disabled'],
+            this.currentViewIndex == 0
+        )
         
-        //TODO:
-        //toggle view locker
-        // instance.$mainWrapper.children('.fpd-modal-lock')
-        // .removeClass('fpd-animated')
-        // .toggleClass('fpd-active', instance.currentViewInstance.options.optionalView)
-        // .toggleClass('fpd-unlocked', !instance.currentViewInstance.locked);
-        // setTimeout(function() {
-        //     instance.$mainWrapper.children('.fpd-modal-lock').addClass('fpd-animated');
-        // }, 1);
+        toggleElemClasses(
+            document.body.querySelectorAll('.fpd-btn[data-action="next-view"], .fpd-view-next'),
+            ['fpd-disabled'],
+            this.currentViewIndex === this.viewInstances.length - 1
+        )
 
         this.#toggleUndoRedoBtns();
         this.currentViewInstance.fabricCanvas.snapToGrid = false;
@@ -1694,7 +1727,7 @@ export default class FancyProductDesigner extends EventTarget {
         /**
          * Gets fired as soon as a view has been selected.
          *
-         * @event FancyProductDesigner#viewSelect
+         * @event viewSelect
          * @param {Event} event
          */
         this.dispatchEvent(
@@ -1715,7 +1748,7 @@ export default class FancyProductDesigner extends EventTarget {
     getElements(viewIndex, elementType='all', deselectElement=true) {
     
         viewIndex = viewIndex === undefined || isNaN(viewIndex) ? -1 : viewIndex;
-    
+                
         if(deselectElement) {
             this.deselectElement();
         }
@@ -1785,8 +1818,6 @@ export default class FancyProductDesigner extends EventTarget {
      * @param {Number} [viewIndex=-1] The index of the target view. By default all views are target.
      * @param {String} [deselectElement=true] Deselect current selected element.
      * @return {array} An array with objects with the fabric object and the view index.
-     * @instance
-     * @memberof FancyProductDesigner
      */
     getCustomElements(type='all', viewIndex=-1, deselectElement=true) {
         
@@ -1817,8 +1848,6 @@ export default class FancyProductDesigner extends EventTarget {
      * @param {Number} [viewIndex=-1] The index of the target view. By default all views are target.
      * @param {String} [deselectElement=true] Deselect current selected element.
      * @return {array} An array with objects with the fabric object and the view index.
-     * @instance
-     * @memberof FancyProductDesigner
      */
     getFixedElements(type='all', viewIndex=-1, deselectElement=true) {
         
@@ -1830,16 +1859,15 @@ export default class FancyProductDesigner extends EventTarget {
             if(element.fixed) {
     
                 const viewIndex = this.getViewIndexByWrapper(element.canvas.wrapperEl);
-                
                 fixedElements.push({element: element, viewIndex: viewIndex});
     
             }
     
         });
-    
+                
         return fixedElements;
     
-    };
+    }
     
     /**
      * Get an elment by ID.
@@ -1860,12 +1888,12 @@ export default class FancyProductDesigner extends EventTarget {
      * Clears the product stage and resets everything.
      *
      * @method reset
-     * @instance
-     * @memberof FancyProductDesigner
+
+
      */
     reset() {
     
-        if(this.currentViews === null) return;
+        if(this.productViews === null) return;
                 
         this.removeEventListener('viewCreate', this.#onViewCreated)
     
@@ -1874,22 +1902,19 @@ export default class FancyProductDesigner extends EventTarget {
             this.currentViewInstance.fabricCanvas.resetZoom();
 
         this.currentViewIndex = this.currentPrice = this.singleProductPrice = this.pricingRulesPrice = 0;
-        this.currentViewInstance = this.currentViews = this.currentElement = null;
+        this.currentViewInstance = this.productViews = this.currentElement = null;
     
-        this.viewInstances.forEach((view) => {
-            view.fabricCanvas.clear();
+        this.viewInstances.forEach((viewInst) => {            
+            viewInst.fabricCanvas.dispose();
         });
         
-        this.productStage.innerHTML = '';
-        this.viewsWrapper.container.querySelector('.fpd-views-selection').innerHTML = '';
-                
+        this.productStage.innerHTML = '';  
         this.viewInstances = [];
-        
     
         /**
          * Gets fired as soon as the stage has been cleared.
          *
-         * @event FancyProductDesigner#clear
+         * @event clear
          * @param {Event} event
          */
         this.dispatchEvent(
@@ -1906,8 +1931,8 @@ export default class FancyProductDesigner extends EventTarget {
      * Deselects the selected element of the current showing view.
      *
      * @method deselectElement
-     * @instance
-     * @memberof FancyProductDesigner
+
+
      */
     deselectElement() {
                      
@@ -1926,6 +1951,8 @@ export default class FancyProductDesigner extends EventTarget {
      * @method formatPrice
      * @param {Number} [price] The price thats gonna be formatted.
      * @return {String} The formatted price string.
+
+
      */
     formatPrice(price) {
         
@@ -1988,6 +2015,8 @@ export default class FancyProductDesigner extends EventTarget {
 	 * @param {string} title The title for the design.
 	 * @param {Object} options Additional options.
 	 * @param {number} [viewIndex] The index of the view where the element needs to be added to. If no index is set, it will be added to current showing view.
+
+
 	 */
 	addCustomImage(source, title, options={}, viewIndex) {
 
@@ -1999,7 +2028,7 @@ export default class FancyProductDesigner extends EventTarget {
 
     	this.toggleSpinner(true, this.translator.getTranslation('misc', 'loading_image'));
         addElemClasses(
-            this.viewsWrapper.container,
+            this.viewsNav.container,
             ['fpd-disabled']
         );
 
@@ -2037,7 +2066,7 @@ export default class FancyProductDesigner extends EventTarget {
     		);
             
             removeElemClasses(
-                this.viewsWrapper.container,
+                this.viewsNav.container,
                 ['fpd-disabled']
             );
 
@@ -2046,7 +2075,7 @@ export default class FancyProductDesigner extends EventTarget {
 		image.onerror = () => {
 
             removeElemClasses(
-                this.viewsWrapper.container,
+                this.viewsNav.container,
                 ['fpd-disabled']
             );
 
@@ -2114,7 +2143,7 @@ export default class FancyProductDesigner extends EventTarget {
 		this.loadingCustomImage = true;
 		this.toggleSpinner(true,  this.translator.getTranslation('misc', 'loading_image'));
         addElemClasses(
-            this.viewsWrapper.container,
+            this.viewsNav.container,
             ['fpd-disabled']
         );
 
@@ -2124,7 +2153,7 @@ export default class FancyProductDesigner extends EventTarget {
         const _errorHandler = (errorMsg) => {
 
             removeElemClasses(
-                this.viewsWrapper.container,
+                this.viewsNav.container,
                 ['fpd-disabled']
             );
 
@@ -2188,6 +2217,8 @@ export default class FancyProductDesigner extends EventTarget {
 	 * @method toggleResponsive
 	 * @param {Boolean} [toggle] True or false.
 	 * @return {Boolean} Returns true or false.
+
+
 	 */
 	toggleResponsive(toggle) {
 
@@ -2220,6 +2251,8 @@ export default class FancyProductDesigner extends EventTarget {
 	 * @param {boolean} [onlyEditableElements=false] If true, only the editable elements will be returned.
 	 * @param {boolean} [customizationRequired=false] To receive the product the user needs to customize the initial elements.
 	 * @return {array} An array with all views. A view is an object containing the title, thumbnail, custom options and elements. An element object contains the title, source, parameters and type.
+
+
 	 */
 	getProduct(onlyEditableElements=false, customizationRequired=false) {
 
@@ -2322,8 +2355,8 @@ export default class FancyProductDesigner extends EventTarget {
 				locked: viewInstance.locked
 			};
             
-			if(i == 0 && this.currentViews[0].hasOwnProperty('productTitle')) {
-				viewObj.productTitle = this.currentViews[0].productTitle;
+			if(i == 0 && this.productViews[0].hasOwnProperty('productTitle')) {
+				viewObj.productTitle = this.productViews[0].productTitle;
 			}
 
 			product.push(viewObj);
@@ -2340,16 +2373,17 @@ export default class FancyProductDesigner extends EventTarget {
 	 *
 	 * @method getProductDataURL
 	 * @param {Function} callback A function that will be called when the data URL is created. The function receives the data URL.
-	 * @param {String} [backgroundColor=transparent] The background color as hexadecimal value. For 'png' you can also use 'transparent'.
-	 * @param {Object} [options={}] See fabricjs documentation http://fabricjs.com/docs/fabric.Canvas.html#toDataURL.
-	 * @param {Boolean} [options.onlyExportable=false] If true elements with excludeFromExport=true are not exported in the image.
-	 * @param {Array} viewRange An array defining the start and the end indexes of the exported views.
+	 * @param {Object} [options] See {@link FancyProductDesignerView#toDataURL}.
+	 * @param {Array} [viewRange=[]] An array defining the start and the end indexes of the exported views. When not defined, all views will be exported.
 	 * @example fpd.getProductDataURL( function(dataURL){} );
+
+
 	 */
-	getProductDataURL(callback=() => {}, backgroundColor='transparent', options={}, viewRange=[]) {
+	getProductDataURL(callback=() => {}, options={}, viewRange=[]) {
 
 		options.onlyExportable = options.onlyExportable === undefined ? false : options.onlyExportable;
 		options.enableRetinaScaling = options.enableRetinaScaling === undefined ? false : options.enableRetinaScaling;
+        options.watermarkImg = this.watermarkImg;
 
 		if(this.viewInstances.length === 0) { callback(''); return; }
 
@@ -2406,7 +2440,7 @@ export default class FancyProductDesigner extends EventTarget {
 
 				}, {crossOrigin: "anonymous"});
 
-			}, backgroundColor, options, this.watermarkImg);
+			}, options);
 
 			if(viewInst.options.stageWidth * multiplier > printCanvas.getWidth()) {
 				printCanvas.setDimensions({width: viewInst.options.stageWidth * multiplier});
@@ -2425,12 +2459,14 @@ export default class FancyProductDesigner extends EventTarget {
 	 *
 	 * @method getViewsDataURL
 	 * @param {Function} callback A function that will be called when the data URL is created. The function receives the data URL.
-	 * @param {string} [backgroundColor=transparent] The background color as hexadecimal value. For 'png' you can also use 'transparent'.
-	 * @param {string} [options={}] See fabricjs documentation http://fabricjs.com/docs/fabric.Canvas.html#toDataURL.
-	 * @param {Boolean} [options.onlyExportable=false] If true elements with excludeFromExport=true are not exported in the image.
+	 * @param {string} [options] See {@link FancyProductDesignerView#toDataURL}.
 	 * @return {array} An array with all views as data URLs.
+
+
 	 */
-	getViewsDataURL(callback=() => {}, backgroundColor='transparent', options={}) {
+	getViewsDataURL(callback=() => {}, options={}) {
+
+        options.watermarkImg = this.watermarkImg;
 
 		let dataURLs = [];
 
@@ -2445,7 +2481,7 @@ export default class FancyProductDesigner extends EventTarget {
 					callback(dataURLs);
 				}
 
-			}, backgroundColor, options, this.watermarkImg);
+			}, options);
 
 		}
 
@@ -2455,6 +2491,8 @@ export default class FancyProductDesigner extends EventTarget {
 	 * Opens the current showing product in a Pop-up window and shows the print dialog.
 	 *
 	 * @method print
+
+
 	 */
 	print() {
 
@@ -2507,7 +2545,7 @@ export default class FancyProductDesigner extends EventTarget {
 	 * @method getUsedFonts
 	 * @return {array} An array with objects containing the font name and optional the URL to the font.
 	 */
-	getUsedFonts() {
+	getUsedFonts() {        
 
 		let _usedFonts = [], //temp to check if already included
 			usedFonts = [];
@@ -2572,22 +2610,121 @@ export default class FancyProductDesigner extends EventTarget {
     /**
 	 * Returns the views as SVG.
 	 *
-	 * @method getViewsSVG
-	 * @param {Object} options See http://fabricjs.com/docs/fabric.StaticCanvas.html#toSVG.
-	 * @param {Function} reviver See http://fabricjs.com/docs/fabric.StaticCanvas.html#toSVG.
+	 * @param {Object} options See {@link FancyProductDesignerView#toSVG}.
 	 * @return {array} An array with all views as SVG.
 	 */
-	getViewsSVG (options, reviver, respectPrintingBox) {
+	getViewsSVG (options) {
 
 		let SVGs = [];
 
 		for(var i=0; i < this.viewInstances.length; ++i) {
-			SVGs.push(this.viewInstances[i].toSVG(options, reviver, respectPrintingBox, null, this.getUsedFonts()));
+			SVGs.push(this.viewInstances[i].toSVG(options, this.getUsedFonts()));
 		}
 
 		return SVGs;
 
-	};
+	}
+
+    /**
+	 * Get all used colors from a single or all views.
+	 *
+	 * @param {Number} [viewIndex=-1] The index of the target view. By default all views are target.
+	 * @return {array} An array with hexdecimal color values.
+	 */
+	getUsedColors(viewIndex=-1) {
+
+		var usedColors = [];
+		this.getElements(viewIndex, 'all', false).forEach((element) => {
+
+			const type = element.isColorizable();
+            
+			if(type) {
+
+				if(type === 'svg') {
+
+					if(element.type === 'group') {
+
+						element.getObjects().forEach((path) => {
+
+							if(tinycolor(path.fill).isValid()) {
+								usedColors.push(path.fill);
+							}
+
+						});
+
+					}
+					else { //single path
+
+						if(tinycolor(element.fill).isValid()) {
+							usedColors.push(element.fill);
+						}
+
+					}
+
+				}
+				else {
+
+					if(tinycolor(element.fill).isValid()) {
+						usedColors.push(element.fill);
+					}
+
+				}
+			}
+
+		});
+
+		return arrayUnique(usedColors);
+
+	}
+
+    /**
+	 * Removes a view by index. If no viewIndex is set, it will remove the first view.
+	 *
+	 * @method removeView
+	 * @param {Number} [viewIndex=0] The index of the target view.
+	 */
+	removeView(viewIndex=0) {
+
+		const viewInst = this.viewInstances[viewIndex];
+                
+        viewInst.fabricCanvas.wrapperEl.remove();
+        this.viewInstances.splice(viewIndex, 1);
+
+		//select next view if removing view is showing
+		if(this.viewInstances.length > 0) {
+			viewIndex == this.currentViewIndex ? this.selectView(0) : this.selectView(viewIndex);
+		}
+
+		/**
+		 * Gets fired when a view is removed.
+		 *
+		 * @event viewRemove
+		 * @param {Event} event
+		 */        
+        this.dispatchEvent(
+            new CustomEvent('viewRemove', {
+                detail: {
+                    viewIndex: viewIndex
+                }
+            })
+        );
+
+        //todo
+        return;
+		var truePrice = instance.calculatePrice();
+
+		/**
+	     * Gets fired as soon as the price changes in a view.
+	     *
+	     * @event priceChange
+	     * @param {Event} event
+	     * @param {number} elementPrice - The price of the element.
+	     * @param {number} totalPrice - The true price of all views with quantity.
+	     * @param {number} singleProductPrice - The true price of all views without quantity.
+	     */
+		$elem.trigger('priceChange', [null, truePrice, instance.singleProductPrice]);
+
+	}
 }
 
 window.FancyProductDesigner = FancyProductDesigner;

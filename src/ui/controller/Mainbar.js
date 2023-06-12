@@ -250,6 +250,14 @@ export default class Mainbar extends EventTarget {
             );
             
         }
+
+        this.fpdInstance.dispatchEvent(
+            new CustomEvent('navItemSelect', {
+                detail: {
+                    item: evt.currentTarget
+                }
+            })
+        );
         
     }
     
@@ -370,6 +378,14 @@ export default class Mainbar extends EventTarget {
                 
         this.toggleContentDisplay();
         this.currentModuleKey = name;
+
+        this.fpdInstance.dispatchEvent(
+            new CustomEvent('moduleCalled', {
+                detail: {
+                    moduleName: name
+                }
+            })
+        );
         
     }
 
@@ -407,7 +423,6 @@ export default class Mainbar extends EventTarget {
                 }
             })
         );
-
         
     }
     

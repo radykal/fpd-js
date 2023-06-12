@@ -15,12 +15,11 @@ module.exports = (env, argv) => {
             path: path.resolve(__dirname, 'test'),
             publicPath: '',
         },
-        watch: true,
         watchOptions: {
             ignored: ['/_uploads/', '/node_modules/', '/dist/**'],
         },
         devServer: {
-            https: true,  
+            server: 'https',  
             static:  [
                 {
                     directory: path.join(__dirname, 'dist'),

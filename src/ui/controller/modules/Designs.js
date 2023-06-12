@@ -235,12 +235,14 @@ export default class DesignsModule extends EventTarget {
     #addGridDesign(design) {
     
         design.thumbnail = design.thumbnail === undefined ? design.source : design.thumbnail;
-        
+                
+        const priceStr = getItemPrice(this.fpdInstance, this.container, design.parameters.price);
         const thumbnailItem = createImgThumbnail({
                 url: design.source,
                 thumbnailUrl: design.thumbnail,
                 title: design.title,
-                price: getItemPrice(this.fpdInstance, this.container, design.parameters.price),
+                price: priceStr,
+                disablePrice: !Boolean(priceStr)
         });
         
         thumbnailItem.dataset.search = design.title.toLowerCase();

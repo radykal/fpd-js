@@ -80,32 +80,13 @@ export default class ActionsBar extends EventTarget {
 				
             }
         )
-
+		
 		addEvents(
 			fpdInstance,
 			['viewSelect'],
 			(evt) => {
 
 				this.reset();
-
-				toggleElemClasses(
-					document.body.querySelectorAll('.fpd-btn[data-action="previous-view"], .fpd-btn[data-action="next-view"]'),
-					['fpd-hidden'],
-					fpdInstance.viewInstances.length <= 1
-				)
-
-
-				toggleElemClasses(
-					document.body.querySelectorAll('.fpd-btn[data-action="previous-view"]'),
-					['fpd-disabled'],
-					fpdInstance.currentViewIndex == 0
-				)
-	
-				toggleElemClasses(
-					document.body.querySelectorAll('.fpd-btn[data-action="next-view"]'),
-					['fpd-disabled'],
-					fpdInstance.currentViewIndex === fpdInstance.viewInstances.length - 1
-				)
 
 			}
 		)
@@ -232,7 +213,7 @@ export default class ActionsBar extends EventTarget {
 				['click'],
 				() => {
 					
-					this.fpdInstance.loadProduct(this.fpdInstance.currentViews);
+					this.fpdInstance.loadProduct(this.fpdInstance.productViews);
 					confirmModal.remove();
 
 				}
@@ -298,12 +279,12 @@ export default class ActionsBar extends EventTarget {
 			const startVal = this.fpdInstance.currentViewInstance.fabricCanvas.getZoom() / this.fpdInstance.currentViewInstance.fabricCanvas.responsiveScale;
 			const zoomSlider = document.createElement('fpd-range-slider');
 			zoomSlider.className = 'fpd-progress';
-			zoomSlider.value = startVal;
-			zoomSlider.step = 0.02;
-			zoomSlider.min = 1;
-			zoomSlider.max = 3;
+			zoomSlider.setAttribute('value', startVal);
+			zoomSlider.setAttribute('step', 0.02);
+			zoomSlider.setAttribute('min', 1);
+			zoomSlider.setAttribute('max', 3);
 			zoomSlider.onInput = (evt) => {
-
+				
 				this.fpdInstance.currentViewInstance.fabricCanvas.setResZoom(Number(evt.currentTarget.value));
 				
 			}
@@ -421,7 +402,7 @@ export default class ActionsBar extends EventTarget {
 		if(type === 'jpeg' || type === 'png') {
 
 			var a = document.createElement('a'),
-				background = type === 'jpeg' ? '#fff' : 'transparent';
+				bgColor = type === 'jpeg' ? '#fff' : 'transparent';
 
 			if(onlyCurrentView) {
 
@@ -429,7 +410,7 @@ export default class ActionsBar extends EventTarget {
 
 					download(dataURL, downloadFilename+'.'+type, 'image/'+type);
 
-				}, background, {format: type}, this.fpdInstance.watermarkImg);
+				}, {format: type, backgroundColor: bgColor, watermarkImg:  this.fpdInstance.watermarkImg});
 
 			}
 			else {
@@ -438,7 +419,7 @@ export default class ActionsBar extends EventTarget {
 
 					download(dataURL, downloadFilename+'.'+type, 'image/'+type);
 
-				}, background, {format: type});
+				}, {format: type, backgroundColor: bgColor});
 
 			}
 
@@ -446,7 +427,7 @@ export default class ActionsBar extends EventTarget {
 		else if(type === 'svg') {
 
 			download(
-				this.fpdInstance.currentViewInstance.toSVG({suppressPreamble: false}, null, false, this.fpdInstance.watermarkImg),
+				this.fpdInstance.currentViewInstance.toSVG({suppressPreamble: false, watermarkImg: this.fpdInstance.watermarkImg}),
 				'Product_'+this.fpdInstance.currentViewIndex+'.svg',
 				'image/svg+xml'
 			);

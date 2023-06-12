@@ -1,0 +1,1181 @@
+import '../view/ElementToolbar';
+import ColorPanel from '/src/ui/view/comps/ColorPanel';
+import ColorPalette from '/src/ui/view/comps/ColorPalette';
+import ColorPicker from '/src/ui/view/comps/ColorPicker';
+
+import { 
+    addEvents,
+    toggleElemClasses,
+    addElemClasses,
+    removeElemClasses,
+    getFileExtension,
+    elementAvailableColors,
+    getBgCssFromElement
+} from '/src/helpers/utils';
+
+export default class ElementToolbar extends EventTarget {
+
+    currentPlacement = 'smart';
+    #colorWrapper;
+    #visible = false
+
+    constructor(fpdInstance) {
+        
+        super();
+
+        this.fpdInstance = fpdInstance;
+        this.container = document.createElement("fpd-element-toolbar");   
+    
+        this.updateWrapper();
+
+        //set max values in inputs
+		const maxValuesKeys = Object.keys(fpdInstance.mainOptions.maxValues);
+        maxValuesKeys.forEach(key => {
+
+            const inputElem = this.container.querySelector('[data-control="'+key+'"]');
+
+            if(inputElem) {
+
+                inputElem.setAttribute('max', fpdInstance.mainOptions.maxValues[key])
+
+            }
+
+        })
+
+        //fonts        
+		if(Array.isArray(fpdInstance.mainOptions.fonts) && fpdInstance.mainOptions.fonts.length) {
+
+            const fontsList = this.subPanel.querySelector('.fpd-fonts-list');
+
+            fpdInstance.mainOptions.fonts
+            .forEach(fontObj => {
+
+                let fontName = typeof fontObj == 'object' ?  fontObj.name : fontObj;
+
+                const fontListItem = document.createElement('span');
+                fontListItem.className = 'fpd-item';
+                fontListItem.dataset.value = fontName;
+                fontListItem.innerText = fontName;
+                fontListItem.style.fontFamily = fontName;
+                fontsList.append(fontListItem);
+
+                addEvents(
+                    fontListItem,
+                    'click',
+                    (evt) => {
+
+                        removeElemClasses(
+                            Array.from(fontsList.children),
+                            ['fpd-active']
+                        )
+
+                        addElemClasses(fontListItem, ['fpd-active'])
+
+                        fpdInstance.currentViewInstance.fabricCanvas
+                        .setElementOptions({fontFamily: fontName});
+
+                    }
+                )
+
+            })
+
+            addEvents(
+                this.subPanel.querySelector('.fpd-panel-font-family input'),
+                'keyup',
+                (evt) => {
+
+                    const searchStr = evt.currentTarget.value;
+                    fontsList.querySelectorAll('.fpd-item').forEach((item) => {
+                    
+                        if(searchStr.length == 0) {
+                            item.classList.remove('fpd-hidden');
+                        }
+                        else {
+                            item.classList.toggle(
+                                'fpd-hidden', 
+                                !item.innerText.toLowerCase().includes(searchStr.toLowerCase()));
+                        }
+                
+                    })                    
+
+                }
+            )
+
+		}
+        else {
+            this.navElem.querySelector('.fpd-tool-font-family').style.display = 'none';
+        }
+
+        addEvents(
+            fpdInstance,
+            'elementSelect',
+            () => {
+                
+                const selectedElem = fpdInstance.currentElement;
+
+                if(this.#hasToolbar(selectedElem)) {
+
+                    this.update(selectedElem);
+                    this.updatePosition();
+
+                }
+                else {                    
+                    this.toggle(false);
+                }
+                
+            }
+        )
+
+        addEvents(
+            fpdInstance,
+            'elementChange',
+            () => {
+
+                if(this.currentPlacement == 'smart')
+                    this.toggle(false);
+
+            }
+        )
+
+        addEvents(
+            fpdInstance,
+            'elementModify',
+            (evt) => {
+
+                const { options } = evt.detail;
+
+                if(options.fontSize !== undefined) {
+                    this.updateUIValue('fontSize', options.fontSize)
+                }
+
+                if(options.scaleX !== undefined) {
+                    this.updateUIValue('scaleX', parseFloat(Number(options.scaleX).toFixed(2)));
+                }
+
+                if(options.scaleY !== undefined) {
+                    this.updateUIValue('scaleY', parseFloat(Number(options.scaleY).toFixed(2)));
+                }
+
+                if(options.angle !== undefined) {
+                    this.updateUIValue('angle', parseInt(options.angle));
+                }
+
+                if(options.text !== undefined) {
+                    this.updateUIValue('text', options.text);
+                }
+                
+            }
+        )
+
+        addEvents(
+            document.body,
+            ['mouseup', 'touchend'],
+            () => {
+
+                if(this.fpdInstance.currentElement) {
+                    this.updatePosition();
+                }
+            }
+        )
+
+        addEvents(
+            fpdInstance,
+            'uiLayoutChange',
+            (evt) => {
+
+                const { layout } = evt.detail;
+
+                removeElemClasses(
+                    this.container,
+                    ['fpd-layout-small', 'fpd-layout-medium', 'fpd-layout-large']
+                )
+
+                addElemClasses(
+                    this.container,
+                    ['fpd-layout-'+layout]
+                )
+                
+                //this.updateWrapper()
+                                
+
+            }
+        )
+
+        addEvents(
+            this.subPanel.querySelectorAll('.fpd-number'),
+            'change',
+            (evt) => {
+
+                const inputElem = evt.currentTarget;
+				let numberParameters = {};
+                
+                if( inputElem.value > Number(inputElem.max) ) {
+                    inputElem.value = Number(inputElem.max);
+                }
+
+                if( inputElem.value < Number(inputElem.min) ) {
+                    inputElem.value = Number(inputElem.min);
+                }
+
+                let value = Number(inputElem.value);
+
+                if(inputElem.classList.contains('fpd-slider-number')) {
+                                        
+                    inputElem.previousElementSibling.setAttribute('value', value);
+                    
+                    if(inputElem.dataset.control === 'scaleX' && fpdInstance.currentElement && fpdInstance.currentElement.lockUniScaling) {
+                        
+                        numberParameters.scaleY = value;
+                        this.updateUIValue('scaleY', value)
+
+                    }
+
+                }
+                
+                numberParameters[inputElem.dataset.control] = value;
+
+                if(fpdInstance.currentViewInstance) {
+
+                    fpdInstance.currentViewInstance.fabricCanvas.setElementOptions(
+                        numberParameters
+                    );
+
+                }
+
+            }
+        )
+        
+        addEvents(
+            this.subPanel.querySelectorAll('fpd-range-slider'),
+            'onInput',
+            (evt) => {
+
+                const slider = evt.currentTarget;
+                const value = evt.detail;
+
+                if(fpdInstance.currentViewInstance && fpdInstance.currentElement) {
+    
+                    var props = {},
+                        propKey = slider.dataset.control;
+
+                    props[propKey] = value;
+
+                     //proportional scaling
+                    if(propKey === 'scaleX' && fpdInstance.currentElement && fpdInstance.currentElement.lockUniScaling) {
+                        props.scaleY = value;
+                        this.updateUIValue('scaleY', value)
+                    }
+
+                    fpdInstance.currentViewInstance.fabricCanvas.setElementOptions(
+                        props
+                    );
+
+                }
+
+                const numberInput = evt.currentTarget.nextElementSibling;
+                if(numberInput && numberInput.classList.contains('fpd-slider-number')) {
+
+                    numberInput.value = value;
+
+                }                
+
+            }
+
+        )
+
+        //call content in tab
+        addEvents(
+            this.subPanel.querySelectorAll('.fpd-panel-tabs > span'),
+            'click',
+            (evt) => {
+
+                const targetTab = evt.currentTarget;
+                const tabsPanel = targetTab.parentNode;
+                const tabsContent = tabsPanel.nextElementSibling;
+                
+                //select tab
+                removeElemClasses(
+                    tabsPanel.querySelectorAll('span'),
+                    ['fpd-active']
+                )
+                addElemClasses(targetTab, ['fpd-active']);
+                
+                //select tab content
+                const contentTabs = Array.from(tabsContent.children);
+                removeElemClasses(
+                    contentTabs,
+                    ['fpd-active']
+                )
+                                
+                addElemClasses(
+                    contentTabs.filter(ct => ct.dataset.id == targetTab.dataset.tab),
+                    ['fpd-active']
+                )
+
+            }
+        )
+
+        //toggle options
+        addEvents(
+            this.subPanel.querySelectorAll('.fpd-toggle'),
+            'click',
+            (evt) => {
+
+                const item = evt.currentTarget;
+                let toggleParameters = {};
+
+                toggleElemClasses(
+                    item,
+                    ['fpd-enabled'],
+                    !item.classList.contains('fpd-enabled')
+                )
+
+                toggleParameters[item.dataset.control] = item.classList.contains('fpd-enabled') ? item.dataset.enabled : item.dataset.disabled;
+
+                if(['true', 'false'].includes(toggleParameters[item.dataset.control])) {
+                    toggleParameters[item.dataset.control] = toggleParameters[item.dataset.control] === 'true' ? true : false;                    
+                }
+
+                if(item.classList.contains('fpd-tool-uniscaling-locker')) {
+                    
+					this.#lockUniScaling(toggleParameters[item.dataset.control]);
+                    
+				}
+
+                fpdInstance.currentViewInstance.fabricCanvas
+                .setElementOptions( toggleParameters );
+
+            }
+        )
+        
+        //buttons with mulitple options
+        addEvents(
+            this.subPanel.querySelectorAll('.fpd-btn-options'),
+            'click',
+            (evt) => {
+
+                evt.preventDefault();
+
+                const item = evt.currentTarget;
+                const options = JSON.parse(item.dataset.options);
+                const optionKeys = Object.keys(options);
+                const currentVal = fpdInstance.currentElement ? fpdInstance.currentElement[item.dataset.control] : optionKeys[0];
+		        const nextOption = optionKeys.indexOf(currentVal) == optionKeys.length - 1 ? optionKeys[0] : optionKeys[optionKeys.indexOf(currentVal)+1];
+                const fpdOpts = {};
+
+                fpdOpts[item.dataset.control] = nextOption;
+                item.querySelector('span').className = options[nextOption]; 
+
+                fpdInstance.currentViewInstance.fabricCanvas
+                .setElementOptions(fpdOpts);                
+
+            }
+        )
+
+        //button group
+        addEvents(
+            this.subPanel.querySelectorAll('.fpd-btn-group [data-option]'),
+            'click',
+            (evt) => {
+
+                evt.preventDefault();
+
+                const item = evt.currentTarget;
+                const option = item.dataset.option;
+                
+                removeElemClasses(
+                    Array.from(item.parentNode.children),
+                    ['fpd-active']
+                )
+
+                addElemClasses(
+                    item,
+                    ['fpd-active']
+                )
+
+                const fpdOpts = {};
+                fpdOpts[item.parentNode.dataset.control] = option;
+
+                fpdInstance.currentViewInstance.fabricCanvas
+                .setElementOptions(fpdOpts);                 
+
+            }
+        )
+
+        //do action inside group
+        addEvents(
+            this.subPanel.querySelectorAll('.fpd-tools-group > [data-do]'),
+            'click',
+            (evt) => {
+
+                const btn = evt.currentTarget;
+                const doAction = btn.dataset.do;
+                
+                if(doAction == 'align-left')
+                    fpdInstance.currentElement.alignToPosition('left');
+                else if(doAction == 'align-right')
+                    fpdInstance.currentElement.alignToPosition('right');
+                else if(doAction == 'align-top')
+                    fpdInstance.currentElement.alignToPosition('top');
+                else if(doAction == 'align-bottom')
+                    fpdInstance.currentElement.alignToPosition('bottom');
+                else if(doAction == 'align-middle')
+                    fpdInstance.currentElement.centerElement(false, true);
+                else if(doAction == 'align-center')
+                    fpdInstance.currentElement.centerElement(true, false);
+                else if(doAction == 'layer-up' || doAction == 'layer-down') {
+
+                    let currentZ = fpdInstance.currentElement.getZIndex();
+
+                    currentZ = doAction == 'layer-up' ? currentZ+1 : currentZ-1;
+                    currentZ = currentZ < 0 ? 0 : currentZ;
+
+			        fpdInstance.currentViewInstance.fabricCanvas
+                    .setElementOptions( {z: currentZ} );
+
+                }
+                else if(doAction == 'flip-x' || doAction == 'flip-y') {
+
+                    const flipOpts = {};
+
+                    if(doAction == 'flip-x')
+                        flipOpts.flipX = !fpdInstance.currentElement.flipX;
+                    else
+                        flipOpts.flipY = !fpdInstance.currentElement.flipY;
+
+                    fpdInstance.currentViewInstance.fabricCanvas
+                    .setElementOptions(flipOpts);
+
+                }
+
+            }
+        )
+
+        //edit text panel
+        addEvents(
+            this.subPanel.querySelector('textarea[data-control="text"]'),
+            'keyup',
+            (evt) => {
+
+                evt.stopPropagation;
+                evt.preventDefault();
+
+                var selectionStart = evt.currentTarget.selectionStart,
+                    selectionEnd = evt.currentTarget.selectionEnd;
+                    
+                fpdInstance.currentViewInstance.fabricCanvas
+                .setElementOptions( {text: evt.currentTarget.value} );
+
+                evt.currentTarget.selectionStart = selectionStart;
+                evt.currentTarget.selectionEnd = selectionEnd;
+                
+            }
+        )
+
+        //curved text
+        addEvents(
+            this.subPanel.querySelectorAll('.fpd-curved-options > span'),
+            'click',
+            (evt) => {
+
+                const item = evt.currentTarget;
+                let curvedOpts = {};
+
+                if(item.dataset.value == 'normal') {
+
+                    curvedOpts.curved = false;
+
+                }
+                else {
+
+                    curvedOpts.curved = true;
+                    curvedOpts.curveReverse = item.dataset.value == 'curveReverse';
+
+                }
+
+                fpdInstance.currentViewInstance.fabricCanvas
+                .setElementOptions(curvedOpts);
+
+                this.#toggleCurvedOptions(curvedOpts.curved);
+
+            }
+        )
+        
+        //reset
+        addEvents(
+            this.navElem.querySelector('.fpd-tool-reset'),
+            'click',
+            (evt) => {
+
+                let originParams = fpdInstance.currentElement.originParams;
+                delete originParams['clipPath'];
+
+                //if element has bounding box, rescale for scale mode
+                if(fpdInstance.currentElement.boundingBox) {
+                    fpdInstance.currentElement.scaleX = 1;
+                    originParams.boundingBox = fpdInstance.currentElement.boundingBox;
+                }
+
+                fpdInstance.currentViewInstance.fabricCanvas
+                .setElementOptions( fpdInstance.currentElement.originParams );
+                fpdInstance.deselectElement();
+
+            }
+        )
+
+        //duplicate
+        addEvents(
+            this.navElem.querySelector('.fpd-tool-duplicate'),
+            'click',
+            (evt) => {
+
+                fpdInstance.currentViewInstance.fabricCanvas.duplicateElement(fpdInstance.currentElement)
+
+            }
+        )
+
+        //remove
+        addEvents(
+            this.navElem.querySelector('.fpd-tool-remove'),
+            'click',
+            (evt) => {
+
+                fpdInstance.currentViewInstance.fabricCanvas.removeElement(fpdInstance.currentElement)
+
+            }
+        )
+
+        //remove shadow
+        addEvents(
+            this.subPanel.querySelector('.fpd-panel-color .fpd-remove-shadow'),
+            'click',
+            (evt) => {
+
+                fpdInstance.currentViewInstance.fabricCanvas
+                .setElementOptions( {shadowColor: null} );
+                
+            }
+        )
+
+        //nav item
+        addEvents(
+            Array.from(this.navElem.children),
+            'click',
+            (evt) => {
+
+                const navItem = evt.currentTarget;
+
+                if(navItem.dataset.panel) { //has a sub a panel
+
+                    const element = fpdInstance.currentElement;
+
+                    //add active state to nav item
+                    removeElemClasses(Array.from(this.navElem.children), ['fpd-active']);
+                    addElemClasses(navItem, ['fpd-active']);
+
+                    const subPanels = Array.from(this.subPanel.children);
+                    const targetPanel = subPanels.filter( p => p.classList.contains('fpd-panel-'+navItem.dataset.panel) );
+                    removeElemClasses(subPanels, ['fpd-active']);
+                    addElemClasses(targetPanel, ['fpd-active']);
+
+                    if(this.currentPlacement == 'smart') {
+
+                        addElemClasses(
+                            this.container,
+                            ['fpd-panel-visible']
+                        )
+
+                    }
+
+                }
+                
+            }
+        )
+
+        addEvents(
+            this.container.querySelector('.fpd-close'),
+            'click',
+            (evt) => {
+
+                this.toggle(false);
+                fpdInstance.deselectElement();
+                
+
+            }
+        )
+
+        addEvents(
+            this.container.querySelector('.fpd-close-sub-panel'),
+            'click',
+            (evt) => {
+
+                removeElemClasses(
+                    Array.from(this.subPanel.children), 
+                    ['fpd-active']
+                );
+
+                removeElemClasses(
+                    this.container,
+                    ['fpd-panel-visible']
+                )
+                
+
+            }
+        )
+
+    }
+
+    #toggleNavItem = function(tool, toggle=true) {
+
+		const tools = this.navElem.querySelectorAll('.fpd-tools-nav > .fpd-tool-'+tool);        
+
+        toggleElemClasses(
+            tools,
+            ['fpd-hidden'],
+            !Boolean(toggle)
+        )
+
+        return tools;
+
+	};
+
+	#togglePanelTool(panel, tools, toggle) {
+
+		toggle = Boolean(toggle);
+
+        const panelElem = this.subPanel.querySelector('.fpd-panel-'+panel);
+        
+        toggleElemClasses(
+            panelElem.querySelectorAll('.fpd-tool-'+tools),
+            ['fpd-hidden'],
+            !toggle
+        )
+
+        return panel;
+
+	}
+
+	#togglePanelTab(panel, tab, toggle) {
+
+        const panelElem = this.subPanel.querySelector('.fpd-panel-'+panel);
+
+        toggleElemClasses(
+            panelElem.querySelectorAll('.fpd-panel-tabs [data-tab="'+tab+'"]'),
+            ['fpd-disabled'],
+            !toggle
+        )
+
+	}
+
+    #updateElementColor(element, hexColor) {
+        
+        let elementType = element.isColorizable();
+        
+        if(elementType !== 'png') {
+            element.changeColor(hexColor);
+        }        
+        
+    }
+
+	#setElementColor(element, hexColor) {
+
+		this.navElem.querySelector('.fpd-current-fill').style.backgroundColor = hexColor
+        this.fpdInstance.currentViewInstance.fabricCanvas.setElementOptions({fill: hexColor}, element);
+
+	}
+
+    #updateGroupPath(element, pathIndex, hexColor) {
+        
+        const groupColors = element.changeObjectColor(pathIndex, hexColor);
+        this.fpdInstance.currentViewInstance.fabricCanvas.setElementOptions({fill: groupColors}, element);
+        
+    }
+
+	#lockUniScaling(locked) {
+
+        const lockElem = this.subPanel.querySelector('.fpd-tool-uniscaling-locker > span');
+        lockElem.className = locked ? 'fpd-icon-locked' : 'fpd-icon-unlocked'
+
+        toggleElemClasses(
+            this.subPanel.querySelector('.fpd-tool-scaleY'),
+            ['fpd-disabled'],
+            locked
+        )
+
+	}
+
+    #toggleCurvedOptions(toggle=true) {
+
+        toggleElemClasses(
+            this.subPanel.querySelector('.fpd-tool-curved-text-radius'),
+            ['fpd-hidden'],
+            !toggle
+        )
+
+    }
+
+    #hasToolbar(elem) {
+
+        return elem && !elem._ignore && !elem.uploadZone;
+
+    }
+
+    update(element) {
+
+        this.hideTools();
+        removeElemClasses(this.container, ['fpd-type-image'])
+
+		let source = element.source,
+			allowedImageTypes = [
+				'png',
+				'jpg',
+				'jpeg',
+				'svg'
+			];
+
+		//COLOR: colors array, true=svg colorization        
+		if(element.hasColorSelection()) {
+
+            let availableColors = elementAvailableColors(element, this.fpdInstance);
+
+            let colorPanel;
+            if(element.type === 'group' && element.getObjects().length > 1) {
+
+                // palette per path
+                if(Array.isArray(element.colors)  && element.colors.length > 1) {
+                    
+                    colorPanel = ColorPalette({
+                        colors: availableColors, 
+                        colorNames: this.fpdInstance.mainOptions.hexNames,
+                        palette: element.colors,
+                        subPalette: true,
+                        onChange: (hexColor, pathIndex) => {
+                            
+                            this.#updateGroupPath(element, pathIndex, hexColor);
+                            
+                            
+                        }
+                    });
+                    
+                }
+                //picker per path
+                else {
+                    
+                    colorPanel = ColorPalette({
+                        colors: availableColors, 
+                        enablePicker: true,
+                        colorNames: this.fpdInstance.mainOptions.hexNames,
+                        palette: this.fpdInstance.mainOptions.colorPickerPalette,
+                        onMove: (hexColor, pathIndex) => {
+                            
+                            element.changeObjectColor(pathIndex, hexColor);
+                            
+                        },
+                        onChange: (hexColor, pathIndex) => {
+                            
+                            this.#updateGroupPath(element, pathIndex, hexColor);
+                                                        
+                        }
+                    });
+                    
+                }
+                
+            }
+            else {
+
+                colorPanel = ColorPanel(this.fpdInstance, {
+                    colors: availableColors,
+                    patterns: Array.isArray(element.patterns) && (element.isSVG() || element.getType() === 'text') ? element.patterns : null,
+                    onMove: (hexColor) => {
+                                                
+                        this.#updateElementColor(element, hexColor);
+                        
+                    },
+                    onChange: (hexColor) => {
+                        
+                        this.#setElementColor(element, hexColor);
+                        
+                    },
+                    onPatternChange: (patternImg) => {
+    
+                        // rowElem.querySelector('.fpd-current-color')
+                        // .style.backgroundImage = `url("${patternImg}")`;
+                        
+                        this.fpdInstance.currentViewInstance.fabricCanvas.setElementOptions(
+                            {pattern: patternImg}, 
+                            element
+                        );
+    
+                    }
+                })
+
+            }
+
+            this.#colorWrapper.append(colorPanel);
+
+            //stroke
+            const strokeColorWrapper = this.subPanel.querySelector('.fpd-stroke-color-wrapper');
+            strokeColorWrapper.innerHTML = '';
+            const strokeColorPicker = ColorPicker({
+                initialColor: element.stroke ? element.stroke : '#000',
+                colorNames: this.fpdInstance.mainOptions.hexNames,
+                palette: this.fpdInstance.mainOptions.colorPickerPalette,
+                onMove: (hexColor) => {
+
+                    this.fpdInstance.currentViewInstance.fabricCanvas.setElementOptions(
+                        {stroke: hexColor}, 
+                        element
+                    );
+                    
+                },
+                onChange: hexColor => {
+
+                    this.fpdInstance.currentViewInstance.fabricCanvas.setElementOptions(
+                        {stroke: hexColor}, 
+                        element
+                    );
+
+                }
+            });
+            strokeColorWrapper.append(strokeColorPicker);
+
+            //shadow
+            const shadowColorWrapper = this.subPanel.querySelector('.fpd-shadow-color-wrapper');
+            shadowColorWrapper.innerHTML = '';            
+            const shadowColorPicker = ColorPicker({
+                initialColor: element.shadowColor ? element.shadowColor : '#000000',
+                colorNames: this.fpdInstance.mainOptions.hexNames,
+                palette: this.fpdInstance.mainOptions.colorPickerPalette,
+                onMove: (hexColor) => {
+
+                    this.fpdInstance.currentViewInstance.fabricCanvas.setElementOptions(
+                        {shadowColor: hexColor}, 
+                        element
+                    );
+                    
+                },
+                onChange: hexColor => {
+
+                    this.fpdInstance.currentViewInstance.fabricCanvas.setElementOptions(
+                        {shadowColor: hexColor}, 
+                        element
+                    );
+
+                }
+            });
+            shadowColorWrapper.append(shadowColorPicker);
+
+			this.#toggleNavItem('color');
+			this.#togglePanelTab('color', 'fill', true);
+
+		}
+
+		if((element.isSVG() || element.getType() === 'text') && element.patterns && element.patterns.length) {
+
+			this.#toggleNavItem('color');
+			this.#togglePanelTab('color', 'fill', true);
+
+		}
+
+		//TRANSFORM
+		let showScale = Boolean((element.resizable && element.getType() === 'image') || element.uniScalingUnlockable || element.__editorMode);
+		if(showScale || element.rotatable || element.draggable || element.__editorMode) {
+
+			this.#toggleNavItem('transform');
+			this.#togglePanelTool('transform', 'scale', showScale);            
+			this.#lockUniScaling(element.lockUniScaling);            
+			this.#togglePanelTool('transform', 'uniscaling-locker', Boolean(element.uniScalingUnlockable || element.__editorMode));
+			this.#togglePanelTool('transform', 'angle', Boolean(element.rotatable || element.__editorMode));
+			this.#togglePanelTool('transform', 'flip', Boolean(showScale || element.__editorMode));
+			
+		}
+
+        //POSITION
+        if(element.draggable || element.zChangeable || element.__editorMode) {
+
+            this.#toggleNavItem('position');
+            this.#togglePanelTab('position', 'arrange', Boolean(element.zChangeable || element.__editorMode));
+            this.#togglePanelTab('position', 'align', Boolean(element.draggable || element.__editorMode));
+
+        }
+
+		//EDIT TEXT
+		if(element.getType() === 'text' && (element.editable || element.__editorMode)) {
+
+			this.#toggleNavItem('edit-text');
+			this.#toggleNavItem('font-family');
+
+			this.#togglePanelTab('color', 'stroke', true);
+			this.#togglePanelTab('color', 'shadow', true);
+
+			if(element.curvable && !element.textBox) {
+				this.#toggleNavItem('curved-text');
+                this.#toggleCurvedOptions(element.curved);
+			}
+            
+			this.subPanel.querySelector('textarea[data-control="text"]').value = element.text;
+
+			this.#toggleNavItem('edit-text', !element.textPlaceholder && !element.numberPlaceholder);
+
+		}
+		else {
+
+            addElemClasses(this.container, ['fpd-type-image'])
+
+        }
+
+		//todo: ADVANCED EDITING
+		// if(element.advancedEditing && source &&
+		// 	(element.isSVG() || Array.inArray(sourceExt, allowedImageTypes) !== -1 || sourceExt.search(/data:image\/(jpeg|png);/) !== -1)) {
+		// 	this.#toggleNavItem('advanced-editing');
+		// }
+
+        this.#togglePanelTool('text-size', 'text-line-spacing', !element.curved);
+		this.#toggleNavItem('reset');
+		this.#toggleNavItem('duplicate', element.copyable);
+		this.#toggleNavItem('remove', element.removable);
+
+		//display only enabled tabs and when tabs length > 1
+        this.subPanel.querySelectorAll('.fpd-panel-tabs').forEach(tabs => {
+
+            const visibleTabs = tabs.querySelectorAll('[data-tab]:not(.fpd-disabled)');
+
+            toggleElemClasses(
+                tabs,
+                ['fpd-hidden'],
+                visibleTabs.length <=1
+            )
+
+            //select first visible tab
+            if(visibleTabs.item(0)) 
+                visibleTabs.item(0).click();
+            
+        })
+
+		//set UI value by selected element
+		this.container.querySelectorAll('[data-control]').forEach(uiElement => {
+
+			const parameter = uiElement.dataset.control;
+
+			if(uiElement.classList.contains('fpd-number')) {
+
+				if(element[parameter] !== undefined) {
+
+					var numVal = uiElement.step && uiElement.step.length > 1 ? parseFloat(element[parameter]).toFixed(2) : parseInt(element[parameter]);
+					uiElement.value = numVal;
+                    
+					if(uiElement.classList.contains('fpd-slider-number')) {
+
+                        const inputSlider = uiElement.previousElementSibling;
+						if(parameter == 'fontSize') {
+
+                            inputSlider.setAttribute('min', element.minFontSize);
+                            inputSlider.setAttribute('max', element.maxFontSize);                            
+
+						}
+						else if(parameter == 'scaleX' || parameter == 'scaleY') {
+
+                            inputSlider.setAttribute('min', element.minScaleLimit);
+
+						}
+
+                        inputSlider.setAttribute('value', numVal)
+
+					}
+
+				}
+
+			}
+			else if(uiElement.classList.contains('fpd-toggle')) {
+
+                toggleElemClasses(
+                    uiElement,
+                    ['fpd-enabled'],
+                    element[parameter] === uiElement.dataset.enabled
+                )
+
+            }
+            else if(uiElement.classList.contains('fpd-btn-options')) {
+
+                const options = JSON.parse(uiElement.dataset.options);
+                uiElement.querySelector('span').className = options[element[parameter]]; 
+
+            }
+            else if(uiElement.classList.contains('fpd-btn-group')) {
+
+                removeElemClasses(
+                    Array.from(uiElement.children),
+                    ['fpd-active']
+                )
+                
+                const control = uiElement.dataset.control;
+                addElemClasses(
+                    uiElement.querySelector('[data-option="'+element[control]+'"]'),
+                    ['fpd-active']
+                )
+
+            }
+			else if(parameter == 'fontFamily') {
+
+				if(element[parameter] !== undefined) {
+
+                    removeElemClasses(
+                        this.subPanel.querySelectorAll('.fpd-fonts-list .fpd-item'),
+                        ['fpd-active']
+                    )
+
+                    addElemClasses(
+                        this.subPanel.querySelector('.fpd-fonts-list .fpd-item[data-value="'+element[parameter]+'"]'),
+                        ['fpd-active']
+                    )
+
+				}
+
+			}
+
+			const bgCss = getBgCssFromElement(element);
+			if(bgCss) {
+
+				this.navElem.querySelector('.fpd-current-fill')
+                .style.backgroundColor = bgCss;
+
+			}
+
+		});
+
+		//select first visible nav item
+		if(this.currentPlacement == 'mainbar') {            
+			this.navElem.querySelector('[data-panel]:not(.fpd-hidden)').click();
+		}
+
+        this.toggle();
+
+        //reset scroll
+        this.container.querySelectorAll('.fpd-scroll-area').forEach(scrollArea => {
+            scrollArea.scrollLeft = scrollArea.scrollTop = 0; 
+        })
+
+    }
+
+    updatePosition() {
+        
+        if(this.currentPlacement !== 'smart' || !this.#hasToolbar(this.fpdInstance.currentElement)) return;
+
+        this.toggle(Boolean(this.fpdInstance.currentElement))
+
+        if(this.fpdInstance.currentElement) {
+
+            const fpdElem = this.fpdInstance.currentElement;
+
+            //top
+            const elemBoundingRect = fpdElem.getBoundingRect();            
+            const lowestY = elemBoundingRect.top + elemBoundingRect.height + fpdElem.controls.mtr.offsetY + fpdElem.cornerSize;
+            const posTop = this.fpdInstance.productStage.getBoundingClientRect().top +  window.scrollY + lowestY;
+            
+            //left
+            const oCoords = fpdElem.oCoords;            
+            const halfWidth = this.container.offsetWidth / 2;
+            const viewStageRect = this.fpdInstance.currentViewInstance.fabricCanvas.wrapperEl.getBoundingClientRect();  
+            let posLeft = viewStageRect.left + oCoords.mt.x;
+            posLeft = posLeft < halfWidth ? halfWidth : posLeft; //move toolbar not left outside of document
+		    posLeft = posLeft > window.innerWidth - halfWidth ? window.innerWidth - halfWidth : posLeft; //move toolbar not right outside of document            
+        
+            this.container.style.top = posTop+'px';
+            this.container.style.left = posLeft+'px';
+
+        }        
+
+	};
+
+    toggle(toggle=true) {   
+        
+        this.#visible = toggle;
+        
+        toggleElemClasses(this.container, ['fpd-show'], toggle);
+        toggleElemClasses(document.body, ['fpd-toolbar-visible'], toggle);
+
+	};
+
+    updateWrapper() {
+
+        this.container.className = '';
+        
+        if(this.fpdInstance.mainOptions.toolbarPlacement == 'smart' ||
+            this.fpdInstance.container.classList.contains('fpd-layout-small')    
+        ) {
+            
+            this.currentPlacement = 'smart';
+            this.container.className = 'fpd-container fpd-smart';
+            document.body.append(this.container)
+
+        }
+        else {
+
+            this.currentPlacement = 'mainbar';
+            this.fpdInstance.mainBar.container.append(this.container)
+
+        }
+
+        this.navElem = this.container.querySelector('.fpd-tools-nav');
+        this.subPanel = this.container.querySelector('.fpd-sub-panel');
+        this.#colorWrapper = this.subPanel.querySelector('.fpd-color-wrapper');
+
+    }
+
+    updateUIValue(tool, value) {
+
+        this.subPanel.querySelectorAll('[data-control="'+tool+'"]').forEach(toolInput => {
+                            
+            toolInput.value = value;
+            toolInput.setAttribute('value', value);
+
+        })
+
+	};
+
+    hideTools() {
+
+        this.#colorWrapper.innerHTML = '';
+
+        removeElemClasses(
+            this.container,
+            ['fpd-panel-visible']
+        )
+        
+        //hide tool in row
+        addElemClasses(
+            Array.from(this.navElem.children),
+            ['fpd-hidden']
+        )
+
+        removeElemClasses(
+            Array.from(this.navElem.children),
+            ['fpd-active']
+        )
+        
+        //hide all sub panels in sub toolbar
+        removeElemClasses(
+            Array.from(this.subPanel.children),
+            ['fpd-active']
+        )
+
+        //disable all tabs
+        addElemClasses(
+            this.subPanel.querySelectorAll('.fpd-panel-tabs > span'),
+            ['fpd-disabled']
+        )
+
+        removeElemClasses(
+            this.subPanel.querySelectorAll('.fpd-panel-tabs > span'),
+            ['fpd-hidden']
+        )
+
+        //remove active tabs
+        removeElemClasses(
+            this.subPanel.querySelectorAll('.fpd-panel-tabs-content > *, .fpd-panel-tabs > *'),
+            ['fpd-active']
+        )
+        
+	};
+
+}

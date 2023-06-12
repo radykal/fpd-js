@@ -9,8 +9,16 @@
                     "product_id": 9,
                     "title": "Front",
                     "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_front-1.png",
-                    "mask": {},
+                    "mask": {
+                        "left": 100,
+                        "top": 100,
+                        "url": "examples/images/heart_single.sv",
+                        "scaleX": 0.5,
+                        "scaleY": 0.5
+                    },
+                    "locked": false,
                     "options": {
+                        "optionalView": true,
                         "stageWidth": 600,
                         "stageHeight": 660,
                         "printingBox": {
@@ -33,7 +41,70 @@
                             "uploads": true,
                             "texts": true,
                             "designs": true
-                        }
+                        },
+                        "layouts": [
+                            {
+                                "title": "My View Layout",
+                                "thumbnail": "https://d3g7hp6owqj5vv.cloudfront.net/templates_library/shirts_men_standard/preview_men_standard_front-1.png",
+                                "elements": [
+                                   {
+                                      "type": "image",
+                                      "source": "https://dek8oqj8xxsl6.cloudfront.net/img/humans/professions/construction_worker.svg",
+                                      "title": "Large Image",
+                                      "parameters": {
+                                         "price": 50.05,
+                                         "left": 150,
+                                         "top": 300,
+                                         "scaleX": 0.1,
+                                         "scaleY": 0.1,
+                                         "autoCenter": false,
+                                         "zChangeable": true,
+                                         "removable": false,
+                                         "draggable": true,
+                                         "rotatable": true,
+                                         "resizable": true,
+                                         "copyable": true,
+                                         "autoSelect": false,
+                                         "uniScalingUnlockable": true,
+                                         "flipX": false,
+                                         "originX": "left",
+                                         "originY": "top",
+                                         "advancedEditing": true,
+                                         "colors": "#000"
+                                      }
+                                   },
+                                   {
+                                      "type": "text",
+                                      "source": "Last\nName",
+                                      "title": "Enter your last name",
+                                      "parameters": {
+                                         "zChangeable": true,
+                                         "removable": true,
+                                         "draggable": true,
+                                         "rotatable": true,
+                                         "resizable": true,
+                                         "colors": "#ffffff",
+                                         "fontSize": 30,
+                                         "minFontSize": 5,
+                                         "maxFontSize": 100,
+                                         "patternable": true,
+                                         "fontStyle": "normal",
+                                         "fontWeight": "bold",
+                                         "lineHeight": 1.5,
+                                         "letterSpacing": 1,
+                                         "textAlign": "left",
+                                         "fill": "#990000",
+                                         "editable": true,
+                                         "left": 200,
+                                         "fontFamily": "Lobster",
+                                         "top": 500,
+                                         "maxLines": 1,
+                                         "textPlaceholder": true
+                                      }
+                                   }
+                                ]
+                             }
+                        ]
                     },
                     "elements": [
                         {
@@ -59,6 +130,7 @@
                                 "angle": 0,
                                 "copyable": true,
                                 "lockUniScaling": true,
+                                "uniScalingUnlockable": true,
                                 "uploadZone": 1
                             }
                         },
@@ -91,8 +163,7 @@
                                     "designs": true,
                                     "texts": true
                                 },
-                                "designCategories": [
-                                ]
+                                "designCategories": []
                             }
                         },
                         {
@@ -264,8 +335,7 @@
                                     "designs": true,
                                     "texts": true
                                 },
-                                "designCategories": [
-                                ]
+                                "designCategories": []
                             }
                         },
                         {
@@ -412,7 +482,8 @@
                                 "colors": "#000",
                                 "angle": 0,
                                 "copyable": true,
-                                "lockUniScaling": true
+                                "lockUniScaling": true,
+                                "uniScalingUnlockable": true
                             }
                         },
                         {
@@ -425,11 +496,11 @@
                                 "scaleX": 0.5,
                                 "scaleY": 0.5,
                                 "autoCenter": true,
-                                "removable": false,
+                                "removable": 1,
                                 "draggable": true,
                                 "zChangeable": true,
                                 "resizable": true,
-                                "autoSelect": 1,
+                                "autoSelect": 0,
                                 "scale": 0.3,
                                 "topped": false,
                                 "rotatable": false,
@@ -437,7 +508,9 @@
                                 "colors": "#990000,#000",
                                 "angle": 0,
                                 "copyable": false,
-                                "lockUniScaling": false
+                                "lockUniScaling": false,
+                                "uniScalingUnlockable": true,
+                                "fixed": true
                             }
                         },
                         {
@@ -490,7 +563,7 @@
                                 "fontStyle": "normal",
                                 "textAlign": "left",
                                 "curvable": 1,
-                                "curved": false,
+                                "curved": 1,
                                 "curveRadius": 100,
                                 "curveReverse": true,
                                 "stroke": null,
@@ -721,8 +794,7 @@
                                     "designs": true,
                                     "texts": true
                                 },
-                                "designCategories": [
-                                ]
+                                "designCategories": []
                             }
                         },
                         {

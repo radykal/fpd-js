@@ -8,7 +8,10 @@ import {
     removeUrlParams
 } from '/src/helpers/utils';
 
-fabric.Object.propertiesToInclude = ['_isInitial', 'lockMovementX', 'lockMovementY', 'lockRotation', 'lockScalingX', 'lockScalingY', 'lockScalingFlip', 'lockUniScaling', 'resizeType', 'boundingBox', 'boundingBoxMode', 'selectable', 'evented', 'title', 'editable', 'cornerColor', 'cornerIconColor', 'borderColor', 'isEditable', 'hasUploadZone', 'cornerSize'];
+fabric.Object.propertiesToInclude = [
+    '_isInitial', 'lockMovementX', 'lockMovementY', 'lockRotation', 'lockScalingX', 'lockScalingY', 'lockScalingFlip', 'lockUniScaling', 
+    'resizeType', 'boundingBox', 'boundingBoxMode', 'selectable', 'evented', 'title', 'editable', 'cornerColor', 'cornerIconColor', 
+    'borderColor', 'isEditable', 'hasUploadZone', 'cornerSize', 'source'];
 
 fabric.Object.prototype.initialize = (function(originalFn) {
     return function(...args) {
@@ -45,36 +48,43 @@ fabric.Object.prototype._elementInit = function() {
         },
         'selected': () => {
 
-            let widthControls = !this.lockUniScaling;
-            if(this.textBox)
-                widthControls = true;
-            
-            if(this.canvas && this.canvas.viewOptions.cornerControlsStyle == 'basic') {
-                this.controls.mtr.offsetX = 0;
-                this.cornerSize = 16;
-            }
-            
-            this.setControlsVisibility({
-                ml: widthControls,
-                mr: widthControls,
-                mt: !this.lockUniScaling,
-                mb: !this.lockUniScaling,
-                tr: this.removable,
-                tl: this.copyable,
-                mtr: this.rotatable,
-                br: this.resizable && !this.curved,
-            });
+            this._elementControls();
             
         }
     })
     
-};
+}
+
+fabric.Object.prototype._elementControls = function() {
+
+    let widthControls = !this.lockUniScaling;
+
+    if(this.textBox)
+        widthControls = true;
+    
+    if(this.canvas && this.canvas.viewOptions.cornerControlsStyle == 'basic') {
+        this.controls.mtr.offsetX = 0;
+        this.cornerSize = 16;
+    }
+    
+    this.setControlsVisibility({
+        ml: widthControls,
+        mr: widthControls,
+        mt: !this.lockUniScaling,
+        mb: !this.lockUniScaling,
+        tr: this.removable,
+        tl: this.copyable,
+        mtr: this.rotatable,
+        br: this.resizable && !this.curved,
+    });
+
+}
 
 fabric.Object.prototype.getType = function (fabricType) {
     
     fabricType = fabricType ? fabricType : this.type;
     
-    if(fabricType === 'text' || fabricType === 'i-text' || fabricType === 'curvedText' || fabricType === 'textbox') {
+    if(fabricType === 'text' || fabricType === 'i-text' || fabricType === 'textbox') {
         return 'text';
     }
     else {
@@ -96,7 +106,7 @@ fabric.Object.prototype.isColorizable = function () {
     if(this.getType() === 'text') {
         return 'text';
     }
-    
+        
     if(!this.source) {
         return false;
     }
@@ -133,7 +143,7 @@ fabric.Object.prototype.isColorizable = function () {
 };
 
 fabric.Object.prototype.hasColorSelection = function() {
-    
+        
     return (Array.isArray(this.colors) || Boolean(this.colors) || this.colorLinkGroup || this.__editorMode) && this.isColorizable() !== false;
 
 };
@@ -670,7 +680,7 @@ fabric.Object.prototype.getElementJSON = function(addPropertiesToInclude=false, 
 /**
 	 * Aligns an element.
 	 *
-	 * @method alignElement
+	 * @method alignToPosition
 	 * @param {String} pos Allowed values: left, right, top or bottom.
 	 */
 fabric.Object.prototype.alignToPosition = function(pos='left') {
@@ -680,7 +690,7 @@ fabric.Object.prototype.alignToPosition = function(pos='left') {
         boundingBox = this.getBoundingBoxCoords(),
         posOriginX = 'left',
         posOriginY = 'top';
-
+        
     if(pos === 'left') {
 
         localPoint.x = boundingBox ? boundingBox.left : 0;
@@ -707,7 +717,7 @@ fabric.Object.prototype.alignToPosition = function(pos='left') {
     }
 
     this.setPositionByOrigin(localPoint, posOriginX, posOriginY);
-    this.setCoords();
+    this.canvas.renderAll();
     this._checkContainment();
 
 };

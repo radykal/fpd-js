@@ -71,6 +71,8 @@ export default class SaveLoadModule extends EventTarget {
                             new CustomEvent('actionSave', {detail: savedProduct})
                         );
 
+                        this.fpdInstance.doUnsavedAlert = false;
+
                     }
                     
 

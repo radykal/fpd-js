@@ -26,30 +26,11 @@ export default class LayoutsModule extends EventTarget {
 
         addEvents(
             fpdInstance,
-            'productCreate',
+            'layoutsSet',
             (evt) => {
 
-                const layoutsOption = fpdInstance.currentViews[0].options.layouts;
-
-                if(typeof layoutsOption == 'string') {
-
-                    getJSON({
-                        url: this.fpdInstance.mainOptions.layouts,
-                        onSuccess: (data) => {
-        
-                            this.layoutsData = data;
-                            this.#setup();
-        
-                        },
-                        onError: () => {
-                            alert('Layouts JSON could not be loaded. Please check that your URL is correct! URL: '+this.fpdInstance.mainOptions.layouts);
-                        } 
-                    });  
-        
-                }
-                else if(Array.isArray(layoutsOption)) {
-                    this.layoutsData = layoutsOption;
-                }
+                this.layoutsData = fpdInstance.currentLayouts;
+                this.#setup();
 
             }
         )
