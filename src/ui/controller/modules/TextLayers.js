@@ -71,27 +71,6 @@ export default class TextLayersModule extends EventTarget {
 
             }
         )
-
-        addEvents(
-            fpdInstance,
-            'elementColorChange', 
-            (evt) => {
-                
-                if(fpdInstance.productCreated) {
-
-                    const element = evt.detail.element;
-                    const rowElem = this.listElem.querySelector('.fpd-list-row[id="'+element.id+'"]');
-
-                    if(rowElem) {
-                        //todo: do same for pattern, test with toolbar
-                        rowElem.querySelector('.fpd-current-color').style.backgroundColor = element.fill;
-                        
-                    }
-                    
-                }
-                
-            }
-        )
         
     }
     
@@ -152,12 +131,6 @@ export default class TextLayersModule extends EventTarget {
         rowElem.className = 'fpd-list-row';
         rowElem.id = element.id;
         this.listElem.append(rowElem);  
-        
-        const titleWrapper = document.createElement('div');
-        titleWrapper.className = 'fpd-cell-full';
-        titleWrapper.innerText = element.title.replace(/(\r\n|\n|\r)/gm, " ");
-        
-        rowElem.append(titleWrapper);
 
         //text input
         const textWrapper = document.createElement('div');

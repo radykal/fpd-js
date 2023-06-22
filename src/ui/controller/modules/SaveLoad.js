@@ -76,7 +76,7 @@ export default class SaveLoadModule extends EventTarget {
                     }
                     
 
-				}, 'transparent', {multiplier: scale, format: 'png'});
+				}, {multiplier: scale, format: 'png', backgroundColor:'transparent'});
                 
             }
         )
@@ -166,3 +166,5 @@ export default class SaveLoadModule extends EventTarget {
 	}
 
 }
+
+window.FPDSaveLoadModule = SaveLoadModule;

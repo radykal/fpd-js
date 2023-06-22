@@ -3,11 +3,11 @@ import Modal from '/src/ui/view/comps/Modal';
 
 import { 
     deepMerge,
-    objectHasKeys
+    objectHasKeys,
+    toggleElemClasses
 } from '/src/helpers/utils';
 
 import { parseFontsToEmbed } from '/src/helpers/fonts-loader';
-import { toggleElemClasses } from '../helpers/utils';
 
 /**
  * Creates a new FancyProductDesignerView.
@@ -76,6 +76,7 @@ export default class FancyProductDesignerView extends EventTarget {
      * @memberof FancyProductDesignerView
      */
     totalPrice = 0;
+    
     /**
      * The total price for the view including max. price and corrert formatting.
      *
@@ -84,6 +85,7 @@ export default class FancyProductDesignerView extends EventTarget {
      * @memberof FancyProductDesignerView
      */
     truePrice = 0;
+
     /**
      * Additional price for the view.
      *
@@ -92,6 +94,7 @@ export default class FancyProductDesignerView extends EventTarget {
      * @memberof FancyProductDesignerView
      */
     additionalPrice = 0;
+
     /**
      * The locked state of the view.
      *
@@ -99,11 +102,7 @@ export default class FancyProductDesignerView extends EventTarget {
      * @default false
      */
     locked = false;
-    viewData;
-    onCreatedCallback;
-    title;
-    thumbnail;
-    options;
+
     /**
      * The properties for the mask object (url, left, top, width, height).
      *
@@ -112,8 +111,16 @@ export default class FancyProductDesignerView extends EventTarget {
      * @memberof FancyProductDesignerView
      */
     mask = null;
+
+    viewData;
+    onCreatedCallback;
+    title;
+    thumbnail;
+    options;
+    names_numbers;
     canvasElem = null;
     fabricCanvas = null;
+    elementsAdded = false;
     
     constructor(container, viewData={}, callback, fabricCanvasOptions={}) {
         
@@ -125,6 +132,8 @@ export default class FancyProductDesignerView extends EventTarget {
         this.thumbnail = viewData.thumbnail;
         this.options = viewData.options;
         this.mask = viewData.mask;
+        
+        this.names_numbers = viewData.names_numbers ? viewData.names_numbers : null;
         
         fabric.Canvas.prototype.snapGridSize = this.options.snapGridSize;
         fabric.Canvas.prototype.snapToObjects = this.options.smartGuides;
@@ -179,6 +188,78 @@ export default class FancyProductDesignerView extends EventTarget {
         if(viewData.options.optionalView) {
             this.toggleLock(Boolean(viewData.locked));
         }
+
+        const _onTextChanged = (textElem) => {
+
+            if (textElem.chargeAfterEditing) {
+
+                if (!textElem._isPriced) {
+                    this.changePrice(textElem.price, '+');
+                    textElem._isPriced = true;
+                }
+                                
+                if (textElem._initialText === textElem.text && textElem._isPriced) {
+                    this.changePrice(textElem.price, '-');
+                    textElem._isPriced = false;
+                }
+    
+            }
+            
+        }
+
+        this.fabricCanvas.on({
+			'object:added': (opts) => {
+
+				let element = opts.target,
+					price = element.price;
+
+				//if element is added into upload zone, use upload zone price if one is set
+				if((element._addToUZ && element._addToUZ != '')) {
+
+					var uploadZoneObj = this.fabricCanvas.getElementByTitle(element._addToUZ);
+					price = uploadZoneObj && uploadZoneObj.price ? uploadZoneObj.price : price;
+
+				}
+
+				if(price !== undefined &&
+					price !== 0 &&
+					!element.uploadZone &&
+					!element._ignore &&
+					(!element.chargeAfterEditing || element._isPriced)
+				) {
+					this.changePrice(price, '+');
+
+				}
+
+			},
+			'object:removed': (opts) => {
+
+				const element = opts.target;
+
+				if(element.price !== undefined && element.price !== 0 && !element.uploadZone
+					&& (!element.chargeAfterEditing || element._isPriced)) {
+					this.changePrice(element.price, '-');
+				}
+
+			},
+            'text:changed': (opts) => {
+
+                _onTextChanged(opts.target)                
+
+            },
+            'elementModify': (opts) => {
+
+                if(this.elementsAdded && opts.options.hasOwnProperty('text')) {
+                    _onTextChanged(opts.element);
+                }
+                
+            },
+            'elementFillChange': (opts) => {
+
+                this.#setColorPrice(opts.element);
+
+            }
+		});
                 
     }
     
@@ -213,6 +294,7 @@ export default class FancyProductDesignerView extends EventTarget {
     
     #afterSetup() {
 
+        this.elementsAdded = true;
         this.fabricCanvas._doHistory = true;
 
         if(this.mask) {
@@ -440,7 +522,6 @@ export default class FancyProductDesignerView extends EventTarget {
 
         let svgString = tempSVG.innerHTML;
 
-        //todo: check if required
 		svgString = svgString
 			//replace all newlines
 			.replace(/(?:\r\n|\r|\n)/g, '')
@@ -466,12 +547,124 @@ export default class FancyProductDesignerView extends EventTarget {
             locked
         )
         
-        //todo
-		//$this.trigger('priceChange', [0, instance.truePrice]);
+        this.dispatchEvent(
+            new CustomEvent('priceChange', {
+                detail: {
+                    elementPrice: 0,
+                    truePrice: this.truePrice
+                }
+            })
+        );
 
 		return locked;
 
-	};
+	}
+
+    /**
+	 * Changes the price by an operator, + or -.
+	 *
+	 * @method changePrice
+	 * @param {Number} price Price as number.
+	 * @param {String} operator "+" or "-".
+	 * @return {Number} The total price of the view.
+	 */
+	changePrice(price, operator, additionalPrice=null) {
+
+		if(typeof price !== 'number') {
+			price = Number(price);
+		}
+
+		if(operator === '+') {
+			this.totalPrice += price;
+		}
+		else {
+			this.totalPrice -= price;
+		}
+        
+        
+		if(additionalPrice !== null) {
+
+			let tempAdditionalPrice = this.additionalPrice;
+			this.totalPrice -= tempAdditionalPrice;
+
+			this.additionalPrice = additionalPrice;
+			this.totalPrice += additionalPrice;
+
+		}
+
+		this.truePrice = this.totalPrice;
+
+		//consider max. view price
+		if(typeof this.options.maxPrice === 'number' && this.options.maxPrice != -1 && this.truePrice > this.options.maxPrice) {
+			this.truePrice = Number(this.options.maxPrice);
+		}
+        
+
+		//price has decimals, set max. decimals to 2
+		if(this.truePrice % 1 != 0) {
+			this.truePrice = Number(this.truePrice.toFixed(2));
+		}
+
+		/**
+	     * Gets fired as soon as the price has changed.
+	     *
+	     * @event FancyProductDesignerView#priceChange
+	     * @param {Event} event
+	     * @param {number} elementPrice - The price of the added element.
+	     * @param {number} truePrice - The total price.
+	     */
+        this.dispatchEvent(
+            new CustomEvent('priceChange', {
+                detail: {
+                    elementPrice: price,
+                    truePrice: this.truePrice
+                }
+            })
+        );
+
+		return this.truePrice;
+
+	}
+
+    //sets the price for the element if it has color prices
+	#setColorPrice(element) {
+        
+
+		//only execute when initial elements are loaded and element has color prices and colors is an object
+		if(this.elementsAdded && element.colorPrices && typeof element.colors === 'object' && element.colors.length > 1) {
+
+			//subtract current color price, if set and is hex
+			if(element.currentColorPrice !== undefined) {
+				element.price -= element.currentColorPrice;
+				this.changePrice(element.currentColorPrice, '-');
+			}
+
+            const hexFill = element.fill;
+			if(typeof hexFill === 'string') {
+
+				var hexKey = hexFill.replace('#', '');
+
+				if(element.colorPrices.hasOwnProperty(hexKey) || element.colorPrices.hasOwnProperty(hexKey.toUpperCase())) {
+
+					var elementColorPrice = element.colorPrices[hexKey] === undefined ? element.colorPrices[hexKey.toUpperCase()] : element.colorPrices[hexKey];
+
+					element.currentColorPrice = elementColorPrice;
+					element.price += element.currentColorPrice;
+					this.changePrice(element.currentColorPrice, '+');
+
+				}
+				else {
+					element.currentColorPrice = 0;
+				}
+
+			}
+			else {
+				element.currentColorPrice = 0;
+			}
+
+		}
+
+	}
     
 }
 

@@ -156,3 +156,4 @@ export default class LayoutsModule extends EventTarget {
 
 }
     
+window.FPDLayoutsModule = LayoutsModule;

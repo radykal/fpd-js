@@ -1,0 +1,66 @@
+.fpd-bulk-variations {
+
+    margin: 20px 0;
+
+    > .fpd-head {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+
+        > .fpd-headline {
+            font-size: 18px;
+        }
+    }
+
+    .fpd-variations-list {
+
+        display: flex;
+        flex-flow: column wrap;
+        gap: 20px;
+
+        .fpd-row {
+            display: flex;
+            flex-flow: row nowrap;
+            gap: 10px;
+            height: 40px;
+            align-items: center;
+    
+            > select {
+                flex: 1;
+                font-size: 16px;
+                padding: 0 5px;
+                height: 100%;
+
+                &.fpd-error {
+                    border-color: var(--fpd-red-color);
+                }
+            }
+    
+            > input {
+                width: 50px;
+                height: 100%;
+                margin: 0;
+                text-align: center;
+            };
+    
+            > span {
+                display: inline-block;
+                width: 30px;
+                cursor: pointer;
+                font-size: 18px;
+                text-align: center;
+            }
+    
+            &:first-child {
+    
+                span {
+                    display: none;
+                }
+            }
+        }
+
+    }
+
+}

@@ -18,7 +18,7 @@ export default class Translator extends EventTarget {
      * @param {Function} callback The function that will be invoked when the language data is set.
      */
     loadLangJSON(langJSON=null, callback=()=>{}) {
-        
+                
         //load language JSON
         if(langJSON !== false) {
         
@@ -33,8 +33,10 @@ export default class Translator extends EventTarget {
                 getJSON({
                     url: langJSON,
                     onSuccess: (data) => {
-                        this.langJSON = data;
+                        
+                        this.langJSON = data;                        
                         callback.call(this);
+                        
                     },
                     onError: (error) => {
                         
@@ -62,6 +64,7 @@ export default class Translator extends EventTarget {
     translateElement(htmlElem) {
     
         let label = '';
+        
         if(this.langJSON) {
     
             let objString = '';
@@ -87,7 +90,7 @@ export default class Translator extends EventTarget {
                 label = rootObject[keys[1]];
                 
                 if(label === undefined) { //if label does not exist in JSON, take default text
-                    console.log("FPD label not found: "+htmlElem.dataset.defaulttext);             
+                    console.log("FPD label not found: "+htmlElem.dataset.defaulttext, keys);             
                     label = htmlElem.dataset.defaulttext;
                 }
     
@@ -118,7 +121,7 @@ export default class Translator extends EventTarget {
     
         return label;
     
-    };
+    }
     
     /**
      * Get the translation of a label.
@@ -141,6 +144,21 @@ export default class Translator extends EventTarget {
     
         return defaulText;
     
-    };
+    }
+
+    translateArea(area) {
+
+        const labels = area.querySelectorAll('[data-defaulttext]');
+        
+        Array.from(labels)
+        .forEach(item => {
+            
+            this.translateElement(
+                item
+            );
+            
+        })
+
+    }
     
 }

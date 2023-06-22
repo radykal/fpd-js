@@ -1,31 +1,54 @@
-var FPDPricingRules = function($elem, fpdInstance) {
+import { 
+    addEvents
+} from '/src/helpers/utils';
 
+export default class PricingRules {
 
-	var instance = this,
-		unitFormat = fpdInstance.mainOptions.dynamicViewsOptions ? fpdInstance.mainOptions.dynamicViewsOptions.unit : 'mm';
+	constructor(fpdInstance) {
 
-	this.doPricingRules = function() {
+		this.fpdInstance = fpdInstance;
 
-		fpdInstance.pricingRulesPrice = 0;
+		addEvents(
+			fpdInstance, 
+			[
+				'elementModify',
+				'productCreate',
+				'elementAdd',
+				'elementRemove',
+				'viewCreate',
+				'viewRemove',
+				'elementFillChange',
+				'textLinkApply'
+			],
+			this.doPricingRules.bind(this)
+		)
 
-		var pricingRules = fpdInstance.mainOptions.pricingRules;
+	}
+
+	doPricingRules() {
+
+		const unitFormat =this.fpdInstance.mainOptions.dynamicViewsOptions ? this.fpdInstance.mainOptions.dynamicViewsOptions.unit : 'mm';
+
+		this.fpdInstance.pricingRulesPrice = 0;
+
+		var pricingRules = this.fpdInstance.mainOptions.pricingRules;
 		if( pricingRules && pricingRules.length > 0) {
 
 			//loop all pricing groups
-			pricingRules.forEach(function(pGroup) {
+			pricingRules.forEach((pGroup) => {
 
 				var targetElems = [];
 				//get single element by title
-				if(pGroup.property == 'canvasSize' || pGroup.property == 'canvasArea') {
-					targetElems = fpdInstance.viewInstances;
+				if(pGroup.property == 'canvasSize') {
+					targetElems = this.fpdInstance.viewInstances;
 				}
 				else if(pGroup.target.elements !== undefined && pGroup.target.elements.charAt(0) === '#') {
-					targetElems.push(fpdInstance.getElementByTitle(pGroup.target.elements.replace('#', ''), pGroup.target.views));
+					targetElems.push(this.fpdInstance.getElementByTitle(pGroup.target.elements.replace('#', ''), pGroup.target.views));
 				}
 				//get custom elements
 				else if(pGroup.target.elements !== undefined && pGroup.target.elements.search('custom') !== -1) {
 
-					targetElems = fpdInstance.getCustomElements(
+					targetElems = this.fpdInstance.getCustomElements(
 						pGroup.target.elements.replace('custom', '').toLowerCase(),
 						pGroup.target.views,
 						false
@@ -34,8 +57,10 @@ var FPDPricingRules = function($elem, fpdInstance) {
 				}
 				//get mutliple elements
 				else {
-					targetElems = fpdInstance.getElements(pGroup.target.views, pGroup.target.elements, false);
-				}
+					
+					targetElems = this.fpdInstance.getElements(pGroup.target.views, pGroup.target.elements, false);
+
+				}				
 
 				//loop all target elements in group
 				var property,
@@ -46,7 +71,7 @@ var FPDPricingRules = function($elem, fpdInstance) {
 					loopTargetsOnce = true;
 				}
 
-				targetElems.forEach(function(targetElem, index) {
+				targetElems.forEach((targetElem, index) => {
 
 					if(!targetElem || (loopTargetsOnce && index > 0)) {
 						return;
@@ -57,9 +82,9 @@ var FPDPricingRules = function($elem, fpdInstance) {
 						targetElem = targetElem.element;
 					}
 
-					//get property for condition
+					//get property for condition					
 					if(pGroup.property === 'textLength') { //for text in all views
-						property = targetElem.text ? targetElem.text.replace(/\s/g, "").length : null;
+						property = targetElem.text ? targetElem.text.replace(/\s/g, "").length : null;						
 					}
 					else if(pGroup.property === 'linesLength') { //for text in all views
 						property = targetElem.text ? targetElem.text.split("\n").length : null;
@@ -76,38 +101,15 @@ var FPDPricingRules = function($elem, fpdInstance) {
 					else if(pGroup.property === 'canvasSize') { //views: all
 						property = {width: FPDUtil.pixelToUnit(targetElem.options.stageWidth, unitFormat), height: FPDUtil.pixelToUnit(targetElem.options.stageHeight, unitFormat) };
 					}
-					else if(pGroup.property === 'canvasArea') { //views: all
-
-/*
-						//calculate width and height from canvas siize
-						var width = FPDUtil.pixelToUnit(targetElem.options.stageWidth, unitFormat),
-							height = FPDUtil.pixelToUnit(targetElem.options.stageHeight, unitFormat);
-
-						//check if canvas output has dimensions
-						if(FPDUtil.objectHasKeys(targetElem.options.output, ['width', 'height'])) {
-							width = targetElem.options.output.width;
-							height = targetElem.options.output.height;
-
-							//convert mm to cm
-							if(unitFormat == 'cm') {
-								width = Math.round(width / 10);
-								height = Math.round(height / 10);
-							}
-
-						}
-						//calculatee area from width and height (mm or cm)
-						property = width * height;
-*/
-					}
 					else if(pGroup.property === 'pattern') { //text and svg in all views
 						property = targetElem.pattern;
 					}
 					// ---- one time loop props
 					else if(pGroup.property === 'elementsLength') { //views: all, elements: all
-						property = targetElems.length;
+						property = targetElems.length;						
 					}
 					else if(pGroup.property === 'colorsLength') { //views: all
-						property = fpdInstance.getUsedColors(pGroup.target.views).length;
+						property = this.fpdInstance.getUsedColors(pGroup.target.views).length;
 					}
 
 					//property for element is not valid
@@ -116,15 +118,15 @@ var FPDPricingRules = function($elem, fpdInstance) {
 					}
 
 					//add real property to every rule
-					pGroup.rules.forEach(function(pRule) {
+					pGroup.rules.forEach((pRule) => {
 						pRule.property = property;
 					});
 
 					if(pGroup.type === 'any') { //if-else
-						pGroup.rules.some(_loopPricingGroup)
+						pGroup.rules.some(this.#loopPricingGroup.bind(this))
 					}
 					else { //all, if-loop
-						pGroup.rules.forEach(_loopPricingGroup);
+						pGroup.rules.forEach(this.#loopPricingGroup.bind(this));
 					}
 
 				});
@@ -133,17 +135,16 @@ var FPDPricingRules = function($elem, fpdInstance) {
 
 		}
 
-		var truePrice = fpdInstance.calculatePrice();
-		$elem.trigger('priceChange', [null, truePrice, fpdInstance.singleProductPrice]);
+		this.fpdInstance.calculatePrice();
 
-	};
+	}
 
-	var _loopPricingGroup = function(pRule, index) {
+	#loopPricingGroup(pRule, index) {
 
-		if(_condition(pRule.operator, pRule.property, pRule.value)) {
+		if(this.#condition(pRule.operator, pRule.property, pRule.value)) {
 
 			if(typeof pRule.price === 'number') {
-				fpdInstance.pricingRulesPrice += pRule.price;
+				this.fpdInstance.pricingRulesPrice += pRule.price;
 			}
 			return true;
 		}
@@ -152,7 +153,7 @@ var FPDPricingRules = function($elem, fpdInstance) {
 
 	};
 
-	var _condition = function(oper, prop, value) {
+	#condition(oper, prop, value) {
 
 		//check if prop is an object that contains more props to compare
 		if(typeof value === 'object') {
@@ -161,22 +162,22 @@ var FPDPricingRules = function($elem, fpdInstance) {
 				tempReturn = null;
 
 			//as soon as if one is false in the prop object, the whole condition becomes false
-			keys.forEach(function(key){
+			keys.forEach((key) => {
 
 				if(tempReturn !== false) {
-					tempReturn = _operator(oper, prop[key], value[key]);
+					tempReturn = this.#operator(oper, prop[key], value[key]);
 				}
 
 			});
 			return tempReturn;
 		}
 		else { //just single to compare
-			return _operator(oper, prop, value);
+			return this.#operator(oper, prop, value);
 		}
 
-	};
+	}
 
-	var _operator = function(oper, prop, value) {
+	#operator(oper, prop, value) {
 
 		if(oper === '=') {
 			return prop === value;
@@ -196,12 +197,4 @@ var FPDPricingRules = function($elem, fpdInstance) {
 
 	}
 
-	$elem.on('elementModify productCreate elementAdd elementRemove viewCreate viewRemove _doPricingRules elementColorChange', function(evt) {
-
-		if(fpdInstance.productCreated) {
-			instance.doPricingRules();
-		}
-
-	});
-
-};
+}

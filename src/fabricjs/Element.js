@@ -228,7 +228,6 @@ fabric.Object.prototype.changeColor = function (colorData, colorLinking=true) {
             
             this.applyFilters();
             this.canvas.renderAll();
-            this.canvas.fire('elementColorChange', { element: this, colorLinking: colorLinking});
             this.fill = colorData;
     
         }
@@ -237,11 +236,12 @@ fabric.Object.prototype.changeColor = function (colorData, colorLinking=true) {
             
             this.set('fill', colorData);
             this.canvas.renderAll();
-            this.canvas.fire('elementColorChange', { element: this, colorLinking: colorLinking });
     
         }
     
     }
+
+    this.canvas.fire('elementFillChange', { element: this, colorLinking: colorLinking });
 
 };
 
@@ -300,6 +300,7 @@ fabric.Object.prototype.setPattern = function (patternUrl) {
             }
         
             this.canvas.renderAll();
+            this.canvas.fire('elementFillChange', { element: this });
         
         });
         
@@ -611,6 +612,8 @@ fabric.Object.prototype._clipElement = function() {
             this.clipPath = clipRect;
 
         }
+
+        this.canvas.renderAll();
 
     }
 

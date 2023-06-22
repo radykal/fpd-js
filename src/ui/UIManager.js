@@ -8,6 +8,8 @@ import ViewsNav from './controller/ViewsNav.js';
 import ViewsGrid from './controller/ViewsGrid.js';
 import ElementToolbar from './controller/ElementToolbar';
 import GuidedTour from '/src/ui/controller/addons/GuidedTour';
+import BulkVariations from '/src/ui/controller/addons/BulkVariations';
+import ColorSelection from '/src/ui/controller/addons/ColorSelection';
 
 import { 
     addEvents,
@@ -19,7 +21,7 @@ import {
 export default class UIManager extends EventTarget {
     
     #currentWindowWidth = 0;
-    #currentLayout = '';
+    currentLayout = '';
     
     constructor(fpdInstance) {
         
@@ -141,7 +143,10 @@ export default class UIManager extends EventTarget {
         this.fpdInstance.productStage = this.fpdInstance.mainWrapper.container.querySelector('.fpd-product-stage');
         this.fpdInstance.viewsNav = new ViewsNav(this.fpdInstance);
         this.fpdInstance.viewsGrid = new ViewsGrid(this.fpdInstance);
-        this.fpdInstance.toolbar = new ElementToolbar(this.fpdInstance);
+
+        //addons
+        this.fpdInstance.bulkVariations = new BulkVariations(this.fpdInstance);
+        new ColorSelection(this.fpdInstance);
 
         if(this.fpdInstance.mainOptions.guidedTour && Object.keys(this.fpdInstance.mainOptions.guidedTour).length > 0) {
 
@@ -152,15 +157,14 @@ export default class UIManager extends EventTarget {
         //all labels
         const labels = new Set([
             ...this.fpdInstance.container.querySelectorAll('[data-defaulttext]'),
-            ...this.fpdInstance.toolbar.container.querySelectorAll('[data-defaulttext]')
+            ...document.querySelectorAll('.fpd-draggable-dialog [data-defaulttext]')
         ])
 
         Array.from(labels)
         .forEach(item => {
             
             this.fpdInstance.translator.translateElement(
-                item, 
-                this.fpdInstance.mainOptions.langJson
+                item
             );
             
         })
@@ -170,7 +174,7 @@ export default class UIManager extends EventTarget {
         );
         
         window.addEventListener("resize", this.#updateResponsive.bind(this));
-
+        
         this.#updateResponsive();
         this.#hoverThumbnail();
         this.#setMainTooltip();
@@ -203,9 +207,13 @@ export default class UIManager extends EventTarget {
             currentLayout = 'large';
         }
 
-        if(currentLayout != this.#currentLayout) {
+        this.fpdInstance.container.dataset.layout = currentLayout;
 
-            this.#currentLayout = currentLayout;
+        if(currentLayout != this.currentLayout) {
+
+            this.currentLayout = currentLayout;
+            
+            this.#updateToolbarWrapper(currentLayout);
 
             /**
              * Gets fired when the UI layout changes.
@@ -223,6 +231,17 @@ export default class UIManager extends EventTarget {
             );
             
         }
+        
+    }
+
+    #updateToolbarWrapper(layout='large') {
+
+        const presentToolbar = document.querySelector('fpd-element-toolbar');
+        if(presentToolbar)
+            presentToolbar.remove()
+
+        this.fpdInstance.toolbar = new ElementToolbar(this.fpdInstance);
+        this.fpdInstance.translator.translateArea(this.fpdInstance.toolbar.container)
         
     }
 

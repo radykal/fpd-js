@@ -4,52 +4,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Framework | Testing all web components</title>
-    <script src='../dist/fabric-5.3.1.js'></script>
-    <script src='../dist/js/vendor.js'></script>
-    <script src='../dist/js/FancyProductDesigner.js'></script>
-    <link href="../dist/css/vendor.css" rel="stylesheet" type="text/css">
-    <link href="../dist/css/FancyProductDesigner.css?test=122" rel="stylesheet" type="text/css">
+    <!-- <script src="//code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script> -->
+    <link rel="stylesheet" type="text/css" href="css/semantic.min.css">
+    
+    <script src='./dist/fabric-5.3.1.js'></script>
+    <script src='./dist/js/vendor.js'></script>
+    <link href="./dist/css/vendor.css" rel="stylesheet" type="text/css">
+    <script src='js/FancyProductDesigner.js'></script>
+    
     <style>
         
         body {
             font-size: 12px;
-            font-family: Helvetica;
         }
         
-        body > .container {
-            max-width: 1200px;
-            margin: auto;
-            padding-top: 80px;
+        #fpd-target {
+            margin-top: 100px;
         }
         
     </style>
 </head>
 <body>
-    <div class="container">
+    
+    <div class="ui container">
         
-        <button id="open-modal" class="ui button">Open Modal</button>
-        <div 
-            id="fpd-target" 
-            class="fpd-sidebar fpd-shadow-2 fpd-views-inside-left"
-        >
-        </div>
-        
-        <script>
+        <div class="ui one column grid" style="padding-top: 20px;">
             
+            <div class="column">
+                
+                    <div id="fpd-target" class="fpd-sidebar fpd-shadow-2"></div>
+                    <!-- <div id="fpd-target" class="fpd-off-canvas fpd-shadow-2 fpd-views-inside-right"></div> -->
+                    <!-- <div id="fpd-target" class="fpd-topbar fpd-shadow-2 fpd-views-inside-right"></div> -->
+
+                    <div id="custom-mainbar-container"></div>
+            </div>
+
+            
+            
+            <div class="column">
+                <select id="main-layout" class="ui selection dropdown">
+                    <option value="sidebar">Sidebar</option>
+                    <option value="topbar">Topbar</option>
+                    <!-- <option value="off-canvas">Off-Canvas</option> -->
+                </select>
+            </div>
+            
+            <div class="column" style="margin-bottom: 1000px;">
+                <h5>Test API</h5>
+                <div id="test-api">
+                    <button id="undo" class="ui button" data-tooltip="test">Undo</button>
+                    <button id="redo" class="ui button">Redo</button>
+                    <button id="test" class="ui button">Test</button>
+                    <button id="toSVG" class="ui button">toSVG</button>
+                    <button id="open-modal" class="ui button">Open Modal</button>
+                    <input type="range" id="range-test" min="0" max="360">
+                </div>
+                <div id="editor-box-wrapper"></div>
+                <div id="svg-display"></div>
+            </div>
+            
+        </div>
+        <script>
+
             const appOptions = {
-                langJson: '../data/langs/default.json',
-                initialActiveModule: 'images',
+                actions:  {
+                    left: ['info', 'download', 'preview-lightbox', 'reset-product'],
+                    center: ['undo','redo', 'previous-view', 'next-view'],
+                    right: ['zoom', 'ruler', 'guided-tour'],
+                },
+                langJson: 'data/langs/default.json',
+                initialActiveModule: 'products',
                 responsiveBreakpoints: {
                 },
                 mainBarModules: [
                     'products',
                     'images',
                     'text',
-                    'text-to-image',
                     'designs',
                     'designs_love',
                     'manage-layers',
                     'text-layers',
+                    'layouts',
                     'save-load',
                 ],
                 fonts: [
@@ -63,8 +98,8 @@
                     },
                     {name: 'Pacifico', url: 'fonts/Pacifico.ttf'},
                 ],
-                productsJSON: './product-categories.json',
-                designsJSON: '../data/designs/design-categories.json',
+                productsJSON: './data/product-categories.json',
+                designsJSON: 'data/designs/design-categories.json',
                 textTemplates: [
                     {
                         text: "This is\nmy world",
@@ -109,7 +144,7 @@
                         }
                     },
                     {
-                        text: "This is\nmy world",
+                        text: "This is\nmy world vccx vcxv cxvxcvcx",
                         properties: {
                             fontSize: 30,
                             fontFamily: "Lobster"
@@ -130,29 +165,142 @@
                         categories: ['love']
                     }
                 },
-                fileServerURL: 'https://radykal.dep/fpd-js/server/php/custom-image-handler.php',
+                fileServerURL: 'https://radykal.dep/fpd-js-server/php/file-handler.php',
                 facebookAppId: '893957135155898',
                 instagramClientId: '6748682918479320',
                 instagramRedirectUri: 'https://localhost:8080/data/html/instagram_auth.html',
-                instagramTokenUri: 'https://radykal.dep/fpd-js/server/php/instagram-token.php',
-                customImageParameters: {
-                    price: 10,
-                    maxSize: 1,
-                },
+                instagramTokenUri: 'https://radykal.dep/fpd-js-server/php/instagram-token.php',
+                uploadAgreementModal: false,
+                swapProductConfirmation: false,
+                pixabayApiKey: '7571591-cf8ff820ec635edeb4e8c6af7',
+                pixabayLang: 'de',
+                pixabayHighResImages: false,
+                fitImagesInCanvas: true,
                 colorPickerPalette: ["#000", "#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc", '#5f27cd', '#222f3e', '#10ac84',"#000", "#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc", '#5f27cd', '#222f3e', '#10ac84',"#000", "#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc", '#5f27cd', '#222f3e', '#10ac84',"#000", "#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc", '#5f27cd', '#222f3e', '#10ac84'],
                 hexNames: {'000': 'black', ffffff:'white',FFFFFF:'white',990000:'red',cccccc:'grey', "83635c": 'Chestnut', f4cccc: 'Redder'},
                 elementParameters: {
                     patterns: ['images/patterns/carbon.png', 'images/patterns/grune_2.png', 'images/patterns/grunge_1.png', 'images/patterns/lines_green.png', 'images/patterns/lines_purple.png', 'images/patterns/lines_red.png', 'images/patterns/wood_1.png', 'images/patterns/wood_2.png', 'images/patterns/wood_3.png', 'images/patterns/carbon.png','images/patterns/carbon.png', 'images/patterns/grune_2.png', 'images/patterns/grunge_1.png', 'images/patterns/lines_green.png', 'images/patterns/lines_purple.png', 'images/patterns/lines_red.png', 'images/patterns/wood_1.png', 'images/patterns/wood_2.png', 'images/patterns/wood_3.png', 'images/patterns/carbon.png']
                 },
-                uploadAgreementModal: false,
-                swapProductConfirmation: true,
-                pixabayApiKey: '7571591-cf8ff820ec635edeb4e8c6af7',
-                pixabayLang: 'de',
-                pixabayHighResImages: false,
+                customImageParameters: {
+                    removable: true,
+                    draggable: true,
+                    resizable: true,
+                    autoCenter: true,
+                    price: 10,
+                    maxSize: 10,
+                    autoSelect: true,
+                    replace: 'test',
+                    replaceInAllViews: true
+                },
+                customTextParameters: {
+                    autoCenter: true,
+                    draggable: true,
+                    removable: true,
+                    colors: true,
+                },
+                canvasHeight: 'auto',
+                maxCanvasHeight: 0.8,
+                highlightEditableObjects: '',
+                inCanvasTextEditing: true,
+                replaceInitialElements: true,
+                cornerControlsStyle: 'advanced',
+                multiSelection: false,
+                disableTextEmojis: true,
+                editorMode: false,
+                autoFillUploadZones: false,
+                imageQualityRatings: {
+                    low: [200, 300],
+                    mid: [1000, 1000],
+                    high: [2000, 2000]
+                },
+                dragDropImagesToUploadZones: true,
+                hideDialogOnAdd: true,
+                imageSizeTooltip: true,
+                mobileGesturesBehaviour: 'pinchPanCanvas',
+                textLinkGroupProps: ['fontSize', 'fontFamily', 'fontStyle', 'fill'],
+                fabricCanvasOptions: {
+                    allowTouchScrolling: true
+                },
+                layouts: 'data/layouts/data.json',
+                smartGuides: true,
+                snapGridSize: [40, 40],
                 modalMode: '#open-modal',
+                toolbarPlacement: 'sidebar',
+                enableDynamicViews: true
+                //mainBarContainer: '#custom-mainbar-container'
             }
                 
             const fpd = new FancyProductDesigner(document.getElementById('fpd-target'), appOptions);
+            window.fpd = fpd;
+            
+            const updateMainLayout = (layout='sidebar') => {
+                
+                fpd.container.classList.remove('fpd-topbar');
+                fpd.container.classList.remove('fpd-sidebar');
+                fpd.container.classList.remove('fpd-off-canvas');
+                
+                fpd.container.classList.add('fpd-'+layout);
+                fpd.mainBar.updateContentWrapper();
+                
+            }
+            
+            fpd.addEventListener('ready', () => {
+                
+                document.querySelector('#main-layout')
+                .addEventListener('change', (evt) => {
+                    updateMainLayout(evt.currentTarget.value);
+                })
+                
+            })
+
+            fpd.addEventListener('productsSet', () => {
+                
+                fpd.selectProduct(1)
+                
+            })
+            
+            fpd.addEventListener('productAdd', (evt, details) => {
+                //console.log(evt.detail);              
+            })
+            
+            const testApiWrapper = document.body.querySelector('#test-api');
+            
+            testApiWrapper.querySelector('#undo')
+            .addEventListener('click', (evt) => {
+                console.log(fpd.currentViewInstance.fabricCanvas.historyUndo);
+                fpd.currentViewInstance.fabricCanvas.undo();
+            })
+            
+            testApiWrapper.querySelector('#redo')
+            .addEventListener('click', (evt) => {
+                fpd.currentViewInstance.fabricCanvas.redo();
+            })
+            
+            testApiWrapper.querySelector('#test')
+            .addEventListener('click', (evt) => {
+                
+                let elem = fpd.currentViewInstance.fabricCanvas.getElementByTitle('Base');
+
+                fpd.currentViewInstance.fabricCanvas.snapToGrid = !fpd.currentViewInstance.fabricCanvas.snapToGrid;
+                
+                elem.canvas.renderAll();
+            })
+
+            testApiWrapper.querySelector('#toSVG')
+            .addEventListener('click', (evt) => {
+
+                let svgStr = fpd.currentViewInstance.fabricCanvas.toSVG();
+                document.querySelector('#svg-display').innerHTML = svgStr;
+                
+            })
+
+            testApiWrapper.querySelector('#range-test')
+            .addEventListener('input', (evt) => {
+                
+                let elem = fpd.currentViewInstance.fabricCanvas.getElementByTitle('Design Me');
+                fpd.currentViewInstance.fabricCanvas.setElementOptions({curveRadius: parseInt(evt.currentTarget.value)}, elem);
+                
+            })
             
         </script>
     </div>

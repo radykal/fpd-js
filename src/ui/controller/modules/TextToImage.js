@@ -101,5 +101,6 @@ export default class TextToImageModule extends EventTarget {
                 
     }
 
-
 }
+
+window.FPDTextToImageModule = TextToImageModule;

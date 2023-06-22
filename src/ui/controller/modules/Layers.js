@@ -53,7 +53,7 @@ export default class LayersModule extends EventTarget {
 
         addEvents(
             fpdInstance,
-            'elementColorChange', 
+            'elementFillChange', 
             (evt) => {
                 
                 if(fpdInstance.productCreated) {
@@ -62,8 +62,8 @@ export default class LayersModule extends EventTarget {
                     const rowElem = this.listElem.querySelector('.fpd-list-row[id="'+element.id+'"]');
 
                     if(rowElem && rowElem.querySelector('.fpd-current-color')) {
-                        //todo: do same for pattern, test with toolbar
-                        rowElem.querySelector('.fpd-current-color').style.backgroundColor = element.fill;
+                        
+                        rowElem.querySelector('.fpd-current-color').style.background = getBgCssFromElement(element);
                         
                     }
                     
@@ -328,45 +328,27 @@ export default class LayersModule extends EventTarget {
             //color panel for object group(multi-paths)
             if(element.type === 'group' && element.getObjects().length > 1) {
                 
-                let colorPalette;
-                // palette per path
-                if(Array.isArray(element.colors)  && element.colors.length > 1) {
-                    
-                    colorPalette = ColorPalette({
-                        colors: availableColors, 
-                        colorNames: this.fpdInstance.mainOptions.hexNames,
-                        palette: element.colors,
-                        subPalette: true,
-                        onChange: (hexColor, pathIndex) => {
-                            
-                            this.#updateGroupPath(element, pathIndex, hexColor);
-                            
-                            
-                        }
-                    });
-                    
-                }
-                //picker per path
-                else {
-                    
-                    colorPalette = ColorPalette({
-                        colors: availableColors, 
-                        enablePicker: true,
-                        colorNames: this.fpdInstance.mainOptions.hexNames,
-                        palette: this.fpdInstance.mainOptions.colorPickerPalette,
-                        onMove: (hexColor, pathIndex) => {
-                            
-                            element.changeObjectColor(pathIndex, hexColor);
-                            
-                        },
-                        onChange: (hexColor, pathIndex) => {
-                            
-                            this.#updateGroupPath(element, pathIndex, hexColor);
-                                                        
-                        }
-                    });
-                    
-                }
+                const paletterPerPath = Array.isArray(element.colors)  && element.colors.length > 1;
+
+                let colorPalette = ColorPalette({
+                    colors: availableColors, 
+                    colorNames: this.fpdInstance.mainOptions.hexNames,
+                    palette: element.colors,
+                    subPalette: paletterPerPath,
+                    enablePicker: !paletterPerPath,
+                    onChange: (hexColor, pathIndex) => {
+                        
+                        this.#updateGroupPath(element, pathIndex, hexColor);
+                        
+                        
+                    },
+                    //only for colorpicker per path
+                    onMove: (hexColor, pathIndex) => {
+                        
+                        element.changeObjectColor(pathIndex, hexColor);
+                        
+                    },
+                });
                 
                 colorPanel.append(colorPalette);
                 
@@ -430,17 +412,17 @@ export default class LayersModule extends EventTarget {
         
         //select associated element on canvas when choosing one from the layers list
         addEvents(
-            rowElem,
+            rowElem.querySelector('.fpd-cell-1'),
             'click',
             (evt) => {
                 
-                const row = evt.currentTarget;
+                const row = evt.currentTarget.parentNode;
                 
                 if(row.classList.contains('fpd-locked') ||  evt.target.nodeName == 'TEXTAREA') {
                     return;
                 }
-                                
-                const targetElement = this.fpdInstance.getElementByID(row.id);
+                
+                const targetElement = this.fpdInstance.currentViewInstance.fabricCanvas.getElementByID(row.id);
                 if(targetElement) {
                     targetElement.canvas.setActiveObject(targetElement).renderAll();
                 }
@@ -465,8 +447,8 @@ export default class LayersModule extends EventTarget {
         const rowElem = this.listElem.querySelector('.fpd-list-row[id="'+element.id+'"]');
 
         if(rowElem && rowElem.querySelector('.fpd-current-color')) {
-            //todo: do same for pattern, test with toolbar
-            rowElem.querySelector('.fpd-current-color').style.backgroundColor = element.fill;
+
+            rowElem.querySelector('.fpd-current-color').style.background = getBgCssFromElement(element);
             
         }
                 
@@ -482,3 +464,5 @@ export default class LayersModule extends EventTarget {
     }
 
 }
+
+window.FPDLayersModule = LayersModule;

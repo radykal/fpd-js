@@ -396,16 +396,6 @@ export default class Options {
 		*/
 		colorSelectionPlacement: '',
 		/**
-		* Sets the display type for the color selection. By default the color items will be shown in a grid. You can also enable a dropdown for the color selection, but this is only working when using a custom element in colorSelectionPlacement. Possible values: grid, dropdown. 
-		*
-		* @property colorSelectionDisplayType
-		* @memberof Options.defaults
-		* @type {String}
-		* @default 'grid'
-		* @version PLUS 1.1.1
-		*/
-		colorSelectionDisplayType: 'grid',
-		/**
 		* Sets the placement for the Bulk-Add Variations Form. Just enter ID or class of another element(#my-color-selection). 
 		*
 		* @property bulkVariationsPlacement
@@ -1465,7 +1455,7 @@ export default class Options {
 			*/
 			uploadZone: false,
 			/**
-			* Sets a filter on the image. Possible values: 'grayscale', 'sepia', 'sepia2' or any filter name from FPDFilters class.
+			* Sets a filter on the image. Possible values: 'grayscale', 'sepia' or any filter name from FPDFilters class.
 			*
 			* @property filter
 			* @type {Boolean}

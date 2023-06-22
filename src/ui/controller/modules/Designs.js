@@ -337,3 +337,5 @@ export default class DesignsModule extends EventTarget {
     
     };
 }
+
+window.FPDDesignsModule = DesignsModule;

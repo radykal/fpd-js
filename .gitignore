@@ -1,3 +1,4 @@
 node_modules/
-_uploads/
 fpd-js.code-workspace
+_play.html
+examples/_play/

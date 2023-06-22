@@ -687,5 +687,6 @@ export default class UploadsModule extends EventTarget {
     
     }
 
-
 }
+
+window.FPDUploadsModule = UploadsModule;

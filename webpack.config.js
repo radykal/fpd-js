@@ -11,8 +11,8 @@ module.exports = (env, argv) => {
         devtool: 'inline-source-map',
         entry: './src/index.js',
         output: {
-            filename: 'js/FancyProductDesigner.js',
-            path: path.resolve(__dirname, 'test'),
+            filename: 'dev/FancyProductDesigner.js',
+            path: path.resolve(__dirname, 'examples'),
             publicPath: '',
         },
         watchOptions: {
@@ -21,27 +21,18 @@ module.exports = (env, argv) => {
         devServer: {
             server: 'https',  
             static:  [
+                { 
+                    directory: path.join(__dirname, 'examples'),
+                    publicPath: '/',
+                },
                 {
                     directory: path.join(__dirname, 'dist'),
                     publicPath: '/dist',
                 },
                 { 
-                    directory: path.join(__dirname, 'tests'),
-                    publicPath: '/',
-                },
-                { 
                     directory: path.join(__dirname, 'data'),
                     publicPath: '/data',
-                },
-                { 
-                    directory: path.join(__dirname, 'examples'),
-                    publicPath: '/examples',
-                },
-                { 
-                    directory: path.join(__dirname, '_uploads'),
-                    publicPath: '/_uploads',
-                    watch: false
-                },                
+                },           
             ]     
         },
         module: {

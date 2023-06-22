@@ -2,31 +2,31 @@ import '../view/ElementToolbar';
 import ColorPanel from '/src/ui/view/comps/ColorPanel';
 import ColorPalette from '/src/ui/view/comps/ColorPalette';
 import ColorPicker from '/src/ui/view/comps/ColorPicker';
+import Filters from '/src/helpers/Filters';
 
 import { 
     addEvents,
     toggleElemClasses,
     addElemClasses,
     removeElemClasses,
-    getFileExtension,
+    isBitmap,
     elementAvailableColors,
     getBgCssFromElement
 } from '/src/helpers/utils';
 
 export default class ElementToolbar extends EventTarget {
 
-    currentPlacement = 'smart';
+    currentPlacement = '';
     #colorWrapper;
-    #visible = false
 
     constructor(fpdInstance) {
         
-        super();
+        super();        
 
         this.fpdInstance = fpdInstance;
         this.container = document.createElement("fpd-element-toolbar");   
-    
-        this.updateWrapper();
+                
+        this.#updateWrapper(fpdInstance.container.dataset.layout);
 
         //set max values in inputs
 		const maxValuesKeys = Object.keys(fpdInstance.mainOptions.maxValues);
@@ -106,6 +106,30 @@ export default class ElementToolbar extends EventTarget {
             this.navElem.querySelector('.fpd-tool-font-family').style.display = 'none';
         }
 
+        //advanced editing - filters
+        const filtersGrid = this.subPanel.querySelector('.fpd-tool-filters')
+        for(const filterKey in Filters) {
+
+            const filterItem = document.createElement('div');
+            const filterData = Filters[filterKey];
+            filterItem.className = 'fpd-item';
+            filterItem.setAttribute('aria-label', filterData.name);
+            filterItem.style.backgroundImage = `url(${filterData.preview})`;
+            filtersGrid.append(filterItem);
+
+            addEvents(
+                filterItem,
+                'click',
+                (evt) => {
+                    
+                    fpdInstance.currentViewInstance.fabricCanvas
+                    .setElementOptions({filter: filterData.array || filterKey});
+                    
+                }
+            )
+            
+        }
+
         addEvents(
             fpdInstance,
             'elementSelect',
@@ -115,12 +139,19 @@ export default class ElementToolbar extends EventTarget {
 
                 if(this.#hasToolbar(selectedElem)) {
 
-                    this.update(selectedElem);
-                    this.updatePosition();
+                    this.#update(selectedElem);
+                    this.#updatePosition();
+
+                    if(selectedElem.getType() == 'text') {
+
+                        selectedElem.off('changed', this.#updatePosition.bind(this))
+                        selectedElem.on('changed', this.#updatePosition.bind(this))
+                        
+                    }
 
                 }
                 else {                    
-                    this.toggle(false);
+                    this.#toggle(false);
                 }
                 
             }
@@ -132,7 +163,7 @@ export default class ElementToolbar extends EventTarget {
             () => {
 
                 if(this.currentPlacement == 'smart')
-                    this.toggle(false);
+                    this.#toggle(false);
 
             }
         )
@@ -145,23 +176,23 @@ export default class ElementToolbar extends EventTarget {
                 const { options } = evt.detail;
 
                 if(options.fontSize !== undefined) {
-                    this.updateUIValue('fontSize', options.fontSize)
+                    this.#updateUIValue('fontSize', options.fontSize)
                 }
 
                 if(options.scaleX !== undefined) {
-                    this.updateUIValue('scaleX', parseFloat(Number(options.scaleX).toFixed(2)));
+                    this.#updateUIValue('scaleX', parseFloat(Number(options.scaleX).toFixed(2)));
                 }
 
                 if(options.scaleY !== undefined) {
-                    this.updateUIValue('scaleY', parseFloat(Number(options.scaleY).toFixed(2)));
+                    this.#updateUIValue('scaleY', parseFloat(Number(options.scaleY).toFixed(2)));
                 }
 
                 if(options.angle !== undefined) {
-                    this.updateUIValue('angle', parseInt(options.angle));
+                    this.#updateUIValue('angle', parseInt(options.angle));
                 }
 
-                if(options.text !== undefined) {
-                    this.updateUIValue('text', options.text);
+                if(options.text !== undefined) {                    
+                    this.#updateUIValue('text', options.text);
                 }
                 
             }
@@ -173,31 +204,8 @@ export default class ElementToolbar extends EventTarget {
             () => {
 
                 if(this.fpdInstance.currentElement) {
-                    this.updatePosition();
+                    this.#updatePosition();
                 }
-            }
-        )
-
-        addEvents(
-            fpdInstance,
-            'uiLayoutChange',
-            (evt) => {
-
-                const { layout } = evt.detail;
-
-                removeElemClasses(
-                    this.container,
-                    ['fpd-layout-small', 'fpd-layout-medium', 'fpd-layout-large']
-                )
-
-                addElemClasses(
-                    this.container,
-                    ['fpd-layout-'+layout]
-                )
-                
-                //this.updateWrapper()
-                                
-
             }
         )
 
@@ -226,7 +234,7 @@ export default class ElementToolbar extends EventTarget {
                     if(inputElem.dataset.control === 'scaleX' && fpdInstance.currentElement && fpdInstance.currentElement.lockUniScaling) {
                         
                         numberParameters.scaleY = value;
-                        this.updateUIValue('scaleY', value)
+                        this.#updateUIValue('scaleY', value)
 
                     }
 
@@ -263,7 +271,7 @@ export default class ElementToolbar extends EventTarget {
                      //proportional scaling
                     if(propKey === 'scaleX' && fpdInstance.currentElement && fpdInstance.currentElement.lockUniScaling) {
                         props.scaleY = value;
-                        this.updateUIValue('scaleY', value)
+                        this.#updateUIValue('scaleY', value)
                     }
 
                     fpdInstance.currentViewInstance.fabricCanvas.setElementOptions(
@@ -494,9 +502,9 @@ export default class ElementToolbar extends EventTarget {
                 }
 
                 fpdInstance.currentViewInstance.fabricCanvas
-                .setElementOptions(curvedOpts);
+                .setElementOptions(curvedOpts);                
 
-                this.#toggleCurvedOptions(curvedOpts.curved);
+                this.#toggleCurvedOptions(curvedOpts);
 
             }
         )
@@ -557,27 +565,25 @@ export default class ElementToolbar extends EventTarget {
             }
         )
 
-        //nav item
+        //nav item                
         addEvents(
             Array.from(this.navElem.children),
             'click',
             (evt) => {
-
+                
                 const navItem = evt.currentTarget;
 
                 if(navItem.dataset.panel) { //has a sub a panel
 
-                    const element = fpdInstance.currentElement;
-
                     //add active state to nav item
                     removeElemClasses(Array.from(this.navElem.children), ['fpd-active']);
                     addElemClasses(navItem, ['fpd-active']);
-
+                    
                     const subPanels = Array.from(this.subPanel.children);
                     const targetPanel = subPanels.filter( p => p.classList.contains('fpd-panel-'+navItem.dataset.panel) );
                     removeElemClasses(subPanels, ['fpd-active']);
                     addElemClasses(targetPanel, ['fpd-active']);
-
+                    
                     if(this.currentPlacement == 'smart') {
 
                         addElemClasses(
@@ -585,7 +591,7 @@ export default class ElementToolbar extends EventTarget {
                             ['fpd-panel-visible']
                         )
 
-                    }
+                    }                    
 
                 }
                 
@@ -597,10 +603,9 @@ export default class ElementToolbar extends EventTarget {
             'click',
             (evt) => {
 
-                this.toggle(false);
+                this.#toggle(false);
                 fpdInstance.deselectElement();
                 
-
             }
         )
 
@@ -679,7 +684,7 @@ export default class ElementToolbar extends EventTarget {
 
 	#setElementColor(element, hexColor) {
 
-		this.navElem.querySelector('.fpd-current-fill').style.backgroundColor = hexColor
+		this.navElem.querySelector('.fpd-current-fill').style.background = hexColor;
         this.fpdInstance.currentViewInstance.fabricCanvas.setElementOptions({fill: hexColor}, element);
 
 	}
@@ -704,12 +709,48 @@ export default class ElementToolbar extends EventTarget {
 
 	}
 
-    #toggleCurvedOptions(toggle=true) {
+    #toggleCurvedOptions(opts={}) {
 
+        const curvedOptionsElem = this.subPanel.querySelector('.fpd-curved-options');
+        
+        removeElemClasses(
+            curvedOptionsElem.querySelectorAll('[data-value]'),
+            ['fpd-active']
+        )
+
+        if(opts.curved) {
+
+            if(opts.curveReverse) {
+
+                addElemClasses(
+                    curvedOptionsElem.querySelectorAll('[data-value="curveReverse"]'),
+                    ['fpd-active']
+                )
+
+            }
+            else {
+
+                addElemClasses(
+                    curvedOptionsElem.querySelectorAll('[data-value="curved"]'),
+                    ['fpd-active']
+                )
+
+            }
+
+        }
+        else {
+
+            addElemClasses(
+                curvedOptionsElem.querySelectorAll('[data-value="normal"]'),
+                ['fpd-active']
+            )
+
+        }
+        
         toggleElemClasses(
             this.subPanel.querySelector('.fpd-tool-curved-text-radius'),
             ['fpd-hidden'],
-            !toggle
+            !opts.curved
         )
 
     }
@@ -720,18 +761,10 @@ export default class ElementToolbar extends EventTarget {
 
     }
 
-    update(element) {
-
-        this.hideTools();
+    #update(element) {
+        
+        this.#reset();
         removeElemClasses(this.container, ['fpd-type-image'])
-
-		let source = element.source,
-			allowedImageTypes = [
-				'png',
-				'jpg',
-				'jpeg',
-				'svg'
-			];
 
 		//COLOR: colors array, true=svg colorization        
 		if(element.hasColorSelection()) {
@@ -741,44 +774,27 @@ export default class ElementToolbar extends EventTarget {
             let colorPanel;
             if(element.type === 'group' && element.getObjects().length > 1) {
 
-                // palette per path
-                if(Array.isArray(element.colors)  && element.colors.length > 1) {
-                    
-                    colorPanel = ColorPalette({
-                        colors: availableColors, 
-                        colorNames: this.fpdInstance.mainOptions.hexNames,
-                        palette: element.colors,
-                        subPalette: true,
-                        onChange: (hexColor, pathIndex) => {
-                            
-                            this.#updateGroupPath(element, pathIndex, hexColor);
-                            
-                            
-                        }
-                    });
-                    
-                }
-                //picker per path
-                else {
-                    
-                    colorPanel = ColorPalette({
-                        colors: availableColors, 
-                        enablePicker: true,
-                        colorNames: this.fpdInstance.mainOptions.hexNames,
-                        palette: this.fpdInstance.mainOptions.colorPickerPalette,
-                        onMove: (hexColor, pathIndex) => {
-                            
-                            element.changeObjectColor(pathIndex, hexColor);
-                            
-                        },
-                        onChange: (hexColor, pathIndex) => {
-                            
-                            this.#updateGroupPath(element, pathIndex, hexColor);
-                                                        
-                        }
-                    });
-                    
-                }
+                const paletterPerPath = Array.isArray(element.colors)  && element.colors.length > 1;
+
+                colorPanel = ColorPalette({
+                    colors: availableColors, 
+                    colorNames: this.fpdInstance.mainOptions.hexNames,
+                    palette: element.colors,
+                    subPalette: paletterPerPath,
+                    enablePicker: !paletterPerPath,
+                    onChange: (hexColor, pathIndex) => {
+                        
+                        this.#updateGroupPath(element, pathIndex, hexColor);
+                        
+                        
+                    },
+                    //only for colorpicker per path
+                    onMove: (hexColor, pathIndex) => {
+                        
+                        element.changeObjectColor(pathIndex, hexColor);
+                        
+                    },
+                });
                 
             }
             else {
@@ -797,9 +813,8 @@ export default class ElementToolbar extends EventTarget {
                         
                     },
                     onPatternChange: (patternImg) => {
-    
-                        // rowElem.querySelector('.fpd-current-color')
-                        // .style.backgroundImage = `url("${patternImg}")`;
+
+                        this.navElem.querySelector('.fpd-current-fill').style.background = `url("${patternImg}")`;
                         
                         this.fpdInstance.currentViewInstance.fabricCanvas.setElementOptions(
                             {pattern: patternImg}, 
@@ -910,7 +925,7 @@ export default class ElementToolbar extends EventTarget {
 
 			if(element.curvable && !element.textBox) {
 				this.#toggleNavItem('curved-text');
-                this.#toggleCurvedOptions(element.curved);
+                this.#toggleCurvedOptions(element);
 			}
             
 			this.subPanel.querySelector('textarea[data-control="text"]').value = element.text;
@@ -924,11 +939,9 @@ export default class ElementToolbar extends EventTarget {
 
         }
 
-		//todo: ADVANCED EDITING
-		// if(element.advancedEditing && source &&
-		// 	(element.isSVG() || Array.inArray(sourceExt, allowedImageTypes) !== -1 || sourceExt.search(/data:image\/(jpeg|png);/) !== -1)) {
-		// 	this.#toggleNavItem('advanced-editing');
-		// }
+		if(element.advancedEditing && element.source && isBitmap(element.source)) {
+			this.#toggleNavItem('advanced-editing');
+		}
 
         this.#togglePanelTool('text-size', 'text-line-spacing', !element.curved);
 		this.#toggleNavItem('reset');
@@ -1037,7 +1050,7 @@ export default class ElementToolbar extends EventTarget {
 			if(bgCss) {
 
 				this.navElem.querySelector('.fpd-current-fill')
-                .style.backgroundColor = bgCss;
+                .style.background = bgCss;
 
 			}
 
@@ -1048,7 +1061,7 @@ export default class ElementToolbar extends EventTarget {
 			this.navElem.querySelector('[data-panel]:not(.fpd-hidden)').click();
 		}
 
-        this.toggle();
+        this.#toggle();
 
         //reset scroll
         this.container.querySelectorAll('.fpd-scroll-area').forEach(scrollArea => {
@@ -1057,11 +1070,11 @@ export default class ElementToolbar extends EventTarget {
 
     }
 
-    updatePosition() {
-        
+    #updatePosition() {
+                
         if(this.currentPlacement !== 'smart' || !this.#hasToolbar(this.fpdInstance.currentElement)) return;
 
-        this.toggle(Boolean(this.fpdInstance.currentElement))
+        this.#toggle(Boolean(this.fpdInstance.currentElement))
 
         if(this.fpdInstance.currentElement) {
 
@@ -1087,32 +1100,36 @@ export default class ElementToolbar extends EventTarget {
 
 	};
 
-    toggle(toggle=true) {   
-        
-        this.#visible = toggle;
-        
+    #toggle(toggle=true) {   
+                
         toggleElemClasses(this.container, ['fpd-show'], toggle);
         toggleElemClasses(document.body, ['fpd-toolbar-visible'], toggle);
 
 	};
 
-    updateWrapper() {
-
-        this.container.className = '';
+    #updateWrapper(layout='large') {
+         
+        this.container.className = 'fpd-layout-'+layout;
         
         if(this.fpdInstance.mainOptions.toolbarPlacement == 'smart' ||
-            this.fpdInstance.container.classList.contains('fpd-layout-small')    
+            this.fpdInstance.container.classList.contains('fpd-layout-small')  
         ) {
-            
+                        
+            if(this.currentPlacement != 'smart') {
+                document.body.appendChild(this.container)
+            }
+
             this.currentPlacement = 'smart';
-            this.container.className = 'fpd-container fpd-smart';
-            document.body.append(this.container)
+            this.container.className += ' fpd-container fpd-smart';
 
         }
         else {
 
+            if(this.currentPlacement != 'mainbar') {
+                this.fpdInstance.mainBar.container.appendChild(this.container);
+            }
+                
             this.currentPlacement = 'mainbar';
-            this.fpdInstance.mainBar.container.append(this.container)
 
         }
 
@@ -1122,7 +1139,7 @@ export default class ElementToolbar extends EventTarget {
 
     }
 
-    updateUIValue(tool, value) {
+    #updateUIValue(tool, value) {
 
         this.subPanel.querySelectorAll('[data-control="'+tool+'"]').forEach(toolInput => {
                             
@@ -1133,8 +1150,8 @@ export default class ElementToolbar extends EventTarget {
 
 	};
 
-    hideTools() {
-
+    #reset() {
+        
         this.#colorWrapper.innerHTML = '';
 
         removeElemClasses(

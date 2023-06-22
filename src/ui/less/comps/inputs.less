@@ -29,12 +29,24 @@
         width: 100%;
         min-height: 100px;
     }
+
+    select {
+        
+        box-shadow: 0px 0px 4px rgba(110, 111, 114, 0.22);
+        border-radius: var(--fpd-border-radius);
+        border: 1px solid transparent;
+
+        &:focus {
+            box-shadow: 0px 0px 4px rgba(110, 111, 114, 0.22);
+            border: 1px solid var(--fpd-secondary-color);
+        }
+    }
     
     .fpd-input-back-search,
     .fpd-input-search {
         
         display: flex;
-        box-shadow: 0 3px 15px rgb(90 97 105 / 10%), 0 2px 3px rgb(90 97 105 / 20%);
+        box-shadow: 0px 0px 4px rgba(110, 111, 114, 0.22);
         height: 40px;
         border-radius: 4px;
         flex: 1;
@@ -45,12 +57,15 @@
             margin: 0;
             padding: 0 5px;
             line-height: 1;
+            border: none !important;
         }
         
         span {
             width: 20px;
             align-self: center;
             text-align: center;
+            font-size: 16px;
+            margin-right: 5px;
         }
         
     }

@@ -84,3 +84,5 @@ export default class ${moduleName}Module extends EventTarget {
 }
 
 exports.createModule = series(viewJs, lessFile, htmlFile, controllerJs)
+
+// gulp createModule --name module-key

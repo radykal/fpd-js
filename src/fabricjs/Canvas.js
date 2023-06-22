@@ -12,6 +12,7 @@ import {
     isEmpty
 } from '/src/helpers/utils';
 import {
+    getFilter,
     getScaleByDimesions
 } from './utils.js';
 
@@ -952,6 +953,7 @@ fabric.Canvas.prototype.resetSize = function () {
 
     let widthScale = viewStageWidth < this.viewOptions.stageWidth ? viewStageWidth / this.viewOptions.stageWidth : 1;
     let scaleHeight = widthScale;
+    
     this.responsiveScale = widthScale;
 
     let canvasHeight = this.viewOptions.stageHeight;
@@ -992,7 +994,7 @@ fabric.Canvas.prototype.resetSize = function () {
     .setZoom(this.responsiveScale)
     .calcOffset()
     .renderAll();    
-
+    
     this.fire('sizeUpdate', {
         responsiveScale: this.responsiveScale,
         canvasHeight: canvasHeight * scaleHeight
@@ -1074,18 +1076,13 @@ fabric.Canvas.prototype.getElementByID = function (id) {
  */
 fabric.Canvas.prototype.reset = function (removeCanvas = true) {
 
-    this.elements = [];
-    //todo add to view class
-    //this.totalPrice = this.truePrice = this.additionalPrice = 0;
     this.clear();
 
     if (removeCanvas) {
         this.wrapperEl.remove();
     }
-
+    
     this.fire('clear')
-
-    //$this.trigger('priceChange', [0, 0]);
 
 }
 
@@ -1162,7 +1159,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 
     const elemType = element.getType();
 
-    //scale image into bounding box (cover or fit)
+    //scale image into bounding box (cover or fit)    
     if (elemType == 'image' && !element._isInitial && !element._addToUZ && element.scaleX === 1) {
 
         //only scale to bb when no scale value is set
@@ -1375,22 +1372,6 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
         let text = parameters.text;
         text = text.replace(FancyProductDesigner.forbiddenTextChars, '');
 
-        if (this.initialElementsLoaded && element.chargeAfterEditing) {
-
-            if (!element._isPriced) {
-                //todo: use in view instance
-                //this.changePrice(element.price, '+');
-                element._isPriced = true;
-            }
-
-            if (element._initialText === text && element._isPriced) {
-                //todo: use in view instance
-                //this.changePrice(element.price, '-');
-                element._isPriced = false;
-            }
-
-        }
-
     }
 
     if (elemType === 'text') {
@@ -1514,22 +1495,15 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
     //set pattern
     if (parameters.pattern !== undefined) {
         element.setPattern(parameters.pattern)
-        //todo
-        // _setColorPrice(element, parameters.pattern);
     }
 
     //set filter
     if (parameters.filter) {
-        //todo
-        //         element.filters = [];
-        //         var fabricFilter = FPDUtil.getFilter(parameters.filter);
-        // 
-        //         if(fabricFilter != null) {
-        //             element.filters.push(fabricFilter);
-        //         }
-        //         if(typeof element.applyFilters !== 'undefined') {
-        //             element.applyFilters();
-        //         }
+        
+        const fabricFilter = getFilter(parameters.filter);
+
+        element.filters = [fabricFilter];
+        element.applyFilters();
 
     }
 
@@ -1569,10 +1543,8 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
         if(element == this.getActiveObject()) {
             element.path.visible = true;   
         }
-        
 
     }
-    
 
     if (element.uploadZone) {
         element.evented = element.opacity !== 0;

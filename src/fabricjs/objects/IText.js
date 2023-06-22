@@ -28,9 +28,6 @@ fabric.IText.prototype._ITextInit = function() {
                 this.exitEditing();
 
         },
-        'scaling': () => {
-
-        },
         'changed': () => {
                              
             //max. lines

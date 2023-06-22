@@ -326,6 +326,24 @@ export default class ViewsGrid extends EventTarget {
 
                         }
                     )
+
+                    if(fpdInstance.mainOptions.dynamicViewsOptions.pricePerArea) {
+
+                        var width = pixelToUnit(viewInstance.options.stageWidth, 'cm'),
+                            height = pixelToUnit(viewInstance.options.stageHeight, 'cm');
+        
+                        //check if canvas output is set
+                        if(objectHasKeys(viewInstance.options.output, ['width', 'height'])) {
+                            width = viewInstance.options.output.width / 10;
+                            height = viewInstance.options.output.height / 10;
+                        }
+        
+                        var cm2 = Math.ceil(width * height),
+                            cm2Price = cm2 * Number(fpdInstance.mainOptions.dynamicViewsOptions.pricePerArea);
+                            
+                        viewInstance.changePrice(0, '+', cm2Price);
+        
+                    }
                     
                 }
                 
@@ -342,27 +360,6 @@ export default class ViewsGrid extends EventTarget {
 
                     }
                 )
-
-                if(fpdInstance.mainOptions.dynamicViewsOptions.pricePerArea) {
-
-                    var width = pixelToUnit(viewInstance.options.stageWidth, 'cm'),
-                        height = pixelToUnit(viewInstance.options.stageHeight, 'cm');
-    
-                    //check if canvas output is set
-                    if(objectHasKeys(viewInstance.options.output, ['width', 'height'])) {
-                        width = viewInstance.options.output.width / 10;
-                        height = viewInstance.options.output.height / 10;
-                    }
-    
-                    var cm2 = Math.ceil(width * height),
-                        cm2Price = cm2 * Number(fpdInstance.mainOptions.dynamicViewsOptions.pricePerArea);
-                    
-                    //todo
-                    //viewInstance.changePrice(0, '+', cm2Price);
-    
-                }
-
-
             }
         )
 

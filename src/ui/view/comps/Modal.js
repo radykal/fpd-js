@@ -31,7 +31,7 @@ const Modal = (htmlContent='', fullscreen=false, type='', container=document.bod
     `;
     
     const modal = document.createElement('div');
-    modal.className = `fpd-modal-internal fpd-modal-overlay ${fullscreen ? 'fpd-fullscreen' : ''}`;
+    modal.className = `fpd-modal-internal fpd-modal-overlay fpd-container ${fullscreen ? 'fpd-fullscreen' : ''}`;
     modal.innerHTML = html;
     modal.dataset.type = type;
     

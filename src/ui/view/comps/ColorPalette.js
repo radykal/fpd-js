@@ -37,6 +37,7 @@ const ColorPalette = (props) => {
             colorItem.className = 'fpd-item';
             colorItem.style.backgroundColor = color;
             colorItem.setAttribute('aria-label', tooltipTxt);
+            colorItem.dataset.hex = color;
             wrapper.append(colorItem);
             
             if(!props.enablePicker && !props.subPalette)

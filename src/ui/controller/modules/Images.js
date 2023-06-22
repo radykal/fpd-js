@@ -157,3 +157,5 @@ export default class ImagesModule extends EventTarget {
     }
 
 }
+
+window.FPDImagesModule = ImagesModule;

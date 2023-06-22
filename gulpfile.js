@@ -4,6 +4,7 @@ const less = require('gulp-less');
 const concat = require('gulp-concat');
 const cleanCSS = require('gulp-clean-css');
 const webpack = require('webpack-stream');
+const copy = require('gulp-copy');
 
 const { createModule } = require('./gulp-tasks/createModule');
 
@@ -62,6 +63,12 @@ function buildVendorCSS() {
         
 }
 
+function copyFontFiles() {
+
+    return src('./src/vendor/FontFPD/fonts/*.*')
+        .pipe(copy('dist/css/fonts/', { prefix: 4 }))
+}
+
 function buildCSS() {
     
     return src('./src/ui/less/main.less')
@@ -75,6 +82,6 @@ function buildCSS() {
 exports.buildJS = buildJS;
 exports.minifyJS = minifyJS;
 exports.buildCSS = buildCSS;
-exports.buildVendors = series(buildVendorJS, buildVendorCSS);
+exports.buildVendors = series(buildVendorJS, buildVendorCSS, copyFontFiles);
 exports.default = series(buildVendorJS, buildJS, minifyJS, buildCSS);
 exports.createModule = createModule;

@@ -77,7 +77,7 @@ export default class Mainbar extends EventTarget {
         //draggable dialog
         this.#dialogContainer = document.querySelector(this.fpdInstance.mainOptions.modalMode ? '.fpd-modal-product-designer' : 'body');
         
-        this.#draggableDialog = document.querySelector(".fpd-draggable-dialog");
+        this.#draggableDialog = document.querySelector('.fpd-draggable-dialog');
         this.#dialogContainer.append(this.#draggableDialog);
         
         //prevent right click context menu & document scrolling when in dialog content
@@ -125,31 +125,41 @@ export default class Mainbar extends EventTarget {
         
         if(fpdContainer.classList.contains('fpd-off-canvas')) {
             
-            let touchStart = 0,
-                panX = 0,
-                closeStartX = 0;
+            let touchStartX = 0,
+                touchStartY = 0,
+                diffX = 0;
             
             this.contentElem.addEventListener('touchstart', (evt) => {
             
-                touchStart = evt.touches[0].pageX;
+                touchStartX = evt.touches[0].pageX;
+                touchStartY = evt.touches[0].pageY;
                 addElemClasses(this.container, ['fpd-is-dragging']);
             
             })
+
             this.contentElem.addEventListener('touchmove', (evt) => {
             
-                evt.preventDefault();
-            
                 let moveX = evt.touches[0].pageX;
-                    panX = touchStart-moveX;
-                
-                panX = Math.abs(panX) < 0 ? 0 : Math.abs(panX);
-                this.contentElem.style.left = -panX+'px';
-                this.contentElem.previousElementSibling.style.left = this.contentElem.clientWidth - panX+'px';
+                let moveY = evt.touches[0].pageY;
+
+                diffX = touchStartX - moveX;
+                let diffY = touchStartY - moveY;
+
+                if(Math.abs(diffX) > Math.abs(diffY)) {
+
+                    diffX = Math.abs(diffX) < 0 ? 0 : Math.abs(diffX);
+                    this.contentElem.style.left = -diffX+'px';
+                    this.contentElem.previousElementSibling.style.left = this.contentElem.clientWidth - diffX+'px';
+
+                    evt.preventDefault();
+
+                }
             
             })
+
             this.contentElem.addEventListener('touchend', (evt) => {
             
-                if(Math.abs(panX) > 100) {
+                if(Math.abs(diffX) > 100) {
                     
                     this.toggleContentDisplay(false);
             
@@ -159,13 +169,13 @@ export default class Mainbar extends EventTarget {
                     this.contentElem.previousElementSibling.style.left = this.contentElem.clientWidth+'px';
                 }
             
-                panX = 0;
+                diffX = 0;
                 removeElemClasses(this.container, ['fpd-is-dragging']);
             
             });
                
         }
-        
+                
         this.updateContentWrapper();
         this.setup(this.currentModules);
     }
@@ -308,11 +318,11 @@ export default class Mainbar extends EventTarget {
             ['fpd-disabled'],
             !viewAdds.texts
         );
-        
+                
         toggleElemClasses(
             document.querySelectorAll('.fpd-nav-item[data-module="names-numbers"]'),
             ['fpd-disabled'],
-            !viewInst.textPlaceholder && !viewInst.numberPlaceholder
+            !viewInst.fabricCanvas.textPlaceholder && !viewInst.fabricCanvas.numberPlaceholder
         );
 
         this.toggleContentDisplay(false);
@@ -320,17 +330,6 @@ export default class Mainbar extends EventTarget {
     }
     
     callModule(name, dynamicDesignsId=null) {
-
-        //hide secondary content
-        removeElemClasses(
-            this.secContent,
-            ['fpd-active']
-        );
-
-        removeElemClasses(
-            this.contentElem,
-            ['fpd-hidden']
-        );
         
         //unselect current module
         removeElemClasses(
@@ -396,16 +395,6 @@ export default class Mainbar extends EventTarget {
             this.navElem.querySelectorAll('.fpd-nav-item'), 
             ['fpd-active']
         );
-        
-        addElemClasses(
-            this.contentElem,
-            ['fpd-hidden']
-        );
-                
-        addElemClasses(
-            this.secContent,
-            ['fpd-active']
-        );
 
         addElemClasses(
             this.secContent.querySelector('.fpd-'+name),
@@ -413,7 +402,7 @@ export default class Mainbar extends EventTarget {
         );
 
         addElemClasses(
-            this.fpdInstance.container, ['fpd-secondary-visible']
+            [this.fpdInstance.container, this.#draggableDialog], ['fpd-secondary-visible']
         );
         
         this.fpdInstance.dispatchEvent(
@@ -438,8 +427,8 @@ export default class Mainbar extends EventTarget {
         
         const fpdContainer = this.fpdInstance.container;
         
-        removeElemClasses(fpdContainer, ['fpd-secondary-visible']);
-        toggleElemClasses(fpdContainer, ['fpd-module-visible'], toggle);
+        removeElemClasses([this.fpdInstance.container, this.#draggableDialog], ['fpd-secondary-visible']);
+        toggleElemClasses([this.fpdInstance.container, this.#draggableDialog], ['fpd-module-visible'], toggle);
         
         if(this.contentClosable) {
             
@@ -463,8 +452,13 @@ export default class Mainbar extends EventTarget {
             
             this.contentElem.style.removeProperty('left');
             this.contentElem.previousElementSibling.style.removeProperty('left');
-            this.contentElem.style.height = this.fpdInstance.mainWrapper.container.clientHeight+'px';
-            this.container.classList.toggle('fpd-show', toggle);
+            this.container.style.setProperty('--fpd-content-height', this.fpdInstance.mainWrapper.container.clientHeight+'px');
+            
+            toggleElemClasses(
+                this.container,
+                ['fpd-show'],
+                toggle
+            )
             
         }
         else if(this.#draggableDialogEnabled) {
@@ -472,9 +466,13 @@ export default class Mainbar extends EventTarget {
             if(toggle) {
                 this.#draggableDialog.querySelector('.fpd-dialog-title').innerText = this.navElem.querySelector('.fpd-nav-item.fpd-active .fpd-label').innerText;
             }
-            
-            this.#draggableDialog.classList.toggle('fpd-show', toggle);
-            
+
+            toggleElemClasses(
+                this.#draggableDialog,
+                ['fpd-show'],
+                toggle
+            )
+                                    
         }
         
         if(!toggle) {
@@ -511,20 +509,19 @@ export default class Mainbar extends EventTarget {
             
             this.#draggableDialogEnabled = true;
             this.#draggableDialog.append(this.contentElem);
+            this.#draggableDialog.append(this.secContent);
             
         }
                 
     }
     
-    toggleUploadZonePanel(toggle=true, customAdds={}) {
+    toggleUploadZonePanel(toggle=true, customAdds={}) {        
                     
         //do nothing when custom image is loading
         if(this.fpdInstance.loadingCustomImage) {
             return;
         }
-
-        toggleElemClasses(this.secContent, ['fpd-active'], toggle);
-    
+                
         if(toggle) {
 
             toggleElemClasses(
@@ -553,7 +550,6 @@ export default class Mainbar extends EventTarget {
             const firstVisibleNavItem = this.uploadZoneNavItems.find(navItem => !navItem.classList.contains('fpd-hidden'))
             if(firstVisibleNavItem)
                 firstVisibleNavItem.click();   
-        
 
             this.callSecondary('upload-zone-panel');
         }
@@ -561,6 +557,22 @@ export default class Mainbar extends EventTarget {
     
             this.fpdInstance.currentViewInstance.currentUploadZone = null;
     
+        }
+
+        toggleElemClasses(
+            [this.fpdInstance.container, this.#draggableDialog], 
+            ['fpd-secondary-visible'],
+            toggle
+        );
+
+        if(this.#draggableDialogEnabled) {
+
+            toggleElemClasses(
+                this.#draggableDialog, 
+                ['fpd-show'],
+                toggle
+            );
+
         }
     
     }

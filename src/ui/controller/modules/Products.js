@@ -186,3 +186,5 @@ export default class ProductsModule extends EventTarget {
     }
 
 }
+
+window.FPDProductsModule = ProductsModule;

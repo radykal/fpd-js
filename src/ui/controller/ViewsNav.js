@@ -68,6 +68,8 @@ export default class ViewsNav extends EventTarget {
             'click',
             (evt) => {
 
+                fpdInstance.deselectElement();
+
                 toggleElemClasses(
                     fpdInstance.viewsGrid.container,
                     ['fpd-show'],

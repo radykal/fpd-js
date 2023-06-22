@@ -411,8 +411,7 @@ const createImgThumbnail = (opts = {}) => {
         removeElem.className = 'fpd-delete fpd-icon-remove';
         thumbnail.append(removeElem);
     }
-
-
+    
     return thumbnail;
 
 }
@@ -425,8 +424,8 @@ const getItemPrice = (fpdInstance, container, price = null) => {
 
     let currentViewOptions = fpdInstance.currentViewInstance.options;
 
-    //get price from upload zone if module is inside upload-zone-content
-    if (fpdInstance.mainBar.container.querySelector('.fpd-upload-zone-content').contains(container)
+    //get price from upload zone if module is inside upload-zone-content    
+    if (document.querySelector('.fpd-upload-zone-content').contains(container)
         && fpdInstance.currentViewInstance.currentUploadZone
     ) {
 
@@ -446,7 +445,7 @@ const getItemPrice = (fpdInstance, container, price = null) => {
         price = objectGet(currentViewOptions, 'customImageParameters.price', 0);
     }
 
-    const priceStr = price ? fpdInstance.formatPrice(price) : '';
+    const priceStr = price ? formatPrice(price, fpdInstance.mainOptions.priceFormat) : '';
 
     return priceStr;
 
@@ -521,6 +520,13 @@ const getFileExtension = (str) => {
 }
 
 export { getFileExtension }
+
+const isBitmap = (url) => {
+
+    return ['jpeg', 'jpg', 'png'].includes(getFileExtension(url));
+}
+
+export { isBitmap }
 
 /**
  * Returns the available colors of an element.
@@ -702,3 +708,55 @@ const pixelToUnit = (pixel, unit, dpi=72) => {
 }
 
 export { pixelToUnit }
+
+const formatPrice = (price, priceFormatOpts={}) => {
+        
+    if(price && typeof priceFormatOpts === 'object') {
+
+        const thousandSep = priceFormatOpts.thousandSep || ',';
+        const decimalSep = priceFormatOpts.decimalSep || '.';
+
+        let splitPrice = price.toString().split('.'),
+            absPrice = splitPrice[0],
+            decimalPrice = splitPrice[1],
+            tempAbsPrice = '';
+
+        if (typeof absPrice != 'undefined') {
+
+            for (var i=absPrice.length-1; i>=0; i--) {
+                tempAbsPrice += absPrice.charAt(i);
+            }
+
+            tempAbsPrice = tempAbsPrice.replace(/(\d{3})/g, "$1" + thousandSep);
+            if (tempAbsPrice.slice(-thousandSep.length) == thousandSep) {
+                tempAbsPrice = tempAbsPrice.slice(0, -thousandSep.length);
+            }
+
+            absPrice = '';
+            for (var i=tempAbsPrice.length-1; i>=0 ;i--) {
+                absPrice += tempAbsPrice.charAt(i);
+            }
+
+            if (typeof decimalPrice != 'undefined' && decimalPrice.length > 0) {
+                //if only one decimal digit add zero at end
+                if(decimalPrice.length == 1) {
+                    decimalPrice += '0';
+                }
+                absPrice += decimalSep + decimalPrice;
+            }
+
+        }
+
+        const currency = priceFormatOpts.currency || '&#36;%d';
+
+        absPrice = currency.replace('%d', absPrice.toString());
+
+        return absPrice;
+
+    }
+
+    return price;
+
+}
+
+export { formatPrice }

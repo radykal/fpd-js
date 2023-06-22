@@ -1,0 +1,125 @@
+.fpd-container fpd-module-names-numbers {
+
+    padding: var(--fpd-module-content-padding);
+
+    .fpd-head {
+
+        .fpd-btn {
+            margin: 0 0 20px;
+        }
+    }
+
+    .fpd-list {
+        display: flex;
+        flex-flow: column nowrap;
+        gap: 10px;
+        padding-right: 10px;
+
+        > .fpd-row {
+
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: flex-end;
+
+            > .fpd-number-col {
+                width: 50px;
+
+                input {
+                    text-align: center;
+                }
+                
+            }
+
+            > .fpd-name-col {
+                flex: 1;
+            }
+
+            > .fpd-select-col {
+
+                width: 50px;
+                position: relative;
+
+                select {
+                    position: relative;
+                    appearance: none;
+                    height: 100%;
+                    width: 100%;
+                    text-align: center;
+                    background: var(--fpd-light-bg-color);
+                    cursor: pointer;
+                    padding-right: 10px;
+                }
+
+                &:after {
+                    content: "\e90e";
+                    font-family: FontFPD !important;
+                    font-size: 16px;
+                    position: absolute;
+                    top: 50%;
+                    right: 2px;
+                    pointer-events: none;
+                    transform: translateY(-50%);
+                }
+            }
+
+            > .fpd-remove-col {
+                flex: 1 100%;
+                text-align: right;
+                font-size: 10px;
+                line-height: 1;
+                color: var(--fpd-red-color);
+                order: 3;
+
+                > span {
+                    opacity: 0.7;
+                    text-transform: uppercase;
+                    cursor: pointer;
+
+                    &:hover {
+                        opacity: 1;
+                    }
+                }
+                
+            }
+
+            > .fpd-input-col:nth-child(2) {
+
+                > * {
+                    border-top-left-radius: var(--fpd-border-radius);
+                    border-bottom-left-radius: var(--fpd-border-radius);
+                    border-left: 1px solid var(--fpd-border-color);
+                }
+
+            }
+
+            > .fpd-input-col:last-child {
+
+                > *  {
+                    border-top-right-radius: var(--fpd-border-radius);
+                    border-bottom-right-radius: var(--fpd-border-radius);
+                    
+                }
+
+            }
+
+            input, select {
+                border-radius: 0;
+                box-shadow: none;
+                margin: 0;
+                border: 1px solid var(--fpd-border-color);
+                width: 100%;
+                border-left: none;
+            }
+
+            &:first-child {
+
+                > .fpd-remove-col {
+                    visibility: hidden;
+                }
+                
+            }
+        }
+
+    }
+
+}

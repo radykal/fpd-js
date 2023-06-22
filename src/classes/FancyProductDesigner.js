@@ -1,4 +1,5 @@
 import Options from './Options.js';
+import PricingRules from './PricingRules';
 import FancyProductDesignerView from './FancyProductDesignerView.js';
 import Translator from '/src/ui/Translator.js';
 import UIManager from '/src/ui/UIManager';
@@ -16,7 +17,8 @@ import {
     arrayUnique,
     isEmpty,
     popupBlockerAlert,
-    localStorageAvailable
+    localStorageAvailable,
+    formatPrice
 } from '/src/helpers/utils';
 import { getJSON, postJSON } from '/src/helpers/request';
 import { toggleElemClasses } from '../helpers/utils.js';
@@ -251,6 +253,24 @@ export default class FancyProductDesigner extends EventTarget {
 	 * @default []
 	 */
     currentLayouts = [];
+
+    /**
+	 * The order quantity.
+	 *
+	 * @property orderQuantity
+	 * @type Number
+	 * @default 1
+	 */
+	orderQuantity = 1;
+
+	/**
+	 * If FPDBulkVariations is used with the product designer, this is the instance to the FPDBulkVariations class.
+	 *
+	 * @property bulkVariations
+	 * @type FPDBulkVariations
+	 * @default null
+	 */
+	bulkVariations = null;
     
     loadingCustomImage = false;
     lazyBackgroundObserver = null;
@@ -261,6 +281,7 @@ export default class FancyProductDesigner extends EventTarget {
     #totalProductElements = 0;
     #productElementLoadingIndex = 0;
     #inTextField = false;
+    _order = {};
     
     constructor(elem, opts={}) {
         
@@ -271,7 +292,7 @@ export default class FancyProductDesigner extends EventTarget {
             return;
         }
     
-        this.lazyBackgroundObserver = new IntersectionObserver((entries, observer) => {
+        this.lazyBackgroundObserver = new IntersectionObserver((entries) => {
 
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
@@ -292,6 +313,15 @@ export default class FancyProductDesigner extends EventTarget {
             newHexNames[hexKey.toLowerCase()] = this.mainOptions.hexNames[hexKey];            
         })
         this.mainOptions.hexNames = newHexNames;
+
+        if(elem.classList.contains('fpd-off-canvas') || elem.classList.contains('fpd-topbar'))
+            this.mainOptions.toolbarPlacement = 'smart';
+
+        if(Array.isArray(this.mainOptions.pricingRules) && this.mainOptions.pricingRules.length) {
+
+            new PricingRules(this);
+
+        }
         
         this.translator = new Translator();
         this.translator.loadLangJSON(this.mainOptions.langJson, this.#langLoaded.bind(this));
@@ -475,13 +505,18 @@ export default class FancyProductDesigner extends EventTarget {
             
             currentWindowWidth = window.innerWidth;
                             
-            if(this.currentViewInstance) {
-                this.currentViewInstance.fabricCanvas.resetSize();
-            }
-                            
             //deselect element if one is selected and active element is not input (FB browser fix)
             if(this.currentElement && !['INPUT', 'TEXTAREA'].includes(document.activeElement)) {
                 this.deselectElement();
+            }
+
+            if(this.currentViewInstance) {
+
+                //timeout to get correct with
+                setTimeout(() => {
+                    this.currentViewInstance.fabricCanvas.resetSize();
+                }, 100);
+                
             }
 
         })
@@ -986,6 +1021,10 @@ export default class FancyProductDesigner extends EventTarget {
             },
             'beforeElementAdd': (opts) => {
 
+                if(this.mainBar && this.uiManager && this.uiManager.currentLayout == 'small') {
+                    this.mainBar.toggleContentDisplay(false);
+                }
+
                 if(!this.productCreated) {
 
                     this.#productElementLoadingIndex++;
@@ -1180,12 +1219,7 @@ export default class FancyProductDesigner extends EventTarget {
                         this.mainBar.toggleUploadZonePanel(false);
 
                     }
-
-                    //TODO:
-
-                    // if(instance.mainOptions.openTextInputOnSelect && FPDUtil.getType(element.type) === 'text' && element.editable) {
-                    //     $elementToolbar.find('.fpd-tool-edit-text:first').click();
-                    // }
+                    
 
                 }
 
@@ -1199,6 +1233,17 @@ export default class FancyProductDesigner extends EventTarget {
                     new CustomEvent('elementSelect')
                 );
 
+                if(this.mainOptions.openTextInputOnSelect 
+                    && element
+                    && element.getType() === 'text' 
+                    && element.editable
+                    && this.toolbar
+                ) {
+                    
+                    this.toolbar.container.querySelector('.fpd-tool-edit-text').click();
+                    
+                }
+
             },
             'elementCheckContainemt': ({target, boundingBoxMode}) => {
 
@@ -1209,7 +1254,7 @@ export default class FancyProductDesigner extends EventTarget {
                 }
 
             },
-            'elementColorChange': ({element, colorLinking}) => {                
+            'elementFillChange': ({element, colorLinking}) => {                
                 
                 if(this.productCreated && colorLinking && element.colorLinkGroup && element.colorLinkGroup.length > 0) {
         
@@ -1238,14 +1283,14 @@ export default class FancyProductDesigner extends EventTarget {
                 /**
                  * Gets fired when the color of an element is changed.
                  *
-                 * @event elementColorChange
+                 * @event elementFillChange
                  * @param {Event} event
                  * @param {fabric.Object} element
                  * @param {String} hex Hexadecimal color string.
                  * @param {Boolean} colorLinking Color of element is linked to other colors.
                  */                
                 this.dispatchEvent(
-                    new CustomEvent('elementColorChange', {
+                    new CustomEvent('elementFillChange', {
                         detail: {
                             element: element,
                             colorLinking: colorLinking
@@ -1308,32 +1353,17 @@ export default class FancyProductDesigner extends EventTarget {
             'history:undo': () => { this.#historyAction('undo') },
             'history:redo': () => { this.#historyAction('redo') },
         })
-    
-        // todo
-    //     $(viewInstance)
-    //     .on('priceChange', function(evt, price, viewPrice) {
-    // 
-    //         var truePrice = instance.calculatePrice();
-    // 
-    //         /**
-    //          * Gets fired as soon as the price changes in a view.
-    //          *
-    //          * @event priceChange
-    //          * @param {Event} event
-    //          * @param {number} elementPrice - The price of the element.
-    //          * @param {number} totalPrice - The true price of all views with quantity.
-    //          * @param {number} singleProductPrice - The true price of all views without quantity.
-    //          */
-    //         $elem.trigger('priceChange', [price, truePrice, instance.singleProductPrice]);
-    // 
-    //     })
-    //     .on('textEditEnter', function() {
-    // 
-    //         if(instance.currentElement) {
-    //             instance.toolbar.updatePosition(instance.currentElement);
-    //         }
-    // 
-    //     })
+
+        addEvents(
+            viewInstance,
+            'priceChange',
+            (evt) => {
+
+                const truePrice = this.calculatePrice();
+                //console.log("🚀 ~ file: FancyProductDesigner.js:1355 ~ FancyProductDesigner ~ addView ~ truePrice:", truePrice)
+                
+            }
+        )
     
         viewInstance.init();
     
@@ -1623,10 +1653,8 @@ export default class FancyProductDesigner extends EventTarget {
                         })
                         
                         viewInst.fabricCanvas.renderAll();
-                        //todo
-                        //$elem.trigger('_doPricingRules');
+     
                     }
-                    
 
                 })
 
@@ -1775,14 +1803,14 @@ export default class FancyProductDesigner extends EventTarget {
         //remove ignore objects
         allElements = allElements.filter((obj) => {
             return !obj._ignore;
-        });
+        });        
     
         if(elementType === 'text') {
     
             let textElements = [];
             allElements.forEach((elem) => {
     
-                if(elem.getType(elem) === 'text') {
+                if(elem.getType() === 'text') {
                     textElements.push(elem);
                 }
     
@@ -1870,26 +1898,9 @@ export default class FancyProductDesigner extends EventTarget {
     }
     
     /**
-     * Get an elment by ID.
-     *
-     * @method getElementByID
-     * @param {Number} id The id of an element.
-     * @param {Number} [viewIndex] The view index you want to search in. If no index is set, it will use the current showing view.
-     */
-     getElementByID(id, viewIndex) {
-    
-        viewIndex = viewIndex === undefined ? this.currentViewIndex : viewIndex;
-    
-        return this.viewInstances[viewIndex] ? this.viewInstances[viewIndex].fabricCanvas.getElementByID(id) : null;
-    
-    };
-    
-    /**
      * Clears the product stage and resets everything.
      *
      * @method reset
-
-
      */
     reset() {
     
@@ -1931,8 +1942,6 @@ export default class FancyProductDesigner extends EventTarget {
      * Deselects the selected element of the current showing view.
      *
      * @method deselectElement
-
-
      */
     deselectElement() {
                      
@@ -1944,68 +1953,6 @@ export default class FancyProductDesigner extends EventTarget {
         }
         
     }
-    
-    /**
-     * Formats the price to a string with the currency and the decimal as well as the thousand separator.
-     *
-     * @method formatPrice
-     * @param {Number} [price] The price thats gonna be formatted.
-     * @return {String} The formatted price string.
-
-
-     */
-    formatPrice(price) {
-        
-        const priceFormatOpts = this.mainOptions.priceFormat;
-
-        if(price && typeof priceFormatOpts === 'object') {
-    
-            const thousandSep = priceFormatOpts.thousandSep;
-            const decimalSep = priceFormatOpts.decimalSep;
-    
-            let splitPrice = price.toString().split('.'),
-                absPrice = splitPrice[0],
-                decimalPrice = splitPrice[1],
-                tempAbsPrice = '';
-    
-            if (typeof absPrice != 'undefined') {
-    
-                for (var i=absPrice.length-1; i>=0; i--) {
-                    tempAbsPrice += absPrice.charAt(i);
-                }
-    
-                tempAbsPrice = tempAbsPrice.replace(/(\d{3})/g, "$1" + thousandSep);
-                if (tempAbsPrice.slice(-thousandSep.length) == thousandSep) {
-                    tempAbsPrice = tempAbsPrice.slice(0, -thousandSep.length);
-                }
-    
-                absPrice = '';
-                for (var i=tempAbsPrice.length-1; i>=0 ;i--) {
-                    absPrice += tempAbsPrice.charAt(i);
-                }
-    
-                if (typeof decimalPrice != 'undefined' && decimalPrice.length > 0) {
-                    //if only one decimal digit add zero at end
-                    if(decimalPrice.length == 1) {
-                        decimalPrice += '0';
-                    }
-                    absPrice += decimalSep + decimalPrice;
-                }
-    
-            }
-    
-            absPrice = priceFormatOpts.currency.replace('%d', absPrice.toString());
-    
-            return absPrice;
-    
-        }
-        else if(price) {
-            price = priceFormatOpts.priceFormat.replace('%d', price);
-        }
-    
-        return price;
-    
-    }
 
     /**
 	 * Adds a new custom image to the product stage. This method should be used if you are using an own image uploader for the product designer. The customImageParameters option will be applied on the images that are added via this method.
@@ -2015,8 +1962,6 @@ export default class FancyProductDesigner extends EventTarget {
 	 * @param {string} title The title for the design.
 	 * @param {Object} options Additional options.
 	 * @param {number} [viewIndex] The index of the view where the element needs to be added to. If no index is set, it will be added to current showing view.
-
-
 	 */
 	addCustomImage(source, title, options={}, viewIndex) {
 
@@ -2217,8 +2162,6 @@ export default class FancyProductDesigner extends EventTarget {
 	 * @method toggleResponsive
 	 * @param {Boolean} [toggle] True or false.
 	 * @return {Boolean} Returns true or false.
-
-
 	 */
 	toggleResponsive(toggle) {
 
@@ -2251,15 +2194,12 @@ export default class FancyProductDesigner extends EventTarget {
 	 * @param {boolean} [onlyEditableElements=false] If true, only the editable elements will be returned.
 	 * @param {boolean} [customizationRequired=false] To receive the product the user needs to customize the initial elements.
 	 * @return {array} An array with all views. A view is an object containing the title, thumbnail, custom options and elements. An element object contains the title, source, parameters and type.
-
-
 	 */
 	getProduct(onlyEditableElements=false, customizationRequired=false) {
 
 		let customizationChecker = false,
 			jsMethod = this.mainOptions.customizationRequiredRule == 'all' ? 'every' : 'some';
 
-        //todo check
 		customizationChecker = this.viewInstances[jsMethod]((viewInst) => {
 			return viewInst.isCustomized;
 		})
@@ -2353,7 +2293,7 @@ export default class FancyProductDesigner extends EventTarget {
 				names_numbers: viewInstance.names_numbers,
 				mask: viewInstance.mask,
 				locked: viewInstance.locked
-			};
+			};            
             
 			if(i == 0 && this.productViews[0].hasOwnProperty('productTitle')) {
 				viewObj.productTitle = this.productViews[0].productTitle;
@@ -2376,8 +2316,6 @@ export default class FancyProductDesigner extends EventTarget {
 	 * @param {Object} [options] See {@link FancyProductDesignerView#toDataURL}.
 	 * @param {Array} [viewRange=[]] An array defining the start and the end indexes of the exported views. When not defined, all views will be exported.
 	 * @example fpd.getProductDataURL( function(dataURL){} );
-
-
 	 */
 	getProductDataURL(callback=() => {}, options={}, viewRange=[]) {
 
@@ -2461,8 +2399,6 @@ export default class FancyProductDesigner extends EventTarget {
 	 * @param {Function} callback A function that will be called when the data URL is created. The function receives the data URL.
 	 * @param {string} [options] See {@link FancyProductDesignerView#toDataURL}.
 	 * @return {array} An array with all views as data URLs.
-
-
 	 */
 	getViewsDataURL(callback=() => {}, options={}) {
 
@@ -2491,8 +2427,6 @@ export default class FancyProductDesigner extends EventTarget {
 	 * Opens the current showing product in a Pop-up window and shows the print dialog.
 	 *
 	 * @method print
-
-
 	 */
 	print() {
 
@@ -2709,22 +2643,166 @@ export default class FancyProductDesigner extends EventTarget {
             })
         );
 
-        //todo
-        return;
-		var truePrice = instance.calculatePrice();
-
-		/**
-	     * Gets fired as soon as the price changes in a view.
-	     *
-	     * @event priceChange
-	     * @param {Event} event
-	     * @param {number} elementPrice - The price of the element.
-	     * @param {number} totalPrice - The true price of all views with quantity.
-	     * @param {number} singleProductPrice - The true price of all views without quantity.
-	     */
-		$elem.trigger('priceChange', [null, truePrice, instance.singleProductPrice]);
+		this.calculatePrice();
 
 	}
+
+    /**
+	 * Sets the order quantity.
+	 *
+	 * @method setOrderQuantity
+	 * @param {Number} quantity The width in pixel.
+	 */
+	setOrderQuantity(quantity=1) {
+
+		quantity = quantity == '' || quantity < 0 ? 1 : quantity;
+		this.orderQuantity = quantity;
+
+		this.calculatePrice();
+
+	}
+
+    /**
+	 * Returns an order object containing the product from the getProduct() method, usedFonts from getUsedFonts() and usedColors from getUsedColors().
+	 *
+	 * @method getOrder
+	 * @param {Object} [options={}] Options for the methods that are called inside this mehtod, e.g. getProduct() can receive two parameters.
+	 * @return {object} An object containing different objects representing important order data.
+	 * @example
+	 * // includes only editable elements and the user needs to customize the initial product
+	 * fpd.getOrder( {onlyEditableElements: true, customizationRequired: true} );
+	 */
+	getOrder(options={}) {
+
+		this._order.product = this.getProduct(
+			options.onlyEditableElements,
+			options.customizationRequired
+		);
+
+		this._order.usedFonts = this.getUsedFonts();
+		this._order.usedColors = [];
+
+		this.getUsedColors().forEach((hexValue) => {
+
+			let colorName = this.mainOptions.hexNames[hexValue.replace('#', '').toLowerCase()],
+				colorItem = {hex: hexValue};
+
+			if(colorName) {
+				colorItem.name = colorName;
+			}
+
+			this._order.usedColors.push(colorItem)
+		});
+
+        /**
+		 * Gets fired before the data of getOrder is returned. Useful to manipulate order data.
+		 *
+		 * @event getOrder
+		 * @param {Event} event
+		 */        
+        this.dispatchEvent(
+            new CustomEvent('getOrder')
+        );
+
+		return this._order;
+
+	}
+
+    /**
+	 * Generates an object that will be used for the print-ready export. This objects includes the used fonts and the SVG data strings to generate the PDF.
+	 *
+	 * @method getPrintOrderData
+	 */
+	getPrintOrderData() {
+
+		let printOrderData = {
+			used_fonts: this.getUsedFonts(),
+			svg_data: [],
+			custom_images: []
+		};
+
+        this.viewInstances.forEach(viewInst => {
+            
+            printOrderData.svg_data.push({
+				svg: viewInst.toSVG({respectPrintingBox: true}),
+				output: viewInst.options.output
+			});
+
+        })
+
+		this.getCustomElements('image').forEach(img => {
+
+            if(!printOrderData.custom_images.includes(img.element.source))
+			    printOrderData.custom_images.push(img.element.source);
+
+		})
+
+		return printOrderData;
+
+	}
+
+    #calculateViewsPrice() {
+
+		this.currentPrice = this.singleProductPrice = 0;
+
+		//calulate total price of all views
+        this.viewInstances.forEach(viewInst => {
+
+            if(!viewInst.locked) {
+				this.singleProductPrice += viewInst.truePrice;
+			}
+
+        })
+		
+	};
+
+    /**
+	 * Calculates the total price considering the elements price in all views and pricing rules.
+	 *
+	 * @method calculatePrice
+	 * @param {Boolean} [considerQuantity=true] Calculate with or without quantity.
+	 * @return {Number} The calculated price.
+	 */
+	calculatePrice(considerQuantity=true) {
+
+		this.#calculateViewsPrice();
+
+		let calculatedPrice = this.singleProductPrice;
+		this.currentPrice = calculatedPrice;
+
+		calculatedPrice += this.pricingRulesPrice;
+
+		if(considerQuantity) {
+			calculatedPrice *= this.orderQuantity;
+		}
+
+		//price has decimals, set max. decimals to 2
+		if(calculatedPrice % 1 != 0) {
+			calculatedPrice = Number(calculatedPrice.toFixed(2));
+		}
+
+        this.currentPrice = calculatedPrice;
+
+        /**
+         * Gets fired as soon as the price changes in a view.
+         *
+         * @event priceChange
+         * @param {Event} event
+         * @param {number} elementPrice - The price of the element.
+         */
+        this.dispatchEvent(
+            new CustomEvent('priceChange')
+        );
+
+		return this.currentPrice;
+
+	}
+
+    formatPrice(price) {
+
+        return formatPrice(price, this.mainOptions.priceFormat)
+
+    }
 }
 
 window.FancyProductDesigner = FancyProductDesigner;

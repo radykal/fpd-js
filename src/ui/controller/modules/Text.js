@@ -181,3 +181,5 @@ export default class TextsModule extends EventTarget {
     }
 
 }
+
+window.FPDTextsModule = TextsModule;

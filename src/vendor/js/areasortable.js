@@ -367,7 +367,6 @@ function layout2(el, lines, parent, movedNode, placeholder, scroll, axis, size, 
             el[$].prev[axis] = el[$][RECT][axis];
             switch(el[$].$.verticalAlign)
             {
-                // TODO: support more vertical align options
                 case 'bottom':
                     el[$][RECT][axis] = parent[$][RECT][axis] - parent[$][SCROLL][axis] + lines[line + 1] - el[$][RECT][size] - el[$][MARGIN][axis_opposite];
                     break;

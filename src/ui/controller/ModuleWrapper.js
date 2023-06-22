@@ -7,6 +7,7 @@ import LayersModule from './modules/Layers';
 import SaveLoadModule from './modules/SaveLoad';
 import TextLayersModule from './modules/TextLayers';
 import LayoutsModule from './modules/Layouts';
+import NamesNumbersModule from './modules/NamesNumbers';
 
 import { isEmpty } from '/src/helpers/utils';
 
@@ -76,6 +77,9 @@ export default class ModuleWrapper extends EventTarget {
         }
         else if(moduleKey === 'layouts') {
             moduleInstance = new LayoutsModule(fpdInstance, wrapper);
+        }
+        else if(moduleKey === 'names-numbers') {
+            moduleInstance = new NamesNumbersModule(fpdInstance, wrapper);
         }
         // else if(moduleKey === 'drawing') {
         //     moduleInstance = new FPDDrawingModule(this.fpdInstance, $moduleClone);
