@@ -41,6 +41,7 @@ const Modal = (htmlContent='', fullscreen=false, type='', container=document.bod
         modal.querySelector('.fpd-modal-close'),
         ['click'],
         (evt) => {
+            container.classList.remove('fpd-overflow-hidden');
             modal.remove();
         }
     ) 

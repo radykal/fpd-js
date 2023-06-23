@@ -99,24 +99,6 @@ export default class Options {
 		*/
 		instagramTokenUri: '',
 		/**
-		* The zoom step when using the UI slider to change the zoom level.
-		*
-		* @property zoomStep
-		* @memberof Options.defaults
-		* @type {Number}
-		* @default 0.2
-		*/
-		zoomStep: 0.2,
-		/**
-		* The maximal zoom factor. Set it to 1 to hide the zoom feature in the user interface.
-		*
-		* @property maxZoom
-		* @memberof Options.defaults
-		* @type {Number}
-		* @default 3
-		*/
-		maxZoom: 3,
-		/**
 		* Set custom names for your hexdecimal colors. key=hexcode without #, value: name of the color.
 		*
 		* @property hexNames
@@ -213,14 +195,12 @@ export default class Options {
 		* @property actions
 		* @memberof Options.defaults
 		* @type {Object}
-		* @default {'top': [], 'right': [], 'bottom': [], 'left': []}
-		* @example {'top': ['manage-layers'], 'right': ['info'], 'bottom': ['undo', 'redo'], 'left': []}
+		* @default {left: ['info', 'download', 'print', 'preview-lightbox', 'reset-product'], center: ['undo', 'redo'], right: ['zoom', 'ruler', 'guided-tour']}
 		*/
 		actions:  {
-			'top': [],
-			'right': [],
-			'bottom': [],
-			'left': []
+			left: ['info', 'download', 'print', 'preview-lightbox', 'reset-product'],
+			center: ['undo', 'redo'],
+			right: ['zoom', 'ruler', 'guided-tour']
 		},
 		/**
 		* An array defining the available modules in the main bar. Possible values: 'products', 'images', 'text', 'designs'. 'names-numbers', 'drawing' 
@@ -909,6 +889,7 @@ export default class Options {
 		* @type {Boolean}
 		* @default false
 		* @version 5.1.4
+		* @ignore
 		*/
 		splitMultiSVG: false,
 		/**
@@ -1717,5 +1698,4 @@ export default class Options {
 
 };
 
-if(window)
-	window.FPDOptions = Options;
+if(window) window.FPDOptions = Options;

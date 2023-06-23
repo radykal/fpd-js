@@ -46,9 +46,10 @@ export default class FancyProductDesigner extends EventTarget {
      * @public additionalModules
      * @type {Object}
      * @readonly
-     * @static
      * @default {}
      * @example {'my-module': ModuleClass}
+     * @memberof FancyProductDesigner
+     * @static
      */
     static additionalModules = {}; 
         
@@ -58,6 +59,8 @@ export default class FancyProductDesigner extends EventTarget {
      * @type {HTMLElement}
      * @readonly
      * @default null
+     * @memberof FancyProductDesigner
+     * @inner 
      */
     container = null;
     
@@ -67,6 +70,8 @@ export default class FancyProductDesigner extends EventTarget {
      * @type Object
      * @readonly
      * @default {}
+     * @memberof FancyProductDesigner
+     * @inner 
      */
     mainOptions = {};
     
@@ -75,8 +80,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type {FancyProductDesignerView}
      * @readonly
-
-
+     * @memberof FancyProductDesigner
+     * @inner      
      */
     currentViewInstance = null;
     
@@ -85,8 +90,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type Number
      * @default 0
-
-
+     * @memberof FancyProductDesigner
+     * @inner      
      */
     currentViewIndex = 0;
     
@@ -95,8 +100,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type {Array}
      * @readonly
-
-
+     * @memberof FancyProductDesigner
+     * @inner      
      */
     products = [];
     
@@ -105,8 +110,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type {Array}
      * @readonly
-
-
+     * @memberof FancyProductDesigner
+     * @inner      
      */
     designs = [];
     
@@ -115,8 +120,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type HTMLElement
      * @default document.body
-
-
+     * @memberof FancyProductDesigner
+     * @inner      
      */
     modalContainer = document.body;
     
@@ -125,8 +130,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type Number
      * @default 0
-
-
+     * @memberof FancyProductDesigner
+     * @inner      
      */
     currentCategoryIndex = 0;
     
@@ -135,8 +140,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type Number
      * @default 0
-
-
+     * @memberof FancyProductDesigner
+     * @inner      
      */
     currentProductIndex = 0;
     
@@ -145,8 +150,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type Array
      * @default []
-
-
+     * @memberof FancyProductDesigner
+     * @inner      
      */
     viewInstances = [];
     
@@ -155,8 +160,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type Array
      * @default null
-
-
+     * @memberof FancyProductDesigner
+     * @inner      
      */
     productViews = null;
     
@@ -166,6 +171,8 @@ export default class FancyProductDesigner extends EventTarget {
      * @property currentElement
      * @type fabric.Object
      * @default null
+     * @memberof FancyProductDesigner
+     * @inner      
      */
     currentElement = null;
     
@@ -174,8 +181,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type Boolean
      * @default false
-
-
+     * @memberof FancyProductDesigner
+     * @inner      
      */
     productCreated = false;
     
@@ -184,8 +191,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type Object
      * @default {}
-
-
+     * @memberof FancyProductDesigner
+     * @inner      
      */
     colorLinkGroups = {};
     
@@ -194,8 +201,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type Array
      * @default []
-
-
+     * @memberof FancyProductDesigner
+     * @inner      
      */
     globalCustomElements = [];
     
@@ -204,8 +211,8 @@ export default class FancyProductDesigner extends EventTarget {
      *
      * @type Boolean
      * @default false
-
-
+     * @memberof FancyProductDesigner
+     * @inner      
      */
     doUnsavedAlert = false;
     
@@ -215,6 +222,8 @@ export default class FancyProductDesigner extends EventTarget {
      * @property currentPrice
      * @type Number
      * @default 0
+     * @memberof FancyProductDesigner
+     * @inner      
      */
     currentPrice = 0;
     
@@ -224,6 +233,8 @@ export default class FancyProductDesigner extends EventTarget {
      * @property singleProductPrice
      * @type Number
      * @default 0
+     * @memberof FancyProductDesigner
+     * @inner      
      */
     singleProductPrice = 0;
     
@@ -233,6 +244,8 @@ export default class FancyProductDesigner extends EventTarget {
      * @property pricingRulesPrice
      * @type Number
      * @default 0
+     * @memberof FancyProductDesigner
+     * @inner      
      */
     pricingRulesPrice = 0;
 
@@ -1799,7 +1812,7 @@ export default class FancyProductDesigner extends EventTarget {
             }
     
         }
-    
+
         //remove ignore objects
         allElements = allElements.filter((obj) => {
             return !obj._ignore;

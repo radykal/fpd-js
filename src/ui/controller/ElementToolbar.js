@@ -1116,7 +1116,12 @@ export default class ElementToolbar extends EventTarget {
         ) {
                         
             if(this.currentPlacement != 'smart') {
-                document.body.appendChild(this.container)
+                
+                if(this.fpdInstance.mainOptions.toolbarDynamicContext == 'body')
+                    document.body.appendChild(this.container);
+                else
+                    document.querySelector(this.fpdInstance.mainOptions.toolbarDynamicContext).appendChild(this.container);
+            
             }
 
             this.currentPlacement = 'smart';

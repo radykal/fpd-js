@@ -25,8 +25,8 @@ export default class FancyProductDesignerView extends EventTarget {
      * Relevant options for the view.
      *
      * @type Array
-     * @static
-     * @memberof FancyProductDesignerView
+     * @memberof FancyProductDesigner
+     * @static      
      */
     static relevantOptions = [
         'stageWidth',
@@ -74,6 +74,8 @@ export default class FancyProductDesignerView extends EventTarget {
      * @type Number
      * @default 0
      * @memberof FancyProductDesignerView
+     * @inner     
+     * @readonly 
      */
     totalPrice = 0;
     
@@ -83,6 +85,8 @@ export default class FancyProductDesignerView extends EventTarget {
      * @type Number
      * @default 0
      * @memberof FancyProductDesignerView
+     * @inner     
+     * @readonly 
      */
     truePrice = 0;
 
@@ -92,6 +96,8 @@ export default class FancyProductDesignerView extends EventTarget {
      * @type Number
      * @default 0
      * @memberof FancyProductDesignerView
+     * @inner   
+     * @readonly   
      */
     additionalPrice = 0;
 
@@ -100,6 +106,7 @@ export default class FancyProductDesignerView extends EventTarget {
      *
      * @type Boolean
      * @default false
+     * @readonly
      */
     locked = false;
 
@@ -109,6 +116,8 @@ export default class FancyProductDesignerView extends EventTarget {
      * @type Object
      * @default null
      * @memberof FancyProductDesignerView
+     * @inner    
+     * @readonly  
      */
     mask = null;
 
@@ -608,10 +617,10 @@ export default class FancyProductDesignerView extends EventTarget {
 		/**
 	     * Gets fired as soon as the price has changed.
 	     *
-	     * @event FancyProductDesignerView#priceChange
+	     * @event priceChange
 	     * @param {Event} event
-	     * @param {number} elementPrice - The price of the added element.
-	     * @param {number} truePrice - The total price.
+	     * @param {number} event.detail.elementPrice - The price of the added element.
+	     * @param {number} event.detail.truePrice - The total price.
 	     */
         this.dispatchEvent(
             new CustomEvent('priceChange', {

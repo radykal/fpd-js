@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Framework | Testing all web components</title>
-    <script src='../dist/fabric-5.3.1.js'></script>
-    <script src='../dist/js/vendor.js'></script>
-    <script src='../dist/js/FancyProductDesigner.js'></script>
-    <link href="../dist/css/vendor.css" rel="stylesheet" type="text/css">
-    <link href="../dist/css/FancyProductDesigner.css" rel="stylesheet" type="text/css">
+
+    <script src='./dist/fabric-5.3.1.js'></script>
+    <link href="./dist/css/FancyProductDesigner.min.css" rel="stylesheet" type="text/css">
+    <script src='./dist/js/FancyProductDesigner.min.js'></script>
     <style>
         
         body {
@@ -36,7 +35,10 @@
         <script>
             
             const appOptions = {
-                langJson: '../data/langs/default.json',
+                productsJSON: './data/products/product-categories.json',
+                designsJSON: './data/designs/design-categories.json',
+                layouts: './data/layouts/data.json',
+                langJson: './data/langs/default.json',
                 initialActiveModule: 'images',
                 toolbarPlacement: 'sidebar',
                 responsiveBreakpoints: {
@@ -50,6 +52,7 @@
                     'designs_love',
                     'manage-layers',
                     'text-layers',
+                    'layouts'
                 ],
                 fonts: [
                     {name: 'Lobster', url: 'google'},
@@ -61,8 +64,6 @@
                     },
                     {name: 'Pacifico', url: 'fonts/Pacifico.ttf'},
                 ],
-                productsJSON: './product-categories.json',
-                designsJSON: '../data/designs/design-categories.json',
                 textTemplates: [
                     {
                         text: "This is\nmy world",
@@ -136,10 +137,10 @@
                         uploadsDirURL: this.location.origin + '/data/uploads'
                     }
                 },
-                facebookAppId: '893957135155898',
-                instagramClientId: '6748682918479320',
-                instagramRedirectUri: 'https://localhost:8080/data/html/instagram_auth.html',
-                instagramTokenUri: 'https://radykal.dep/fpd-js/server/php/instagram-token.php',
+                facebookAppId: '',
+                instagramClientId: '',
+                instagramRedirectUri: './data/html/instagram_auth.html',
+                instagramTokenUri: '',
                 customImageParameters: {
                     price: 10,
                     maxSize: 1,
@@ -151,10 +152,9 @@
                 },
                 uploadAgreementModal: false,
                 swapProductConfirmation: true,
-                pixabayApiKey: '7571591-cf8ff820ec635edeb4e8c6af7',
+                pixabayApiKey: '',
                 pixabayLang: 'de',
                 pixabayHighResImages: false,
-                layouts: './layouts.json',
                 enableDynamicViews: true,
                 dynamicViewsOptions: {
                     unit: 'mm',

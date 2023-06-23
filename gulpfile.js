@@ -79,9 +79,17 @@ function buildCSS() {
         
 }
 
+function combineCSS() {
+    
+    return src(['./dist/css/vendor.css', './dist/css/FancyProductDesigner.css'])
+        .pipe(concat('FancyProductDesigner.min.css'))
+        .pipe(dest('dist/css/'));
+        
+}
+
 exports.buildJS = buildJS;
 exports.minifyJS = minifyJS;
 exports.buildCSS = buildCSS;
 exports.buildVendors = series(buildVendorJS, buildVendorCSS, copyFontFiles);
-exports.default = series(buildVendorJS, buildJS, minifyJS, buildCSS);
+exports.default = series(buildVendorJS, buildJS, minifyJS, buildCSS, combineCSS);
 exports.createModule = createModule;
