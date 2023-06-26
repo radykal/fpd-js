@@ -902,7 +902,7 @@ export default class FancyProductDesigner extends EventTarget {
         }
         else { 
             //no categories enabled
-            productsObj = instance.products;
+            productsObj = this.products;
         }
         
         this.currentProductIndex = index;

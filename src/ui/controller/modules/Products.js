@@ -171,8 +171,8 @@ export default class ProductsModule extends EventTarget {
                 .value = this.fpdInstance.products[index].category;
                 
             }
-            else {
-                productsObj = this.fpdInstance.products.products;
+            else {                
+                productsObj = this.fpdInstance.products;
             }
             
             productsObj.forEach((productItem, i) => {

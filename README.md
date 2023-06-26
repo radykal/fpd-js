@@ -9,12 +9,7 @@
 * [Off-Canvas Layout](https://jsdemos.fancyproductdesigner.com/off-canvas.html)
 * [Topbar Layout](https://jsdemos.fancyproductdesigner.com/topbar.html)
 * [Modal (Lightbox)](https://jsdemos.fancyproductdesigner.com/modal.html)
-* Dynamic Views: User can add/remove views
-* Layouts module
-* Names-Numbers module
-* Pricing Rules
-* Color Selection Add-on
-* Bulk Variations Add-on
+* [Layouts module with dynamic views: User can add/remove views](https://jsdemos.fancyproductdesigner.com/dynamic-views.html)
 
 
 ### Folder Structure

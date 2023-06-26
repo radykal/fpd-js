@@ -894,7 +894,7 @@ export default class ElementToolbar extends EventTarget {
 
 		//TRANSFORM
 		let showScale = Boolean((element.resizable && element.getType() === 'image') || element.uniScalingUnlockable || element.__editorMode);
-		if(showScale || element.rotatable || element.draggable || element.__editorMode) {
+		if(showScale || element.rotatable) {
 
 			this.#toggleNavItem('transform');
 			this.#togglePanelTool('transform', 'scale', showScale);            

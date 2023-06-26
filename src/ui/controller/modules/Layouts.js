@@ -109,6 +109,7 @@ export default class LayoutsModule extends EventTarget {
                                     this.fpdInstance.globalCustomElements = this.fpdInstance.getCustomElements();
                                 }
 
+                                this.fpdInstance.deselectElement();
                                 this.fpdInstance.toggleSpinner(true);
                                 this.#toggleLoader = true;
 

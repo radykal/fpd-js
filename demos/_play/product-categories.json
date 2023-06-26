@@ -517,7 +517,7 @@
                         },
                         {
                             "title": "Design Mee",
-                            "source": "Design Me",
+                            "source": "Design Meeeee",
                             "type": "text",
                             "parameters": {
                                 "left": 300,
@@ -533,7 +533,7 @@
                                 "colorLinkGroup": false,
                                 "textLinkGroup": "same",
                                 "draggable": 1,
-                                "rotatable": 1,
+                                "rotatable": false,
                                 "resizable": true,
                                 "removable": 1,
                                 "flipX": false,
