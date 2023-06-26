@@ -11,8 +11,9 @@
 * [Modal (Lightbox)](https://jsdemos.fancyproductdesigner.com/modal.html)
 * [Layouts module with dynamic views: User can add/remove views](https://jsdemos.fancyproductdesigner.com/dynamic-views.html)
 
+File Upload is not enabled in the demos. If you want to enable file upload in the Images module, please [see our other git for server librares](https://github.com/radykal/fpd-js-server).
 
-### Folder Structure
+## Folder Structure
 * *data*: All data files which are relevant for setup like languages files and example products and designs.
 * *dist*: Ready-to-use bundles that you can use in your project.
 * *examples*: Some examples to understand the setup of the product designer.
