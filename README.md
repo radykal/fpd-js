@@ -2,7 +2,7 @@
 
 ## Documentation
 * [JSDoc](https://jsdoc.fancyproductdesigner.com/)
-* [Knowledge Base](https://support.fancyproductdesigner.com/support/solutions/5000115464)
+* [Knowledge Base (Will ne updated soon)](https://support.fancyproductdesigner.com/support/solutions/5000115464)
 
 ## Demos
 * [Sidebar Layout](https://jsdemos.fancyproductdesigner.com/sidebar.html)
