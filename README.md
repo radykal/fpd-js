@@ -1,14 +1,17 @@
 # Fancy Product Designer - JS
 
-**[You can find the JSDoc here.
-](https://jsdoc.fancyproductdesigner.com/)**
-
-**[Setup guides ](https://support.fancyproductdesigner.com/support/solutions/5000115464)**
+## Documentation
+* [JSDoc](https://jsdoc.fancyproductdesigner.com/)
+* [Knowledge Base](https://support.fancyproductdesigner.com/support/solutions/5000115464)
 
 ## Demos
-* Sidebar Layout
-* Off-Canvas Layout
-* Topbar Layout
+* [Sidebar Layout](https://jsdemos.fancyproductdesigner.com/sidebar.html)
+* [Off-Canvas Layout](https://jsdemos.fancyproductdesigner.com/off-canvas.html)
+* [Topbar Layout](https://jsdemos.fancyproductdesigner.com/topbar.html)
+* [Modal (Lightbox)](https://jsdemos.fancyproductdesigner.com/modal.html)
+* Dynamic Views: User can add/remove views
+* Layouts module
+* Names-Numbers module
 * Pricing Rules
 * Color Selection Add-on
 * Bulk Variations Add-on

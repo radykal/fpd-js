@@ -41,7 +41,7 @@ fpd-element-toolbar {
 
             >span[class^=fpd-icon-] {
                 display: block;
-                font-size: 16px;
+                font-size: 22px;
                 line-height: 28px;
             }
 
@@ -167,13 +167,22 @@ fpd-element-toolbar {
                     flex: 1;
                     border: 1px solid var(--fpd-border-color);
                     border-radius: var(--fpd-border-radius);
-                    font-size: 18px;
+                    font-size: 13px;
                     padding: 5px 0;
                     cursor: pointer;
+                    line-height: 1;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 5px;
 
                     &:hover {
                         background: var(--fpd-light-bg-color);
                     }
+                }
+
+                [class^="fpd-icon-"] {
+                    font-size: 18px;
                 }
             }
 

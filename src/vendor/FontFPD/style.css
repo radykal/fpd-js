@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'FontFPD';
-  src:  url('fonts/FontFPD.eot?mx9zuf');
-  src:  url('fonts/FontFPD.eot?mx9zuf#iefix') format('embedded-opentype'),
-    url('fonts/FontFPD.ttf?mx9zuf') format('truetype'),
-    url('fonts/FontFPD.woff?mx9zuf') format('woff'),
-    url('fonts/FontFPD.svg?mx9zuf#FontFPD') format('svg');
+  src:  url('fonts/FontFPD.eot?3qhntd');
+  src:  url('fonts/FontFPD.eot?3qhntd#iefix') format('embedded-opentype'),
+    url('fonts/FontFPD.ttf?3qhntd') format('truetype'),
+    url('fonts/FontFPD.woff?3qhntd') format('woff'),
+    url('fonts/FontFPD.svg?3qhntd#FontFPD') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,42 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.fpd-icon-cloud-upload:before {
+  content: "\e912";
+  color: #485563;
+}
+.fpd-icon-bin:before {
+  content: "\e931";
+  color: #485563;
+}
+.fpd-icon-text-input:before {
+  content: "\e935";
+  color: #485563;
+}
+.fpd-icon-text-layers:before {
+  content: "\e933";
+  color: #485563;
+}
+.fpd-icon-design-library:before {
+  content: "\e919";
+  color: #485563;
+}
+.fpd-icon-effects:before {
+  content: "\e91a";
+  color: #485563;
+}
+.fpd-icon-layouts:before {
+  content: "\e91e";
+  color: #485563;
+}
+.fpd-icon-name-number:before {
+  content: "\e920";
+  color: #485563;
+}
+.fpd-icon-text-format:before {
+  content: "\e92c";
+  color: #485563;
+}
 .fpd-icon-format-italic:before {
   content: "\e90a";
   color: #485563;
@@ -210,10 +246,6 @@
 .fpd-icon-uppercase:before {
   content: "\e938";
 }
-.fpd-icon-name-number:before {
-  content: "\e931";
-  color: #4a4a4a;
-}
 .fpd-icon-share:before {
   content: "\e92b";
 }
@@ -235,9 +267,6 @@
 .fpd-icon-share-twitter:before {
   content: "\e924";
 }
-.fpd-icon-bin:before {
-  content: "\e926";
-}
 .fpd-icon-corner-resize:before {
   content: "\e922";
 }
@@ -258,9 +287,6 @@
 }
 .fpd-icon-qrcode:before {
   content: "\e91f";
-}
-.fpd-icon-text-input:before {
-  content: "\e912";
 }
 .fpd-icon-flip-vertical:before {
   content: "\e61e";
@@ -291,20 +317,11 @@
 .fpd-icon-copy:before {
   content: "\e942";
 }
-.fpd-icon-layout:before {
-  content: "\e940";
-}
 .fpd-icon-color-fill:before {
   content: "\e93e";
 }
-.fpd-icon-text-layers:before {
-  content: "\e93d";
-}
 .fpd-icon-none:before {
   content: "\e936";
-}
-.fpd-icon-advanced-editing:before {
-  content: "\e935";
 }
 .fpd-icon-crop:before {
   content: "\e934";
@@ -314,9 +331,6 @@
 }
 .fpd-icon-text:before {
   content: "\e089";
-}
-.fpd-icon-cloud-upload:before {
-  content: "\e0fe";
 }
 .fpd-icon-photo:before {
   content: "\e1a4";
@@ -352,10 +366,6 @@
   content: "\e610";
   color: #444;
 }
-.fpd-icon-design-library:before {
-  content: "\e60a";
-  color: #444;
-}
 .fpd-icon-reorder:before {
   content: "\e607";
   color: #444;
@@ -366,12 +376,6 @@
 }
 .fpd-icon-arrow-right:before {
   content: "\e92d";
-}
-.fpd-icon-arrow-left:before {
-  content: "\e92e";
-}
-.fpd-icon-arrow-up:before {
-  content: "\e92f";
 }
 .fpd-icon-arrow-right:before {
   content: "\e92d";

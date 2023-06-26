@@ -301,7 +301,7 @@ export default class LayersModule extends EventTarget {
             
             const removeIcon = document.createElement('span');
             removeIcon.className = 'fpd-remove-element';
-            removeIcon.innerHTML = `<span class="fpd-icon-remove"></span>`;
+            removeIcon.innerHTML = `<span class="fpd-icon-bin"></span>`;
             actionsWrapper.append(removeIcon);
             
             addEvents(
@@ -317,7 +317,7 @@ export default class LayersModule extends EventTarget {
             
         }
         
-        this.listElem.append(rowElem);        
+        this.listElem.prepend(rowElem);        
         
         let colorPanel;
 

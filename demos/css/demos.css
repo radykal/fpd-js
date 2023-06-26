@@ -1,0 +1,25 @@
+body {
+    font-size: 12px;
+    font-family: Helvetica;
+}
+
+body > .container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 80px 10px;
+}
+
+.demo-btn {
+    border-radius: 4px;
+    background: #EBEBEB;
+    color: #989898;
+    padding: 10px;
+    font-size: 20px;
+    text-align: center;
+    display: block;
+    cursor: pointer;
+}
+
+.demo-btn:hover {
+    opacity: 0.8;
+}

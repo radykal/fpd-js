@@ -120,7 +120,6 @@ export default class NamesNumbersModule extends EventTarget {
                 this.#selectRow(this.container.querySelector('.fpd-row:first-child'));
 
                 this.fpdInstance.currentViewInstance.names_numbers = this.getViewNamesNumbers();
-                console.log(this.fpdInstance.currentViewInstance.options.namesNumbersEntryPrice);
                 
 				if(this.fpdInstance.mainOptions.namesNumbersEntryPrice) {
 

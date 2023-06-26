@@ -1372,8 +1372,7 @@ export default class FancyProductDesigner extends EventTarget {
             'priceChange',
             (evt) => {
 
-                const truePrice = this.calculatePrice();
-                //console.log("🚀 ~ file: FancyProductDesigner.js:1355 ~ FancyProductDesigner ~ addView ~ truePrice:", truePrice)
+                this.calculatePrice();
                 
             }
         )

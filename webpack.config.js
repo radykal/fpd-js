@@ -1,10 +1,6 @@
 const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');   
 
 module.exports = (env, argv) => {
-    
-    let isProduction = process.env.NODE_ENV === 'production';
-    //isProduction = true;
     
     return {
         mode: 'development',
@@ -12,7 +8,7 @@ module.exports = (env, argv) => {
         entry: './src/index.js',
         output: {
             filename: 'dev/FancyProductDesigner.js',
-            path: path.resolve(__dirname, 'examples'),
+            path: path.resolve(__dirname, 'demos'),
             publicPath: '',
         },
         watchOptions: {
@@ -22,7 +18,7 @@ module.exports = (env, argv) => {
             server: 'https',  
             static:  [
                 { 
-                    directory: path.join(__dirname, 'examples'),
+                    directory: path.join(__dirname, 'demos'),
                     publicPath: '/',
                 },
                 {

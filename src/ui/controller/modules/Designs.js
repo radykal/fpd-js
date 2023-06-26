@@ -4,7 +4,7 @@ import {
     deepMerge, 
     addEvents,
     getItemPrice, 
-    createImgThumbnail 
+    createImgThumbnail
 } from '/src/helpers/utils';
 
 export default class DesignsModule extends EventTarget {
@@ -268,7 +268,6 @@ export default class DesignsModule extends EventTarget {
     
     toggleCategories() {
         
-    
         if(!this.#categoriesUsed) {
             return;
         }
@@ -279,16 +278,16 @@ export default class DesignsModule extends EventTarget {
         this.container.classList.remove('fpd-head-visible', 'fpd-single-cat');
     
         this.#currentCategories = this.fpdInstance.designs;
+        
         this.#displayCategories(this.#currentCategories);
     
         let catTitles = [];
         
-        //display dynamic designs
+        //display dynamic designs        
         if(this.#dynamicDesignsId) {
             catTitles = this.fpdInstance.mainOptions.dynamicDesigns[this.#dynamicDesignsId].categories;
         }
-                
-        if(this.fpdInstance.currentViewInstance) {
+        else if(this.fpdInstance.currentViewInstance) {
     
             const element = this.fpdInstance.currentElement;
     
@@ -302,22 +301,23 @@ export default class DesignsModule extends EventTarget {
                 catTitles = this.fpdInstance.currentViewInstance.options.designCategories;
             }
     
-        }
+        }        
+    
+        catTitles = catTitles.map(ct => ct.toLowerCase());
     
         //check for particular design categories
         var allCatElems = this.container.querySelectorAll('.fpd-category');
         if(catTitles.length > 0) {
-            
+                        
             let visibleCats = [];
             for (let item of allCatElems) {
                                 
-                if(catTitles.includes(item.dataset.title)) {
+                if(catTitles.includes(item.dataset.title.toLowerCase())) {
                     item.classList.remove('fpd-hidden');
                     visibleCats.push(item);
                 }
-                else {
+                else {                    
                     item.classList.add('fpd-hidden');
-                    
                 }
                 
             }

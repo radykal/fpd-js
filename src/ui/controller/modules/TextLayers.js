@@ -80,7 +80,7 @@ export default class TextLayersModule extends EventTarget {
         
         this.fpdInstance.getElements(this.fpdInstance.currentViewIndex, 'all', false)
         .forEach((element) => {
-            
+                        
             if(element.checkEditable() && element.getType() == 'text') {
                 this.#appendLayerItem(element);
             }
@@ -130,9 +130,11 @@ export default class TextLayersModule extends EventTarget {
         const rowElem = document.createElement('div');
         rowElem.className = 'fpd-list-row';
         rowElem.id = element.id;
-        this.listElem.append(rowElem);  
+        this.listElem.prepend(rowElem);  
 
-        //text input
+        if(element.editable) {
+
+            //text input
         const textWrapper = document.createElement('div');
         textWrapper.className = 'fpd-cell-full';
         rowElem.append(textWrapper);
@@ -214,6 +216,8 @@ export default class TextLayersModule extends EventTarget {
             
             const fontsDropdown = this.#createFontsDropdown(availableFonts, fontsWrapper, element);
             fontsDropdown.setAttribute('value', element.fontFamily);
+
+        }
 
         }
 

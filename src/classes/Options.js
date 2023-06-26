@@ -1564,7 +1564,8 @@ export default class Options {
 			* @memberof Options.defaults.customImageParameters
 			* @default 10
 			*/
-			maxSize: 10
+			maxSize: 10,
+			autoCenter: true
 		},
 		/**
 		* An object containing additional parameters for custom added text.The properties in the object will merge with the properties in the elementParameters and textParameters.
@@ -1573,7 +1574,9 @@ export default class Options {
 		* @memberof Options.defaults
 		* @type {Object}
 		*/
-		customTextParameters: {},
+		customTextParameters: {
+			autoCenter: true
+		},
 		/**
 		* An object containing the supported media types the user can add in the product designer.
 		*
