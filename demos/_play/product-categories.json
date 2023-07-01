@@ -512,7 +512,7 @@
                                 "copyable": false,
                                 "lockUniScaling": false,
                                 "uniScalingUnlockable": true,
-                                "fixed": true
+                                "fixed": false
                             }
                         },
                         {
@@ -1143,7 +1143,7 @@
                                 "originX": "center",
                                 "originY": "center",
                                 "z": -1,
-                                "fill": "#252525",
+                                "fill": "#ccc",
                                 "colorLinkGroup": "color-shirt",
                                 "draggable": 0,
                                 "rotatable": 0,
@@ -1425,9 +1425,8 @@
                                 "originX": "center",
                                 "originY": "center",
                                 "z": -1,
-                                "fill": "#252525",
+                                "fill": "#ccc",
                                 "colors": 1,
-                                "colorLinkGroup": "color-shirt",
                                 "draggable": 0,
                                 "rotatable": 0,
                                 "resizable": 0,

@@ -101,3 +101,11 @@ const changeBase64DPI = (dataURI, dpi=72) => {
 }
 
 export { changeBase64DPI };
+
+if(window) {
+
+    window.FPDFabricUtils = {
+        getScaleByDimesions: getScaleByDimesions
+    }
+
+}

@@ -33,19 +33,6 @@ export default class TextLayersModule extends EventTarget {
 
         addEvents(
             fpdInstance,
-            ['historyAction'], 
-            (evt) => {
-                
-                const { type } = evt.detail;
-                
-                if(type == 'undo' || type == 'redo') {
-                    this.#updateList();
-                }
-            }
-        )
-
-        addEvents(
-            fpdInstance,
             ['elementModify', 'textLinkApply'], 
             (evt) => {
                 
@@ -286,7 +273,8 @@ export default class TextLayersModule extends EventTarget {
                 }
             })
 
-            colorPanelWrapper.append(colorPanel)
+            if(colorPanel)
+                colorPanelWrapper.append(colorPanel)
             
         }
         

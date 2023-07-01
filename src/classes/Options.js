@@ -856,7 +856,7 @@ export default class Options {
 		* @property maxCanvasHeight
 		* @memberof Options.defaults
 		* @type {Number}
-		* @default 1
+		* @default 0.8
 		* @version 5.1.1
 		*/
 		maxCanvasHeight: 0.8,

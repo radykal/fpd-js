@@ -57,7 +57,12 @@ fabric.Object.prototype._elementInit = function() {
 
 fabric.Object.prototype._elementControls = function() {
 
-    let widthControls = !this.lockUniScaling;
+    let widthControls = !this.lockUniScaling || this.__editorMode,
+        heightControls = !this.lockUniScaling || this.__editorMode,
+        copyControl = this.copyable,
+        removeControl = this.removable || this.__editorMode,
+        resizeControl = (this.resizable || this.__editorMode) && !this.curved,
+        rotateControl = this.rotatable || this.__editorMode;
 
     if(this.textBox)
         widthControls = true;
@@ -67,15 +72,25 @@ fabric.Object.prototype._elementControls = function() {
         this.cornerSize = 16;
     }
     
+    if(this.name == 'printing-boxes' || this.name == 'view-mask') {
+
+        widthControls = false;
+        heightControls = false;
+        rotateControl = false;
+        copyControl = false;
+        removeControl = false;
+
+    }
+    
     this.setControlsVisibility({
         ml: widthControls,
         mr: widthControls,
-        mt: !this.lockUniScaling,
-        mb: !this.lockUniScaling,
-        tr: this.removable,
-        tl: this.copyable,
-        mtr: this.rotatable,
-        br: this.resizable && !this.curved,
+        mt: heightControls,
+        mb: heightControls,
+        tr: removeControl,
+        tl: copyControl,
+        mtr: rotateControl,
+        br: resizeControl,
     });
 
 }

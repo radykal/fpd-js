@@ -40,19 +40,6 @@ export default class LayersModule extends EventTarget {
 
         addEvents(
             fpdInstance,
-            ['historyAction'], 
-            (evt) => {
-                
-                const { type } = evt.detail;
-                
-                if(type == 'undo' || type == 'redo') {
-                    this.#updateList();
-                }
-            }
-        )
-
-        addEvents(
-            fpdInstance,
             'elementFillChange', 
             (evt) => {
                 
@@ -77,10 +64,10 @@ export default class LayersModule extends EventTarget {
     #updateList() {
         
         this.listElem.innerHTML = '';
-        
+                
         this.fpdInstance.getElements(this.fpdInstance.currentViewIndex, 'all', false)
         .forEach((element) => {
-            
+                        
             if(element.checkEditable()) {
                 this.#appendLayerItem(element);
             }
@@ -384,8 +371,13 @@ export default class LayersModule extends EventTarget {
                 
             }
 
-            addElemClasses(colorPanel, ['fpd-cell-full'])
-            rowElem.append(colorPanel);
+            if(colorPanel) {
+
+                addElemClasses(colorPanel, ['fpd-cell-full'])
+                rowElem.append(colorPanel);
+
+            }
+            
             
             //show color options
             addEvents(

@@ -96,7 +96,7 @@ fabric.Canvas.prototype._fpdCanvasInit = function () {
 
         },
         'object:added': ({ target }) => {
-            
+                        
             this._bringToppedElementsToFront();            
 
         },
@@ -387,17 +387,19 @@ fabric.Canvas.prototype._renderPrintingBox = function () {
             fill: false,
             originX: 'left',
             originY: 'top',
-            name: "printing-box",
+            name: 'printing-box',
             excludeFromExport: true,
             _ignore: true
         });
-
 
         this.printingBoxObject = new fabric.Group([printingBox], {
             left: this.viewOptions.printingBox.left,
             top: this.viewOptions.printingBox.top,
             evented: false,
             resizable: true,
+            removable: false,
+            copyable: false,
+            rotatable: false,
             uniformScaling: false,
             lockRotation: true,
             borderColor: 'transparent',
@@ -407,12 +409,11 @@ fabric.Canvas.prototype._renderPrintingBox = function () {
             cornerSize: 24,
             originX: 'left',
             originY: 'top',
-            name: "printing-boxes",
+            name: 'printing-boxes',
             excludeFromExport: true,
             selectable: false,
             _ignore: true
         });
-
 
         this.add(this.printingBoxObject);
         this.printingBoxObject.setCoords();
@@ -458,7 +459,7 @@ fabric.Canvas.prototype._bringToppedElementsToFront = function () {
  * @param {Function} callback A function that will be called when all elements have beed added.
  * @method addElements
  */
-fabric.Canvas.prototype.addElements = function (elements, callback) {
+fabric.Canvas.prototype.addElements = function (elements, callback) {    
 
     let countElements = -1;
 
@@ -470,9 +471,9 @@ fabric.Canvas.prototype.addElements = function (elements, callback) {
         //add all elements of a view
         if (countElements < elements.length) {
 
-            const element = elements[countElements];
+            const element = elements[countElements];            
             if (!_removeNotValidElementObj(element)) {
-
+                
                 this.addElement(
                     element.type,
                     element.source,
@@ -503,7 +504,7 @@ fabric.Canvas.prototype.addElements = function (elements, callback) {
             || element.source === undefined
             || element.title === undefined) {
 
-            const removeInd = elements.indexOf(element)
+            const removeInd = elements.indexOf(element);            
             if (removeInd !== -1) {
 
                 console.log('Element index ' + removeInd + ' from elements removed, its not a valid element object!', 'info');
@@ -514,7 +515,7 @@ fabric.Canvas.prototype.addElements = function (elements, callback) {
             }
 
         }
-        else {
+        else {            
             this.elements.push(element);
         }
 
@@ -607,10 +608,6 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
 
     params = deepMerge(defaultsParams, params);
 
-    //convert boolean value to hex   
-    if (params.colors === true || params.colors == 1) {
-        params.colors = params.fill ? params.fill : '#000';
-    }
     //store current color and convert colors in string to array
     if (params.colors && typeof params.colors == 'string') {
 
@@ -950,7 +947,7 @@ fabric.Canvas.prototype.resetSize = function () {
 
     const viewStage = this.wrapperEl;
     const viewStageWidth = viewStage.parentNode.clientWidth;
-
+    
     let widthScale = viewStageWidth < this.viewOptions.stageWidth ? viewStageWidth / this.viewOptions.stageWidth : 1;
     let scaleHeight = widthScale;
     
@@ -985,9 +982,8 @@ fabric.Canvas.prototype.resetSize = function () {
         this.responsiveScale = 1;
         widthScale = scaleHeight = 1;
     }
-
-    this
-    .setDimensions({
+    
+    this.setDimensions({
         width: widthScale * this.viewOptions.stageWidth,
         height: this.viewOptions.stageHeight * this.responsiveScale
     })
@@ -1022,7 +1018,7 @@ fabric.Canvas.prototype.setResZoom = function(value) {
         this.resetZoom();
     }
 
-};
+}
 
 fabric.Canvas.prototype.resetZoom = function () {
 
@@ -1031,7 +1027,102 @@ fabric.Canvas.prototype.resetZoom = function () {
     this.zoomToPoint(new fabric.Point(0, 0), this.responsiveScale);
     this.absolutePan(new fabric.Point(0, 0));
 
-};
+}
+
+/**
+ * Returns an array with fabricjs objects.
+ *
+ * @method getElements
+ * @return {Array} An array with fabricjs objects.
+ */
+fabric.Canvas.prototype.getElements = function(elementType='all', deselectElement=true) {
+    
+    if(deselectElement) {
+        this.deselectElement();
+    }
+
+    let allElements = this.getObjects();
+
+    //remove ignore objects
+    allElements = allElements.filter((obj) => {        
+        return !obj._ignore;
+    });        
+
+    if(elementType === 'text') {
+
+        return allElements.filter((elem) => {
+            return elem.getType() === 'text';
+        });
+
+    }
+    else if(elementType === 'image') {
+
+        return allElements.filter((elem) => {
+            return elem.getType() === 'image';
+        });
+
+    }
+
+    return allElements;
+
+}
+
+/**
+ * Returns an fabric object by title.
+ *
+ * @method getElements
+ * @param {string} title The title of an element.
+ * @return {Object} FabricJS Object.
+ */
+fabric.Canvas.prototype.getElementsJSON = function(onlyEditableElements=false, deselectElement=true) {
+
+    let viewElements = this.getElements('all', deselectElement),
+        jsonViewElements = [];
+
+    viewElements.forEach(element => {
+
+        if(element.title !== undefined && element.source !== undefined) {
+
+            var jsonItem = {
+                title: element.title,
+                source: element.source,
+                parameters: element.getElementJSON(),
+                type: element.getType()
+            };
+
+            const printingBox = this.viewOptions && this.viewOptions.printingBox ? this.viewOptions.printingBox : null;
+            if(printingBox 
+                && printingBox.hasOwnProperty('left')  
+                && printingBox.hasOwnProperty('top')
+            ) {
+
+                let pointLeftTop = element.getPointByOrigin('left', 'top');
+
+                jsonItem.printingBoxCoords = {
+                    left: pointLeftTop.x - printingBox.left,
+                    top: pointLeftTop.y - printingBox.top,
+                };
+
+            }
+
+            if(onlyEditableElements) {
+
+                if(element.isEditable)
+                    jsonViewElements.push(jsonItem);
+
+            }
+            else {
+
+                jsonViewElements.push(jsonItem);
+
+            }
+        }
+
+    })
+    
+    return jsonViewElements;
+
+}
 
 /**
  * Returns an fabric object by title.
@@ -1652,6 +1743,7 @@ fabric.Canvas.prototype.setMask = function(maskOptions={}, callback=() => {}) {
     if(maskOptions && maskOptions.url && maskOptions.url.includes('.svg')) {
 
         const maskURL = FancyProductDesigner.proxyFileServer + maskOptions.url;
+        this.maskOptions = maskOptions;
 
         fabric.loadSVGFromURL(maskURL, (objects, options) => {            
 
@@ -1690,6 +1782,7 @@ fabric.Canvas.prototype.setMask = function(maskOptions={}, callback=() => {}) {
                     }
                 })
 
+                this.maskObject = svgGroup;
                 this.clipPath = svgGroup;
                 this.renderAll();
 
@@ -1703,7 +1796,8 @@ fabric.Canvas.prototype.setMask = function(maskOptions={}, callback=() => {}) {
 
     }
     else {
-        this.clipPath = null;
+        this.maskObject = this.maskOptions = this.clipPath = null;
+        this.renderAll();
     }
 
 };

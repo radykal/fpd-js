@@ -1,5 +1,3 @@
-import Options from '/src/classes/Options.js';
-
 /**
  * Override the initialize function for the _historyInit();
  */
@@ -27,11 +25,10 @@ fabric.Canvas.prototype.dispose = (function (originalFn) {
  */
 fabric.Canvas.prototype._historyNext = function () {
 
-    let propertyKeys = Options.getParameterKeys();    
-    propertyKeys = propertyKeys.concat(fabric.Object.propertiesToInclude);
+    let jsonObj = {version: fabric.version, objects: this.getElementsJSON(false, false)};
+    
+    jsonObj.objects.forEach(element => {        
 
-    let jsonObj = this.toJSON(propertyKeys);
-    jsonObj.objects.forEach(element => {
         if(element.curved) {
             delete element.path;
         }
@@ -127,16 +124,19 @@ fabric.Canvas.prototype.redo = function (callback) {
 }
 
 fabric.Canvas.prototype._loadHistory = function (history, event, callback) {
-    var that = this;
 
-    this.loadFromJSON(history, function () {
-        that.renderAll();
-        that.fire(event);
-        that.historyProcessing = false;
-        
-        if (callback && typeof callback === 'function')
-            callback();
-    });
+    if(typeof history === 'string')
+        history = JSON.parse(history);
+    
+    this.clear();
+    this.addElements(history.objects, () => {
+
+        this.fire(event);
+        this.historyProcessing = false;
+        if (callback && typeof callback === 'function') callback();
+
+    })
+   
 }
 
 /**

@@ -295,7 +295,7 @@ export default class FancyProductDesignerView extends EventTarget {
         if(this.fabricCanvas.initialElementsLoaded) {
             this.fabricCanvas.reset(false);
         }
-        
+                
         this.fabricCanvas.offHistory();
         this.fabricCanvas.addElements(elements, callback);
     

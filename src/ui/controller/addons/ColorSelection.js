@@ -153,8 +153,9 @@ export default class ColorSelection extends EventTarget {
                 })
 
             }
-
-            item.append(colorPanel);
+            
+            if(colorPanel)
+                item.append(colorPanel);
 
         }
 

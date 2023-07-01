@@ -766,7 +766,7 @@ export default class ElementToolbar extends EventTarget {
         this.#reset();
         removeElemClasses(this.container, ['fpd-type-image'])
 
-		//COLOR: colors array, true=svg colorization        
+		//COLOR: colors array, true=svg colorization                
 		if(element.hasColorSelection()) {
 
             let availableColors = elementAvailableColors(element, this.fpdInstance);
@@ -798,7 +798,7 @@ export default class ElementToolbar extends EventTarget {
                 
             }
             else {
-
+                
                 colorPanel = ColorPanel(this.fpdInstance, {
                     colors: availableColors,
                     patterns: Array.isArray(element.patterns) && (element.isSVG() || element.getType() === 'text') ? element.patterns : null,
@@ -826,7 +826,8 @@ export default class ElementToolbar extends EventTarget {
 
             }
 
-            this.#colorWrapper.append(colorPanel);
+            if(colorPanel)
+                this.#colorWrapper.append(colorPanel);
 
             //stroke
             const strokeColorWrapper = this.subPanel.querySelector('.fpd-stroke-color-wrapper');
@@ -945,8 +946,8 @@ export default class ElementToolbar extends EventTarget {
 
         this.#togglePanelTool('text-size', 'text-line-spacing', !element.curved);
 		this.#toggleNavItem('reset');
-		this.#toggleNavItem('duplicate', element.copyable);
-		this.#toggleNavItem('remove', element.removable);
+		this.#toggleNavItem('duplicate', element.copyable || element.__editorMode);
+		this.#toggleNavItem('remove', element.removable || element.__editorMode);
 
 		//display only enabled tabs and when tabs length > 1
         this.subPanel.querySelectorAll('.fpd-panel-tabs').forEach(tabs => {

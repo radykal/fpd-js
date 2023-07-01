@@ -361,7 +361,13 @@ export default class FancyProductDesigner extends EventTarget {
     }
     
     #ready() {
-            
+        
+        /**
+         * Gets fired as soon as product designer is ready, e.g. to make any method call.
+         *
+         * @event ready
+         * @param {CustomEvent} event
+         */
         this.dispatchEvent(
             new CustomEvent('ready')
         );
@@ -1108,7 +1114,7 @@ export default class FancyProductDesigner extends EventTarget {
                 if(element.colorLinkGroup && element.colorLinkGroup.length > 0 && !this.mainOptions.editorMode) {
                                         
                     var viewIndex = this.getViewIndexByWrapper(viewInstance.fabricCanvas.wrapperEl);
-        
+                                        
                     if(this.colorLinkGroups.hasOwnProperty(element.colorLinkGroup)) { //check if color link object exists for the link group
         
                         //add new element with id and view index of it
@@ -1119,6 +1125,11 @@ export default class FancyProductDesigner extends EventTarget {
                             //create color group colors
                             const colorGroupColors = this.mainOptions.replaceColorsInColorGroup ? element.colors : this.colorLinkGroups[element.colorLinkGroup].colors.concat(element.colors);                            
                             this.colorLinkGroups[element.colorLinkGroup].colors = arrayUnique(colorGroupColors);
+        
+                        }
+                        else if(element.colors === 1 || element.colors === true) {
+        
+                            this.colorLinkGroups[element.colorLinkGroup].colors = ['#000'];
         
                         }
         
@@ -1133,6 +1144,11 @@ export default class FancyProductDesigner extends EventTarget {
                             this.colorLinkGroups[element.colorLinkGroup].colors = element.colors;
         
                         }
+                        else if(element.colors === 1 || element.colors === true) {
+        
+                            this.colorLinkGroups[element.colorLinkGroup].colors = ['#000'];
+        
+                        }
         
                     }
         
@@ -1141,7 +1157,7 @@ export default class FancyProductDesigner extends EventTarget {
                 if(this.productCreated && this.mainOptions.hideDialogOnAdd && this.mainBar) {
                     this.mainBar.toggleContentDisplay(false);
                 }
-
+                
                 /**
                  * Gets fired when an element is added.
                  *
@@ -1338,6 +1354,14 @@ export default class FancyProductDesigner extends EventTarget {
 
                 this.applyTextLinkGroup(element, options);
                 
+                /**
+                 * Gets fired when an element is modified.
+                 *
+                 * @event elementModify
+                 * @param {CustomEvent} event
+                 * @param {Object} event.detail.options - Ab object containing the modified options(parameters).
+                 * @param {fabric.Object} event.detail.element - The modified element.
+                 */
                 this.dispatchEvent(
                     new CustomEvent('elementModify', {
                         detail: {
@@ -1483,7 +1507,7 @@ export default class FancyProductDesigner extends EventTarget {
                 this.doUnsavedAlert = true;
                 
             if(historyUndo) {
-
+                                
                 toggleElemClasses(
                     document.body.querySelectorAll('.fpd-btn[data-action="undo"]'),
                     ['fpd-disabled'],
@@ -1567,7 +1591,7 @@ export default class FancyProductDesigner extends EventTarget {
                 }
             })
         );
-        
+                
         viewInstance.fabricCanvas.onHistory();
         viewInstance.fabricCanvas.clearHistory();
         
@@ -1756,7 +1780,7 @@ export default class FancyProductDesigner extends EventTarget {
             ['fpd-disabled'],
             this.currentViewIndex === this.viewInstances.length - 1
         )
-
+                
         this.#toggleUndoRedoBtns();
         this.currentViewInstance.fabricCanvas.snapToGrid = false;
         this.currentViewInstance.fabricCanvas.enableRuler = false;
@@ -1797,56 +1821,23 @@ export default class FancyProductDesigner extends EventTarget {
         if(viewIndex === -1) {
     
             for(var i=0; i < this.viewInstances.length; ++i) {
-                allElements = allElements.concat(this.viewInstances[i].fabricCanvas.getObjects());
+                allElements = allElements.concat(this.viewInstances[i].fabricCanvas.getElements(elementType, deselectElement));
             }
     
         }
         else {
     
             if(this.viewInstances[viewIndex]) {
-                allElements = this.viewInstances[viewIndex].fabricCanvas.getObjects();
+                allElements = this.viewInstances[viewIndex].fabricCanvas.getElements(elementType, deselectElement);
             }
             else {
                 return [];
             }
     
         }
-
-        //remove ignore objects
-        allElements = allElements.filter((obj) => {
-            return !obj._ignore;
-        });        
-    
-        if(elementType === 'text') {
-    
-            let textElements = [];
-            allElements.forEach((elem) => {
-    
-                if(elem.getType() === 'text') {
-                    textElements.push(elem);
-                }
-    
-            });
-    
-            return textElements;
-    
-        }
-        else if(elementType === 'image') {
-    
-            let imageElements = [];
-            allElements.forEach(function(elem) {
-    
-                if(elem.getType() === 'image') {
-                    imageElements.push(elem);
-                }
-    
-            });
-    
-            return imageElements;
-    
-        }
     
         return allElements;
+        
     
     };
     
@@ -2248,63 +2239,16 @@ export default class FancyProductDesigner extends EventTarget {
 		}
 
 		//add views
-		for(var i=0; i < this.viewInstances.length; ++i) {
+        this.viewInstances.forEach(viewInst => {
 
-			let viewInstance = this.viewInstances[i],
-				relevantViewOpts = viewInstance.options;
-
-			let viewElements = viewInstance.fabricCanvas.getObjects(),
-				jsonViewElements = [];
-
-			for(var j=0; j < viewElements.length; ++j) {
-
-				const element = viewElements[j];
-
-				if(element.title !== undefined && element.source !== undefined) {
-
-					var jsonItem = {
-						title: element.title,
-						source: element.source,
-						parameters: element.getElementJSON(),
-						type: element.getType()
-					};
-
-					if(relevantViewOpts.printingBox 
-                        && relevantViewOpts.printingBox.hasOwnProperty('left')  
-                        && relevantViewOpts.printingBox.hasOwnProperty('top')
-                    ) {
-
-						let pointLeftTop = element.getPointByOrigin('left', 'top');
-
-						jsonItem.printingBoxCoords = {
-							left: pointLeftTop.x - relevantViewOpts.printingBox.left,
-							top: pointLeftTop.y - relevantViewOpts.printingBox.top,
-						};
-
-					}
-
-					if(onlyEditableElements) {
-
-						if(element.isEditable)
-							jsonViewElements.push(jsonItem);
-
-					}
-					else {
-
-						jsonViewElements.push(jsonItem);
-
-					}
-				}
-			}
-
-			const viewObj = {
-				title: viewInstance.title,
-				thumbnail: viewInstance.thumbnail,
-				elements: jsonViewElements,
-				options: relevantViewOpts,
-				names_numbers: viewInstance.names_numbers,
-				mask: viewInstance.mask,
-				locked: viewInstance.locked
+            const viewObj = {
+				title: viewInst.title,
+				thumbnail: viewInst.thumbnail,
+				elements: viewInst.fabricCanvas.getElementsJSON(onlyEditableElements),
+				options: viewInst.options,
+				names_numbers: viewInst.names_numbers,
+				mask: viewInst.mask,
+				locked: viewInst.locked
 			};            
             
 			if(i == 0 && this.productViews[0].hasOwnProperty('productTitle')) {
@@ -2313,7 +2257,7 @@ export default class FancyProductDesigner extends EventTarget {
 
 			product.push(viewObj);
 
-		}
+        })
 
 		//returns an array with all views
 		return product;

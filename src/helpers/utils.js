@@ -1,6 +1,10 @@
 import Modal from '/src/ui/view/comps/Modal';
 import Snackbar from '/src/ui/view/comps/Snackbar';
 
+if (window) {
+    window.FPDUtils = {};
+}
+
 const isPlainObject = (value) => {
     return Object.prototype.toString.call(value) === '[object Object]';
 }
@@ -120,6 +124,8 @@ const isUrl = (s) => {
 }
 
 export { isUrl }
+if (window)
+    window.FPDUtils.isUrl = isUrl;
 
 const removeUrlParams = (url) => {
     return url.replace(/\?.*$/, '');
@@ -411,7 +417,7 @@ const createImgThumbnail = (opts = {}) => {
         removeElem.className = 'fpd-delete fpd-icon-remove';
         thumbnail.append(removeElem);
     }
-    
+
     return thumbnail;
 
 }
@@ -539,12 +545,16 @@ export { isBitmap }
  */
 const elementAvailableColors = (element, fpdInstance) => {
 
+    if (element.__editorMode) {
+        return ['#000'];
+    }
+
     var availableColors = [];
     if (element.type == 'group') {
 
         const paths = element.getObjects();
         if (paths.length === 1) {
-            availableColors = element.colors;
+            availableColors = element.colors === true || element.colors === 1 ? ['#000'] : element.colors;
         }
         else {
             availableColors = [];
@@ -560,9 +570,10 @@ const elementAvailableColors = (element, fpdInstance) => {
     }
     else if (element.colorLinkGroup && fpdInstance.colorLinkGroups[element.colorLinkGroup]) {
         availableColors = fpdInstance.colorLinkGroups[element.colorLinkGroup].colors;
+
     }
     else {
-        availableColors = element.colors;
+        availableColors = element.colors === true || element.colors === 1 ? ['#000'] : element.colors;
     }
 
     return availableColors;
@@ -649,8 +660,8 @@ export { popupBlockerAlert }
 const getScript = (src) => {
 
     return new Promise(function (resolve, reject) {
-        
-        if (document.querySelector("script[src='" + src + "']") === null ) {
+
+        if (document.querySelector("script[src='" + src + "']") === null) {
 
             var script = document.createElement('script');
             script.onload = () => {
@@ -662,7 +673,7 @@ const getScript = (src) => {
 
             script.src = src;
             document.body.appendChild(script);
-            
+
         } else {
             resolve();
         }
@@ -673,14 +684,14 @@ const getScript = (src) => {
 
 export { getScript }
 
-const unitToPixel = (length, unit, dpi=72) => {
+const unitToPixel = (length, unit, dpi = 72) => {
 
     const ppi = length * dpi;
 
-    if(unit == 'cm') {
+    if (unit == 'cm') {
         return Math.round(ppi / 2.54);
     }
-    else if(unit == 'mm') {
+    else if (unit == 'mm') {
         return Math.round(ppi / 25.4);
     }
     else {
@@ -691,14 +702,14 @@ const unitToPixel = (length, unit, dpi=72) => {
 
 export { unitToPixel }
 
-const pixelToUnit = (pixel, unit, dpi=72) => {
+const pixelToUnit = (pixel, unit, dpi = 72) => {
 
     const inches = pixel / dpi;
 
-    if(unit == 'cm') {
+    if (unit == 'cm') {
         return Math.round(inches * 2.54);
     }
-    else if(unit == 'mm') {
+    else if (unit == 'mm') {
         return Math.round(inches * 25.4);
     }
     else {
@@ -708,10 +719,12 @@ const pixelToUnit = (pixel, unit, dpi=72) => {
 }
 
 export { pixelToUnit }
+if (window)
+    window.FPDUtils.pixelToUnit = pixelToUnit;
 
-const formatPrice = (price, priceFormatOpts={}) => {
-        
-    if(price && typeof priceFormatOpts === 'object') {
+const formatPrice = (price, priceFormatOpts = {}) => {
+
+    if (price && typeof priceFormatOpts === 'object') {
 
         const thousandSep = priceFormatOpts.thousandSep || ',';
         const decimalSep = priceFormatOpts.decimalSep || '.';
@@ -723,7 +736,7 @@ const formatPrice = (price, priceFormatOpts={}) => {
 
         if (typeof absPrice != 'undefined') {
 
-            for (var i=absPrice.length-1; i>=0; i--) {
+            for (var i = absPrice.length - 1; i >= 0; i--) {
                 tempAbsPrice += absPrice.charAt(i);
             }
 
@@ -733,13 +746,13 @@ const formatPrice = (price, priceFormatOpts={}) => {
             }
 
             absPrice = '';
-            for (var i=tempAbsPrice.length-1; i>=0 ;i--) {
+            for (var i = tempAbsPrice.length - 1; i >= 0; i--) {
                 absPrice += tempAbsPrice.charAt(i);
             }
 
             if (typeof decimalPrice != 'undefined' && decimalPrice.length > 0) {
                 //if only one decimal digit add zero at end
-                if(decimalPrice.length == 1) {
+                if (decimalPrice.length == 1) {
                     decimalPrice += '0';
                 }
                 absPrice += decimalSep + decimalPrice;
