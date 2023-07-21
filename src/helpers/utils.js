@@ -67,14 +67,15 @@ const deepMerge = (obj1, obj2) => {
         ...obj1,
         ...obj2
     };
-
+    
     if (Object.keys(obj2).length) {
 
         // Loop through the properties of the merged object
         for (const key of Object.keys(merged)) {
 
-            // Check if the property is an object
+            // Check if the property is an object            
             if (isPlainObject(merged[key])) {
+
                 if (obj1[key] && obj2[key]) {
                     merged[key] = deepMerge(obj1[key], obj2[key]);
                 }
@@ -217,6 +218,28 @@ const addEvents = (elements, events = [], listener = () => { }, useCapture = fal
 }
 
 export { addEvents }
+
+const fireEvent = (target, eventName, eventDetail={}) => {
+    
+    if(window) {
+
+        target.dispatchEvent(
+            new CustomEvent(eventName, {
+                detail: eventDetail
+            })
+        );
+
+    }   
+
+    if(window.jQuery && target.container) {
+
+        jQuery(target.container).trigger(eventName, Object.values(eventDetail));
+
+    }
+
+}
+
+export { fireEvent }
 
 const addElemClasses = (elements = [], classes = []) => {
 
@@ -723,8 +746,8 @@ if (window)
     window.FPDUtils.pixelToUnit = pixelToUnit;
 
 const formatPrice = (price, priceFormatOpts = {}) => {
-
-    if (price && typeof priceFormatOpts === 'object') {
+    
+    if (!isNaN(price) && typeof priceFormatOpts === 'object') {
 
         const thousandSep = priceFormatOpts.thousandSep || ',';
         const decimalSep = priceFormatOpts.decimalSep || '.';

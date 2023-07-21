@@ -136,7 +136,7 @@ fabric.Object.prototype.controls.tr.render = function(ctx, left, top, styleOverr
             top, 
             styleOverride, 
             fabricObject,
-            String.fromCharCode('0xe61d'),
+            String.fromCharCode('0xe944'),
             8,
             -8
         );
@@ -163,7 +163,7 @@ fabric.Object.prototype.controls.mtr.render = function(ctx, left, top, styleOver
             top, 
             styleOverride, 
             fabricObject,
-            String.fromCharCode('0xe923')
+            String.fromCharCode('0xe957')
         );
 
     }

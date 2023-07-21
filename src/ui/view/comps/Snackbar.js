@@ -30,3 +30,5 @@ const Snackbar = (text='', autoRemove=true) => {
 }
 
 export default Snackbar;
+
+window.FPDSnackbar = Snackbar;

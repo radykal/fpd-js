@@ -229,7 +229,7 @@ export default class LayersModule extends EventTarget {
             }
             
             //lock/unlock element
-            const lockClass = element.locked ? 'fpd-icon-locked-full' : 'fpd-icon-unlocked';     
+            const lockClass = element.locked ? 'fpd-icon-locked' : 'fpd-icon-unlocked';     
             const lockIcon = document.createElement('span');
             lockIcon.className = 'fpd-lock-element';
             lockIcon.innerHTML = `<span class="${lockClass}"></span>`;
@@ -259,7 +259,7 @@ export default class LayersModule extends EventTarget {
                     
                     toggleElemClasses(
                         lockSymbol,
-                        ['fpd-icon-locked-full'],
+                        ['fpd-icon-locked'],
                         !element.evented
                     )
                     
@@ -416,7 +416,10 @@ export default class LayersModule extends EventTarget {
                 
                 const targetElement = this.fpdInstance.currentViewInstance.fabricCanvas.getElementByID(row.id);
                 if(targetElement) {
-                    targetElement.canvas.setActiveObject(targetElement).renderAll();
+
+                    targetElement.canvas.setActiveObject(targetElement)
+                    .renderAll();
+                    
                 }
                 
             }

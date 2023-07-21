@@ -146,7 +146,7 @@ export default class TextLayersModule extends EventTarget {
 
         const textClear = document.createElement('span');
         textClear.className = 'fpd-clear-text';
-        textClear.innerText = this.fpdInstance.translator.getTranslation('modules', 'text_layers_clear');
+        textClear.innerText = this.fpdInstance.translator.getTranslation('modules', 'text_layers_clear', 'Clear');
         textWrapper.append(textClear);
 
         addEvents(
@@ -217,7 +217,7 @@ export default class TextLayersModule extends EventTarget {
 
             const fontSizeInput = document.createElement('input');
             fontSizeInput.className = 'fpd-tooltip';
-            fontSizeInput.setAttribute('aria-label', this.fpdInstance.translator.getTranslation('toolbar', 'font_size'));
+            fontSizeInput.setAttribute('aria-label', this.fpdInstance.translator.getTranslation('toolbar', 'font_size', 'Font Size'));
             fontSizeInput.type = 'number';
             fontSizeInput.value = element.fontSize;
             fontSizeInput.dataset.control = 'fontSize';

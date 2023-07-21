@@ -1,3 +1,5 @@
+fabric.Canvas.prototype.historyProcessing = true;
+
 /**
  * Override the initialize function for the _historyInit();
  */
@@ -71,11 +73,13 @@ fabric.Canvas.prototype._historyDispose = function () {
  * It pushes the state of the canvas into history stack
  */
 fabric.Canvas.prototype.historySaveAction = function () {
-
+    
     if (this.historyProcessing)
         return;
     
     const json = this.historyNextState;
+    
+    this.isCustomized = this.initialElementsLoaded;
     
     this.historyUndo.push(json);
     this.historyNextState = this._historyNext();
@@ -92,6 +96,7 @@ fabric.Canvas.prototype.undo = function (callback) {
     // Therefore, object:added and object:modified events will triggered again
     // To ignore those events, we are setting a flag.
     this.historyProcessing = true;
+    this.deselectElement();
 
     const history = this.historyUndo.pop();
     if (history) {
@@ -112,6 +117,8 @@ fabric.Canvas.prototype.redo = function (callback) {
     // Therefore, object:added and object:modified events will triggered again
     // To ignore those events, we are setting a flag.
     this.historyProcessing = true;
+    this.deselectElement();
+
     const history = this.historyRedo.pop();
     if (history) {
         // Every redo action is actually a new action to the undo history
@@ -145,6 +152,7 @@ fabric.Canvas.prototype._loadHistory = function (history, event, callback) {
 fabric.Canvas.prototype.clearHistory = function () {
     this.historyUndo = [];
     this.historyRedo = [];
+    //this.isCustomized = false;
     this.fire('history:clear');
 }
 

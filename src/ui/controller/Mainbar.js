@@ -11,6 +11,18 @@ import {
 import { fetchText } from '/src/helpers/request';
 
 export default class Mainbar extends EventTarget {
+
+    static availableModules = [
+        'products',
+        'images',
+        'text',
+        'designs',
+        'manage-layers',
+        'text-layers',
+        'layouts',
+        'save-load',
+        'names-numbers'
+    ];
     
     #dialogContainer = null;
     #draggableDialog = null;
@@ -24,6 +36,7 @@ export default class Mainbar extends EventTarget {
     contentElem = null;
     navElem = null;
     currentModuleKey = '';
+    currentModules = [];
     
     constructor(fpdInstance) {
         
@@ -71,9 +84,7 @@ export default class Mainbar extends EventTarget {
         this.contentElem = this.container.querySelector('.fpd-module-content');
         this.navElem = this.container.querySelector('.fpd-navigation');
         this.secContent = this.container.querySelector('.fpd-secondary-content');
-        
-        this.currentModules = fpdInstance.mainOptions.mainBarModules;
-        
+                
         //draggable dialog
         this.#dialogContainer = document.querySelector(this.fpdInstance.mainOptions.modalMode ? '.fpd-modal-product-designer' : 'body');
         
@@ -177,7 +188,12 @@ export default class Mainbar extends EventTarget {
         }
                 
         this.updateContentWrapper();
-        this.setup(this.currentModules);
+        this.setup(fpdInstance.mainOptions.mainBarModules);
+        this.fpdInstance.translator.translateArea(this.container);
+
+        if(this.#draggableDialogEnabled) {
+            this.fpdInstance.translator.translateArea(this.#draggableDialog);
+        }
     }
     
     #draggableDialogStart(evt) {
@@ -481,7 +497,7 @@ export default class Mainbar extends EventTarget {
         
     }
     
-    updateContentWrapper() {
+    updateContentWrapper() {        
         
         const fpdContainer = this.fpdInstance.container;
             
@@ -511,7 +527,11 @@ export default class Mainbar extends EventTarget {
             this.#draggableDialog.append(this.contentElem);
             this.#draggableDialog.append(this.secContent);
             
+            this.fpdInstance.translator.translateArea(this.#draggableDialog);
+            
         }
+        
+        this.fpdInstance.translator.translateArea(this.container);
                 
     }
     
@@ -523,6 +543,12 @@ export default class Mainbar extends EventTarget {
         }
                 
         if(toggle) {
+
+            if(this.#draggableDialogEnabled) {
+            
+                this.#draggableDialog.querySelector('.fpd-dialog-title').innerText = '';
+                                        
+            }
 
             toggleElemClasses(
                 this.uploadZoneNavItems.find(navItem => navItem.classList.contains('fpd-add-image')),
@@ -578,21 +604,23 @@ export default class Mainbar extends EventTarget {
     }
     
     setup(modules=[]) {
-                
+        
+        this.currentModules = [];
+
         let selectedModule = this.fpdInstance.mainOptions.initialActiveModule ? this.fpdInstance.mainOptions.initialActiveModule : '';
         
         const navElem = this.container.querySelector('.fpd-navigation');
         
         //if only one modules exist, select it and hide nav
-        if(this.currentModules.length <= 1 && !this.fpdInstance.container.classList.contains('fpd-topbar')) {
+        if(modules.length <= 1 && !this.fpdInstance.container.classList.contains('fpd-topbar')) {
         
-            selectedModule = this.currentModules[0] ? this.currentModules[0] : '';
+            selectedModule = modules[0] ? modules[0] : '';
             navElem.classList.add('fpd-hidden');
         
         }
         else if(this.fpdInstance.container.classList.contains('fpd-sidebar') && selectedModule == '') {
         
-            selectedModule = this.currentModules[0] ? this.currentModules[0] : '';
+            selectedModule = modules[0] ? modules[0] : '';
         
         }
         else {
@@ -617,6 +645,8 @@ export default class Mainbar extends EventTarget {
             
             if(!moduleWrapper.moduleInstance)
                 return;
+
+            this.currentModules.push(moduleKey);
                             
             //create nav item element            
             const navItemElem = document.createElement('div');
@@ -651,11 +681,10 @@ export default class Mainbar extends EventTarget {
             if(moduleWrapper.configs.langKeys) {
                 
                 //get translation for nav item label
-                const langKeys = moduleWrapper.configs.langKeys;
+                const langKeys = moduleWrapper.configs.langKeys;                                
                 navItemTitle = this.fpdInstance.translator.getTranslation(
                     langKeys[0], 
                     langKeys[1], 
-                    this.fpdInstance.mainOptions.langJson, 
                     moduleWrapper.configs.defaultText
                 );
                 
@@ -726,8 +755,12 @@ export default class Mainbar extends EventTarget {
 
             }
         )
+
+        this.fpdInstance.translator.translateArea(this.container);
         
         
     }
 
 }
+
+window.FPDMainBar = Mainbar;

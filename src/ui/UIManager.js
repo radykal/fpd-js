@@ -125,6 +125,17 @@ export default class UIManager extends EventTarget {
                 }
             )
 
+            addEvents(
+                this.fpdInstance,
+                'priceChange',
+                () => {
+
+                    modalWrapper.querySelector('fpd-actions-bar .fpd-total-price')
+                    .innerHTML = this.fpdInstance.formatPrice(this.fpdInstance.currentPrice); 
+                    
+                }
+            )
+
 		}
         
         this.fpdInstance.container.classList.add('fpd-container');
@@ -148,26 +159,10 @@ export default class UIManager extends EventTarget {
         this.fpdInstance.bulkVariations = new BulkVariations(this.fpdInstance);
         new ColorSelection(this.fpdInstance);
 
-        if(this.fpdInstance.mainOptions.guidedTour && Object.keys(this.fpdInstance.mainOptions.guidedTour).length > 0) {
-
-            this.fpdInstance.guidedTour = new GuidedTour(this.fpdInstance);
-            
-        }
+        //guided tour
+        this.fpdInstance.guidedTour = new GuidedTour(this.fpdInstance);
         
-        //all labels
-        const labels = new Set([
-            ...this.fpdInstance.container.querySelectorAll('[data-defaulttext]'),
-            ...document.querySelectorAll('.fpd-draggable-dialog [data-defaulttext]')
-        ])
-
-        Array.from(labels)
-        .forEach(item => {
-            
-            this.fpdInstance.translator.translateElement(
-                item
-            );
-            
-        })
+        this.fpdInstance.translator.translateArea(this.fpdInstance.container);
 
         this.dispatchEvent(
             new CustomEvent('ready')
@@ -213,7 +208,7 @@ export default class UIManager extends EventTarget {
 
             this.currentLayout = currentLayout;
             
-            this.#updateToolbarWrapper(currentLayout);
+            this.updateToolbarWrapper();
 
             /**
              * Gets fired when the UI layout changes.
@@ -234,7 +229,7 @@ export default class UIManager extends EventTarget {
         
     }
 
-    #updateToolbarWrapper(layout='large') {
+    updateToolbarWrapper() {
 
         const presentToolbar = document.querySelector('fpd-element-toolbar');
         if(presentToolbar)

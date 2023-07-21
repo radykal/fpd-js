@@ -107,7 +107,7 @@ export default class NamesNumbersModule extends EventTarget {
         removeColumn.className = 'fpd-remove-col';
 
         const removeElem = document.createElement('span');
-        removeElem.innerText = this.fpdInstance.translator.getTranslation('modules', 'names_numbers_remove');
+        removeElem.innerText = this.fpdInstance.translator.getTranslation('modules', 'names_numbers_remove', 'Remove');
         removeColumn.append(removeElem);
 
         addEvents(

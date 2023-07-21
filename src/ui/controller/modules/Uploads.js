@@ -121,28 +121,24 @@ export default class UploadsModule extends EventTarget {
         
             storageImages.forEach((storageImage) => {
                 
-                const thumbnail = this.#addGridItem(
+                this.#addGridItem(
                     storageImage.url,
                     storageImage.title
                 );
         
-                var image = new Image();
+                const image = new Image();
                 image.src = storageImage.url;
-                image.onerror = function() {
+                image.onerror = () => {
         
-                    var removeIndex = null;
-                    storageImages.forEach(function(storedImg, key) {
-                        if(storedImg.url == image.src) { removeIndex = key; }
+                    storageImages.forEach((storedImg, key) => {
+                        storageImages.splice(key, 1);
                     })
-        
-                    if(removeIndex != null) {
-                        storageImages.splice(removeIndex, 1);
-                        window.localStorage.setItem('fpd_uploaded_images', JSON.stringify(storageImages));
-                    }
         
                 }
         
             });
+
+            window.localStorage.setItem('fpd_uploaded_images', JSON.stringify(storageImages));
         
         }
         
@@ -351,14 +347,14 @@ export default class UploadsModule extends EventTarget {
                                 if (status === 0 || (status >= 200 && status < 400)) {
                                     
                                     const data = xhr.response;
-                                    
+                                                                        
                                     if(data.image_src) {
                                         
                                         this.#storeUploadedImage(data.image_src, data.filename);
                                         
                                         //update source to local server image
                                         thumbnail
-                                        .dataset.source =  data.image_src; 
+                                        .dataset.source =  data.image_src;                                         
                                         
                                         thumbnail.classList.remove('fpd-loading');
                                         thumbnail.querySelector('.fpd-loading-bar').remove();
@@ -600,12 +596,14 @@ export default class UploadsModule extends EventTarget {
     
         }
         else if(addToStage) {
+
             this.fpdInstance._addGridItemToCanvas(
                 item,
                 {},
                 undefined,
                 false
             );
+            
         }
     
         if(this.#uploadCounter == this.#totalUploadFiles-1) {

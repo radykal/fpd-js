@@ -5,6 +5,8 @@ import {
     isEmpty
 } from '/src/helpers/utils';
 
+import Snackbar from '/src/ui/view/comps/Snackbar';
+
 /**
  * The class to create the Bulk Variations that is related to FancyProductDesigner class.
  * <h5>Example</h5><pre>fpdInstance.bulkVariations.getOrderVariations();</pre>
@@ -16,6 +18,8 @@ import {
  * @extends EventTarget
  */
 export default class BulkVariations extends EventTarget {
+
+    enabled = false;
 
     constructor(fpdInstance) {
 
@@ -29,18 +33,20 @@ export default class BulkVariations extends EventTarget {
             this.container = document.querySelector(fpdInstance.mainOptions.bulkVariationsPlacement);
             if(this.container) {
 
+                this.enabled = true;
+
                 const headElem = document.createElement('div');
                 headElem.className = 'fpd-head';
                 this.container.append(headElem);
 
                 const headline = document.createElement('div');
                 headline.className = 'fpd-headline';
-                headline.innerText = fpdInstance.translator.getTranslation('misc', 'bulk_add_variations_title');
+                headline.innerText = fpdInstance.translator.getTranslation('misc', 'bulk_add_variations_title', 'Bulk Order');
                 headElem.append(headline);
 
                 const addBtn = document.createElement('span');
                 addBtn.className = 'fpd-btn';
-                addBtn.innerText = fpdInstance.translator.getTranslation('misc', 'bulk_add_variations_add');
+                addBtn.innerText = fpdInstance.translator.getTranslation('misc', 'bulk_add_variations_add', 'Add');
                 headElem.append(addBtn);
 
                 addEvents(
@@ -55,7 +61,7 @@ export default class BulkVariations extends EventTarget {
 
                 this.listElem = document.createElement('div');
                 this.listElem.className = 'fpd-variations-list';
-                this.container.append(this.listElem);
+                this.container.append(this.listElem);                
 
                 addElemClasses(this.container, ['fpd-bulk-variations', 'fpd-container']);
                 this.#createRow();
@@ -180,6 +186,8 @@ export default class BulkVariations extends EventTarget {
 	 */
     getOrderVariations() {
 
+        if(!this.listElem) return false;
+
         let variations = [];
 		this.listElem.querySelectorAll('.fpd-row').forEach(row => {
 
@@ -188,12 +196,14 @@ export default class BulkVariations extends EventTarget {
 			row.querySelectorAll('select').forEach(select => {
                 
 				if(isEmpty(select.value)) {
+
 					variations = false;
 
                     addElemClasses(
                         select,
                         ['fpd-error']
                     )
+
 				}
 
 				variation[select.name] = select.value;
@@ -208,6 +218,9 @@ export default class BulkVariations extends EventTarget {
                 });
 
 			}
+            else {
+                Snackbar(this.fpdInstance.translator.getTranslation('misc', 'bulk_add_variations_term'))
+            }
 
 
 		});

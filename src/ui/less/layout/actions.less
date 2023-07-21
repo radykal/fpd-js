@@ -71,10 +71,6 @@
             vertical-align: middle;
         }
 
-        > i {
-            font-size: 18px;
-        }
-
         &.fpd-btn-fill {
             background: rgba(255,255,255, 0.1);
 
@@ -211,22 +207,29 @@
             display: block !important;
         }
 
-    } 
+        .fpd-total-price {
+            line-height: 20px;
+            font-size: 15px;
+            display: inline-block !important;
+        }
+
+    }
 
 }
 
-.fpd-layout-small {
+.fpd-wrapper.fpd-layout-small {
 
     fpd-actions-bar {
 
         > * {
+
             flex: 0;
 
             > .fpd-btn,
             > .fpd-dropdown-btn {
 
                 > span {
-                    display: none !important;
+                    display: none;
                 }
         
             }

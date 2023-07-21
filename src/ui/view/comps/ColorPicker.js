@@ -16,7 +16,7 @@ const ColorPicker = (props) => {
         parent: colorPickerWrapper,
         popup: false,
         alpha: false,
-        color: props.initialColor ? props.initialColor : '#fff',
+        color: tinycolor(props.initialColor).isValid() ? props.initialColor : '#fff',
         onChange: (color) => {
             
             const hexColor = tinycolor(color.rgbaString).toHexString();

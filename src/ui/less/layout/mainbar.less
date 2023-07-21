@@ -242,7 +242,6 @@ fpd-main-bar {
     
     .fpd-navigation {
 
-        min-height: var(--fpd-container-min-height);
         flex: 0 0 var(--fpd-sidebar-nav-width);
         overflow: auto;
         
@@ -302,7 +301,7 @@ fpd-main-bar {
         
         .fpd-navigation > div > .fpd-label {
             font-size: 15px;
-            padding-left: 5px;
+            padding-left: 10px;
             vertical-align: top;
             text-transform: uppercase;
             white-space: nowrap;
@@ -354,7 +353,7 @@ fpd-main-bar {
             padding: 0 15px;
             line-height: 50px;
             text-align: center;
-            font-size: 18px;
+            font-size: 16px;
             background: rgba(255,255,255, 0.96);
             z-index: 99;
             cursor: pointer;
@@ -460,9 +459,9 @@ fpd-main-bar {
     width: 350px;
     height: 450px;
     background: var(--fpd-primary-fg-color);
-    position: absolute !important;
-    left: ~"calc(50% - 175px)";
-    top: ~"calc(45% - 200px)";
+    position: fixed !important;
+    left: ~"calc(50vh - 175px)";
+    top: ~"calc(45vh - 200px)";
     min-width: 200px;
     min-height: 100px;
     z-index: 1000000;
@@ -501,7 +500,7 @@ fpd-main-bar {
         }
 
         > .fpd-close-dialog {
-            font-size: 18px;
+            font-size: 14px;
             padding: 0 12px;
             text-align: right;
             cursor: pointer;
@@ -529,6 +528,7 @@ fpd-main-bar {
 
         > .fpd-secondary-content {
             display: block;
+            overflow: hidden;
         }
     }
 }

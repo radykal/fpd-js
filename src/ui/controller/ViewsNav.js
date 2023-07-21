@@ -84,8 +84,12 @@ export default class ViewsNav extends EventTarget {
             'click',
             (evt) => {
 
-                fpdInstance.currentViewInstance.toggleLock(!fpdInstance.currentViewInstance.locked);  
-                this.#toggleViewLock(fpdInstance.currentViewInstance);              
+                if(fpdInstance.currentViewInstance) {
+
+                    fpdInstance.currentViewInstance.toggleLock(!fpdInstance.currentViewInstance.locked);  
+                    this.#toggleViewLock(fpdInstance.currentViewInstance);   
+
+                }        
 
             } 
         )

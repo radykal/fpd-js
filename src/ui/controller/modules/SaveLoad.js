@@ -53,7 +53,7 @@ export default class SaveLoadModule extends EventTarget {
 							savedProducts = [];
 						}
 
-                        this.#addSavedProduct(savedProduct);
+                        this.addSavedProduct(savedProduct);
 
 						savedProducts.push(savedProduct);
 						window.localStorage.setItem(
@@ -87,7 +87,7 @@ export default class SaveLoadModule extends EventTarget {
             if(savedProducts && savedProducts.length > 0) {
 
                 savedProducts.forEach((savedProduct) => {
-                    this.#addSavedProduct(savedProduct);
+                    this.addSavedProduct(savedProduct);
                 })
                 
             }
@@ -102,7 +102,7 @@ export default class SaveLoadModule extends EventTarget {
 	}
 
     //add a saved product to the load dialog
-    #addSavedProduct({thumbnail, product, title=''}) {
+    addSavedProduct({thumbnail, product, title=''}) {
         
         const thumbnailElem = createImgThumbnail({
             url: thumbnail,
@@ -151,10 +151,9 @@ export default class SaveLoadModule extends EventTarget {
                 }
 
                 this.fpdInstance.dispatchEvent(
-                    new CustomEvent('actionSave', {detail: {
-                        title: title,
-                        thumbnail: thumbnail,
-                        product: product
+                    new CustomEvent('actionLoad:Remove', {detail: {
+                        index: index,
+                        item: itemElem,
                     }})
                 );
 
@@ -162,6 +161,8 @@ export default class SaveLoadModule extends EventTarget {
 
             }
         );
+
+        return thumbnailElem;
 
 	}
 

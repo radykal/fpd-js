@@ -14,9 +14,14 @@ export default class GuidedTour {
 
     start() {
 
-        const firstKey = Object.keys(this.fpdInstance.mainOptions.guidedTour)[0];
-		this.selectStep(firstKey);
+        if(this.fpdInstance.mainOptions.guidedTour 
+            && Object.keys(this.fpdInstance.mainOptions.guidedTour).length) {
 
+            const firstKey = Object.keys(this.fpdInstance.mainOptions.guidedTour)[0];
+		    this.selectStep(firstKey);
+
+        }
+        
     }
 
     selectStep = (target) => {
@@ -45,7 +50,7 @@ export default class GuidedTour {
             if(targetElem.length === 0) {
     
                 if(Object.keys(this.fpdInstance.mainOptions.guidedTour)[keyIndex+1]) {
-                    instance.selectGuidedTourStep(Object.keys(this.fpdInstance.mainOptions.guidedTour)[keyIndex+1]);
+                    this.selectStep(Object.keys(this.fpdInstance.mainOptions.guidedTour)[keyIndex+1]);
                 }
     
                 return;
@@ -61,8 +66,8 @@ export default class GuidedTour {
             </div>
             <div class="fpd-gt-text">${this.fpdInstance.mainOptions.guidedTour[target]}</div>
             <div class="fpd-gt-actions">
-                <div class="fpd-gt-next fpd-btn fpd-primary">${this.fpdInstance.translator.getTranslation('misc', 'guided_tour_next')}</div>
-                <div class="fpd-gt-back fpd-btn fpd-primary">${this.fpdInstance.translator.getTranslation('misc', 'guided_tour_back')}</div>
+                <div class="fpd-gt-next fpd-btn fpd-primary">${this.fpdInstance.translator.getTranslation('misc', 'guided_tour_next', 'Next')}</div>
+                <div class="fpd-gt-back fpd-btn fpd-primary">${this.fpdInstance.translator.getTranslation('misc', 'guided_tour_back', 'Back')}</div>
                 <span class="fpd-gt-counter">${String(keyIndex +1)+'/'+Object.keys(this.fpdInstance.mainOptions.guidedTour).length}</span>
             </div>`;
     

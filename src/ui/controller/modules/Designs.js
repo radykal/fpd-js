@@ -19,7 +19,7 @@ export default class DesignsModule extends EventTarget {
         
         super();
         
-        this.#searchInLabel = fpdInstance.translator.getTranslation('modules', 'designs_search_in').toUpperCase();        
+        this.#searchInLabel = fpdInstance.translator.getTranslation('modules', 'designs_search_in', 'Search in').toUpperCase();        
         this.fpdInstance = fpdInstance;
         this.#dynamicDesignsId = dynamicDesignsId;
         

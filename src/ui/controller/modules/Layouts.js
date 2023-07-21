@@ -83,7 +83,8 @@ export default class LayoutsModule extends EventTarget {
                         var confirmModal = Modal(
                             this.fpdInstance.translator.getTranslation(
                                 'modules', 
-                                'layouts_confirm_replacement'
+                                'layouts_confirm_replacement',
+                                'Yes, please!'
                             ), 
                             false, 
                             'confirm', 
@@ -93,7 +94,8 @@ export default class LayoutsModule extends EventTarget {
                         const confirmBtn = confirmModal.querySelector('.fpd-confirm');
                         confirmBtn.innerText = this.fpdInstance.translator.getTranslation(
                             'modules', 
-                            'layouts_confirm_button'
+                            'layouts_confirm_button',
+                            'Sure?'
                         );
                         
                         addEvents(

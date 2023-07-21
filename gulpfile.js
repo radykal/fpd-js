@@ -91,5 +91,5 @@ exports.buildJS = buildJS;
 exports.minifyJS = minifyJS;
 exports.buildCSS = buildCSS;
 exports.buildVendors = series(buildVendorJS, buildVendorCSS, copyFontFiles);
-exports.default = series(buildVendorJS, buildJS, minifyJS, buildCSS, combineCSS);
+exports.default = series(buildVendorJS, buildVendorCSS, copyFontFiles, buildJS, minifyJS, buildCSS, combineCSS);
 exports.createModule = createModule;

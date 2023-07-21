@@ -314,37 +314,12 @@ fabric.Canvas.prototype._renderElementBoundingBox = function (element) {
         this.currentBoundingObject = null;
     }
 
-    if (element) {
+    const _bbCreated = (bbObj=null) => {
 
-        var bbCoords = element.getBoundingBoxCoords();
+        if(bbObj) {
 
-        if (bbCoords && element.boundingBoxMode != 'none') {
-
-            let boundingBoxProps = {
-                left: bbCoords.left,
-                top: bbCoords.top,
-                width: bbCoords.width,
-                height: bbCoords.height,
-                angle: bbCoords.angle || 0,
-                stroke: this.viewOptions.boundingBoxColor,
-                strokeWidth: 1,
-                strokeLineCap: 'square',
-                strokeDashArray: [10, 10],
-                fill: false,
-                selectable: false,
-                evented: false,
-                originX: 'left',
-                originY: 'top',
-                name: "bounding-box",
-                excludeFromExport: true,
-                _ignore: true
-            };
-
-            boundingBoxProps = deepMerge(boundingBoxProps, this.viewOptions.boundingBoxProps);
-            this.currentBoundingObject = new fabric.Rect(boundingBoxProps);
-
-            this.add(this.currentBoundingObject);
-            this.currentBoundingObject.bringToFront();
+            this.add(bbObj);
+            bbObj.bringToFront();
 
             /**
              * Gets fired when bounding box is toggling.
@@ -358,6 +333,74 @@ fabric.Canvas.prototype._renderElementBoundingBox = function (element) {
                 currentBoundingObject: this.currentBoundingObject,
                 state: true
             });
+
+        }
+
+    }
+
+    if (element) {
+
+        var bbCoords = element.getBoundingBoxCoords();
+
+        if (bbCoords && element.boundingBoxMode != 'none') {
+
+            let boundingBoxProps = {
+                stroke: this.viewOptions.boundingBoxColor,
+                strokeWidth: 1,
+                strokeLineCap: 'square',
+                strokeDashArray: [10, 10],
+                fill: false,
+                selectable: false,
+                evented: false,
+                name: "bounding-box",
+                excludeFromExport: true,
+                _ignore: true
+            };
+            
+            boundingBoxProps = deepMerge(boundingBoxProps, this.viewOptions.boundingBoxProps);
+
+            if(!element.clipPath || element.clipPath.type == 'rect') {
+
+                boundingBoxProps = deepMerge(boundingBoxProps, {
+                    left: bbCoords.left,
+                    top: bbCoords.top,
+                    width: bbCoords.width,
+                    height: bbCoords.height,
+                    angle: bbCoords.angle || 0,
+                    originX: 'left',
+                    originY: 'top',
+                });
+
+                this.currentBoundingObject = new fabric.Rect(boundingBoxProps);
+                _bbCreated(this.currentBoundingObject);
+                
+            }
+            else if(element.clipPath) {       
+                         
+                element.clipPath.clone((clonedObj) => {
+
+                    boundingBoxProps = deepMerge(boundingBoxProps, {
+                        fill: 'transparent',
+                    });
+
+                    clonedObj.set(boundingBoxProps)
+
+                    if(clonedObj.type == 'group') {
+
+                        //transparent background for objects in group
+                        clonedObj.forEachObject((obj) => {
+                            obj.set('fill', 'transparent')
+                        })
+
+                    }
+                    
+                    this.currentBoundingObject = clonedObj;
+                    _bbCreated(this.currentBoundingObject);
+                    element._checkContainment();
+
+                });
+                
+            }
 
         }
 
@@ -1042,11 +1085,11 @@ fabric.Canvas.prototype.getElements = function(elementType='all', deselectElemen
     }
 
     let allElements = this.getObjects();
-
+    
     //remove ignore objects
     allElements = allElements.filter((obj) => {        
         return !obj._ignore;
-    });        
+    });
 
     if(elementType === 'text') {
 
@@ -1592,10 +1635,18 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
     if (parameters.filter) {
         
         const fabricFilter = getFilter(parameters.filter);
+        
+        if(fabricFilter && element.applyFilters) {
 
-        element.filters = [fabricFilter];
-        element.applyFilters();
+            element.filters = [fabricFilter];        
+            element.applyFilters();
 
+        }
+        else if(element.applyFilters) {
+            element.filters = [];        
+            element.applyFilters();
+        }
+        
     }
 
     //set z position, check if element has canvas prop, otherwise its not added into canvas
@@ -1749,6 +1800,7 @@ fabric.Canvas.prototype.setMask = function(maskOptions={}, callback=() => {}) {
 
             let svgGroup = null;
             if(objects) {
+
                 //if objects is null, svg is loaded from external server with cors disabled
                 svgGroup = objects ? fabric.util.groupSVGElements(objects, options) : null;
 
@@ -1773,19 +1825,13 @@ fabric.Canvas.prototype.setMask = function(maskOptions={}, callback=() => {}) {
                     name: "view-mask",
                     objectCaching: false,
                     excludeFromExport: true,
-                    _ignore: true,
-                    _originParams: {
-                        left: maskOptions.left ? Number(maskOptions.left) :  0,
-                        top: maskOptions.top ? Number(maskOptions.top) :  0,
-                        scaleX: maskOptions.scaleX ? Number(maskOptions.scaleX) :  1,
-                        scaleY: maskOptions.scaleY ? Number(maskOptions.scaleY) :  1,
-                    }
+                    _ignore: true
                 })
 
                 this.maskObject = svgGroup;
                 this.clipPath = svgGroup;
-                this.renderAll();
 
+                this.renderAll();
                 this.resetSize();
 
             }

@@ -23,7 +23,7 @@ export default class ViewsGrid extends EventTarget {
 		this.minHeight = fpdInstance.mainOptions.dynamicViewsOptions.minHeight;
 		this.maxWidth = fpdInstance.mainOptions.dynamicViewsOptions.maxWidth;
 		this.maxHeight = fpdInstance.mainOptions.dynamicViewsOptions.maxHeight;
-		this.currentLayouts = [];
+		this.currentLayouts = [];        
 
         this.container = document.createElement("fpd-views-grid");
         fpdInstance.container.append(this.container);
@@ -246,6 +246,18 @@ export default class ViewsGrid extends EventTarget {
                     }
                     
                     
+
+                }
+            )
+            
+            this.blankPageModal.querySelector('.fpd-input input[data-type="width"]').value = this.minWidth;
+            this.blankPageModal.querySelector('.fpd-input input[data-type="height"]').value = this.minHeight;
+            addEvents(
+                this.blankPageModal.querySelectorAll('.fpd-input input'),
+                'keyup',
+                (evt) => {
+
+                    evt.currentTarget.value = this.#checkDimensionLimits(evt.currentTarget.dataset.type, evt.currentTarget);
 
                 }
             )
@@ -492,7 +504,7 @@ export default class ViewsGrid extends EventTarget {
 			if(input.value < this.minHeight) { input.value = this.minHeight; }
 			else if(input.value > this.maxHeight) { input.value = this.maxHeight; }
 
-		}
+		}        
 
 		return input.value;
 

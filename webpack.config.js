@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = (env, argv) => {
-    
+
     return {
         mode: 'development',
         devtool: 'inline-source-map',
@@ -15,9 +15,13 @@ module.exports = (env, argv) => {
             ignored: ['/_uploads/', '/node_modules/', '/dist/**'],
         },
         devServer: {
-            server: 'https',  
-            static:  [
-                { 
+            server: 'https',
+            allowedHosts: 'all',
+            client: {
+                webSocketURL: 'auto://0.0.0.0:8080/ws',
+            },
+            static: [
+                {
                     directory: path.join(__dirname, 'demos'),
                     publicPath: '/',
                 },
@@ -25,18 +29,18 @@ module.exports = (env, argv) => {
                     directory: path.join(__dirname, 'dist'),
                     publicPath: '/dist',
                 },
-                { 
+                {
                     directory: path.join(__dirname, 'data'),
                     publicPath: '/data',
-                },           
-            ]     
+                },
+            ]
         },
         module: {
-           rules:[
+            rules: [
                 {
                     test: /\.less$/,
-                    use:[
-                        "style-loader", 
+                    use: [
+                        "style-loader",
                         "css-loader",
                         "less-loader"
                     ]
@@ -45,9 +49,9 @@ module.exports = (env, argv) => {
                     test: /\.html$/i,
                     loader: "html-loader",
                 },
-           ]
+            ]
         },
         plugins: []
     }
-    
+
 };

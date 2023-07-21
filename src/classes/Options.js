@@ -175,10 +175,10 @@ export default class Options {
 		*
 		* @property langJSON
 		* @memberof Options.defaults
-		* @type {String | Object | Boolean}
+		* @type {Object | Boolean}
 		* @default 'lang/default.json'
 		*/
-		langJSON: 'lang/default.json',
+		langJSON: {},
 		/**
 		* The color palette when the color wheel is displayed.
 		*
@@ -322,7 +322,7 @@ export default class Options {
 		*/
 		hideDialogOnAdd: true,
 		/**
-		* Set the placement of the toolbar. For smartphones the toolbar will be fixed at the bottom of the page. Possible values:'smart', 'inside-bottom', 'inside-top'
+		* Set the placement of the toolbar. For smartphones the toolbar will be fixed at the bottom of the page. Possible values:'smart', 'sidebar'
 		*
 		* @property toolbarPlacement
 		* @memberof Options.defaults
@@ -367,12 +367,13 @@ export default class Options {
 		*/
 		namesNumbersEntryPrice: 0,
 		/**
-		* Sets the placement for the color selection, possible values: 'inside-tl', 'inside-tc', 'inside-tr', 'inside-bl', 'inside-bc', 'inside-br' or ID of another element(#my-color-selection). 
+		* Sets the placement for the color selection. Create a HTML element inside your document and use the selector for that element as value, e.g. #my-color-selection. 
 		*
 		* @property colorSelectionPlacement
 		* @memberof Options.defaults
 		* @type {String}
 		* @default ''
+		* @example #my-color-selection
 		*/
 		colorSelectionPlacement: '',
 		/**
@@ -837,7 +838,7 @@ export default class Options {
 		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default '#54dfe6'
-		* @version 6.0.0
+		* @version 5.0.0
 		*/
 		multiSelectionColor: '#54dfe6',
         /**
@@ -952,7 +953,7 @@ export default class Options {
         * @memberof Options.defaults
         * @type {Object}
         * @default {}
-        * @version 6.0.0
+        * @version 5.0.0
         */
         dynamicDesigns: {},
 		/**

@@ -26,7 +26,7 @@ export default class ElementToolbar extends EventTarget {
         this.fpdInstance = fpdInstance;
         this.container = document.createElement("fpd-element-toolbar");   
                 
-        this.#updateWrapper(fpdInstance.container.dataset.layout);
+        this.#setWrapper();
 
         //set max values in inputs
 		const maxValuesKeys = Object.keys(fpdInstance.mainOptions.maxValues);
@@ -831,9 +831,9 @@ export default class ElementToolbar extends EventTarget {
 
             //stroke
             const strokeColorWrapper = this.subPanel.querySelector('.fpd-stroke-color-wrapper');
-            strokeColorWrapper.innerHTML = '';
+            strokeColorWrapper.innerHTML = '';            
             const strokeColorPicker = ColorPicker({
-                initialColor: element.stroke ? element.stroke : '#000',
+                initialColor: tinycolor(element.stroke).isValid() ? element.stroke : '#000',
                 colorNames: this.fpdInstance.mainOptions.hexNames,
                 palette: this.fpdInstance.mainOptions.colorPickerPalette,
                 onMove: (hexColor) => {
@@ -859,7 +859,7 @@ export default class ElementToolbar extends EventTarget {
             const shadowColorWrapper = this.subPanel.querySelector('.fpd-shadow-color-wrapper');
             shadowColorWrapper.innerHTML = '';            
             const shadowColorPicker = ColorPicker({
-                initialColor: element.shadowColor ? element.shadowColor : '#000000',
+                initialColor: tinycolor(element.shadowColor).isValid() ? element.shadowColor : '#000000',
                 colorNames: this.fpdInstance.mainOptions.hexNames,
                 palette: this.fpdInstance.mainOptions.colorPickerPalette,
                 onMove: (hexColor) => {
@@ -1084,7 +1084,7 @@ export default class ElementToolbar extends EventTarget {
             //top
             const elemBoundingRect = fpdElem.getBoundingRect();            
             const lowestY = elemBoundingRect.top + elemBoundingRect.height + fpdElem.controls.mtr.offsetY + fpdElem.cornerSize;
-            const posTop = this.fpdInstance.productStage.getBoundingClientRect().top +  window.scrollY + lowestY;
+            const posTop = this.fpdInstance.productStage.getBoundingClientRect().top + lowestY;
             
             //left
             const oCoords = fpdElem.oCoords;            
@@ -1108,9 +1108,14 @@ export default class ElementToolbar extends EventTarget {
 
 	};
 
-    #updateWrapper(layout='large') {
-         
+    #setWrapper() {
+        
+        const layout = this.fpdInstance.container.dataset.layout;
         this.container.className = 'fpd-layout-'+layout;
+        
+        if(!this.fpdInstance.container.classList.contains('fpd-sidebar')) {
+            this.fpdInstance.mainOptions.toolbarPlacement = 'smart';
+        }        
         
         if(this.fpdInstance.mainOptions.toolbarPlacement == 'smart' ||
             this.fpdInstance.container.classList.contains('fpd-layout-small')  

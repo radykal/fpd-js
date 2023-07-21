@@ -140,6 +140,7 @@
 		"dynamic_views_height": "Height",
 		"dynamic_views_add_view": "Add Page",
 		"bulk_add_variations_title": "Bulk Order",
-		"bulk_add_variations_add": "Add"
+		"bulk_add_variations_add": "Add",
+		"bulk_add_variations_term": "Please set all variations in the Bulk Order panel correctly!"
 	}
 }

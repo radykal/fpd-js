@@ -1,5 +1,6 @@
 import { 
-    addEvents
+    addEvents,
+	pixelToUnit
 } from '/src/helpers/utils';
 
 export default class PricingRules {
@@ -93,13 +94,13 @@ export default class PricingRules {
 						property = targetElem.text ? targetElem.fontSize : null;
 					}
 					else if(pGroup.property === 'imageSize') { //for image in all views
-						property = FPDUtil.getType(targetElem.type) === 'image' && targetElem.title ? {width: targetElem.width, height: targetElem.height} : null;
+						property = targetElem.getType() === 'image' && targetElem.title ? {width: targetElem.width, height: targetElem.height} : null;
 					}
 					else if(pGroup.property === 'imageSizeScaled') { //for image in all views
-						property = FPDUtil.getType(targetElem.type) === 'image' && targetElem.title ? {width: targetElem.width * targetElem.scaleX, height: targetElem.height * targetElem.scaleY} : null;
+						property = targetElem.getType() === 'image' && targetElem.title ? {width: targetElem.width * targetElem.scaleX, height: targetElem.height * targetElem.scaleY} : null;
 					}
 					else if(pGroup.property === 'canvasSize') { //views: all
-						property = {width: FPDUtil.pixelToUnit(targetElem.options.stageWidth, unitFormat), height: FPDUtil.pixelToUnit(targetElem.options.stageHeight, unitFormat) };
+						property = {width: pixelToUnit(targetElem.options.stageWidth, unitFormat), height: pixelToUnit(targetElem.options.stageHeight, unitFormat) };
 					}
 					else if(pGroup.property === 'pattern') { //text and svg in all views
 						property = targetElem.pattern;

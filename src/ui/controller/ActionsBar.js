@@ -2,8 +2,8 @@ import '/src/ui/view/ActionsBar.js';
 import Modal from '/src/ui/view/comps/Modal';
 
 import {
-    addEvents,
-    toggleElemClasses,
+	addEvents,
+	toggleElemClasses,
 	removeElemClasses,
 	getScript
 } from '/src/helpers/utils';
@@ -11,19 +11,54 @@ import {
 export default class ActionsBar extends EventTarget {
 
 	static availableActions = {
-        'print': 'fpd-icon-print',
-        'reset-product': 'fpd-icon-reset',
-        'undo': 'fpd-icon-undo',
-        'redo': 'fpd-icon-redo',
-        'info': 'fpd-icon-info-outline',
-        //'snap': 'fpd-icon-magnet',
-        'zoom': 'fpd-icon-zoom-in',
-        'download': 'fpd-icon-download',
-        'preview-lightbox': ' fpd-icon-preview-lightbox',
-        'ruler': 'fpd-icon-ruler',
-        'previous-view': 'fpd-icon-back',
-        'next-view': 'fpd-icon-forward',
-        'guided-tour': 'fpd-icon-guided-tour'
+		'print': {
+			icon: 'fpd-icon-print',
+			title: 'Print'
+		},
+		'reset-product': {
+			icon: 'fpd-icon-reset',
+			title: 'Reset Product'
+		},
+		'undo': {
+			icon: 'fpd-icon-undo',
+			title: 'Undo'
+		},
+		'redo': {
+			icon: 'fpd-icon-redo',
+			title: 'Redo'
+		},
+		'info': {
+			icon: 'fpd-icon-info',
+			title: 'Info'
+		},
+		'zoom': {
+			icon: 'fpd-icon-zoom-in',
+			title: 'Zoom'
+		},
+		'download': {
+			icon: 'fpd-icon-download',
+			title: 'Download'
+		},
+		'preview-lightbox': {
+			icon: 'fpd-icon-preview-lightbox',
+			title: 'Preview Lightbox'
+		},
+		'ruler': {
+			icon: 'fpd-icon-ruler',
+			title: 'Ruler'
+		},
+		'previous-view': {
+			icon: 'fpd-icon-back',
+			title: 'Previous View'
+		},
+		'next-view': {
+			icon: 'fpd-icon-forward',
+			title: 'Next View'
+		},
+		'guided-tour': {
+			icon: 'fpd-icon-guided-tour',
+			title: 'Guided Tour'
+		}
 	};
 
 	static toggleActions = [
@@ -32,37 +67,37 @@ export default class ActionsBar extends EventTarget {
 		'zoom'
 	];
 
-    currentActions = {};
+	currentActions = {};
 
-    constructor(fpdInstance) {
-        
-        super();
+	constructor(fpdInstance) {
 
-        this.fpdInstance = fpdInstance;
-        
-        this.container = document.createElement("fpd-actions-bar");
-        fpdInstance.container.append(this.container);
-        
-        addEvents(
-            fpdInstance.container.querySelectorAll('.fpd-dropdown-btn'),
-            'click',
-            (evt) => {
+		super();
 
-                const menu = evt.currentTarget.querySelector('.fpd-dropdown-menu');
-                toggleElemClasses(
-                    menu, 
-                    ['fpd-show'],
-                    !menu.classList.contains('fpd-show')
-                )
+		this.fpdInstance = fpdInstance;
 
-            }
-        )
-		
+		this.container = document.createElement("fpd-actions-bar");
+		fpdInstance.container.append(this.container);
+
 		addEvents(
-            fpdInstance.container.querySelectorAll('.fpd-close'),
-            'click',
-            (evt) => {
-				
+			fpdInstance.container.querySelectorAll('.fpd-dropdown-btn'),
+			'click',
+			(evt) => {
+
+				const menu = evt.currentTarget.querySelector('.fpd-dropdown-menu');
+				toggleElemClasses(
+					menu,
+					['fpd-show'],
+					!menu.classList.contains('fpd-show')
+				)
+
+			}
+		)
+
+		addEvents(
+			fpdInstance.container.querySelectorAll('.fpd-close'),
+			'click',
+			(evt) => {
+
 				removeElemClasses(
 					this.fpdInstance.modalWrapper,
 					['fpd-show']
@@ -77,10 +112,28 @@ export default class ActionsBar extends EventTarget {
 				this.fpdInstance.dispatchEvent(
 					new CustomEvent('modalDesignerClose')
 				);
-				
-            }
-        )
-		
+
+			}
+		)
+
+		addEvents(
+			fpdInstance.container.querySelector('.fpd-done'),
+			'click',
+			(evt) => {
+
+				/**
+				 * Gets fired when the modal with the product designer closes.
+				 *
+				 * @event FancyProductDesigner#modalDesignerDone
+				 * @param {Event} event
+				 */
+				this.fpdInstance.dispatchEvent(
+					new CustomEvent('modalDesignerDone')
+				);
+
+			}
+		)
+
 		addEvents(
 			fpdInstance,
 			['viewSelect'],
@@ -101,118 +154,124 @@ export default class ActionsBar extends EventTarget {
 			}
 		)
 
-        this.setup(fpdInstance.mainOptions.actions)
+		this.setup(fpdInstance.mainOptions.actions)
 
-    }
+	}
 
-    #setPosActions(pos, actions) {
-            
-        if(actions) {
+	#setPosActions(pos, actions) {
 
-            actions.forEach(action => {
+		if (actions) {
 
-                let wrapper;
-                if(pos == 'left') {
+			actions.forEach(action => {
 
-                    wrapper = this.container.querySelector('[data-pos="left"] .fpd-actions-wrapper');
-                
-                }
-                else if(pos == 'center') {
-					
-					if(this.container.querySelectorAll('[data-pos="center"].fpd-actions-wrapper > .fpd-btn').length > 1) {
+				let wrapper;
+				if (pos == 'left') {
+
+					wrapper = this.container.querySelector('[data-pos="left"] .fpd-actions-wrapper');
+
+				}
+				else if (pos == 'center') {
+
+					if (this.container.querySelectorAll('[data-pos="center"].fpd-actions-wrapper > .fpd-btn').length > 1) {
 						return;
 					}
-                    
-                    wrapper = this.container.querySelector('[data-pos="'+pos+'"].fpd-actions-wrapper')
-    
-                }
-				else if(pos == 'right') {
 
-                    wrapper = this.container.querySelector('[data-pos="right"] .fpd-actions-wrapper');
-                
-                }
+					wrapper = this.container.querySelector('[data-pos="' + pos + '"].fpd-actions-wrapper')
 
-                if(wrapper)
-                    this.#addActionBtn(wrapper, action);
+				}
+				else if (pos == 'right') {
 
-            })  
+					wrapper = this.container.querySelector('[data-pos="right"] .fpd-actions-wrapper');
 
-        }
+				}
 
-    }
+				if (wrapper)
+					this.addActionBtn(wrapper, action);
 
-    #addActionBtn(wrapper, action) {
-        
-        if(ActionsBar.availableActions.hasOwnProperty(action)) {
-			
-            const label = this.fpdInstance.translator.getTranslation('actions', action.replace(/-/g, '_'));
-            const actionBtn = document.createElement('div');
-            actionBtn.className = 'fpd-btn fpd-tooltip';
+			})
+
+		}
+
+	}
+
+	addActionBtn(wrapper, action) {
+
+		if (ActionsBar.availableActions.hasOwnProperty(action)) {
+
+			const actionData = ActionsBar.availableActions[action];
+
+			const label = this.fpdInstance.translator.getTranslation(
+				'actions', 
+				action.replace(/-/g, '_'),
+				actionData.title
+			);
+			const actionBtn = document.createElement('div');
+			actionBtn.className = 'fpd-btn fpd-tooltip';
 			actionBtn.setAttribute('aria-label', label);
-            actionBtn.dataset.action = action;
-            actionBtn.innerHTML = `<i class="${ActionsBar.availableActions[action]}"></i><span>${label}</span>`;
+			actionBtn.dataset.action = action;
+			actionBtn.innerHTML = `<i class="${actionData.icon}"></i><span>${label}</span>`;
 
-			if(ActionsBar.toggleActions.includes(action)) {
+			if (ActionsBar.toggleActions.includes(action)) {
 				actionBtn.insertAdjacentHTML(
-					'beforeend', 
+					'beforeend',
 					'<input type="checkbox" class="fpd-switch" />'
 				)
 			}
-			
-            wrapper.append(actionBtn);
 
-            addEvents(
-                actionBtn,
-                'click',
+			wrapper.append(actionBtn);
+
+			addEvents(
+				actionBtn,
+				'click',
 				(evt) => {
 
-					const switchElem = evt.currentTarget.querySelector('.fpd-switch');					
-					if(switchElem && !evt.target.classList.contains('fpd-switch')) {
+					const switchElem = evt.currentTarget.querySelector('.fpd-switch');
+					if (switchElem && !evt.target.classList.contains('fpd-switch')) {
 						switchElem.checked = !switchElem.checked;
 					}
 
 					this.doAction(evt.currentTarget.dataset.action)
 				}
-            )
-            
-        }
+			)
 
-    }
+		}
 
-    doAction(action) {
+	}
 
-		if(!this.fpdInstance.currentViewInstance) { return; }
+	doAction(action) {
+
+		if (!this.fpdInstance.currentViewInstance) { return; }
 
 		this.fpdInstance.deselectElement();
 
-		if(action === 'print') {
+		if (action === 'print') {
 
 			this.fpdInstance.print();
 
 		}
-		else if(action === 'reset-product') {
+		else if (action === 'reset-product') {
 
 			var confirmModal = Modal(
 				this.fpdInstance.translator.getTranslation(
-					'misc', 
+					'misc',
 					'reset_confirm'
-				), 
-				false, 
-				'confirm', 
+				),
+				false,
+				'confirm',
 				this.fpdInstance.container
 			);
-			
+
 			const confirmBtn = confirmModal.querySelector('.fpd-confirm');
 			confirmBtn.innerText = this.fpdInstance.translator.getTranslation(
-				'actions', 
+				'actions',
 				'reset_product'
 			);
-			
+
 			addEvents(
 				confirmBtn,
 				['click'],
 				() => {
-					
+
 					this.fpdInstance.loadProduct(this.fpdInstance.productViews);
 					confirmModal.remove();
 
@@ -220,27 +279,27 @@ export default class ActionsBar extends EventTarget {
 			)
 
 		}
-		else if(action === 'undo') {
+		else if (action === 'undo') {
 
 			this.fpdInstance.currentViewInstance.fabricCanvas.undo();
 
 		}
-		else if(action === 'redo') {
+		else if (action === 'redo') {
 
 			this.fpdInstance.currentViewInstance.fabricCanvas.redo();
 
 		}
-		else if(action === 'info') {
+		else if (action === 'info') {
 
-            Modal(
-                this.fpdInstance.translator.getTranslation('actions', 'info_content'),
-                false,
-                '',
-                this.fpdInstance.container
-            );
+			Modal(
+				this.fpdInstance.translator.getTranslation('actions', 'info_content'),
+				false,
+				'',
+				this.fpdInstance.container
+			);
 
 		}
-		else if(action === 'preview-lightbox') {
+		else if (action === 'preview-lightbox') {
 
 			this.fpdInstance.getProductDataURL((dataURL) => {
 
@@ -250,7 +309,7 @@ export default class ActionsBar extends EventTarget {
 				image.onload = () => {
 
 					Modal(
-						'<div style="text-align: center;"><img src="'+image.src+'" download="product.png" /></div>',
+						'<div style="text-align: center;"><img src="' + image.src + '" download="product.png" /></div>',
 						true
 					);
 
@@ -259,23 +318,23 @@ export default class ActionsBar extends EventTarget {
 			});
 
 		}
-		else if(action === 'snap') {
+		else if (action === 'snap') {
 
 			this.fpdInstance.currentViewInstance.fabricCanvas.snapToGrid = !this.fpdInstance.currentViewInstance.fabricCanvas.snapToGrid;
 			this.fpdInstance.currentViewInstance.fabricCanvas.renderAll();
 
 		}
-		else if(action === 'zoom') {
+		else if (action === 'zoom') {
 
 			const existingZoomWrapper = this.fpdInstance.mainWrapper.container.querySelector('.fpd-zoom-wrapper');
-			if(existingZoomWrapper) {
+			if (existingZoomWrapper) {
 				existingZoomWrapper.remove();
 				return;
 			}
 
 			const zoomWrapper = document.createElement('div');
 			zoomWrapper.className = 'fpd-zoom-wrapper fpd-shadow-1';
-			
+
 			const startVal = this.fpdInstance.currentViewInstance.fabricCanvas.getZoom() / this.fpdInstance.currentViewInstance.fabricCanvas.responsiveScale;
 			const zoomSlider = document.createElement('fpd-range-slider');
 			zoomSlider.className = 'fpd-progress';
@@ -284,9 +343,9 @@ export default class ActionsBar extends EventTarget {
 			zoomSlider.setAttribute('min', 1);
 			zoomSlider.setAttribute('max', 3);
 			zoomSlider.onInput = (evt) => {
-				
+
 				this.fpdInstance.currentViewInstance.fabricCanvas.setResZoom(Number(evt.currentTarget.value));
-				
+
 			}
 			zoomWrapper.append(zoomSlider);
 
@@ -301,7 +360,7 @@ export default class ActionsBar extends EventTarget {
 				(evt) => {
 
 					this.fpdInstance.currentViewInstance.fabricCanvas.panCanvas = !this.fpdInstance.currentViewInstance.fabricCanvas.panCanvas;
-					
+
 					toggleElemClasses(panElem, ['fpd-active'], this.fpdInstance.currentViewInstance.fabricCanvas.panCanvas);
 
 				}
@@ -310,7 +369,7 @@ export default class ActionsBar extends EventTarget {
 			this.fpdInstance.mainWrapper.container.append(zoomWrapper);
 
 		}
-		else if(action === 'download') {
+		else if (action === 'download') {
 
 			const downloadHTML = `<div class="fpd-modal-download">
 			<span data-value="jpeg">
@@ -332,103 +391,103 @@ export default class ActionsBar extends EventTarget {
 		</div>`;
 
 			const downloadModal = Modal(
-                downloadHTML,
-                false,
-                '',
-                this.fpdInstance.container
-            );
+				downloadHTML,
+				false,
+				'',
+				this.fpdInstance.container
+			);
 
 			addEvents(
 				downloadModal.querySelectorAll('span[data-value]'),
-				'click', 
+				'click',
 				(evt) => {
 
 					this.downloadFile(
-						evt.currentTarget.dataset.value, 
+						evt.currentTarget.dataset.value,
 						downloadModal.querySelector('.fpd-switch').checked
 					);
-					
+
 					downloadModal.remove();
 				}
 			)
 
 		}
-		else if(action === 'ruler') {
+		else if (action === 'ruler') {
 
 			this.fpdInstance.currentViewInstance.fabricCanvas.enableRuler = !this.fpdInstance.currentViewInstance.fabricCanvas.enableRuler;
 			this.fpdInstance.currentViewInstance.fabricCanvas.renderAll();
 
 		}
-		else if(action === 'previous-view') {
+		else if (action === 'previous-view') {
 
 			this.fpdInstance.selectView(this.fpdInstance.currentViewIndex - 1);
 
 		}
-		else if(action === 'next-view') {
+		else if (action === 'next-view') {
 
 			this.fpdInstance.selectView(this.fpdInstance.currentViewIndex + 1);
 
 		}
-		else if(action === 'guided-tour' && this.fpdInstance.guidedTour) {
+		else if (action === 'guided-tour' && this.fpdInstance.guidedTour) {
 
 			this.fpdInstance.guidedTour.start();
 
 		}
 
-        /**
-         * Gets fired when an element is added.
-         *
-         * @event FancyProductDesigner#actionClick
-         * @param {Event} event
-         * @param {fabric.Object} element
-         */
-        this.dispatchEvent(
-            new CustomEvent('actionClick', {
-                detail: {
-                    action: action
-                }
-            })
-        );
+		/**
+		 * Gets fired when an element is added.
+		 *
+		 * @event FancyProductDesigner#actionClick
+		 * @param {Event} event
+		 * @param {fabric.Object} element
+		 */
+		this.dispatchEvent(
+			new CustomEvent('actionClick', {
+				detail: {
+					action: action
+				}
+			})
+		);
 
 	}
 
 	//download png, jpeg or pdf
-	downloadFile(type, onlyCurrentView=false) {
+	downloadFile(type, onlyCurrentView = false) {
 
-		if(!this.fpdInstance.currentViewInstance) { return; }
+		if (!this.fpdInstance.currentViewInstance) { return; }
 
 		const downloadFilename = this.fpdInstance.mainOptions.downloadFilename;
 
-		if(type === 'jpeg' || type === 'png') {
+		if (type === 'jpeg' || type === 'png') {
 
 			var a = document.createElement('a'),
 				bgColor = type === 'jpeg' ? '#fff' : 'transparent';
 
-			if(onlyCurrentView) {
+			if (onlyCurrentView) {
 
 				this.fpdInstance.currentViewInstance.toDataURL((dataURL) => {
 
-					download(dataURL, downloadFilename+'.'+type, 'image/'+type);
+					download(dataURL, downloadFilename + '.' + type, 'image/' + type);
 
-				}, {format: type, backgroundColor: bgColor, watermarkImg:  this.fpdInstance.watermarkImg});
+				}, { format: type, backgroundColor: bgColor, watermarkImg: this.fpdInstance.watermarkImg });
 
 			}
 			else {
 
 				this.fpdInstance.getProductDataURL((dataURL) => {
 
-					download(dataURL, downloadFilename+'.'+type, 'image/'+type);
+					download(dataURL, downloadFilename + '.' + type, 'image/' + type);
 
-				}, {format: type, backgroundColor: bgColor});
+				}, { format: type, backgroundColor: bgColor });
 
 			}
 
 		}
-		else if(type === 'svg') {
+		else if (type === 'svg') {
 
 			download(
-				this.fpdInstance.currentViewInstance.toSVG({suppressPreamble: false, watermarkImg: this.fpdInstance.watermarkImg}),
-				'Product_'+this.fpdInstance.currentViewIndex+'.svg',
+				this.fpdInstance.currentViewInstance.toSVG({ suppressPreamble: false, watermarkImg: this.fpdInstance.watermarkImg }),
+				'Product_' + this.fpdInstance.currentViewIndex + '.svg',
 				'image/svg+xml'
 			);
 
@@ -442,35 +501,35 @@ export default class ActionsBar extends EventTarget {
 				const _createPDF = (dataURLs) => {
 
 					dataURLs = typeof dataURLs === 'string' ? [dataURLs] : dataURLs;
-	
+
 					let doc;
-					for(let i=0; i < dataURLs.length; ++i) {
-						
+					for (let i = 0; i < dataURLs.length; ++i) {
+
 						const index = onlyCurrentView ? this.fpdInstance.currentViewIndex : i;
 						let viewWidth = this.fpdInstance.viewInstances[index].options.stageWidth,
 							viewHeight = this.fpdInstance.viewInstances[index].options.stageHeight,
-							orien = viewWidth > viewHeight ? 'l' : 'p';						
-	
-						if(i != 0) { //non-first pages
+							orien = viewWidth > viewHeight ? 'l' : 'p';
+
+						if (i != 0) { //non-first pages
 							doc.addPage([viewWidth, viewHeight], orien);
 						}
 						else { //first page
-							doc = new jspdf.jsPDF({orientation: orien, unit: 'px', format: [viewWidth, viewHeight]})
+							doc = new jspdf.jsPDF({ orientation: orien, unit: 'px', format: [viewWidth, viewHeight] })
 						}
-	
+
 						doc.addImage(dataURLs[i], 'PNG', 0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight());
-	
+
 					}
-	
-					doc.save(downloadFilename+'.pdf');
-	
+
+					doc.save(downloadFilename + '.pdf');
+
 				};
-				
-				if(jspdf)
-					onlyCurrentView ? 
-						this.fpdInstance.currentViewInstance.toDataURL(_createPDF, 'transparent', {format: 'png'}, this.fpdInstance.watermarkImg) 
-					: 
-						this.fpdInstance.getViewsDataURL(_createPDF, 'transparent', {format: 'png'});
+
+				if (jspdf)
+					onlyCurrentView ?
+						this.fpdInstance.currentViewInstance.toDataURL(_createPDF, 'transparent', { format: 'png' }, this.fpdInstance.watermarkImg)
+						:
+						this.fpdInstance.getViewsDataURL(_createPDF, 'transparent', { format: 'png' });
 
 			})
 
@@ -482,46 +541,48 @@ export default class ActionsBar extends EventTarget {
 
 		//uncheck all switches
 		const switchElems = this.container.querySelectorAll('.fpd-actions-wrapper .fpd-switch');
-		if(switchElems) {
+		if (switchElems) {
 
 			switchElems.forEach(switchElem => {
 				switchElem.checked = false;
-				
+
 			});
 
 		}
 
 		//remove and reset zoom
 		const zoomWrapper = this.fpdInstance.mainWrapper.container.querySelector('.fpd-zoom-wrapper');
-		if(zoomWrapper)
+		if (zoomWrapper)
 			zoomWrapper.remove();
 
-		if(this.fpdInstance.currentViewInstance)
+		if (this.fpdInstance.currentViewInstance)
 			this.fpdInstance.currentViewInstance.fabricCanvas.setResZoom(1);
 
 	}
 
-    setup(actions={}) {
+	setup(actions = {}) {
 
-        this.currentActions = actions;
+		this.currentActions = actions;
 
-        if(typeof actions === 'object') {
-                        
-            this.container.querySelectorAll('.fpd-actions-wrapper').forEach(wrapper => {
+		if (typeof actions === 'object') {
 
-                wrapper.innerHTML = '';
+			this.container.querySelectorAll('.fpd-actions-wrapper').forEach(wrapper => {
 
-            })
+				wrapper.innerHTML = '';
 
-            for(const pos in actions) {
+			})
 
-                this.#setPosActions(pos, actions[pos])
-                
-            }
+			for (const pos in actions) {
 
-        }
+				this.#setPosActions(pos, actions[pos])
 
-    }
+			}
+
+		}
+
+		this.fpdInstance.translator.translateArea(this.container);
+
+	}
 
 }
 

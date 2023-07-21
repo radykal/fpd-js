@@ -18,7 +18,8 @@ import {
     isEmpty,
     popupBlockerAlert,
     localStorageAvailable,
-    formatPrice
+    formatPrice,
+    fireEvent
 } from '/src/helpers/utils';
 import { getJSON, postJSON } from '/src/helpers/request';
 import { toggleElemClasses } from '../helpers/utils.js';
@@ -36,6 +37,7 @@ import {
  */
 export default class FancyProductDesigner extends EventTarget {
     
+    static version = '6.0.0';
     static forbiddenTextChars = /<|>/g;
     static proxyFileServer = '';
     static uploadsToServer = true;
@@ -337,7 +339,7 @@ export default class FancyProductDesigner extends EventTarget {
         }
         
         this.translator = new Translator();
-        this.translator.loadLangJSON(this.mainOptions.langJson, this.#langLoaded.bind(this));
+        this.translator.loadLangJSON(this.mainOptions.langJSON, this.#langLoaded.bind(this));
                       
     }
     
@@ -368,9 +370,8 @@ export default class FancyProductDesigner extends EventTarget {
          * @event ready
          * @param {CustomEvent} event
          */
-        this.dispatchEvent(
-            new CustomEvent('ready')
-        );
+        fireEvent(this, 'ready', {
+        })
         
         if(this.mainOptions.productsJSON) {
         
@@ -820,9 +821,8 @@ export default class FancyProductDesigner extends EventTarget {
          * @event productsSet
          * @param {CustomEvent} event
          */
-        this.dispatchEvent(
-            new CustomEvent('productsSet')
-        );
+        fireEvent(this, 'productsSet', {
+        })
         
     }
     
@@ -842,9 +842,8 @@ export default class FancyProductDesigner extends EventTarget {
          * @event designsSet
          * @param {CustomEvent} event
          */
-        this.dispatchEvent(
-            new CustomEvent('designsSet')
-        );
+        fireEvent(this, 'designsSet', {
+        })
 
     };
     
@@ -884,15 +883,11 @@ export default class FancyProductDesigner extends EventTarget {
          * @param {String} event.detail.category - The category title.
          * @param {Number} event.detail.catIndex - The index of the category.
          */
-        this.dispatchEvent(
-            new CustomEvent('productAdd', {
-                detail: {
-                    views: views,
-                    category: category,
-                    catIndex: catIndex
-                }
-            })
-        );
+        fireEvent(this, 'productAdd', {
+            views: views,
+            category: category,
+            catIndex: catIndex
+        })
         
     }
     
@@ -947,13 +942,9 @@ export default class FancyProductDesigner extends EventTarget {
          * @param {CustomEvent} event
          * @param {Object} event.detail.product - An object containing the product (views).
          */
-        this.dispatchEvent(
-            new CustomEvent('productSelect', {
-                detail: {
-                    product: views
-                }
-            })
-        );
+        fireEvent(this, 'productSelect', {
+            product: views
+        })
         
         this.toggleSpinner(true);
         
@@ -1060,13 +1051,9 @@ export default class FancyProductDesigner extends EventTarget {
                  * @param {Event} event
                  * @param {fabric.Object} element
                  */
-                this.dispatchEvent(
-                    new CustomEvent('beforeElementAdd', {
-                        detail: {
-                            element: opts
-                        }
-                    })
-                );
+                fireEvent(this, 'beforeElementAdd', {
+                    element: opts
+                })
                 
             },
             'elementAdd': ({element}) => {
@@ -1165,21 +1152,13 @@ export default class FancyProductDesigner extends EventTarget {
                  * @param {Event} event
                  * @param {fabric.Object} element
                  */
-                this.dispatchEvent(
-                    new CustomEvent('elementAdd', {
-                        detail: {
-                            element: element
-                        }
-                    })
-                );
-                
-                this.dispatchEvent(
-                    new CustomEvent('viewCanvasUpdate', {
-                        detail: {
-                            viewInstance: viewInstance
-                        }
-                    })
-                );
+                fireEvent(this, 'elementAdd', {
+                    element: element
+                })
+
+                fireEvent(this, 'viewCanvasUpdate', {
+                    viewInstance: viewInstance
+                })
                 
             },
             'elementRemove': ({element}) => {
@@ -1200,21 +1179,13 @@ export default class FancyProductDesigner extends EventTarget {
                  * @param {Event} event
                  * @param {fabric.Object} element - The fabric object that has been removed.
                  */
-                this.dispatchEvent(
-                    new CustomEvent('elementRemove', {
-                        detail: {
-                            element: element
-                        }
-                    })
-                );
+                fireEvent(this, 'elementRemove', {
+                    element: element
+                })
 
-                this.dispatchEvent(
-                    new CustomEvent('viewCanvasUpdate', {
-                        detail: {
-                            viewInstance: viewInstance
-                        }
-                    })
-                );
+                fireEvent(this, 'viewCanvasUpdate', {
+                    viewInstance: viewInstance
+                })
                 
 
             },
@@ -1258,9 +1229,8 @@ export default class FancyProductDesigner extends EventTarget {
                  * @event elementSelect
                  * @param {Event} event
                  */
-                this.dispatchEvent(
-                    new CustomEvent('elementSelect')
-                );
+                fireEvent(this, 'elementSelect', {
+                })
 
                 if(this.mainOptions.openTextInputOnSelect 
                     && element
@@ -1318,36 +1288,24 @@ export default class FancyProductDesigner extends EventTarget {
                  * @param {String} hex Hexadecimal color string.
                  * @param {Boolean} colorLinking Color of element is linked to other colors.
                  */                
-                this.dispatchEvent(
-                    new CustomEvent('elementFillChange', {
-                        detail: {
-                            element: element,
-                            colorLinking: colorLinking
-                        }
-                    })
-                );
+                fireEvent(this, 'elementFillChange', {
+                    element: element,
+                    colorLinking: colorLinking
+                })
 
-                this.dispatchEvent(
-                    new CustomEvent('viewCanvasUpdate', {
-                        detail: {
-                            viewInstance: viewInstance
-                        }
-                    })
-                );                
+                fireEvent(this, 'viewCanvasUpdate', {
+                    viewInstance: viewInstance
+                })            
             
             },
             'elementChange': ({element, type}) => {
 
                 this.#updateElementTooltip();
-                
-                this.dispatchEvent(
-                    new CustomEvent('elementChange', {
-                        detail: {
-                            type: type,
-                            element: element
-                        }
-                    })
-                )
+
+                fireEvent(this, 'elementChange', {
+                    type: type,
+                    element: element
+                })
 
             },
             'elementModify': ({element, options}) => {
@@ -1362,22 +1320,14 @@ export default class FancyProductDesigner extends EventTarget {
                  * @param {Object} event.detail.options - Ab object containing the modified options(parameters).
                  * @param {fabric.Object} event.detail.element - The modified element.
                  */
-                this.dispatchEvent(
-                    new CustomEvent('elementModify', {
-                        detail: {
-                            options: options,
-                            element: element
-                        }
-                    })
-                );
+                fireEvent(this, 'elementModify', {
+                    options: options,
+                    element: element
+                })
 
-                this.dispatchEvent(
-                    new CustomEvent('viewCanvasUpdate', {
-                        detail: {
-                            viewInstance: viewInstance
-                        }
-                    })
-                );
+                fireEvent(this, 'viewCanvasUpdate', {
+                    viewInstance: viewInstance
+                })
 
             },
             'text:changed': ({target}) => {
@@ -1442,9 +1392,8 @@ export default class FancyProductDesigner extends EventTarget {
                     onSuccess: (data) => {
     
                         this.currentLayouts = data;
-                        this.dispatchEvent(
-                            new CustomEvent('layoutsSet')
-                        );
+                        fireEvent(this, 'layoutsSet', {
+                        })
     
                     },
                     onError: () => {
@@ -1456,9 +1405,8 @@ export default class FancyProductDesigner extends EventTarget {
             else if(Array.isArray(productLayouts)) {
 
                 this.currentLayouts = productLayouts;
-                this.dispatchEvent(
-                    new CustomEvent('layoutsSet')
-                );
+                fireEvent(this, 'layoutsSet', {
+                })
 
             }
         
@@ -1468,15 +1416,19 @@ export default class FancyProductDesigner extends EventTarget {
              * @event productCreate
              * @param {Event} event
              */
-            this.dispatchEvent(
-                new CustomEvent('productCreate')
-            );
+            fireEvent(this, 'productCreate')
     
         }
     
     }
 
-    #historyAction(type) {        
+    #historyAction(type) {
+        
+        if(['undo', 'redo'].includes(type)) {
+
+            this.currentViewInstance.fabricCanvas._renderPrintingBox();
+
+        }
 
         /**
          * Gets fired as soon as any action for canvas history is executed.
@@ -1484,13 +1436,7 @@ export default class FancyProductDesigner extends EventTarget {
          * @event historyAction
          * @param {Event} event
          */
-        this.dispatchEvent(
-            new CustomEvent('historyAction', {
-                detail: {
-                    type: type
-                }
-            })
-        );
+        fireEvent(this, 'historyAction', {type: type})
 
         this.#toggleUndoRedoBtns();
 
@@ -1541,7 +1487,8 @@ export default class FancyProductDesigner extends EventTarget {
         if(selectElement) {
 
             setTimeout(() => {
-                this.currentViewInstance.fabricCanvas.setActiveObject(selectElement);
+                this.currentViewInstance.fabricCanvas.setActiveObject(selectElement)
+                .renderAll();
             }, 500);
 
         }
@@ -1584,13 +1531,7 @@ export default class FancyProductDesigner extends EventTarget {
          * @param {Event} event
          * @param {FancyProductDesignerView} viewInstance
          */
-        this.dispatchEvent(
-            new CustomEvent('viewCreate', {
-                detail: {
-                    viewInstance: viewInstance
-                }
-            })
-        );
+        fireEvent(this, 'viewCreate', {viewInstance: viewInstance})
                 
         viewInstance.fabricCanvas.onHistory();
         viewInstance.fabricCanvas.clearHistory();
@@ -1599,13 +1540,15 @@ export default class FancyProductDesigner extends EventTarget {
 
     #updateElementTooltip() {
 
+        if(!this.mainTooltip) return;
+
 		const element = this.currentElement;
         
 		if(this.productCreated && element && !element.uploadZone && !element.__editorMode) {
-
+            
             if(element.isOut && element.boundingBoxMode === 'inside') {
-
-                const label = this.translator.getTranslation('misc', 'out_of_bounding_box');
+                
+                const label = this.translator.getTranslation('misc', 'out_of_bounding_box', 'Move element inside the boundary!');
                 this.mainTooltip.innerHTML = label;
                 this.mainTooltip.classList.add('fpd-show');
 
@@ -1657,16 +1600,12 @@ export default class FancyProductDesigner extends EventTarget {
 
                             fabricObj.set('text', element.text);
 
-                            this.dispatchEvent(
-                                new CustomEvent('textLinkApply', {
-                                    detail: {
-                                        element: fabricObj,
-                                        options: {
-                                            text: element.text
-                                        }
-                                    }
-                                })
-                            );
+                            fireEvent(this, 'textLinkApply', {
+                                element: fabricObj,
+                                options: {
+                                    text: element.text
+                                }
+                            })
                         }
                             
 
@@ -1676,16 +1615,12 @@ export default class FancyProductDesigner extends EventTarget {
                         linkedPropKeys.forEach(propKey => {
                             fabricObj.set(propKey, element[propKey]);
                             
-                            this.dispatchEvent(
-                                new CustomEvent('textLinkApply', {
-                                    detail: {
-                                        element: fabricObj,
-                                        options: {
-                                            [propKey]: element[propKey]
-                                        }
-                                    }
-                                })
-                            );
+                            fireEvent(this, 'textLinkApply', {
+                                element: fabricObj,
+                                options: {
+                                    [propKey]: element[propKey]
+                                }
+                            })
                         })
                         
                         viewInst.fabricCanvas.renderAll();
@@ -1713,6 +1648,8 @@ export default class FancyProductDesigner extends EventTarget {
 	}
     
     toggleSpinner(toggle=true, msg='') {
+
+        if(!this.mainLoader) return false;
         
         this.mainLoader.querySelector('.fpd-loader-text').innerText = msg;
         this.mainLoader.classList.toggle('fpd-hidden', !toggle);
@@ -1794,9 +1731,7 @@ export default class FancyProductDesigner extends EventTarget {
          * @event viewSelect
          * @param {Event} event
          */
-        this.dispatchEvent(
-            new CustomEvent('viewSelect')
-        );
+        fireEvent(this, 'viewSelect')
         
     }
     
@@ -1931,14 +1866,9 @@ export default class FancyProductDesigner extends EventTarget {
          * @event clear
          * @param {Event} event
          */
-        this.dispatchEvent(
-            new CustomEvent('clear')
-        );
+        fireEvent(this, 'clear')
+        fireEvent(this, 'priceChange')
         
-        this.dispatchEvent(
-            new CustomEvent('priceChange')
-        );
-            
     };
     
     /**
@@ -2004,7 +1934,7 @@ export default class FancyProductDesigner extends EventTarget {
 
             let imageParams = deepMerge(currentCustomImageParameters, fixedParams);
             imageParams = deepMerge(imageParams, options);
-
+            
             this.viewInstances[viewIndex].fabricCanvas.addElement(
     			'image',
     			source,
@@ -2056,7 +1986,7 @@ export default class FancyProductDesigner extends EventTarget {
         if(!this.currentViewInstance) return;
         viewIndex = viewIndex === undefined ? this.currentViewIndex : viewIndex;
                 
-        //download remote image to local server (FB, Instagram, Pixabay)        
+        //download remote image to local server (FB, Instagram, Pixabay)                
         if(FancyProductDesigner.uploadsToServer && isRemoteImage) {
     
             this._downloadRemoteImage(
@@ -2068,8 +1998,8 @@ export default class FancyProductDesigner extends EventTarget {
         }
         //add data uri or local image to canvas
         else {
-    
-            this.loadingCustomImage = true;
+                        
+            this.loadingCustomImage = true;            
             this.addCustomImage(
                 source,
                 title ,
@@ -2113,7 +2043,7 @@ export default class FancyProductDesigner extends EventTarget {
             url: this.mainOptions.fileServerURL,
             body: formData,
             onSuccess: (data) => {
-                
+                                
                 if(data && data.image_src) {
                     
                     this.addCustomImage(
@@ -2204,7 +2134,7 @@ export default class FancyProductDesigner extends EventTarget {
 			jsMethod = this.mainOptions.customizationRequiredRule == 'all' ? 'every' : 'some';
 
 		customizationChecker = this.viewInstances[jsMethod]((viewInst) => {
-			return viewInst.isCustomized;
+			return viewInst.fabricCanvas.isCustomized;
 		})
 
 		if(customizationRequired && !customizationChecker) {
@@ -2239,7 +2169,7 @@ export default class FancyProductDesigner extends EventTarget {
 		}
 
 		//add views
-        this.viewInstances.forEach(viewInst => {
+        this.viewInstances.forEach((viewInst, i) => {
 
             const viewObj = {
 				title: viewInst.title,
@@ -2249,8 +2179,7 @@ export default class FancyProductDesigner extends EventTarget {
 				names_numbers: viewInst.names_numbers,
 				mask: viewInst.mask,
 				locked: viewInst.locked
-			};            
-            
+			};                        
 			if(i == 0 && this.productViews[0].hasOwnProperty('productTitle')) {
 				viewObj.productTitle = this.productViews[0].productTitle;
 			}
@@ -2591,13 +2520,9 @@ export default class FancyProductDesigner extends EventTarget {
 		 * @event viewRemove
 		 * @param {Event} event
 		 */        
-        this.dispatchEvent(
-            new CustomEvent('viewRemove', {
-                detail: {
-                    viewIndex: viewIndex
-                }
-            })
-        );
+        fireEvent(this, 'viewRemove', {
+            viewIndex: viewIndex
+        })
 
 		this.calculatePrice();
 
@@ -2656,9 +2581,8 @@ export default class FancyProductDesigner extends EventTarget {
 		 * @event getOrder
 		 * @param {Event} event
 		 */        
-        this.dispatchEvent(
-            new CustomEvent('getOrder')
-        );
+        fireEvent(this, 'getOrder', {
+        })
 
 		return this._order;
 
@@ -2746,9 +2670,8 @@ export default class FancyProductDesigner extends EventTarget {
          * @param {Event} event
          * @param {number} elementPrice - The price of the element.
          */
-        this.dispatchEvent(
-            new CustomEvent('priceChange')
-        );
+        fireEvent(this, 'priceChange', {
+        })
 
 		return this.currentPrice;
 
