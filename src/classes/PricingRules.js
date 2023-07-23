@@ -38,15 +38,27 @@ export default class PricingRules {
 			//loop all pricing groups
 			pricingRules.forEach((pGroup) => {
 
+				if(!pGroup.property || !pGroup.target) return;
+
 				var targetElems = [];
-				//get single element by title
+				
+				//get view instance as target
 				if(pGroup.property == 'canvasSize') {
+
 					targetElems = this.fpdInstance.viewInstances;
+
 				}
+				//get single element as target
 				else if(pGroup.target.elements !== undefined && pGroup.target.elements.charAt(0) === '#') {
-					targetElems.push(this.fpdInstance.getElementByTitle(pGroup.target.elements.replace('#', ''), pGroup.target.views));
+
+					targetElems.push(
+						this.fpdInstance.currentViewInstance.fabricCanvas.getElementByTitle(
+							pGroup.target.elements.replace('#', ''), 
+							pGroup.target.views
+						)
+					);
 				}
-				//get custom elements
+				//get custom elements as target
 				else if(pGroup.target.elements !== undefined && pGroup.target.elements.search('custom') !== -1) {
 
 					targetElems = this.fpdInstance.getCustomElements(
@@ -56,7 +68,7 @@ export default class PricingRules {
 					);
 
 				}
-				//get mutliple elements
+				//get mutliple elements as target
 				else {
 					
 					targetElems = this.fpdInstance.getElements(pGroup.target.views, pGroup.target.elements, false);

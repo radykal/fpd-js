@@ -334,4 +334,6 @@ export default class NamesNumbersModule extends EventTarget {
 	}
 
 }
+
+window.FPDNamesNumbersModule = NamesNumbersModule;
     

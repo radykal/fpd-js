@@ -334,7 +334,7 @@ export default class FancyProductDesigner extends EventTarget {
 
         if(Array.isArray(this.mainOptions.pricingRules) && this.mainOptions.pricingRules.length) {
 
-            new PricingRules(this);
+            this.pricingRulesInstance = new PricingRules(this);
 
         }
         

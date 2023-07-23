@@ -200,7 +200,7 @@ const addEvents = (elements, events = [], listener = () => { }, useCapture = fal
         }
         else if (Array.from(elements).length) {
 
-            if (elements) {
+            if (elements && elements.forEach) {
 
                 elements.forEach(elem => {
                     elem.addEventListener(eventType, listener, useCapture);
@@ -568,10 +568,6 @@ export { isBitmap }
  */
 const elementAvailableColors = (element, fpdInstance) => {
 
-    if (element.__editorMode) {
-        return ['#000'];
-    }
-
     var availableColors = [];
     if (element.type == 'group') {
 
@@ -590,6 +586,9 @@ const elementAvailableColors = (element, fpdInstance) => {
 
         }
 
+    }
+    else if (element.__editorMode) {
+        return ['#000'];
     }
     else if (element.colorLinkGroup && fpdInstance.colorLinkGroups[element.colorLinkGroup]) {
         availableColors = fpdInstance.colorLinkGroups[element.colorLinkGroup].colors;

@@ -591,6 +591,8 @@ export default class ElementToolbar extends EventTarget {
                             ['fpd-panel-visible']
                         )
 
+                        this.#updatePosition();
+
                     }                    
 
                 }
@@ -766,7 +768,7 @@ export default class ElementToolbar extends EventTarget {
         this.#reset();
         removeElemClasses(this.container, ['fpd-type-image'])
 
-		//COLOR: colors array, true=svg colorization                
+		//COLOR: colors array, true=svg colorization                        
 		if(element.hasColorSelection()) {
 
             let availableColors = elementAvailableColors(element, this.fpdInstance);
@@ -774,14 +776,14 @@ export default class ElementToolbar extends EventTarget {
             let colorPanel;
             if(element.type === 'group' && element.getObjects().length > 1) {
 
-                const paletterPerPath = Array.isArray(element.colors)  && element.colors.length > 1;
+                const paletterPerPath = (Array.isArray(element.colors) && element.colors.length > 1);
 
                 colorPanel = ColorPalette({
                     colors: availableColors, 
                     colorNames: this.fpdInstance.mainOptions.hexNames,
                     palette: element.colors,
                     subPalette: paletterPerPath,
-                    enablePicker: !paletterPerPath,
+                    enablePicker: this.fpdInstance.mainOptions.editorMode ? true : !paletterPerPath,
                     onChange: (hexColor, pathIndex) => {
                         
                         this.#updateGroupPath(element, pathIndex, hexColor);
@@ -1084,7 +1086,12 @@ export default class ElementToolbar extends EventTarget {
             //top
             const elemBoundingRect = fpdElem.getBoundingRect();            
             const lowestY = elemBoundingRect.top + elemBoundingRect.height + fpdElem.controls.mtr.offsetY + fpdElem.cornerSize;
-            const posTop = this.fpdInstance.productStage.getBoundingClientRect().top + lowestY;
+            let posTop = this.fpdInstance.productStage.getBoundingClientRect().top + lowestY;
+            
+            //stay in viewport            
+            if(posTop > window.innerHeight - this.container.clientHeight) {
+                posTop = window.innerHeight - this.container.clientHeight;
+            }
             
             //left
             const oCoords = fpdElem.oCoords;            

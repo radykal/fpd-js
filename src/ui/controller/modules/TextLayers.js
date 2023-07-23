@@ -281,3 +281,5 @@ export default class TextLayersModule extends EventTarget {
     }
 
 }
+
+window.FPDTextLayersModule = TextLayersModule;
