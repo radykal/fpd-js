@@ -52,6 +52,9 @@ export default class ModuleWrapper extends EventTarget {
                                 attrs: moduleAttrs
                             };     
                         }
+                        else {
+                            console.info('FPD: Dynamic Designs Module does not contain an icon for the main bar.');
+                        }
         
                     }
                     else { //dynamic designs module does not exist

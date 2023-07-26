@@ -315,7 +315,21 @@ fpd-main-bar {
     
 } 
 
-/* Top Bar - Off Canvas */
+/* Top Bar */
+
+.fpd-topbar {
+    
+    fpd-main-bar {
+
+
+        > .fpd-close {
+            display: none !important;
+        }
+    }
+
+}
+
+/* Off Canvas */
 
 .fpd-off-canvas {
 
@@ -460,8 +474,8 @@ fpd-main-bar {
     height: 450px;
     background: var(--fpd-primary-fg-color);
     position: fixed !important;
-    left: ~"calc(50vh - 175px)";
-    top: ~"calc(45vh - 200px)";
+    left: ~"calc(50% - 175px)";
+    top: ~"calc(45% - 200px)";
     min-width: 200px;
     min-height: 100px;
     z-index: 1000000;
@@ -540,7 +554,7 @@ fpd-main-bar {
     &.fpd-off-canvas {
 
         .fpd-close {
-            display: block !important;
+            display: block;
         }
 
     }

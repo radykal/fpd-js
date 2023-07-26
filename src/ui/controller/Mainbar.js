@@ -643,7 +643,7 @@ export default class Mainbar extends EventTarget {
             let navItemTitle = '';        
             const moduleWrapper = new ModuleWrapper(this.fpdInstance, this.contentElem, moduleKey);
             
-            if(!moduleWrapper.moduleInstance)
+            if(!moduleWrapper.moduleInstance || !moduleWrapper.configs)
                 return;
 
             this.currentModules.push(moduleKey);
@@ -657,7 +657,10 @@ export default class Mainbar extends EventTarget {
             
             //create nav icon
             let moduleIcon = document.createElement('span');
-            if(moduleWrapper.configs.icon.includes('.svg')) {
+            
+            if( typeof moduleWrapper.configs.icon == 'string' && 
+                moduleWrapper.configs.icon.includes('.svg')
+            ) {
                 
                 fetchText({
                     url: moduleWrapper.configs.icon,
@@ -671,8 +674,10 @@ export default class Mainbar extends EventTarget {
                 
             }
             else {
+
                 moduleIcon.classList.add('fpd-nav-icon');
                 moduleIcon.classList.add(moduleWrapper.configs.icon);
+                
             }
             
             navItemElem.append(moduleIcon);

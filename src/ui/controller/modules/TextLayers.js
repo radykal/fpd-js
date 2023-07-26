@@ -43,14 +43,18 @@ export default class TextLayersModule extends EventTarget {
 
                     if(rowElem) {
 
-                        if(options.fontSize)
-                        rowElem.querySelector('[data-control="fontSize"]').value = options.fontSize;
+                        const fontSizeInput = rowElem.querySelector('[data-control="fontSize"]');
+                        if(options.fontSize && fontSizeInput)
+                            fontSizeInput.value = options.fontSize;
 
-                        if(options.fontFamily)
-                            rowElem.querySelector('fpd-dropdown').setAttribute('value', options.fontFamily);
-                            
-                        if(options.text)
-                            rowElem.querySelector('.fpd-text-input').value =  options.text;
+                        const fontFamilyDropdown = rowElem.querySelector('fpd-dropdown');
+                        if(options.fontFamily && fontFamilyDropdown)
+                            fontFamilyDropdown.setAttribute('value', options.fontFamily);
+                        
+                        const textInput = rowElem.querySelector('.fpd-text-input');
+                        
+                        if(options.text && textInput)
+                            textInput.value =  options.text;
 
                     }
 
@@ -126,8 +130,8 @@ export default class TextLayersModule extends EventTarget {
         textWrapper.className = 'fpd-cell-full';
         rowElem.append(textWrapper);
 
-        let textInput;        
-        if(element.maxLines === 1) {
+        let textInput;                
+        if(element.maxLines == 1) {
 
             textInput = document.createElement('input');
             textInput.value = element.text;

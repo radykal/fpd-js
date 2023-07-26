@@ -963,15 +963,30 @@ export default class FancyProductDesigner extends EventTarget {
         this.fixedElements = this.getFixedElements();
     
         this.reset();
-    
-        if(mergeMainOptions) {
-    
-            views.forEach((view, i) => {
+
+        views.forEach((view, i) => {
+
+            if(mergeMainOptions) {
                 view.options = Options.merge(this.mainOptions, view.options);
-            });
-    
-        }
-    
+            }
+            
+            const relevantOptions = {};
+
+            if(isPlainObject(view.options)) {
+                FancyProductDesignerView.relevantOptions.forEach(key =>  {
+
+                    if(typeof view.options[key] !== 'undefined') {
+                        relevantOptions[key] = view.options[key];
+                    }
+                    
+                });
+            }
+            
+
+            view.options = relevantOptions;
+
+        });
+
         this.productViews = views;
     
         this.#totalProductElements = this.#productElementLoadingIndex = 0;
@@ -1971,6 +1986,10 @@ export default class FancyProductDesigner extends EventTarget {
             {_addToUZ: this.currentViewInstance.currentUploadZone},
             additionalOpts
         );
+
+        if(this.productCreated && this.mainOptions.hideDialogOnAdd && this.mainBar) {
+            this.mainBar.toggleContentDisplay(false);
+        }
                 
         this._addCanvasImage(
             item.dataset.source,
@@ -2078,7 +2097,11 @@ export default class FancyProductDesigner extends EventTarget {
         if(this.currentViewInstance.currentUploadZone) {
             params._addToUZ = this.currentViewInstance.currentUploadZone;
         }
-    
+        
+        if(this.productCreated && this.mainOptions.hideDialogOnAdd && this.mainBar) {
+            this.mainBar.toggleContentDisplay(false);
+        }
+
         this.currentViewInstance.fabricCanvas.addElement(
             'image', 
             source, 
@@ -2170,7 +2193,7 @@ export default class FancyProductDesigner extends EventTarget {
 
 		//add views
         this.viewInstances.forEach((viewInst, i) => {
-
+            
             const viewObj = {
 				title: viewInst.title,
 				thumbnail: viewInst.thumbnail,

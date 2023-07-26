@@ -40,6 +40,29 @@ export default class LayersModule extends EventTarget {
 
         addEvents(
             fpdInstance,
+            ['elementModify', 'textLinkApply'], 
+            (evt) => {
+                
+                if(fpdInstance.productCreated) {
+                    
+                    const {element, options} = evt.detail;
+                    const rowElem = this.listElem.querySelector('.fpd-list-row[id="'+element.id+'"]');
+
+                    if(rowElem) {
+                        
+                        const textInput = rowElem.querySelector('textarea');
+                        if(options.text && textInput)
+                            textInput.value =  options.text;
+
+                    }
+
+                }
+
+            }
+        )
+
+        addEvents(
+            fpdInstance,
             'elementFillChange', 
             (evt) => {
                 

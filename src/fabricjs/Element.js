@@ -14,6 +14,7 @@ fabric.Object.propertiesToInclude = [
     'borderColor', 'isEditable', 'hasUploadZone', 'cornerSize', 'source'];
 
 fabric.Object.prototype._limitModifyOpts = {};
+fabric.Object.prototype.__editorMode = false;
 
 fabric.Object.prototype.initialize = (function (originalFn) {
     return function (...args) {

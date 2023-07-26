@@ -919,9 +919,11 @@ export default class ElementToolbar extends EventTarget {
 
 		//EDIT TEXT
 		if(element.getType() === 'text' && (element.editable || element.__editorMode)) {
-
+            
 			this.#toggleNavItem('edit-text');
+            this.#toggleNavItem('text-size', element.resizable);
 			this.#toggleNavItem('font-family');
+            this.#toggleNavItem('text-format');
 
 			this.#togglePanelTab('color', 'stroke', true);
 			this.#togglePanelTab('color', 'shadow', true);
@@ -945,7 +947,7 @@ export default class ElementToolbar extends EventTarget {
 		if(element.advancedEditing && element.source && isBitmap(element.source)) {
 			this.#toggleNavItem('advanced-editing');
 		}
-
+        
         this.#togglePanelTool('text-size', 'text-line-spacing', !element.curved);
 		this.#toggleNavItem('reset');
 		this.#toggleNavItem('duplicate', element.copyable || element.__editorMode);

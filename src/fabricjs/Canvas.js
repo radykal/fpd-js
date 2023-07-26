@@ -1500,15 +1500,41 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 
     }
 
-    //needs to before setOptions
-    if (typeof parameters.text === 'string') {
-
-        let text = parameters.text;
-        text = text.replace(FancyProductDesigner.forbiddenTextChars, '');
-
-    }
-
     if (elemType === 'text') {
+
+        //needs to before setOptions
+        if (typeof parameters.text === 'string') {
+
+            let text = parameters.text;
+            text = text.replace(FancyProductDesigner.forbiddenTextChars, '');
+            
+            if(element.maxLength != 0 && text.length > element.maxLength) {
+				text = text.substr(0, element.maxLength);    
+                element.set('text', text);           
+			}
+
+			//check lines length
+			if(element.maxLines != 0) {
+                            
+				if(element.maxLines != 0 && text.split('\n').length > element.maxLines) {
+
+                    let textLines = text.split('\n').slice(0, element.maxLines);
+                    text = textLines.join('\n'); 
+                                                      
+                }
+
+			}
+            
+            if (element.textTransform === 'uppercase') {
+                text = text.toUpperCase()
+            }
+            else if (element.textTransform === 'lowercase') {
+                text = text.toLowerCase()
+            }
+            
+            parameters.text = text;
+
+        }
 
         if (parameters.hasOwnProperty('textDecoration')) {
             parameters.underline = parameters.textDecoration === 'underline';
@@ -1525,20 +1551,6 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
             parameters.fontSize = element.maxFontSize;
         }
 
-        if (parameters.text) {
-
-            let text = element.text;
-            if (element.textTransform === 'uppercase') {
-                text = text.toUpperCase()
-            }
-            else if (element.textTransform === 'lowercase') {
-                text = text.toLowerCase()
-            }
-
-            element.set('text', text);
-
-        }
-
         if (parameters.textTransform) {
 
             let text = element.text;
@@ -1549,7 +1561,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
                 text = text.toLowerCase()
             }
 
-            element.set('text', text);
+            parameters.text = text;
 
         }
 
