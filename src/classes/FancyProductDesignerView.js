@@ -141,7 +141,7 @@ export default class FancyProductDesignerView extends EventTarget {
         this.thumbnail = viewData.thumbnail;
         this.options = viewData.options;
         this.mask = viewData.mask;
-        
+        this.locked = viewData.locked !== undefined ? viewData.locked : this.options.optionalView;
         this.names_numbers = viewData.names_numbers ? viewData.names_numbers : null;
         
         fabric.Canvas.prototype.snapGridSize = this.options.snapGridSize;
@@ -193,10 +193,8 @@ export default class FancyProductDesignerView extends EventTarget {
     
             }
         });
-
-        if(viewData.options.optionalView) {
-            this.toggleLock(Boolean(viewData.locked));
-        }
+        
+        this.toggleLock(Boolean(this.locked));
 
         const _onTextChanged = (textElem) => {
 

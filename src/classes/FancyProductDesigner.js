@@ -37,7 +37,7 @@ import {
  */
 export default class FancyProductDesigner extends EventTarget {
     
-    static version = '6.0.0';
+    static version = '6.0.1';
     static forbiddenTextChars = /<|>/g;
     static proxyFileServer = '';
     static uploadsToServer = true;
