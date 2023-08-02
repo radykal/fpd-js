@@ -149,6 +149,8 @@ export default class ActionsBar extends EventTarget {
 			'resize',
 			(evt) => {
 
+				if(fpdInstance.inTextField) return;
+				
 				this.reset();
 
 			}

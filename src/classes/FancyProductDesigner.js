@@ -37,7 +37,7 @@ import {
  */
 export default class FancyProductDesigner extends EventTarget {
     
-    static version = '6.0.1';
+    static version = '6.0.2';
     static forbiddenTextChars = /<|>/g;
     static proxyFileServer = '';
     static uploadsToServer = true;
@@ -295,12 +295,12 @@ export default class FancyProductDesigner extends EventTarget {
     
     #totalProductElements = 0;
     #productElementLoadingIndex = 0;
-    #inTextField = false;
+    inTextField = false;
     _order = {};
     
     constructor(elem, opts={}) {
         
-        super();
+        super();        
 
         if(!elem) {
             console.log("No DOM element found for FPD.");  
@@ -519,7 +519,7 @@ export default class FancyProductDesigner extends EventTarget {
         window.addEventListener('resize', (evt) => {
 
             //fix for android browser, because keyboard trigger resize event
-            if(window.innerWidth === currentWindowWidth || this.#inTextField) {
+            if(window.innerWidth === currentWindowWidth || this.inTextField) {
                 return;
             }
             
@@ -589,7 +589,7 @@ export default class FancyProductDesigner extends EventTarget {
             (evt) => {
                 
                 if(['TEXTAREA', 'INPUT'].includes(evt.target.nodeName)) {
-                    this.#inTextField = evt.type == 'focusin'; 
+                    this.inTextField = evt.type == 'focusin'; 
                 }                
 
             },

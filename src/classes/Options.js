@@ -957,6 +957,16 @@ export default class Options {
         */
         dynamicDesigns: {},
 		/**
+        * Add custom text as textbox (the max. width can be adjusted by side controls).
+        *
+        * @property customTextAsTextbox
+        * @memberof Options.defaults
+        * @type {Boolean}
+        * @default true
+        * @version 6.0.2
+        */
+        customTextAsTextbox: true,
+		/**
 		* An object containing the default element parameters in addition to the default Fabric Object properties. See Options.defaults.elementParameters.
 		*
 		* @property elementParameters

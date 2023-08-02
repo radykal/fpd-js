@@ -928,7 +928,7 @@ export default class ElementToolbar extends EventTarget {
 			this.#togglePanelTab('color', 'stroke', true);
 			this.#togglePanelTab('color', 'shadow', true);
 
-			if(element.curvable && !element.textBox) {
+			if(element.curvable) {
 				this.#toggleNavItem('curved-text');
                 this.#toggleCurvedOptions(element);
 			}

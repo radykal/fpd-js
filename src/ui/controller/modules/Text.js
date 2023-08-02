@@ -15,7 +15,7 @@ export default class TextsModule extends EventTarget {
         this.fpdInstance = fpdInstance;
         
         this.container = document.createElement("fpd-module-text");
-        wrapper.append(this.container);
+        wrapper.append(this.container);        
         
         this.container.querySelector('.fpd-btn')
         .addEventListener('click', (evt) => {
@@ -30,7 +30,7 @@ export default class TextsModule extends EventTarget {
                 let textParams = deepMerge(
                     currentViewOptions.customTextParameters, 
                     {
-                        textBox: true,
+                        textBox: Boolean(this.fpdInstance.mainOptions.customTextAsTextbox),
                         resizable: true,
                         isCustom: true, 
                         _addToUZ: fpdInstance.currentViewInstance.currentUploadZone,
@@ -145,7 +145,7 @@ export default class TextsModule extends EventTarget {
                                                 
                         let templateProps = {...item.properties};                        
                         templateProps.isCustom = true;
-                        templateProps.textBox = true;
+                        templateProps.textBox = Boolean(this.fpdInstance.mainOptions.customTextAsTextbox);
                         templateProps.resizable = true;
                         templateProps._addToUZ = fpdInstance.currentViewInstance.currentUploadZone;
                         templateProps._calcWidth = true;

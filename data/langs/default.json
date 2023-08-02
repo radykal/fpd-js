@@ -65,7 +65,8 @@
 		"next_view": "Next View",
 		"guided_tour": "Start Guided Tour",
 		"menu_file": "File",
-		"menu_more": "More"
+		"menu_more": "More",
+		"modal_done": "Done"
 	},
 	"modules": {
 		"products": "Products",
@@ -118,7 +119,6 @@
 		"product_saved": "Product Saved!",
 		"loading_image": "Loading Image...",
 		"uploaded_image_size_alert" : "Sorry! But the uploaded image size does not conform our indication of size.<br />Minimum Width: %minW pixels<br />Minimum Height: %minH pixels<br />Maximum Width: %maxW pixels<br />Maximum Height: %maxH pixels",
-		"modal_done": "Done",
 		"minimum_dpi_info": "The JPEG image does not have the required DPI of %dpi.",
 		"maximum_size_info": "The image %filename exceeds the maximum file size of %mbMB.",
 		"customization_required_info": "You need to customize the default design!",

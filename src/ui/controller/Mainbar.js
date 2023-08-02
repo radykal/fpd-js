@@ -47,7 +47,7 @@ export default class Mainbar extends EventTarget {
         const fpdContainer = fpdInstance.container;
                 
         this.container = document.createElement("fpd-main-bar");
-        if(fpdInstance.mainOptions.mainBarContainer && fpdInstance.mainOptions.modalMode === false) {
+        if(fpdInstance.mainOptions.mainBarContainer && !fpdInstance.mainOptions.modalMode) {
 
             const mainBarWrapper = document.querySelector(fpdInstance.mainOptions.mainBarContainer);
             if(mainBarWrapper) {
@@ -70,7 +70,6 @@ export default class Mainbar extends EventTarget {
                 mainBarWrapper.append(this.container);
             }
             else {
-                console.log("DOM element for mainbar container not found.");
                 fpdContainer.append(this.container);
             }
 
@@ -78,8 +77,6 @@ export default class Mainbar extends EventTarget {
         else {
             fpdContainer.append(this.container);
         }
-
-        
         
         this.contentElem = this.container.querySelector('.fpd-module-content');
         this.navElem = this.container.querySelector('.fpd-navigation');

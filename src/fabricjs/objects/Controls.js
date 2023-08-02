@@ -16,7 +16,10 @@ const renderIcon = (ctx, left, top, styleOverride, fabricObject, iconString, off
     ctx.rotate(fabric.util.degreesToRadians(fabricObject.angle));
     ctx.fillStyle = styleOverride.cornerColor || fabricObject.cornerColor;
     ctx.beginPath();
-    ctx.roundRect(-xSizeBy2+offsetX, -ySizeBy2+offsetY, xSize, ySize, borderRadius);
+    if(ctx.roundRect)
+        ctx.roundRect(-xSizeBy2+offsetX, -ySizeBy2+offsetY, xSize, ySize, borderRadius);
+    else
+        ctx.rect(-xSizeBy2+offsetX, -ySizeBy2+offsetY, xSize, ySize);
     ctx.filter = 'drop-shadow(0px 0px 2px rgba(0,0,0, 0.3))';
     ctx.fill();
     ctx.font = iconSize + 'px FontFPD';
@@ -45,7 +48,10 @@ const renderRectY = (ctx, left, top, styleOverride, fabricObject) => {
     ctx.rotate(fabric.util.degreesToRadians(fabricObject.angle));
     ctx.fillStyle = styleOverride.cornerColor || fabricObject.cornerColor;
     ctx.beginPath();
-    ctx.roundRect(-xSizeBy2, -ySizeBy2, xSize, ySize, borderRadius);
+    if(ctx.roundRect)
+        ctx.roundRect(-xSizeBy2, -ySizeBy2, xSize, ySize, borderRadius);
+    else
+        ctx.rect(-xSizeBy2, -ySizeBy2, xSize, ySize);
     ctx.filter = 'drop-shadow(0px 0px 2px rgba(0,0,0, 0.3))';
     ctx.fill();
     ctx.restore();
@@ -68,7 +74,10 @@ const renderRectX = (ctx, left, top, styleOverride, fabricObject) => {
     ctx.rotate(fabric.util.degreesToRadians(fabricObject.angle));
     ctx.fillStyle = styleOverride.cornerColor || fabricObject.cornerColor;
     ctx.beginPath();
-    ctx.roundRect(-xSizeBy2, -ySizeBy2, xSize, ySize, borderRadius);
+    if(ctx.roundRect)
+        ctx.roundRect(-xSizeBy2, -ySizeBy2, xSize, ySize, borderRadius);
+    else
+        ctx.rect(-xSizeBy2, -ySizeBy2, xSize, ySize);
     ctx.filter = 'drop-shadow(0px 0px 2px rgba(0,0,0, 0.3))';
     ctx.fill();
     ctx.restore();

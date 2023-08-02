@@ -11,7 +11,7 @@ import {
 fabric.Object.propertiesToInclude = [
     '_isInitial', 'lockMovementX', 'lockMovementY', 'lockRotation', 'lockScalingX', 'lockScalingY', 'lockScalingFlip', 'lockUniScaling',
     'resizeType', 'boundingBox', 'boundingBoxMode', 'selectable', 'evented', 'title', 'editable', 'cornerColor', 'cornerIconColor',
-    'borderColor', 'isEditable', 'hasUploadZone', 'cornerSize', 'source'];
+    'borderColor', 'isEditable', 'hasUploadZone', 'cornerSize', 'source', '_optionsSet'];
 
 fabric.Object.prototype._limitModifyOpts = {};
 fabric.Object.prototype.__editorMode = false;
@@ -66,8 +66,8 @@ fabric.Object.prototype._elementControls = function () {
         removeControl = Boolean(this.removable || this.__editorMode),
         resizeControl = Boolean((this.resizable || this.__editorMode) && !this.curved),
         rotateControl = Boolean(this.rotatable || this.__editorMode);
-
-    if (this.textBox)
+        
+    if (this.textBox && !this.curved)
         widthControls = true;
 
     if (this.canvas && this.canvas.viewOptions.cornerControlsStyle == 'basic') {
@@ -265,12 +265,12 @@ fabric.Object.prototype.changeColor = function (colorData, colorLinking = true) 
 
 fabric.Object.prototype.setPattern = function (patternUrl) {
 
-    if (FancyProductDesigner.proxyFileServer) {
-        patternUrl = FancyProductDesigner.proxyFileServer + patternUrl;
-    }
-
     if (patternUrl) {
 
+        if (FancyProductDesigner.proxyFileServer) {
+            patternUrl = FancyProductDesigner.proxyFileServer + patternUrl;
+        }
+        
         fabric.util.loadImage(patternUrl, (img) => {
 
             if (this.isSVG()) {
@@ -681,6 +681,7 @@ fabric.Object.prototype.getElementJSON = function (addPropertiesToInclude = fals
     propertyKeys.push('originParams');
     propertyKeys.push('originSource');
     propertyKeys.push('_printingBox');
+    propertyKeys.push('_optionsSet');
     propertyKeys = propertyKeys.sort();
 
 

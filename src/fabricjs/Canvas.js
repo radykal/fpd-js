@@ -1293,8 +1293,13 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 
     const elemType = element.getType();
 
-    //scale image into bounding box (cover or fit)    
-    if (elemType == 'image' && !element._isInitial && !element._addToUZ && element.scaleX === 1) {
+    //scale image into bounding box (cover or fit)        
+    if (elemType == 'image' 
+        && !element._isInitial 
+        && !element._optionsSet
+        && !element._addToUZ 
+        && element.scaleX === 1
+    ) {
 
         //only scale to bb when no scale value is set
         let scale = null;
@@ -1330,7 +1335,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
         else if (this.viewOptions.fitImagesInCanvas) {
 
             const iconTolerance = element.cornerSize * 3;
-
+            
             if ((element.width * element.scaleX) + iconTolerance > this.viewOptions.stageWidth
                 || (element.height * element.scaleY) + iconTolerance > this.viewOptions.stageHeight) {
 
@@ -1534,6 +1539,9 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
             
             parameters.text = text;
 
+            if(element.setCurvedTextPosition)
+                element.setCurvedTextPosition();
+
         }
 
         if (parameters.hasOwnProperty('textDecoration')) {
@@ -1671,21 +1679,38 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 
         if(parameters.curved) {
 
+            if(element.type == 'textbox') {
+
+                let textboxProps = element.getElementJSON();
+                delete textboxProps['width'];
+                this.addElement(
+                    'text',
+                    textboxProps.text,
+                    element.title,
+                    textboxProps
+                );
+
+                this.removeElement(element);
+                return;
+
+            }
+
             element.setCurvedTextPath();
                 
             if(element == this.getActiveObject()) {
                 element.path.visible = true;   
             }
-    
+        
+            
             //replace new lines in curved text
-            if(parameters.text) {
-                element.set('text', element.text.replace(/(?:\r\n|\r|\n)/g, ''));
-                element.setCurvedTextPosition();            
-            }   
+            element.set('text', element.text.replace(/[\r\n]+/g, ''));
+            element.setCurvedTextPosition(); 
 
         } 
         else {
+
             element.set('path', null);
+
         }    
 
     }
@@ -1750,6 +1775,8 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
         }, 200);
 
     }
+
+    element._optionsSet = true;
 
 }
 

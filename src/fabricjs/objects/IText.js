@@ -28,7 +28,7 @@ fabric.IText.prototype._ITextInit = function() {
                 this.exitEditing();
 
         },
-        'changed': () => {
+        'changed': () => {            
                              
             //max. lines
             if(this.maxLines != 0 && this.textLines.length > this.maxLines) {
@@ -67,8 +67,8 @@ fabric.IText.prototype.setCurvedTextPath = function() {
 
         const path = new fabric.Path(drawCirclePath(0, 0, this.curveRadius), {
             fill: 'transparent',
-            strokeWidth: 2,
-            stroke: 'rgba(0,0,0, 0.5)',
+            strokeWidth: 1,
+            stroke: 'rgba(0,0,0, 0.1)',
             visible: false,
         });
 
@@ -85,7 +85,7 @@ fabric.IText.prototype.setCurvedTextPosition = function() {
 
         this.pathSide = this.curveReverse ? 'left' : 'right';
         const offset = this.curveReverse ? (Math.PI * this.curveRadius * 2) * 0.25 : (Math.PI * this.curveRadius) / 2;
-        this.pathStartOffset = offset - (this.calcTextWidth() / 2);
+        this.pathStartOffset = offset - (this.calcTextWidth() / 2);        
         this.pathAlign = 'center';
 
     }
