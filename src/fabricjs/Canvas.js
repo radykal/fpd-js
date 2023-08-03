@@ -1640,7 +1640,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
     if (parameters.fill !== undefined || parameters.svgFill !== undefined) {
 
         const fill = parameters.svgFill !== undefined ? parameters.svgFill : parameters.fill;
-
+        
         element.changeColor(fill);
         element.pattern = undefined;
 

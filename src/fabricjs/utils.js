@@ -102,6 +102,12 @@ const changeBase64DPI = (dataURI, dpi=72) => {
 
 export { changeBase64DPI };
 
+const isHexColor = (hex) => {
+    return /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(hex);
+}
+
+export { isHexColor };
+
 if(window) {
 
     window.FPDFabricUtils = {

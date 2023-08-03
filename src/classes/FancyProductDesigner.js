@@ -37,7 +37,7 @@ import {
  */
 export default class FancyProductDesigner extends EventTarget {
     
-    static version = '6.0.2';
+    static version = '6.0.3';
     static forbiddenTextChars = /<|>/g;
     static proxyFileServer = '';
     static uploadsToServer = true;
@@ -2604,8 +2604,7 @@ export default class FancyProductDesigner extends EventTarget {
 		 * @event getOrder
 		 * @param {Event} event
 		 */        
-        fireEvent(this, 'getOrder', {
-        })
+        fireEvent(this, 'getOrder', {})
 
 		return this._order;
 

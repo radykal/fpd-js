@@ -98,10 +98,14 @@ export default class DesignsModule extends EventTarget {
         )
         
         //when adding a product after products are set with productsSetup()
+        let designsSet = false;
         addEvents(
             fpdInstance,
-            'designsSet',
+            'productCreate',
             (evt) => {
+                
+                if(designsSet) return;
+                designsSet = true;
 
                 const designs = fpdInstance.designs;
             

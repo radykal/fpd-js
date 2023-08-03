@@ -8,6 +8,10 @@ import {
     removeUrlParams
 } from '/src/helpers/utils';
 
+import {
+    isHexColor
+} from './utils.js';
+
 fabric.Object.propertiesToInclude = [
     '_isInitial', 'lockMovementX', 'lockMovementY', 'lockRotation', 'lockScalingX', 'lockScalingY', 'lockScalingFlip', 'lockUniScaling',
     'resizeType', 'boundingBox', 'boundingBoxMode', 'selectable', 'evented', 'title', 'editable', 'cornerColor', 'cornerIconColor',
@@ -188,11 +192,11 @@ fabric.Object.prototype.checkEditable = function (checkProps) {
 
 fabric.Object.prototype.changeColor = function (colorData, colorLinking = true) {
 
-    const colorizable = this.isColorizable();
-
-    //check if hex color has only 4 digits, if yes, append 3 more
-    if (typeof colorData === 'string')
-        colorData = tinycolor(colorData).toHexString();
+    const colorizable = this.isColorizable();    
+    
+    //check if hex color has only 4 digits, if yes, append 3 more    
+    if (typeof colorData === 'string' && isHexColor(colorData))
+        colorData = tinycolor(colorData).toHexString();    
 
     //text
     if (this.getType() === 'text') {
