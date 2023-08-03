@@ -112,7 +112,7 @@ fabric.Object.prototype.controls.tl.render = function(ctx, left, top, styleOverr
             top, 
             styleOverride, 
             fabricObject,
-            String.fromCharCode('0xe942'),
+            String.fromCharCode('0xe94d'),
             -8,
             -8
         );
