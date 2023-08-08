@@ -396,7 +396,7 @@ export default class FancyProductDesigner extends EventTarget {
         
         if(this.mainOptions.designsJSON) {
             
-            if(typeof this.mainOptions.productsJSON === 'object') {
+            if(typeof this.mainOptions.designsJSON === 'object') {
                 this.setupDesigns(this.mainOptions.designsJSON);
             }
             else {
