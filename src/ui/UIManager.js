@@ -6,10 +6,11 @@ import MainWrapper from './controller/MainWrapper.js';
 import ActionsBar from './controller/ActionsBar.js';
 import ViewsNav from './controller/ViewsNav.js';
 import ViewsGrid from './controller/ViewsGrid.js';
-import ElementToolbar from './controller/ElementToolbar';
-import GuidedTour from '/src/ui/controller/addons/GuidedTour';
-import BulkVariations from '/src/ui/controller/addons/BulkVariations';
-import ColorSelection from '/src/ui/controller/addons/ColorSelection';
+import ElementToolbar from './controller/ElementToolbar.js';
+import GuidedTour from './controller/addons/GuidedTour.js';
+import BulkVariations from './controller/addons/BulkVariations.js';
+import ColorSelection from './controller/addons/ColorSelection.js';
+import ViewThumbnails from './controller/addons/ViewThumbnails.js';
 
 import { 
     addEvents,
@@ -158,6 +159,9 @@ export default class UIManager extends EventTarget {
         //addons
         this.fpdInstance.bulkVariations = new BulkVariations(this.fpdInstance);
         new ColorSelection(this.fpdInstance);
+
+        //view thumbnails
+        this.fpdInstance.viewThumbnails = new ViewThumbnails(this.fpdInstance);
 
         //guided tour
         this.fpdInstance.guidedTour = new GuidedTour(this.fpdInstance);

@@ -1,9 +1,9 @@
-import ColorPicker from './ColorPicker';
+import ColorPicker from './ColorPicker.js';
 import { 
     addEvents,
     addElemClasses,
     removeElemClasses
-} from '/src/helpers/utils';
+} from '../../../helpers/utils.js';
 
 const ColorPalette = (props) => {
     

@@ -1,5 +1,5 @@
-import '/src/fabricjs/Canvas';
-import Modal from '/src/ui/view/comps/Modal';
+import '../fabricjs/Canvas.js';
+import Modal from '../ui/view/comps/Modal.js';
 
 import { 
     deepMerge,
@@ -169,6 +169,9 @@ export default class FancyProductDesignerView extends EventTarget {
         //create canvas tag for fabricjs
         this.canvasElem = document.createElement('canvas');
         container.append(this.canvasElem);
+
+        fabric.Canvas.prototype.forbiddenTextChars = FancyProductDesigner.forbiddenTextChars;
+        fabric.Canvas.prototype.proxyFileServer = FancyProductDesigner.proxyFileServer;
         
         this.fabricCanvas = new fabric.Canvas(this.canvasElem, fabricCanvasOptions);
         this.fabricCanvas.viewOptions = this.options;

@@ -1,6 +1,6 @@
 import { 
     addEvents
-} from '/src/helpers/utils';
+} from '../../../helpers/utils.js';
 
 const Patterns = (props) => {
     

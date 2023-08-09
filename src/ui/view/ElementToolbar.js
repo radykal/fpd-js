@@ -1,4 +1,4 @@
-import html from '/src/ui/html/element-toolbar.html';
+import html from '../html/element-toolbar.html';
 
 class ElementToolbar extends HTMLElement {
     

@@ -1,4 +1,4 @@
-import html from '/src/ui/html/actions-bar.html';
+import html from '../html/actions-bar.html';
 
 class ActionsBar extends HTMLElement {
     

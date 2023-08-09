@@ -1,10 +1,10 @@
 import Options from './Options.js';
-import PricingRules from './PricingRules';
+import PricingRules from './PricingRules.js';
 import FancyProductDesignerView from './FancyProductDesignerView.js';
-import Translator from '/src/ui/Translator.js';
-import UIManager from '/src/ui/UIManager';
-import Snackbar from '/src/ui/view/comps/Snackbar';
-import EditorBox from '/src/ui/controller/EditorBox';
+import Translator from '../ui/Translator.js';
+import UIManager from '../ui/UIManager.js';
+import Snackbar from '../ui/view/comps/Snackbar.js';
+import EditorBox from '../ui/controller/EditorBox.js';
 
 import { 
     addEvents,
@@ -37,7 +37,7 @@ import {
  */
 export default class FancyProductDesigner extends EventTarget {
     
-    static version = '6.0.3';
+    static version = '6.0.4';
     static forbiddenTextChars = /<|>/g;
     static proxyFileServer = '';
     static uploadsToServer = true;

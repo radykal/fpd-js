@@ -1,4 +1,4 @@
-import html from '/src/ui/html/modules/save-load.html';
+import html from '../../html/modules/save-load.html';
 
 class SaveLoadView extends HTMLElement {
     

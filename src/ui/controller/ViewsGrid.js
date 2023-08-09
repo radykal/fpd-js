@@ -1,4 +1,4 @@
-import '/src/ui/view/ViewsGrid.js';
+import '../../ui/view/ViewsGrid.js';
 
 import {
     addEvents,
@@ -7,8 +7,9 @@ import {
     addElemClasses,
     unitToPixel,
     pixelToUnit,
-    objectHasKeys
-} from '/src/helpers/utils';
+    objectHasKeys,
+    fireEvent
+} from '../../helpers/utils';
 
 export default class ViewsGrid extends EventTarget {
 
@@ -127,8 +128,15 @@ export default class ViewsGrid extends EventTarget {
 
                             fpdInstance.productStage.append(viewInst.fabricCanvas.wrapperEl)
                             
-
                         })
+
+                        /**
+                         * Gets fired when a view is moved into a new position.
+                         *
+                         * @event viewMove
+                         * @param {Event} event
+                         */
+                        fireEvent(fpdInstance, 'viewMove')
 
                         fpdInstance.selectView(0);
 

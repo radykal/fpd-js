@@ -1,10 +1,10 @@
-import '/src/ui/view/modules/Text';
+import '../../../ui/view/modules/Text.js';
 
 import { 
     deepMerge, 
     addEvents,
     objectGet
-} from '/src/helpers/utils';
+} from '../../../helpers/utils.js';
 
 export default class TextsModule extends EventTarget {
         

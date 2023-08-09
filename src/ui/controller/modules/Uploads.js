@@ -1,6 +1,6 @@
-import '/src/ui/view/modules/Uploads';
-import Modal from '/src/ui/view/comps/Modal';
-import Snackbar from '/src/ui/view/comps/Snackbar';
+import '../../../ui/view/modules/Uploads.js';
+import Modal from '../../../ui/view/comps/Modal.js';
+import Snackbar from '../../../ui/view/comps/Snackbar.js';
 import { 
     addEvents, 
     localStorageAvailable, 
@@ -8,7 +8,7 @@ import {
     getItemPrice,
     checkImageDimensions,
     getFileExtension
-} from '/src/helpers/utils';
+} from '../../../helpers/utils.js';
 
 export default class UploadsModule extends EventTarget {
     

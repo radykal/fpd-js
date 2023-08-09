@@ -1,12 +1,12 @@
-import '/src/ui/view/ActionsBar.js';
-import Modal from '/src/ui/view/comps/Modal';
+import '../../ui/view/ActionsBar.js';
+import Modal from '../../ui/view/comps/Modal.js';
 
 import {
 	addEvents,
 	toggleElemClasses,
 	removeElemClasses,
 	getScript
-} from '/src/helpers/utils';
+} from '../../helpers/utils.js';
 
 export default class ActionsBar extends EventTarget {
 

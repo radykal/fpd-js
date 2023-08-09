@@ -1,4 +1,4 @@
-import html from '/src/ui/html/modules/images.html';
+import html from '../../html/modules/images.html';
 
 class ImagesView extends HTMLElement {
     

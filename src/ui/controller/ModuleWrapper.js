@@ -1,15 +1,15 @@
-import ProductsModule from './modules/Products';
-import TextModule from './modules/Text';
-import DesignsModule from './modules/Designs';
+import ProductsModule from './modules/Products.js';
+import TextModule from './modules/Text.js';
+import DesignsModule from './modules/Designs.js';
 //import TextToImageModule from './modules/TextToImage';
-import ImagesModule from './modules/Images';
-import LayersModule from './modules/Layers';
-import SaveLoadModule from './modules/SaveLoad';
-import TextLayersModule from './modules/TextLayers';
-import LayoutsModule from './modules/Layouts';
-import NamesNumbersModule from './modules/NamesNumbers';
+import ImagesModule from './modules/Images.js';
+import LayersModule from './modules/Layers.js';
+import SaveLoadModule from './modules/SaveLoad.js';
+import TextLayersModule from './modules/TextLayers.js';
+import LayoutsModule from './modules/Layouts.js';
+import NamesNumbersModule from './modules/NamesNumbers.js';
 
-import { isEmpty } from '/src/helpers/utils';
+import { isEmpty } from '../../helpers/utils.js';
 
 export default class ModuleWrapper extends EventTarget {
     

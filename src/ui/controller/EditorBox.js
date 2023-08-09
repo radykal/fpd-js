@@ -2,7 +2,7 @@ import {
     addEvents,
     addElemClasses,
     toggleElemClasses
-} from '/src/helpers/utils';
+} from '../../helpers/utils.js';
 
 export default class EditorBox {
     

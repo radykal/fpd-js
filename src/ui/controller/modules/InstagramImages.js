@@ -1,4 +1,4 @@
-import '/src/ui/view/modules/InstagramImages';
+import '../../../ui/view/modules/InstagramImages.js';
 
 import { getJSON } from '/src/helpers/request';
 import { 

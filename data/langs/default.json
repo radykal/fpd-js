@@ -54,7 +54,7 @@
 		"download": "Download",
 		"download_current_view": "Only export current showing view",
 		"info": "Info",
-		"info_content": "Content for the Info Action Button. Change content via language JSON.",
+		"info_content": "You can set the info text in the Fancy Product Designer Labels settings.<a href=\"https://google.de\">dsad</a>",
 		"print": "Print",
 		"undo": "Undo",
 		"redo": "Redo",

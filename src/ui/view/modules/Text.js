@@ -1,4 +1,4 @@
-import html from '/src/ui/html/modules/text.html';
+import html from '../../html/modules/text.html';
 
 class TextView extends HTMLElement {
     

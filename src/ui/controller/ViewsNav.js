@@ -1,9 +1,9 @@
-import '/src/ui/view/ViewsNav.js';
+import '../../ui/view/ViewsNav.js';
 
 import { 
     addEvents,
     toggleElemClasses
-} from '/src/helpers/utils';
+} from '../../helpers/utils';
 
 export default class ViewsNav extends EventTarget {
     

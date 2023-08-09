@@ -1,4 +1,4 @@
-import html from '/src/ui/html/modules/products.html';
+import html from '../../html/modules/products.html';
 
 class ProductsView extends HTMLElement {
     

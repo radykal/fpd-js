@@ -1,4 +1,4 @@
-import '/src/ui/view/modules/Images';
+import '../../../ui/view/modules/Images.js';
 import UploadsModule from './Uploads';
 import FacebookImagesModule from './FacebookImages';
 import InstagramImagesModule from './InstagramImages';

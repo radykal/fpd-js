@@ -1,6 +1,6 @@
 import {
     drawCirclePath
-} from '../utils';
+} from '../utils.js';
 
 fabric.IText.prototype.initialize = (function(originalFn) {
     return function(...args) {

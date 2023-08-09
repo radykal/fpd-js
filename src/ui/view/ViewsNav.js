@@ -1,4 +1,4 @@
-import html from '/src/ui/html/views-nav.html';
+import html from '../html/views-nav.html';
 
 class ViewsNav extends HTMLElement {
     

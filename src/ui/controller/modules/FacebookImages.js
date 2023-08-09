@@ -1,4 +1,4 @@
-import '/src/ui/view/modules/FacebookImages';
+import '../../../ui/view/modules/FacebookImages.js';
 
 import { 
     addEvents, 

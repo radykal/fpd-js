@@ -1,4 +1,4 @@
-import { deepMerge } from '/src/helpers/utils';
+import { deepMerge } from '../helpers/utils.js';
 
 /**
  *
@@ -966,6 +966,16 @@ export default class Options {
         * @version 6.0.2
         */
         customTextAsTextbox: true,
+		/**
+        * Display the views as thumbnails in an own HTML wrapper by defining a CSS selector.
+        *
+        * @property viewThumbnailsWrapper
+        * @memberof Options.defaults
+        * @type {String}
+        * @default true
+        * @version 6.0.4
+        */
+        viewThumbnailsWrapper: '',
 		/**
 		* An object containing the default element parameters in addition to the default Fabric Object properties. See Options.defaults.elementParameters.
 		*

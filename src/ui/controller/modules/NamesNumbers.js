@@ -1,4 +1,4 @@
-import '/src/ui/view/modules/NamesNumbers';
+import '../../../ui/view/modules/NamesNumbers.js';
 
 import { 
     addEvents,

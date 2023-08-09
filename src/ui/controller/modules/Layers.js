@@ -1,4 +1,4 @@
-import '/src/ui/view/modules/Layers';
+import '../../../ui/view/modules/Layers.js';
 
 import { 
     addEvents, 

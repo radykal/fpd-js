@@ -1,6 +1,6 @@
 import { 
     addEvents, 
-} from '/src/helpers/utils.js';
+} from '../../../helpers/utils.js';
 
 const Modal = (htmlContent='', fullscreen=false, type='', container=document.body) => {
     

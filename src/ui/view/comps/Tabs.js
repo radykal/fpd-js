@@ -1,4 +1,4 @@
-import html from '/src/ui/html/comps/tabs.html';
+import html from '../../../ui/html/comps/tabs.html';
 
 class FPD_Tabs extends HTMLElement {
     

@@ -1,14 +1,14 @@
 import '../view/Mainbar.js';
-import '../UIManager';
-import ModuleWrapper from './ModuleWrapper';
+import '../UIManager.js';
+import ModuleWrapper from './ModuleWrapper.js';
 
 import { 
     addEvents, 
     addElemClasses, 
     removeElemClasses, 
     toggleElemClasses 
-} from '/src/helpers/utils';
-import { fetchText } from '/src/helpers/request';
+} from '../../helpers/utils.js';
+import { fetchText } from '../../helpers/request.js';
 
 export default class Mainbar extends EventTarget {
 

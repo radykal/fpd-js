@@ -2,7 +2,7 @@ import {
     addElemClasses,
     addEvents,
     localStorageAvailable
-} from "/src/helpers/utils";
+} from "../../../helpers/utils.js";
 
 export default class GuidedTour {
 

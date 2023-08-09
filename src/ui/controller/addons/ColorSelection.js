@@ -1,5 +1,5 @@
-import ColorPanel from '/src/ui/view/comps/ColorPanel';
-import ColorPalette from '/src/ui/view/comps/ColorPalette';
+import ColorPanel from '../../../ui/view/comps/ColorPanel.js';
+import ColorPalette from '../../../ui/view/comps/ColorPalette.js';
 
 import { 
     addEvents,

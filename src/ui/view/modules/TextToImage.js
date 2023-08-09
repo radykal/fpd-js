@@ -1,4 +1,4 @@
-import html from '/src/ui/html/modules/text-to-image.html';
+import html from '../../html/modules/text-to-image.html';
 
 class TextToImageView extends HTMLElement {
     

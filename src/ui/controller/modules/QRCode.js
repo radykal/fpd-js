@@ -1,8 +1,8 @@
-import '/src/ui/view/modules/QRCode';
+import '../../../ui/view/modules/QRCode.js';
 import { 
     addEvents,
     deepMerge 
-} from '/src/helpers/utils';
+} from '../../../helpers/utils.js';
 
 export default class QRCodeModule extends EventTarget {
 

@@ -1,8 +1,8 @@
-import '/src/ui/view/modules/Products';
-import Modal from '/src/ui/view/comps/Modal';
+import '../../../ui/view/modules/Products.js';
+import Modal from '../../../ui/view/comps/Modal.js';
 import { 
     addEvents
-} from '/src/helpers/utils';
+} from '../../../helpers/utils.js';
 
 export default class ProductsModule extends EventTarget {
         

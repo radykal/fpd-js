@@ -1,8 +1,8 @@
 import '../view/ElementToolbar';
-import ColorPanel from '/src/ui/view/comps/ColorPanel';
-import ColorPalette from '/src/ui/view/comps/ColorPalette';
-import ColorPicker from '/src/ui/view/comps/ColorPicker';
-import Filters from '/src/helpers/Filters';
+import ColorPanel from '../view/comps/ColorPanel.js';
+import ColorPalette from '../view/comps/ColorPalette.js';
+import ColorPicker from '../view/comps/ColorPicker.js';
+import Filters from '../../helpers/Filters.js';
 
 import { 
     addEvents,

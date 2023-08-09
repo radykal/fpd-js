@@ -1,4 +1,4 @@
-import '/src/ui/view/modules/PixabayImages';
+import '../../../ui/view/modules/PixabayImages.js';
 
 import { getJSON } from '/src/helpers/request';
 import { 

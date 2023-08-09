@@ -1,7 +1,7 @@
 import { 
     addEvents,
 	pixelToUnit
-} from '/src/helpers/utils';
+} from '../helpers/utils.js';
 
 export default class PricingRules {
 

@@ -1,5 +1,5 @@
-import { getJSON } from '/src/helpers/request';
-import { isEmpty } from '/src/helpers/utils';
+import { getJSON } from '../helpers/request.js';
+import { isEmpty } from '../helpers/utils.js';
 
 export default class Translator extends EventTarget {
 
@@ -145,17 +145,21 @@ export default class Translator extends EventTarget {
      */
     getTranslation(section, label, defaulText = '') {
         
+        let translatedText = defaulText;
+
         if (!isEmpty(this.langJSON)) {
 
             section = this.langJSON[section];
 
             if (section) {
-                return section[label] ? section[label] : defaulText;
+                translatedText = section[label] ? section[label] : defaulText;
             }
 
         }
 
-        return defaulText;
+        translatedText.replace(/\n/g, '');
+
+        return translatedText;
 
     }
 

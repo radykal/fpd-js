@@ -1,12 +1,12 @@
-import '/src/ui/view/modules/SaveLoad';
-import Snackbar from '/src/ui/view/comps/Snackbar';
+import '../../../ui/view/modules/SaveLoad.js';
+import Snackbar from '../../../ui/view/comps/Snackbar.js';
 
 import { 
     addEvents,
     createImgThumbnail,
     localStorageAvailable
-} from '/src/helpers/utils';
-import { getScaleByDimesions } from '/src/fabricjs/utils';
+} from '../../../helpers/utils.js';
+import { getScaleByDimesions } from '../../../fabricjs/utils.js';
 
 export default class SaveLoadModule extends EventTarget {
         

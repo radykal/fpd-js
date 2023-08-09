@@ -1,4 +1,4 @@
-import '/src/ui/view/modules/Designs';
+import '../../../ui/view/modules/Designs.js';
 
 import { 
     deepMerge, 

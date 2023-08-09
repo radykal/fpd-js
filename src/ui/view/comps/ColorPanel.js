@@ -1,6 +1,6 @@
-import ColorPicker from './ColorPicker';
-import ColorPalette from './ColorPalette';
-import Patterns from './Patterns';
+import ColorPicker from './ColorPicker.js';
+import ColorPalette from './ColorPalette.js';
+import Patterns from './Patterns.js';
 
 const ColorPanel = (fpdInstance, props) => {
 

@@ -1,8 +1,8 @@
-import './objects/Controls';
-import './objects/Group';
-import './objects/Text';
-import './objects/IText';
-import './objects/Textbox';
+import './objects/Controls.js';
+import './objects/Group.js';
+import './objects/Text.js';
+import './objects/IText.js';
+import './objects/Textbox.js';
 
 import {
     removeUrlParams
@@ -270,9 +270,9 @@ fabric.Object.prototype.changeColor = function (colorData, colorLinking = true) 
 fabric.Object.prototype.setPattern = function (patternUrl) {
 
     if (patternUrl) {
-
-        if (FancyProductDesigner.proxyFileServer) {
-            patternUrl = FancyProductDesigner.proxyFileServer + patternUrl;
+        
+        if (this.canvas.proxyFileServer) {
+            patternUrl = this.canvas.proxyFileServer + patternUrl;
         }
         
         fabric.util.loadImage(patternUrl, (img) => {
@@ -476,7 +476,7 @@ fabric.Object.prototype._checkContainment = function () {
                     /**
                      * Gets fired as soon as an element is outside of its bounding box.
                      *
-                     * @event FancyProductDesignerView#elementOut
+                     * @event fabric.Object#elementOut
                      * @param {Event} event
                      */
                     this.canvas.fire('elementOut', {
@@ -488,7 +488,7 @@ fabric.Object.prototype._checkContainment = function () {
                     /**
                      * Gets fired as soon as an element is inside of its bounding box again.
                      *
-                     * @event FancyProductDesignerView#elementIn
+                     * @event fabric.Object#elementIn
                      * @param {Event} event
                      */
                     this.canvas.fire('elementIn', {

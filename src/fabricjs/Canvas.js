@@ -1,8 +1,8 @@
-import './Element';
-import './canvas/History';
-import ZoomPan from './canvas/ZoomPan';
-import Snap from './canvas/Snap';
-import Ruler from './canvas/Ruler';
+import './Element.js';
+import './canvas/History.js';
+import ZoomPan from './canvas/ZoomPan.js';
+import Snap from './canvas/Snap.js';
+import Ruler from './canvas/Ruler.js';
 
 import {
     deepMerge,
@@ -28,6 +28,9 @@ fabric.Canvas.prototype.printingBoxObject = null;
 fabric.Canvas.prototype._canvasCreated = false;
 fabric.Canvas.prototype.currentCurvedTextPath = false;
 fabric.Canvas.prototype._doHistory = false;
+fabric.Canvas.prototype.forbiddenTextChars = /<|>/g;
+
+fabric.Canvas.prototype.proxyFileServer = '';
 
 fabric.Canvas.prototype.initialize = (function (originalFn) {
 
@@ -107,7 +110,7 @@ fabric.Canvas.prototype._fpdCanvasInit = function () {
             /**
              * Gets fired as soon as an element is selected.
              *
-             * @event FancyProductDesignerView#elementSelect
+             * @event fabric.CanvasView#elementSelect
              * @param {Event} event
              * @param {fabric.Object} currentElement - The current selected element.
              */
@@ -261,7 +264,7 @@ fabric.Canvas.prototype._onSelected = function (element) {
     /**
      * Gets fired as soon as an element is selected.
      *
-     * @event FancyProductDesignerView#elementSelect
+     * @event fabric.CanvasView#elementSelect
      * @param {Event} event
      * @param {fabric.Object} currentElement - The current selected element.
      */
@@ -324,7 +327,7 @@ fabric.Canvas.prototype._renderElementBoundingBox = function (element) {
             /**
              * Gets fired when bounding box is toggling.
              *
-             * @event FancyProductDesignerView#boundingBoxToggle
+             * @event fabric.CanvasView#boundingBoxToggle
              * @param {Event} event
              * @param {fabric.Object} currentBoundingObject - The current bounding box object.
              * @param {Boolean} state
@@ -598,14 +601,14 @@ fabric.Canvas.prototype.addElements = function (elements, callback) {
  * @param {string} title Only required for image elements.
  * @param {object} [parameters] An object with the parameters, you would like to apply on the element.
  */
-fabric.Canvas.prototype.addElement = function (type, source, title, params = {}) {    
+fabric.Canvas.prototype.addElement = function (type, source, title, params = {}) {        
 
     if (type === undefined || source === undefined || title === undefined) return;    
 
     /**
      * Gets fired as soon as an element will be added (before its added to canvas).
      *
-     * @event FancyProductDesignerView#beforeElementAdd
+     * @event fabric.CanvasView#beforeElementAdd
      * @param {Event} event
      * @param {String} type - The element type.
      * @param {String} source - URL for image, text string for text element.
@@ -618,11 +621,11 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
         title: title,
         params: params
     });
-
+    
     if (type === 'text') {
         //strip HTML tags
         source = source.replace(/(<([^>]+)>)/ig, "");
-        source = source.replace(FancyProductDesigner.forbiddenTextChars, '');
+        source = source.replace(this.forbiddenTextChars, '');
         title = title.replace(/(<([^>]+)>)/ig, "");
     }
 
@@ -811,12 +814,12 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
         else if (source.split('.').includes('svg')) {
 
             let timeStamp = Date.now().toString(),
-                url = isUrl(source) ? new URL(FancyProductDesigner.proxyFileServer + source) : source;
+                url = isUrl(source) ? new URL(this.proxyFileServer + source) : source;
 
             //add timestamp when option enabled or is cloudfront url
             if ((source.includes('.cloudfront.net/')
                 || this.viewOptions.imageLoadTimestamp)
-                && !FancyProductDesigner.proxyFileServer) {
+                && !this.proxyFileServer) {
 
                 url.searchParams.append('t', timeStamp);
 
@@ -867,10 +870,10 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
 
             if (!source.includes('data:image/')) {//do not add timestamp to data URI
 
-                url = isUrl(source) ? new URL(FancyProductDesigner.proxyFileServer + source) : source
+                url = isUrl(source) ? new URL(this.proxyFileServer + source) : source
 
                 if ((this.viewOptions.imageLoadTimestamp)
-                    && !FancyProductDesigner.proxyFileServer) {
+                    && !this.proxyFileServer) {
                     url.searchParams.append('t', timeStamp);
                 }
 
@@ -1242,7 +1245,7 @@ fabric.Canvas.prototype.removeElement = function (element) {
     /**
      * Gets fired as soon as an element has been removed.
      *
-     * @event FancyProductDesignerView#elementRemove
+     * @event fabric.Canvas#elementRemove
      * @param {Event} event
      * @param {fabric.Object} element - The fabric object that has been removed.
      */
@@ -1264,7 +1267,6 @@ fabric.Canvas.prototype.getElementByReplace = function (replaceValue) {
         const object = objects[i];
         if (object.replace === replaceValue) {
             return object;
-            break;
         }
 
     }
@@ -1511,7 +1513,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
         if (typeof parameters.text === 'string') {
 
             let text = parameters.text;
-            text = text.replace(FancyProductDesigner.forbiddenTextChars, '');
+            text = text.replace(this.forbiddenTextChars, '');
             
             if(element.maxLength != 0 && text.length > element.maxLength) {
 				text = text.substr(0, element.maxLength);    
@@ -1752,7 +1754,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
     /**
      * Gets fired as soon as an element is modified.
      *
-     * @event FancyProductDesignerView#elementModify
+     * @event fabric.Canvas#elementModify
      * @param {Event} event
      * @param {fabric.Object} currentElement - The current selected element.
      */
@@ -1832,7 +1834,7 @@ fabric.Canvas.prototype.setMask = function(maskOptions={}, callback=() => {}) {
 
     if(maskOptions && maskOptions.url && maskOptions.url.includes('.svg')) {
 
-        const maskURL = FancyProductDesigner.proxyFileServer + maskOptions.url;
+        const maskURL = this.proxyFileServer + maskOptions.url;
         this.maskOptions = maskOptions;
 
         fabric.loadSVGFromURL(maskURL, (objects, options) => {            

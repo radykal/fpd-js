@@ -1,5 +1,5 @@
-import Modal from '/src/ui/view/comps/Modal';
-import Snackbar from '/src/ui/view/comps/Snackbar';
+import Modal from '../ui/view/comps/Modal.js';
+import Snackbar from '../ui/view/comps/Snackbar.js';
 
 if (window) {
     window.FPDUtils = {};

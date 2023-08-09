@@ -3,9 +3,9 @@ import {
     addElemClasses,
     removeElemClasses,
     isEmpty
-} from '/src/helpers/utils';
+} from '../../../helpers/utils.js';
 
-import Snackbar from '/src/ui/view/comps/Snackbar';
+import Snackbar from '../../../ui/view/comps/Snackbar.js';
 
 /**
  * The class to create the Bulk Variations that is related to FancyProductDesigner class.

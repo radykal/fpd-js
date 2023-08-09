@@ -1,11 +1,11 @@
-import '/src/ui/view/modules/TextLayers';
+import '../../../ui/view/modules/TextLayers.js';
 
 import {
     addEvents,
     elementAvailableColors
-} from '/src/helpers/utils';
+} from '../../../helpers/utils.js';
 
-import ColorPanel from '/src/ui/view/comps/ColorPanel';
+import ColorPanel from '../../../ui/view/comps/ColorPanel.js';
 
 export default class TextLayersModule extends EventTarget {
 
