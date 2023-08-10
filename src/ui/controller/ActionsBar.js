@@ -526,12 +526,12 @@ export default class ActionsBar extends EventTarget {
 					doc.save(downloadFilename + '.pdf');
 
 				};
-
+				
 				if (jspdf)
 					onlyCurrentView ?
-						this.fpdInstance.currentViewInstance.toDataURL(_createPDF, 'transparent', { format: 'png' }, this.fpdInstance.watermarkImg)
+						this.fpdInstance.currentViewInstance.toDataURL(_createPDF, { format: 'png', watermarkImg: this.fpdInstance.watermarkImg})
 						:
-						this.fpdInstance.getViewsDataURL(_createPDF, 'transparent', { format: 'png' });
+						this.fpdInstance.getViewsDataURL(_createPDF, { format: 'png' });
 
 			})
 

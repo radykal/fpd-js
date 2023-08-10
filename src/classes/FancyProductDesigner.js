@@ -37,7 +37,7 @@ import {
  */
 export default class FancyProductDesigner extends EventTarget {
     
-    static version = '6.0.4';
+    static version = '6.0.5';
     static forbiddenTextChars = /<|>/g;
     static proxyFileServer = '';
     static uploadsToServer = true;
@@ -2309,11 +2309,11 @@ export default class FancyProductDesigner extends EventTarget {
 	 * @return {array} An array with all views as data URLs.
 	 */
 	getViewsDataURL(callback=() => {}, options={}) {
-
+        
         options.watermarkImg = this.watermarkImg;
 
 		let dataURLs = [];
-
+        
 		this.currentViewInstance.fabricCanvas.resetZoom();
 		for(var i=0; i < this.viewInstances.length; ++i) {
 

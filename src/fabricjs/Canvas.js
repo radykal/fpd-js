@@ -1561,6 +1561,9 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
             parameters.fontSize = element.maxFontSize;
         }
 
+        if(parameters.fontSize && element.setCurvedTextPosition)
+                element.setCurvedTextPosition();
+
         if (parameters.textTransform) {
 
             let text = element.text;
