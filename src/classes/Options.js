@@ -965,7 +965,7 @@ export default class Options {
         * @default true
         * @version 6.0.2
         */
-        customTextAsTextbox: true,
+        customTextAsTextbox: false,
 		/**
         * Display the views as thumbnails in an own HTML wrapper by defining a CSS selector.
         *
