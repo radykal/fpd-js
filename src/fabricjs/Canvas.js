@@ -1702,7 +1702,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 
             element.setCurvedTextPath();
                 
-            if(element == this.getActiveObject()) {
+            if(element == this.getActiveObject() && element.path) {                
                 element.path.visible = true;   
             }
         
@@ -1724,7 +1724,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 
         element.setCurvedTextPath();
 
-        if(element == this.getActiveObject()) {
+        if(element == this.getActiveObject() && element.path) {            
             element.path.visible = true;   
         }
 

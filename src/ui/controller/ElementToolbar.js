@@ -517,15 +517,16 @@ export default class ElementToolbar extends EventTarget {
 
                 let originParams = fpdInstance.currentElement.originParams;
                 delete originParams['clipPath'];
+                delete originParams['path'];
 
                 //if element has bounding box, rescale for scale mode
                 if(fpdInstance.currentElement.boundingBox) {
                     fpdInstance.currentElement.scaleX = 1;
                     originParams.boundingBox = fpdInstance.currentElement.boundingBox;
                 }
-
+                
                 fpdInstance.currentViewInstance.fabricCanvas
-                .setElementOptions( fpdInstance.currentElement.originParams );
+                .setElementOptions( originParams );
                 fpdInstance.deselectElement();
 
             }

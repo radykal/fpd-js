@@ -85,23 +85,6 @@ const getFilter = (key, opts={}) => {
 
 export { getFilter };
 
-/**
- * Changes the DPI of a base64 image.
- *
- * @method changeBase64DPI
- * @param {dataURI} string A base64 data uri representing the image(png or jpeg).
- * @param {dpi} number The target DPI.
- * @return {String} Returns the base64 image with the new DPI.
- * @static
- */
-const changeBase64DPI = (dataURI, dpi=72) => {
-
-    return dpi == 72 ? dataURI : changeDpiDataUrl(dataURI, dpi);
-
-}
-
-export { changeBase64DPI };
-
 const isHexColor = (hex) => {
     return /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(hex);
 }

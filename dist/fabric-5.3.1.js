@@ -17553,7 +17553,6 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
           stroke = style.stroke ? getSvgColorString('stroke', style.stroke) : '',
           textDecoration = this.getSvgTextDecoration(style),
           deltaY = style.deltaY ? 'baseline-shift: ' + (-style.deltaY) + '; ' : '';
-      console.log(textDecoration);
       
       if (textDecoration) {
         textDecoration = 'text-decoration: ' + textDecoration + term;

@@ -10,6 +10,17 @@ fabric.Text.prototype.initialize = (function (originalFn) {
 
 })(fabric.Text.prototype.initialize);
 
+// fabric.Text.prototype.toSVG = (function (originalFn) {
+    
+//     return function (...args) {   
+        
+//         let markup = originalFn.call(this, ...args);                
+//         return markup;
+
+//     }
+
+// })(fabric.Text.prototype.toSVG);
+
 
 fabric.Text.prototype._constrainScale = (function (originalFn) {
 
