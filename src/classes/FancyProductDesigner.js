@@ -37,7 +37,7 @@ import {
  */
 export default class FancyProductDesigner extends EventTarget {
     
-    static version = '6.0.6';
+    static version = '6.0.7';
     static forbiddenTextChars = /<|>/g;
     static proxyFileServer = '';
     static uploadsToServer = true;
@@ -415,14 +415,14 @@ export default class FancyProductDesigner extends EventTarget {
             }
         
         }
-        
+                
         if(this.mainOptions.keyboardControl) {
             
             addEvents(
                 document,
                 'keydown',
                 (evt) => {
-                    
+                                        
                     if(this.currentViewInstance && this.currentViewInstance.fabricCanvas) {
                         
                         const viewInst = this.currentViewInstance;
@@ -442,7 +442,7 @@ export default class FancyProductDesigner extends EventTarget {
                                 case 37: // left
                         
                                     if(currentElement.draggable) {
-                                        viewInst.fabricCanvas.setElementParameters({
+                                        viewInst.fabricCanvas.setElementOptions({
                                             left: currentElement.left - 1
                                         });
                                     }
@@ -451,7 +451,7 @@ export default class FancyProductDesigner extends EventTarget {
                                 case 38: // up
                         
                                     if(currentElement.draggable) {
-                                        viewInst.fabricCanvas.setElementParameters({
+                                        viewInst.fabricCanvas.setElementOptions({
                                             top: currentElement.top - 1
                                         });
                                     }
@@ -460,7 +460,7 @@ export default class FancyProductDesigner extends EventTarget {
                                 case 39: // right
                         
                                     if(currentElement.draggable) {
-                                        viewInst.fabricCanvas.setElementParameters({
+                                        viewInst.fabricCanvas.setElementOptions({
                                             left: currentElement.left + 1
                                         });
                                     }
@@ -469,7 +469,7 @@ export default class FancyProductDesigner extends EventTarget {
                                 case 40: // down
                         
                                     if(currentElement.draggable) {
-                                        viewInst.fabricCanvas.setElementParameters({
+                                        viewInst.fabricCanvas.setElementOptions({
                                             top: currentElement.top + 1
                                         });
                                     }

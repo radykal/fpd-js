@@ -37,7 +37,8 @@ export default class UIManager extends EventTarget {
         //add product designer into modal
 		if(this.fpdInstance.mainOptions.modalMode) {
 
-            this.fpdInstance.mainOptions.maxCanvasHeight = 0.85;
+            this.fpdInstance.mainOptions.maxCanvasHeight = 0.75;
+            this.fpdInstance.mainOptions.canvasHeight = 'auto';
             this.fpdInstance.mainOptions.fabricCanvasOptions.allowTouchScrolling = false;
 
             let modalProductDesignerOnceOpened = false;

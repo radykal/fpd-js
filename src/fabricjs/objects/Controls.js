@@ -145,7 +145,7 @@ fabric.Object.prototype.controls.tr.render = function(ctx, left, top, styleOverr
             top, 
             styleOverride, 
             fabricObject,
-            String.fromCharCode('0xe944'),
+            String.fromCharCode('0xe907'),
             8,
             -8
         );

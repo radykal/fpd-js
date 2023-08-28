@@ -988,58 +988,67 @@ fabric.Canvas.prototype.deselectElement = function (discardActiveObject = true) 
  * @method resetSize
  */
 fabric.Canvas.prototype.resetSize = function () {
-
+    
     if(!this.wrapperEl.parentNode) return;
 
     const viewStage = this.wrapperEl;
-    const viewStageWidth = viewStage.parentNode.clientWidth;
-    
-    let widthScale = viewStageWidth < this.viewOptions.stageWidth ? viewStageWidth / this.viewOptions.stageWidth : 1;
-    let scaleHeight = widthScale;
-    
-    this.responsiveScale = widthScale;
-
+    const viewStageWidth = viewStage.parentNode.clientWidth;   
+    let allowedHeight = viewStage.parentNode.clientHeight; 
     let canvasHeight = this.viewOptions.stageHeight;
+    let fixedHeight = null;
+
+    this.responsiveScale = viewStageWidth < this.viewOptions.stageWidth ? viewStageWidth / this.viewOptions.stageWidth : 1;
+
+    let potentialHeight = canvasHeight * this.responsiveScale;
+
+    //set a fixed height
     if (this.viewOptions.canvasHeight !== 'auto') {
 
         if (this.viewOptions.canvasHeight.includes('px')) {
 
-            canvasHeight = parseInt(this.viewOptions.canvasHeight);
-            this.responsiveScale = widthScale * (canvasHeight / this.viewOptions.stageHeight);
-            scaleHeight = 1;
+            fixedHeight = parseInt(this.viewOptions.canvasHeight);
+            allowedHeight = fixedHeight;
+            
         }
 
     }
+    
+    //adjust to height if necessary
+    if (!isNaN(this.viewOptions.maxCanvasHeight) && this.viewOptions.maxCanvasHeight !== 1 && fixedHeight === null) {
 
-    if (!isNaN(this.viewOptions.maxCanvasHeight) && this.viewOptions.maxCanvasHeight !== 1) {
-
-        const maxHeight = window.innerHeight * parseFloat(this.viewOptions.maxCanvasHeight);
-        if ((canvasHeight * scaleHeight) > maxHeight) {
-            this.responsiveScale = widthScale * (maxHeight / this.viewOptions.stageHeight);
-            canvasHeight = maxHeight;
+        const maxHeightByWindow = window.innerHeight * parseFloat(this.viewOptions.maxCanvasHeight);        
+        
+        if (potentialHeight > maxHeightByWindow) {
+            this.responsiveScale = maxHeightByWindow / canvasHeight;
+        }
+        else if (potentialHeight > allowedHeight) {
+            this.responsiveScale = allowedHeight / canvasHeight;
         }
 
     }
+    else if (potentialHeight > allowedHeight) {
+        this.responsiveScale = allowedHeight / canvasHeight;
+    }
+
 
     this.responsiveScale = parseFloat(Number(this.responsiveScale.toFixed(7)));
     this.responsiveScale = Math.min(this.responsiveScale, 1);
         
     if (!this.viewOptions.responsive) {
         this.responsiveScale = 1;
-        widthScale = scaleHeight = 1;
     }
     
     this.setDimensions({
-        width: widthScale * this.viewOptions.stageWidth,
+        width: this.viewOptions.stageWidth * this.responsiveScale,
         height: this.viewOptions.stageHeight * this.responsiveScale
     })
     .setZoom(this.responsiveScale)
     .calcOffset()
-    .renderAll();    
+    .renderAll();  
     
     this.fire('sizeUpdate', {
         responsiveScale: this.responsiveScale,
-        canvasHeight: canvasHeight * scaleHeight
+        canvasHeight: fixedHeight ? fixedHeight : (canvasHeight * this.responsiveScale || canvasHeight)
     })
 
     return this.responsiveScale;
@@ -1508,7 +1517,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
     }
 
     if (elemType === 'text') {
-
+        
         //needs to before setOptions
         if (typeof parameters.text === 'string') {
 
@@ -1561,9 +1570,6 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
             parameters.fontSize = element.maxFontSize;
         }
 
-        if(parameters.fontSize && element.setCurvedTextPosition)
-                element.setCurvedTextPosition();
-
         if (parameters.textTransform) {
 
             let text = element.text;
@@ -1611,6 +1617,9 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 
     delete parameters['paths']; //no paths in parameters
     element.setOptions(parameters);
+
+    if((parameters.fontSize || parameters.fontFamily) && element.setCurvedTextPosition)
+        element.setCurvedTextPosition();
 
     if (element.type == 'i-text' && element.widthFontSize && element.text.length > 0) {
 

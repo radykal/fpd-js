@@ -1151,6 +1151,7 @@ export default class ElementToolbar extends EventTarget {
             }
                 
             this.currentPlacement = 'mainbar';
+            this.container.className += ' fpd-container fpd-sidebar';
 
         }
 
