@@ -101,11 +101,11 @@ export default class DesignsModule extends EventTarget {
         let designsSet = false;
         addEvents(
             fpdInstance,
-            'productCreate',
+            ['designsSet'],
             (evt) => {
                 
                 if(designsSet) return;
-                designsSet = true;
+                designsSet = true;                
 
                 const designs = fpdInstance.designs;
             
@@ -271,7 +271,7 @@ export default class DesignsModule extends EventTarget {
     };
     
     toggleCategories() {
-        
+                
         if(!this.#categoriesUsed) {
             return;
         }

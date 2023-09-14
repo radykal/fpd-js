@@ -37,7 +37,7 @@ import {
  */
 export default class FancyProductDesigner extends EventTarget {
     
-    static version = '6.0.7';
+    static version = '6.0.8';
     static forbiddenTextChars = /<|>/g;
     static proxyFileServer = '';
     static uploadsToServer = true;
@@ -834,7 +834,7 @@ export default class FancyProductDesigner extends EventTarget {
      */
     setupDesigns(designs) {
 
-        this.designs = designs;
+        this.designs = designs;        
                 
         /**
          * Gets fired as soon as the designs are set.
@@ -842,8 +842,7 @@ export default class FancyProductDesigner extends EventTarget {
          * @event designsSet
          * @param {CustomEvent} event
          */
-        fireEvent(this, 'designsSet', {
-        })
+        fireEvent(this, 'designsSet', {})
 
     };
     

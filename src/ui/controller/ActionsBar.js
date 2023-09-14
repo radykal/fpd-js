@@ -1,5 +1,6 @@
 import '../../ui/view/ActionsBar.js';
 import Modal from '../../ui/view/comps/Modal.js';
+import QRCodeModule from './modules/QRCode.js';
 
 import {
 	addEvents,
@@ -58,6 +59,10 @@ export default class ActionsBar extends EventTarget {
 		'guided-tour': {
 			icon: 'fpd-icon-guided-tour',
 			title: 'Guided Tour'
+		},
+		'qr-code': {
+			icon: 'fpd-icon-qrcode',
+			title: 'QR-Code'
 		}
 	};
 
@@ -174,9 +179,6 @@ export default class ActionsBar extends EventTarget {
 				}
 				else if (pos == 'center') {
 
-					if (this.container.querySelectorAll('[data-pos="center"].fpd-actions-wrapper > .fpd-btn').length > 1) {
-						return;
-					}
 
 					wrapper = this.container.querySelector('[data-pos="' + pos + '"].fpd-actions-wrapper')
 
@@ -434,6 +436,38 @@ export default class ActionsBar extends EventTarget {
 
 			this.fpdInstance.guidedTour.start();
 
+		}
+		else if (action === 'qr-code') {
+
+			const existingModal = this.fpdInstance.container.querySelector('.fpd-modal-internal');
+			if(existingModal)
+				existingModal.remove();
+			
+			const modal = Modal(
+				'',
+				false,
+				'',
+				this.fpdInstance.container
+			);
+			
+			const qrCodeModule = new QRCodeModule(
+				this.fpdInstance,
+				modal.querySelector('.fpd-modal-content') 
+			)
+
+			this.fpdInstance.translator.translateArea(modal);
+
+			addEvents(
+				qrCodeModule,
+				'qrCodeModuleBtnClick',
+				() => {
+
+					modal.remove();
+					
+				}
+			)
+
+			
 		}
 
 		/**

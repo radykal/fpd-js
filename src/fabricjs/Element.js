@@ -238,7 +238,7 @@ fabric.Object.prototype.changeColor = function (colorData, colorLinking = true) 
         if (typeof colorData !== 'string') {
             colorData = false;
         }
-
+        
         //colorize png or dataurl image
         if (colorizable == 'png' || colorizable == 'dataurl') {
 
@@ -686,6 +686,7 @@ fabric.Object.prototype.getElementJSON = function (addPropertiesToInclude = fals
     propertyKeys.push('originSource');
     propertyKeys.push('_printingBox');
     propertyKeys.push('_optionsSet');
+    propertyKeys.push('_isQrCode');
     propertyKeys = propertyKeys.sort();
 
 

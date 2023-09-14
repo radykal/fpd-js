@@ -65,7 +65,8 @@
 		"guided_tour": "Start Guided Tour",
 		"menu_file": "File",
 		"menu_more": "More",
-		"modal_done": "Done"
+		"modal_done": "Done",
+		"qr_code": "QR-Code"
 	},
 	"modules": {
 		"products": "Products",

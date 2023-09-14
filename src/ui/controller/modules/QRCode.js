@@ -1,7 +1,8 @@
 import '../../../ui/view/modules/QRCode.js';
 import { 
     addEvents,
-    deepMerge 
+    deepMerge,
+    fireEvent
 } from '../../../helpers/utils.js';
 
 export default class QRCodeModule extends EventTarget {
@@ -45,8 +46,6 @@ export default class QRCodeModule extends EventTarget {
                 
                 this.lightColor = tinycolor(color.rgbaString).toHexString();
                 colorLightElem.style.backgroundColor = this.lightColor;
-                
-                
     
             }
         });
@@ -56,6 +55,8 @@ export default class QRCodeModule extends EventTarget {
             this.container.querySelector('.fpd-btn'),
             'click',
             (evt) => {
+
+                fireEvent(this, 'qrCodeModuleBtnClick');
 
                 qrCodeWrapper.innerHTML = '';
 
@@ -76,7 +77,8 @@ export default class QRCodeModule extends EventTarget {
                         const options = deepMerge(
                             fpdInstance.mainOptions.qrCodeProps,
                             {
-                                _addToUZ: fpdInstance.currentViewInstance.currentUploadZone
+                                _addToUZ: fpdInstance.currentViewInstance.currentUploadZone,
+                                _isQrCode: true
                             }
                         );
 
@@ -84,15 +86,13 @@ export default class QRCodeModule extends EventTarget {
                             evt.currentTarget.src,
                             'QR-Code: ' + text,
                             options
-                        )
+                        )                        
 
                         this.container.querySelector('input[type="text"]').value = '';
                         
                     })
 
                 }
-                
-                
 
             }
         )

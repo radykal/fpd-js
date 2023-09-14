@@ -1504,14 +1504,18 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 
         //element with replace in view found and replaced element is not the new element
         if (replacedElement !== null && replacedElement !== element) {
+
             parameters.z = replacedElement.getZIndex();
             parameters.left = element.originParams.left = replacedElement.left;
             parameters.top = element.originParams.top = replacedElement.top;
             parameters.autoCenter = false;
-            if (this.viewOptions.applyFillWhenReplacing) {
+            
+            if (this.viewOptions.applyFillWhenReplacing && !element._isQrCode) {
                 parameters.fill = replacedElement.fill;
             }
+
             this.removeElement(replacedElement);
+
         }
 
     }
@@ -1650,22 +1654,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
     if(parameters.hasOwnProperty('lockUniScaling'))
         element._elementControls();
 
-    //change element color
-    if (parameters.fill !== undefined || parameters.svgFill !== undefined) {
-
-        const fill = parameters.svgFill !== undefined ? parameters.svgFill : parameters.fill;
-        
-        element.changeColor(fill);
-        element.pattern = undefined;
-
-    }
-
-    //set pattern
-    if (parameters.pattern !== undefined) {
-        element.setPattern(parameters.pattern)
-    }
-
-    //set filter
+    //set filter    
     if (parameters.filter) {
         
         const fabricFilter = getFilter(parameters.filter);
@@ -1681,6 +1670,21 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
             element.applyFilters();
         }
         
+    }
+
+    //change element color    
+    if (parameters.fill !== undefined || parameters.svgFill !== undefined) {
+
+        const fill = parameters.svgFill !== undefined ? parameters.svgFill : parameters.fill;
+                
+        element.changeColor(fill);
+        element.pattern = undefined;
+
+    }
+
+    //set pattern
+    if (parameters.pattern !== undefined) {
+        element.setPattern(parameters.pattern)
     }
 
     //set z position, check if element has canvas prop, otherwise its not added into canvas
