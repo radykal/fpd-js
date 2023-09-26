@@ -78,7 +78,7 @@ fabric.Canvas.prototype.historySaveAction = function () {
         return;
     
     const json = this.historyNextState;
-    
+        
     this.isCustomized = this.initialElementsLoaded;
     
     this.historyUndo.push(json);

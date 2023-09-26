@@ -37,7 +37,7 @@ import {
  */
 export default class FancyProductDesigner extends EventTarget {
     
-    static version = '6.0.8';
+    static version = '6.0.9';
     static forbiddenTextChars = /<|>/g;
     static proxyFileServer = '';
     static uploadsToServer = true;
@@ -892,6 +892,7 @@ export default class FancyProductDesigner extends EventTarget {
     
     selectProduct(index, categoryIndex) {
         
+        this.#totalProductElements = this.#productElementLoadingIndex = 0;
         this.currentCategoryIndex = categoryIndex === undefined ? this.currentCategoryIndex : categoryIndex;
         
         let productsObj;
@@ -989,10 +990,9 @@ export default class FancyProductDesigner extends EventTarget {
         this.productViews = views;
     
         this.#totalProductElements = this.#productElementLoadingIndex = 0;
-        views.forEach((view, i) => {
+        views.forEach((view, i) => {            
             this.#totalProductElements += view.elements.length;
-        });
-        
+        });        
     
         addEvents(
             this,
@@ -1052,7 +1052,7 @@ export default class FancyProductDesigner extends EventTarget {
                 if(!this.productCreated) {
 
                     this.#productElementLoadingIndex++;
-        
+                            
                     const txt = opts.title + '<br>' + String(this.#productElementLoadingIndex) + '/' + this.#totalProductElements;                    
                     this.mainLoader.querySelector('.fpd-loader-text').innerHTML = txt;
 
@@ -1715,10 +1715,17 @@ export default class FancyProductDesigner extends EventTarget {
 
         //toggle next/previous view buttons
         toggleElemClasses(
-            document.body.querySelectorAll('.fpd-btn[data-action="previous-view"], .fpd-btn[data-action="next-view"], fpd-views-nav'),
+            document.body.querySelectorAll('.fpd-btn[data-action="previous-view"], .fpd-btn[data-action="next-view"]'),
             ['fpd-hidden'],
             this.viewInstances.length <= 1
         )
+
+        toggleElemClasses(
+            document.body.querySelectorAll('fpd-views-nav'),
+            ['fpd-hidden'],
+            this.viewInstances.length <= 1 && !this.mainOptions.enableDynamicViews
+        )
+        
 
         toggleElemClasses(
             document.body.querySelectorAll('.fpd-btn[data-action="previous-view"], .fpd-view-prev'),

@@ -5,7 +5,7 @@ import {
     deepMerge,
     objectHasKeys,
     toggleElemClasses
-} from '/src/helpers/utils';
+} from '../helpers/utils';
 
 import { parseFontsToEmbed } from '/src/helpers/fonts-loader';
 
@@ -65,7 +65,8 @@ export default class FancyProductDesignerView extends EventTarget {
         'multiSelectionColor',
         'mobileGesturesBehaviour',
         'smartGuides',
-        'snapGridSize'
+        'snapGridSize',
+        'rulerUnit'
     ];
     
     /**

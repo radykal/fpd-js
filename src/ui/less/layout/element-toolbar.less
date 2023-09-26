@@ -467,3 +467,21 @@ fpd-main-bar {
     }
 
 }
+
+fpd-element-toolbar {
+
+    &[data-element-type="engraved-text"],
+    &[data-element-type="neon-text"] {
+
+        .fpd-panel-color > .fpd-panel-tabs,
+        .fpd-tool-text-format,
+        .fpd-tool-curved-text,
+        .fpd-patterns-wrapper,
+        .fpd-tool-fill-opacity {
+            display: none !important;
+        }
+
+    }
+
+}
+

@@ -977,6 +977,16 @@ export default class Options {
         */
         viewThumbnailsWrapper: '',
 		/**
+        * The unit of measurement for the ruler. Possible values: px, mm, cm. Metric values only works when the view has a printing box.
+        *
+        * @property rulerUnit
+        * @memberof Options.defaults
+        * @type {String}
+        * @default 'px'
+        * @version 6.0.9
+        */
+        rulerUnit: 'px',
+		/**
 		* An object containing the default element parameters in addition to the default Fabric Object properties. See Options.defaults.elementParameters.
 		*
 		* @property elementParameters
@@ -1426,6 +1436,15 @@ export default class Options {
 			* @default []
 			*/
 			strokeColors: [],
+			/**
+			* Enable neon effect to text.
+			*
+			* @property neonText
+			* @type {Boolean}
+			* @memberof Options.defaults.textParameters
+			* @default []
+			*/
+			neonText: false,
 			editable: true,
 			fontFamily: "Arial",
 			fontSize: 18,

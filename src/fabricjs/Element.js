@@ -3,6 +3,8 @@ import './objects/Group.js';
 import './objects/Text.js';
 import './objects/IText.js';
 import './objects/Textbox.js';
+import './objects/NeonText.js';
+import './objects/EngravedText.js';
 
 import {
     removeUrlParams
@@ -105,8 +107,8 @@ fabric.Object.prototype._elementControls = function () {
 fabric.Object.prototype.getType = function (fabricType) {
 
     fabricType = fabricType ? fabricType : this.type;
-
-    if (fabricType === 'text' || fabricType === 'i-text' || fabricType === 'textbox') {
+    
+    if (fabricType === 'text' || fabricType === 'i-text' || fabricType === 'textbox' || fabricType === 'neon-text' || fabricType === 'engraved-text' ) {
         return 'text';
     }
     else {

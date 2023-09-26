@@ -6,7 +6,8 @@ import {
 	addEvents,
 	toggleElemClasses,
 	removeElemClasses,
-	getScript
+	getScript,
+	addElemClasses
 } from '../../helpers/utils.js';
 
 export default class ActionsBar extends EventTarget {
@@ -166,8 +167,8 @@ export default class ActionsBar extends EventTarget {
 	}
 
 	#setPosActions(pos, actions) {
-
-		if (actions) {
+		
+		if (Array.isArray(actions) && actions.length) {
 
 			actions.forEach(action => {
 
@@ -178,7 +179,6 @@ export default class ActionsBar extends EventTarget {
 
 				}
 				else if (pos == 'center') {
-
 
 					wrapper = this.container.querySelector('[data-pos="' + pos + '"].fpd-actions-wrapper')
 
@@ -193,6 +193,14 @@ export default class ActionsBar extends EventTarget {
 					this.addActionBtn(wrapper, action);
 
 			})
+
+		}
+		else {
+
+			//hide actions wrapper			
+			if (pos == 'left' || pos == 'right')
+				addElemClasses(this.container.querySelector('[data-pos="'+pos+'"]'), ['fpd-visible-hidden'])
+			
 
 		}
 
@@ -313,7 +321,7 @@ export default class ActionsBar extends EventTarget {
 				image.onload = () => {
 
 					Modal(
-						'<div style="text-align: center;"><img src="' + image.src + '" download="product.png" /></div>',
+						'<img style="text-align: center; height: 100vh; display:inline-block;" src="' + image.src + '" download="product.png" />',
 						true
 					);
 

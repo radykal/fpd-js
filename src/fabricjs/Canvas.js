@@ -169,7 +169,7 @@ fabric.Canvas.prototype._fpdCanvasInit = function () {
 
         },
         'selection:created': ({ selected }) => {
-
+            
             if (selected.length == 1) {
                 this._onSelected(selected[0]);
             }
@@ -419,7 +419,7 @@ fabric.Canvas.prototype._renderPrintingBox = function () {
         this.remove(this.printingBoxObject);
         this.printingBoxObject = null;
     }
-
+    
     if (objectHasKeys(this.viewOptions.printingBox, ['left', 'top', 'width', 'height'])) {
 
         const printingBox = new fabric.Rect({
@@ -614,7 +614,7 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
      * @param {String} source - URL for image, text string for text element.
      * @param {String} title - The title for the element.
      * @param {Object} params - The default properties.
-     */
+     */    
     this.fire('beforeElementAdd', {
         type: type,
         source: source,
@@ -923,12 +923,25 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
             fabricText = new fabric.Textbox(source, fabricParams);
 
         }
+        //neon-text
+        else if(params.neonText) {
+
+            fabricText = new fabric.NeonText(source, fabricParams);
+
+        }
+        //neon-text
+        else if(params.engravedText) {
+            
+            fabricText = new fabric.EngravedText(source, fabricParams);
+
+        }
         //i-text
         else {
 
             fabricText = new fabric.IText(source, fabricParams);
 
         }
+        
 
         if (fabricParams.textPlaceholder || fabricParams.numberPlaceholder) {
 
@@ -993,7 +1006,7 @@ fabric.Canvas.prototype.resetSize = function () {
 
     const viewStage = this.wrapperEl;
     const viewStageWidth = viewStage.parentNode.clientWidth;   
-    let allowedHeight = viewStage.parentNode.clientHeight; 
+    let allowedHeight = window.innerHeight * parseFloat(this.viewOptions.maxCanvasHeight); 
     let canvasHeight = this.viewOptions.stageHeight;
     let fixedHeight = null;
 
@@ -1014,22 +1027,9 @@ fabric.Canvas.prototype.resetSize = function () {
     }
     
     //adjust to height if necessary
-    if (!isNaN(this.viewOptions.maxCanvasHeight) && this.viewOptions.maxCanvasHeight !== 1 && fixedHeight === null) {
-
-        const maxHeightByWindow = window.innerHeight * parseFloat(this.viewOptions.maxCanvasHeight);        
-        
-        if (potentialHeight > maxHeightByWindow) {
-            this.responsiveScale = maxHeightByWindow / canvasHeight;
-        }
-        else if (potentialHeight > allowedHeight) {
-            this.responsiveScale = allowedHeight / canvasHeight;
-        }
-
-    }
-    else if (potentialHeight > allowedHeight) {
+    if (potentialHeight > allowedHeight) {
         this.responsiveScale = allowedHeight / canvasHeight;
     }
-
 
     this.responsiveScale = parseFloat(Number(this.responsiveScale.toFixed(7)));
     this.responsiveScale = Math.min(this.responsiveScale, 1);
@@ -1045,7 +1045,7 @@ fabric.Canvas.prototype.resetSize = function () {
     .setZoom(this.responsiveScale)
     .calcOffset()
     .renderAll();  
-    
+        
     this.fire('sizeUpdate', {
         responsiveScale: this.responsiveScale,
         canvasHeight: fixedHeight ? fixedHeight : (canvasHeight * this.responsiveScale || canvasHeight)
@@ -1304,6 +1304,10 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 
     const elemType = element.getType();
 
+    if(parameters.scale !== undefined) {
+        parameters.scaleX = parameters.scaleY = parameters.scale;
+    }
+    
     //scale image into bounding box (cover or fit)        
     if (elemType == 'image' 
         && !element._isInitial 
@@ -1587,13 +1591,14 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
             parameters.text = text;
 
         }
-
+        
         if( parameters.hasOwnProperty('shadowColor') 
             || parameters.hasOwnProperty('shadowBlur') 
             || parameters.hasOwnProperty('shadowOffsetX') 
             || parameters.hasOwnProperty('shadowOffsetY')
+            && (element.engravedText || element.neonText)
         ) {
-            
+                        
             if(parameters.shadowColor === null) {
                 element.set('shadow', null);
             }
@@ -1622,7 +1627,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
     delete parameters['paths']; //no paths in parameters
     element.setOptions(parameters);
 
-    if((parameters.fontSize || parameters.fontFamily) && element.setCurvedTextPosition)
+    if((parameters.fontSize || parameters.fontFamily || parameters.letterSpacing) && element.setCurvedTextPosition)
         element.setCurvedTextPosition();
 
     if (element.type == 'i-text' && element.widthFontSize && element.text.length > 0) {
@@ -1692,8 +1697,8 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
         element.moveTo(parameters.z);
         this._bringToppedElementsToFront();
     }
-    
-    if(parameters.hasOwnProperty('curved')) {
+        
+    if(parameters.hasOwnProperty('curved') && element.setCurvedTextPath) {
 
         if(parameters.curved) {
 
@@ -1733,7 +1738,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 
     }
 
-    if(parameters.hasOwnProperty('curveRadius')) {
+    if(parameters.hasOwnProperty('curveRadius') && element.setCurvedTextPath) {
 
         element.setCurvedTextPath();
 
@@ -1790,6 +1795,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 
         setTimeout(() => {
             this.setActiveObject(element);
+            this.renderAll();
         }, 200);
 
     }

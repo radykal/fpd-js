@@ -893,6 +893,7 @@ export default class ElementToolbar extends EventTarget {
 
 			this.#toggleNavItem('color');
 			this.#togglePanelTab('color', 'fill', true);
+            
 
 		}
 
@@ -1073,6 +1074,8 @@ export default class ElementToolbar extends EventTarget {
         this.container.querySelectorAll('.fpd-scroll-area').forEach(scrollArea => {
             scrollArea.scrollLeft = scrollArea.scrollTop = 0; 
         })
+
+        this.container.dataset.elementType = element.type;
 
     }
 
