@@ -2696,10 +2696,9 @@ export default class FancyProductDesigner extends EventTarget {
          *
          * @event priceChange
          * @param {Event} event
-         * @param {number} elementPrice - The price of the element.
+         * @param {number} event.detail.elementPrice - The price of the element.
          */
-        fireEvent(this, 'priceChange', {
-        })
+        fireEvent(this, 'priceChange', { elementPrice: this.currentPrice })
 
 		return this.currentPrice;
 
