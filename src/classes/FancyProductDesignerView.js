@@ -162,7 +162,8 @@ export default class FancyProductDesignerView extends EventTarget {
             controlsAboveOverlay: true,
             centeredScaling: true,
             allowTouchScrolling: true,
-            preserveObjectStacking: true
+            preserveObjectStacking: true,
+            enablePointerEvents: false
         }, fabricCanvasOptions);        
         
         this.fabricOptions = fabricCanvasOptions;

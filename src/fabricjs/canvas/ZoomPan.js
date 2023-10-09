@@ -6,7 +6,8 @@ const ZoomPan = (canvas, type) => {
         lastTouchX,
 		lastTouchY,
         pinchElementScaleX,
-        pinchElementScaleY;
+        pinchElementScaleY,
+        initialDist = null;
  
     canvas.on({
         'mouse:down': (opts) => {
@@ -17,43 +18,61 @@ const ZoomPan = (canvas, type) => {
 
                 lastTouchX = opts.e.touches[0].clientX;
                 lastTouchY = opts.e.touches[0].clientY;
-                
+                                                
                 if(canvas.currentElement) {
                     pinchElementScaleX = canvas.currentElement.scaleX;
                     pinchElementScaleY = canvas.currentElement.scaleY;
                 }
                 
-
             }
 
         },
         'mouse:up': function(opts) {
             
             mouseDownStage = false;
+            initialDist = null;
 
         },
         'mouse:move': function(opts) {
+
+            let scale = null;
+            if((type == 'pinchImageScale' || type == 'pinchPanCanvas')
+                && opts.e.touches
+                && opts.e.touches.length == 2)
+            {
+
+                let touch1 = opts.e.touches[0],
+                    touch2 = opts.e.touches[1];
+
+                if(initialDist === null) {
+                    initialDist = Math.sqrt(Math.pow(touch2.clientX - touch1.clientX, 2) + Math.pow(touch2.clientY - touch1.clientY, 2));
+                }
+
+                let dist = Math.sqrt(Math.pow(touch2.clientX - touch1.clientX, 2) + Math.pow(touch2.clientY - touch1.clientY, 2));
+                
+                scale =  dist / initialDist;
+
+            }
             
             //on touch            
-            if(type == 'pinchImageScale' 
-                && opts.e.touches
-                && opts.e.touches.length == 2
+            if( type == 'pinchImageScale'
+                && scale !== null 
                 && canvas.currentElement 
                 && canvas.currentElement.getType() == 'image' 
                 && canvas.currentElement.resizable) 
             {
-
+                                
                 canvas.setElementOptions({
-                    scaleX: pinchElementScaleX * opts.e.scale,
-                    scaleY: pinchElementScaleY * opts.e.scale,
+                    scaleX: pinchElementScaleX * scale,
+                    scaleY: pinchElementScaleY * scale,
                 }, canvas.currentElement);
 
             }
             else if(type == 'pinchPanCanvas') {
-
+                
                 //on touch
                 if(opts.e.touches) {
-
+                    
                     //pan                    
                     if(opts.e.touches.length == 1 && canvas.panCanvas) {
 
@@ -70,8 +89,8 @@ const ZoomPan = (canvas, type) => {
 
                     }
                     //pinch
-                    else if(opts.e.touches.length == 2) {
-                        canvas.setResZoom(opts.e.scale);
+                    else if(scale !== null) {                        
+                        canvas.setResZoom(scale);
                     }
 
                 }

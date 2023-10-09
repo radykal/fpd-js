@@ -592,7 +592,7 @@ export default class Options {
 		*/
 		pixabayLang: 'en',
 		/**
-		* Shows the current image size in pixels in a tooltip above the image element when its selected.
+		* Shows the current image size (px, mm or cm) in a tooltip above the image element when its selected. The option rulerUnit controls the unit of measurement.
 		*
 		* @property imageSizeTooltip
 		* @memberof Options.defaults

@@ -102,7 +102,7 @@ export default class Mainbar extends EventTarget {
         )
         
         addEvents(
-            this.#draggableDialog,
+            document,
             ['mouseup', 'touchend'],
             this.#draggableDialogEnd.bind(this)
         )

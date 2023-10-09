@@ -22,7 +22,7 @@ import {
     fireEvent
 } from '/src/helpers/utils';
 import { getJSON, postJSON } from '/src/helpers/request';
-import { toggleElemClasses } from '../helpers/utils.js';
+import { objectHasKeys, toggleElemClasses } from '../helpers/utils.js';
 import {
     loadFonts
 } from '/src/helpers/fonts-loader';
@@ -1567,8 +1567,37 @@ export default class FancyProductDesigner extends EventTarget {
                 this.mainTooltip.classList.add('fpd-show');
 
 			}
-			else if(this.mainOptions.imageSizeTooltip && element.getType() === 'image') {                
-				this.mainTooltip.innerText = (parseInt(element.width * element.scaleX) +' x '+ parseInt(element.height * element.scaleY));
+			else if(this.mainOptions.imageSizeTooltip && element.getType() === 'image') { 
+                
+                let unit = this.mainOptions.rulerUnit;
+                let unitFactor = unit == 'cm' ? 10 : 1;
+                let viewWidth = this.currentViewInstance.options.stageWidth;
+                let widthRatio = 1;
+                let viewHeight = this.currentViewInstance.options.stageHeight;
+                let heightRatio = 1;
+                            
+                if(unit != 'px' 
+                    && objectHasKeys(this.currentViewInstance.options.printingBox, ['left','top','width','height']) 
+                    && objectHasKeys(this.currentViewInstance.options.output, ['width','height'])
+                ) {
+
+                    //one pixel in mm                    
+                    widthRatio = this.currentViewInstance.options.output.width / this.currentViewInstance.options.printingBox.width;
+                    heightRatio = this.currentViewInstance.options.output.height / this.currentViewInstance.options.printingBox.height;               
+
+                }
+                else {
+                    unitFactor = 1;
+                    unit = 'px';
+                }
+
+                let sizeWidth = parseInt((element.width * element.scaleX) * widthRatio);
+                sizeWidth = parseInt(sizeWidth / unitFactor);
+
+                let sizeHeight = parseInt((element.height * element.scaleY) * heightRatio);
+                sizeHeight = parseInt(sizeHeight / unitFactor);
+                
+				this.mainTooltip.innerText = sizeWidth +'x'+ sizeHeight + unit;
                 this.mainTooltip.classList.add('fpd-show');
 			}
 			else {
