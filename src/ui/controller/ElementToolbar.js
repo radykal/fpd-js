@@ -272,7 +272,7 @@ export default class ElementToolbar extends EventTarget {
                     if(propKey === 'scaleX' && fpdInstance.currentElement && fpdInstance.currentElement.lockUniScaling) {
                         props.scaleY = value;
                         this.#updateUIValue('scaleY', value)
-                    }
+                    }                    
 
                     fpdInstance.currentViewInstance.fabricCanvas.setElementOptions(
                         props
@@ -801,7 +801,7 @@ export default class ElementToolbar extends EventTarget {
                 
             }
             else {
-                
+                                
                 colorPanel = ColorPanel(this.fpdInstance, {
                     colors: availableColors,
                     patterns: Array.isArray(element.patterns) && (element.isSVG() || element.getType() === 'text') ? element.patterns : null,
@@ -833,12 +833,10 @@ export default class ElementToolbar extends EventTarget {
                 this.#colorWrapper.append(colorPanel);
 
             //stroke
-            const strokeColorWrapper = this.subPanel.querySelector('.fpd-stroke-color-wrapper');
+            const strokeColorWrapper = this.subPanel.querySelector('.fpd-stroke-color-wrapper');            
             strokeColorWrapper.innerHTML = '';            
-            const strokeColorPicker = ColorPicker({
-                initialColor: tinycolor(element.stroke).isValid() ? element.stroke : '#000',
-                colorNames: this.fpdInstance.mainOptions.hexNames,
-                palette: this.fpdInstance.mainOptions.colorPickerPalette,
+            const strokeColorPanel = ColorPanel(this.fpdInstance, {
+                colors: Array.isArray(element.strokeColors) && element.strokeColors.length > 0 ? element.strokeColors : [element.stroke ? element.stroke : '#000'],
                 onMove: (hexColor) => {
 
                     this.fpdInstance.currentViewInstance.fabricCanvas.setElementOptions(
@@ -856,7 +854,7 @@ export default class ElementToolbar extends EventTarget {
 
                 }
             });
-            strokeColorWrapper.append(strokeColorPicker);
+            strokeColorWrapper.append(strokeColorPanel);
 
             //shadow
             const shadowColorWrapper = this.subPanel.querySelector('.fpd-shadow-color-wrapper');

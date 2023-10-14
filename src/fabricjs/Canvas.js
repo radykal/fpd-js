@@ -160,7 +160,7 @@ fabric.Canvas.prototype._fpdCanvasInit = function () {
                         modifiedProps.angle = element.angle;
                     break;
                 }
-                
+                                
                 this.fire('elementModify', { element: element, options: modifiedProps })                
         
             }
@@ -219,7 +219,11 @@ fabric.Canvas.prototype._fpdCanvasInit = function () {
 
             })
     
-
+        },
+        'text:changed': ({target}) => {
+            
+            this.fire('elementModify', { element: target, options: {text: target.text} })
+    
         }
     });    
     
@@ -1591,12 +1595,12 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
             parameters.text = text;
 
         }
-        
+                
         if( parameters.hasOwnProperty('shadowColor') 
             || parameters.hasOwnProperty('shadowBlur') 
             || parameters.hasOwnProperty('shadowOffsetX') 
             || parameters.hasOwnProperty('shadowOffsetY')
-            && (element.engravedText || element.neonText)
+            && !(element.engravedText || element.neonText)
         ) {
                         
             if(parameters.shadowColor === null) {
@@ -1615,7 +1619,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
                     offsetX: parameters.hasOwnProperty('shadowOffsetX') ? parameters.shadowOffsetX : currentShadow.offsetX,
                     offsetY: parameters.hasOwnProperty('shadowOffsetY') ? parameters.shadowOffsetY : currentShadow.offsetY,
                 }
-                
+                                
                 element.set('shadow', shadowObj);
 
             }

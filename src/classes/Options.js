@@ -337,6 +337,7 @@ export default class Options {
 		* @memberof Options.defaults
 		* @type {Array}
 		* @default [50, 50]
+		* @ignore
 		*/
 		snapGridSize: [50, 50],
 		/**

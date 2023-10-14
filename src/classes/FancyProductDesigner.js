@@ -37,7 +37,7 @@ import {
  */
 export default class FancyProductDesigner extends EventTarget {
     
-    static version = '6.0.9';
+    static version = '6.0.10';
     static forbiddenTextChars = /<|>/g;
     static proxyFileServer = '';
     static uploadsToServer = true;
@@ -1323,7 +1323,7 @@ export default class FancyProductDesigner extends EventTarget {
 
             },
             'elementModify': ({element, options}) => {
-
+                
                 this.applyTextLinkGroup(element, options);
                 
                 /**
@@ -2650,7 +2650,7 @@ export default class FancyProductDesigner extends EventTarget {
 	 *
 	 * @method getPrintOrderData
 	 */
-	getPrintOrderData() {
+	getPrintOrderData(includeSVGData=true) {
 
 		let printOrderData = {
 			used_fonts: this.getUsedFonts(),
@@ -2658,15 +2658,19 @@ export default class FancyProductDesigner extends EventTarget {
 			custom_images: []
 		};
 
-        this.viewInstances.forEach(viewInst => {
+        if(includeSVGData) {
+
+            this.viewInstances.forEach(viewInst => {
             
-            printOrderData.svg_data.push({
-				svg: viewInst.toSVG({respectPrintingBox: true}),
-				output: viewInst.options.output
-			});
+                printOrderData.svg_data.push({
+                    svg: viewInst.toSVG({respectPrintingBox: true}),
+                    output: viewInst.options.output
+                });
+    
+            })
 
-        })
-
+        }
+        
 		this.getCustomElements('image').forEach(img => {
 
             if(!printOrderData.custom_images.includes(img.element.source))
@@ -2725,9 +2729,8 @@ export default class FancyProductDesigner extends EventTarget {
          *
          * @event priceChange
          * @param {Event} event
-         * @param {number} event.detail.elementPrice - The price of the element.
          */
-        fireEvent(this, 'priceChange', { elementPrice: this.currentPrice })
+        fireEvent(this, 'priceChange')
 
 		return this.currentPrice;
 
