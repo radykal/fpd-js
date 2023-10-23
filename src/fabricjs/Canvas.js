@@ -3,6 +3,7 @@ import './canvas/History.js';
 import ZoomPan from './canvas/ZoomPan.js';
 import Snap from './canvas/Snap.js';
 import Ruler from './canvas/Ruler.js';
+import tinycolor from "tinycolor2";
 
 import {
     deepMerge,
@@ -289,25 +290,30 @@ fabric.Canvas.prototype._onMultiSelected = function (selectedElements) {
     const activeSelection = this.getActiveObject();
 
     if (this.viewOptions.multiSelection) {
-
+        
         activeSelection.set({
-            lockScalingX: true,
-            lockScalingY: true,
-            lockRotation: true,
-            hasControls: false,
+            lockScalingX: !Boolean(this.viewOptions.editorMode),
+            lockScalingY: !Boolean(this.viewOptions.editorMode),
+            lockRotation: !Boolean(this.viewOptions.editorMode),
+            hasControls: Boolean(this.viewOptions.editorMode),
             borderDashArray: [8, 8],
-            cornerStyle: 'circle',
-            cornerSize: 16,
+            cornerSize: 24,
             transparentCorners: false,
             borderColor: this.viewOptions.multiSelectionColor,
             borderScaleFactor: 3,
         });
 
         selectedElements.forEach((obj) => {
-
-            if (!obj.draggable || obj.locked) {
+            
+            if ((!obj.draggable && !this.viewOptions.editorMode) || !obj.evented) {   
                 activeSelection.removeWithUpdate(obj);
             }
+        })
+
+        activeSelection.setControlsVisibility({
+            tr: false,
+            tl: false,
+            mtr: false
         })
 
     }
@@ -361,7 +367,9 @@ fabric.Canvas.prototype._renderElementBoundingBox = function (element) {
                 evented: false,
                 name: "bounding-box",
                 excludeFromExport: true,
-                _ignore: true
+                _ignore: true,
+                rx: 0,
+                ry: 0
             };
             
             boundingBoxProps = deepMerge(boundingBoxProps, this.viewOptions.boundingBoxProps);
@@ -1729,7 +1737,8 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
             }
         
             
-            //replace new lines in curved text
+            //replace new lines in curved text            
+            element.textAlign = 'left';
             element.set('text', element.text.replace(/[\r\n]+/g, ''));
             element.setCurvedTextPosition(); 
 

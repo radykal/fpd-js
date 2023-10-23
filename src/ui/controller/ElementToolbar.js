@@ -3,6 +3,7 @@ import ColorPanel from '../view/comps/ColorPanel.js';
 import ColorPalette from '../view/comps/ColorPalette.js';
 import ColorPicker from '../view/comps/ColorPicker.js';
 import Filters from '../../helpers/Filters.js';
+import tinycolor from "tinycolor2";
 
 import { 
     addEvents,
@@ -921,7 +922,7 @@ export default class ElementToolbar extends EventTarget {
 		if(element.getType() === 'text' && (element.editable || element.__editorMode)) {
             
 			this.#toggleNavItem('edit-text');
-            this.#toggleNavItem('text-size', element.resizable);
+            this.#toggleNavItem('text-size', Boolean(element.resizable || element.__editorMode));
 			this.#toggleNavItem('font-family');
             this.#toggleNavItem('text-format');
 

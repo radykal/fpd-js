@@ -1,3 +1,5 @@
+import WebFont from 'webfontloader';
+
 const parseFontsToEmbed = (fontItem) => {
 
     let embedString = '';
@@ -38,7 +40,7 @@ const parseFontsToEmbed = (fontItem) => {
 
 export { parseFontsToEmbed }
 
-const loadFonts = (fpdInstance, callback) => {
+const loadFonts = (fpdInstance, callback) => {    
     
     let fonts = fpdInstance.mainOptions.fonts;
             
@@ -127,7 +129,7 @@ const loadFonts = (fpdInstance, callback) => {
             WebFontOpts.custom = {families: customFonts};
         }
     
-        if(typeof WebFont !== 'undefined' && (googleFonts.length > 0 || customFonts.length > 0)) {
+        if((googleFonts.length > 0 || customFonts.length > 0)) {
             WebFont.load(WebFontOpts);
         }
         else {

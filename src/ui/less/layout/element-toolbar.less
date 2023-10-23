@@ -41,7 +41,7 @@ fpd-element-toolbar {
 
             >span[class^=fpd-icon-] {
                 display: block;
-                font-size: 22px;
+                font-size: 22px !important;
                 line-height: 28px;
             }
 
@@ -120,19 +120,28 @@ fpd-element-toolbar {
 
                 display: flex;
                 align-items: center;
-                height: 30px;
-                background: var(--fpd-module-secondary-color);
-                color: var(--fpd-module-secondary-text-color);
 
                 > span {
                     flex: 1;
                     text-align: center;
-                    padding: 8px 0;
+                    padding: 8px 0 6px 0;
                     cursor: pointer;
+                    opacity: 0.7;
                     
                     &.fpd-active {
-                        background: var(--fpd-primary-fg-color);
                         color: var(--fpd-secondary-color);
+                        position: relative;
+                        opacity: 1;
+
+                        &:after {
+                            background-color: var(--fpd-secondary-color);
+                            position: absolute;
+                            content: "";
+                            width: 60%;
+                            height: 2px;
+                            left: 20%;
+                            bottom: 0;
+                        }
                     }
                 }
             }

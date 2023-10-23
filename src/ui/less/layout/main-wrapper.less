@@ -61,6 +61,22 @@
         &.fpd-drag canvas {
             cursor: grab !important;
         }
+
+        > .fpd-warnings {
+            position: absolute;
+            width: 90%;
+            left: 5%;
+            top: 20px;
+            font-size: 14px;
+
+            > .fpd-size-warning {
+                padding: 10px;
+                background: var(--fpd-yellow-color);
+                color: #000;
+                border-radius: var(--fpd-border-radius);
+                box-shadow: 0 0 6px rgba(0,0,0,0.1);
+            }
+        }
         
     }
             

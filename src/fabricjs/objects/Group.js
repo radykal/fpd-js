@@ -1,3 +1,5 @@
+import tinycolor from "tinycolor2";
+
 fabric.Group.prototype.changeObjectColor = function (index, hexColor) {
     
     let colors = [];

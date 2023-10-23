@@ -123,7 +123,7 @@ export default class UploadsModule extends EventTarget {
                 
                 this.#addGridItem(
                     storageImage.url,
-                    storageImage.title
+                    storageImage.title,
                 );
         
                 const image = new Image();
@@ -250,57 +250,10 @@ export default class UploadsModule extends EventTarget {
         reader.onload = (evt) => {
                     
             const imgDataURI = evt.currentTarget.result;
-            
-            //check image resolution of jpeg
-            if(file.type === 'image/jpeg' && mainOptions.customImageParameters.minDPI) {   
-                
-                const jpeg = new JpegMeta.JpegFile(
-                    atob(imgDataURI.replace(/^.*?,/,'')), 
-                    file.name
-                );
-                let realRes = null;
                         
-                if(jpeg.tiff && jpeg.tiff.XResolution && jpeg.tiff.XResolution.value) {
-        
-                    var xResDen = jpeg.tiff.XResolution.value.den,
-                        xResNum = jpeg.tiff.XResolution.value.num;
-        
-                    realRes = xResNum / xResDen;
-        
-                }
-                else if(jpeg.jfif && jpeg.jfif.Xdensity && jpeg.jfif.Xdensity.value) {
-                    realRes = jpeg.jfif.Xdensity.value;
-                }
-        
-                if(realRes !== null) {
-                    
-                    console.log(file.name+' Real Resolution: '+ realRes);
-        
-                    if(realRes < mainOptions.customImageParameters.minDPI) {
-                        
-                        let dpiMsg = this.fpdInstance.translator.getTranslation(
-                            'misc', 
-                            'minimum_dpi_info'
-                        );
-                        dpiMsg = dpiMsg.replace('%dpi', mainOptions.customImageParameters.minDPI)
-                        
-                        Modal(dpiMsg, false, '', this.fpdInstance.container);
-                        
-                        this.fpdInstance.loadingCustomImage = false;
-                        return false;
-                        
-                    }
-        
-                }
-                else {
-                    console.log(file.name + ': Resolution is not accessible.');
-                }
-        
-            }
-            
             const thumbnail = this.#addGridItem(
                 imgDataURI,
-                file.name
+                file.name,
             );
                         
             if(FancyProductDesigner.uploadsToServer) {
@@ -320,14 +273,13 @@ export default class UploadsModule extends EventTarget {
             }
                     
             //check image dimensions
-            var checkDimImage = new Image();
+            const checkDimImage = new Image();
             checkDimImage.onload = (evt) => {
                                 
                 const image = evt.currentTarget;
         
                 let imageH = image.height,
-                    imageW = image.width,
-                    currentCustomImageParameters = this.fpdInstance.currentViewInstance.options.customImageParameters;
+                    imageW = image.width;
         
                 if(checkImageDimensions(this.fpdInstance, imageW, imageH)) {
                     
@@ -417,9 +369,8 @@ export default class UploadsModule extends EventTarget {
                 }
         
             };
-        
             checkDimImage.src = imgDataURI;
-        
+    
         }
         
         //add file to start loading
@@ -502,7 +453,7 @@ export default class UploadsModule extends EventTarget {
             var savedLocalFiles = window.localStorage.getItem('fpd_uploaded_images') ? JSON.parse(window.localStorage.getItem('fpd_uploaded_images')) : [],
                 imgObj = {
                     url: url,
-                    title: title
+                    title: title,
                 };
     
             savedLocalFiles.push(imgObj);

@@ -8,15 +8,6 @@ const copy = require('gulp-copy');
 
 const { createModule } = require('./gulp-tasks/createModule');
 
-function buildVendorJS() {
-
-    return src('./src/vendor/js/*.js')
-        .pipe(uglify())
-        .pipe(concat('vendor.js'))
-        .pipe(dest('dist/js/'));
-
-}
-
 function buildJS() {
 
     return src('./src/classes/FancyProductDesigner.js')
@@ -59,7 +50,7 @@ function buildJS() {
 
 function minifyJS() {
 
-    return src(['./dist/js/vendor.js', './dist/js/FancyProductDesigner.js'])
+    return src(['./dist/js/FancyProductDesigner.js'])
         .pipe(uglify())
         .pipe(concat('FancyProductDesigner.min.js'))
         .pipe(dest('dist/js/'));
@@ -102,6 +93,6 @@ function combineCSS() {
 exports.buildJS = buildJS;
 exports.minifyJS = minifyJS;
 exports.buildCSS = buildCSS;
-exports.buildVendors = series(buildVendorJS, buildVendorCSS, copyFontFiles);
-exports.default = series(buildVendorJS, buildVendorCSS, copyFontFiles, buildJS, minifyJS, buildCSS, combineCSS);
+exports.buildVendors = series(buildVendorCSS, copyFontFiles);
+exports.default = series(buildVendorCSS, copyFontFiles, buildJS, minifyJS, buildCSS, combineCSS);
 exports.createModule = createModule;

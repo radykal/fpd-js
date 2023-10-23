@@ -11,6 +11,7 @@ import {
 
 import ColorPalette from '/src/ui/view/comps/ColorPalette';
 import ColorPanel from '/src/ui/view/comps/ColorPanel';
+import AreaSortable from '../../../vendor/js/areasortable.js';
 
 export default class LayersModule extends EventTarget {
     
@@ -55,6 +56,25 @@ export default class LayersModule extends EventTarget {
                             textInput.value =  options.text;
 
                     }
+
+                }
+
+            }
+        )
+
+        addEvents(
+            fpdInstance,
+            ['elementModify', 'elementChange'], 
+            (evt) => {
+                
+                if(fpdInstance.productCreated) {
+                    
+                    const {element, options, type} = evt.detail;
+
+                    if((options && options.scaleX) || type == 'scaling') {
+                        this.#updateSizeDisplay(element);
+                    }
+                    
 
                 }
 
@@ -221,6 +241,17 @@ export default class LayersModule extends EventTarget {
         const textWrapper = document.createElement('div');
         textWrapper.className = 'fpd-cell-1';
         textWrapper.append(sourceContent);
+
+        if(element.isBitmap()) {
+
+            const imgMetaWrapper = document.createElement('div');
+            imgMetaWrapper.className = 'fpd-img-meta';
+            imgMetaWrapper.innerHTML = 'W: <span data-prop="width"></span>H: <span data-prop="height"></span>';
+            imgMetaWrapper.innerHTML += '<div class="fpd-dpi">DPI: <span data-prop="dpi"></span></div>';
+            textWrapper.append(imgMetaWrapper);
+
+        }
+
         rowElem.append(textWrapper);
         
         //create actions
@@ -447,6 +478,8 @@ export default class LayersModule extends EventTarget {
                 
             }
         )
+
+        this.#updateSizeDisplay(element);
         
     }
     
@@ -479,6 +512,30 @@ export default class LayersModule extends EventTarget {
         const groupColors = element.changeObjectColor(pathIndex, hexColor);
         this.fpdInstance.currentViewInstance.fabricCanvas.setElementOptions({fill: groupColors}, element);
         
+    }
+
+    #updateSizeDisplay(element) {
+
+        const rowElem = this.listElem.querySelector('.fpd-list-row[id="'+element.id+'"]');
+
+        if(rowElem && element.isBitmap()) {
+
+            const imgSize = this.fpdInstance.calcDisplaySize(element);
+
+            rowElem.querySelector('[data-prop="width"]').innerText = imgSize.width+imgSize.unit;
+            rowElem.querySelector('[data-prop="height"]').innerText = imgSize.height+imgSize.unit;
+
+            if(imgSize.dpi) {
+
+                rowElem.querySelector('[data-prop="dpi"]').innerText = imgSize.dpi;                
+
+            }
+            else {
+                addElemClasses(rowElem, ['fpd-hide-dpi'])
+            }
+
+        }
+
     }
 
 }

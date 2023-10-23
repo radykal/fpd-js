@@ -595,12 +595,12 @@ export default class Options {
 		/**
 		* Shows the current image size (px, mm or cm) in a tooltip above the image element when its selected. The option rulerUnit controls the unit of measurement.
 		*
-		* @property imageSizeTooltip
+		* @property sizeTooltip
 		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		*/
-		imageSizeTooltip: false,
+		sizeTooltip: false,
 		/**
 		* Highlight objects (editable texts and upload zones) with a dashed border. To enable this just define a hexadecimal color value.
 		*

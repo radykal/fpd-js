@@ -142,6 +142,7 @@
 		"dynamic_views_add_view": "Add Page",
 		"bulk_add_variations_title": "Bulk Order",
 		"bulk_add_variations_add": "Add",
-		"bulk_add_variations_term": "Please set all variations in the Bulk Order panel correctly!"
+		"bulk_add_variations_term": "Please set all variations in the Bulk Order panel correctly!",
+		"dpi_warning": "The image has a low resolution. Upload a larger image or scale down for better print results."
 	}
 }

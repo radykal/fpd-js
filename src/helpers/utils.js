@@ -1,5 +1,6 @@
 import Modal from '../ui/view/comps/Modal.js';
 import Snackbar from '../ui/view/comps/Snackbar.js';
+import tinycolor from "tinycolor2";
 
 if (window) {
     window.FPDUtils = {};
