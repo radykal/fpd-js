@@ -11,193 +11,214 @@ fabric.Text.prototype.initialize = (function (originalFn) {
 })(fabric.Text.prototype.initialize);
 
 
-// fabric.Text.prototype.toSVG = (function (originalFn) {
+fabric.Text.prototype.toSVG = (function (originalFn) {
 
-//     return function (...args) {
+    return function (...args) {
+        console.log(this.path, "------toSVG called")
+        console.log(fabric.util.degreesToRadians(50))
 
-//         if (this.curved && this.path) {
+        if (this.curved && this.path) {
             
-//             let fontFamily = this.fontFamily.replace(/"/g, "'");
-//             let fontSize = this.fontSize;
-//             let fontStyle = this.fontStyle;
-//             let fontWeight = this.fontWeight;
-//             let fill = this.fill;
-//             let letterSpacing = `${this.letterSpacing/10}em`;
+            let fontFamily = this.fontFamily.replace(/"/g, "'");
+            let fontSize = this.fontSize;
+            let fontStyle = this.fontStyle;
+            let fontWeight = this.fontWeight;
+            let fill = this.fill;
+            let letterSpacing = `${this.letterSpacing / 10}em`;
 
-//             let path = this.path;
-//       let fillPath = path.fill ? path.fill : "none";
-//       let strokePath = path.stroke ? path.stroke : "none";
-//       let strokeWidth = path.strokeWidth ? path.strokeWidth : 0;
-//       let display = path.visible ? 'block' : 'none';
+            let path = this.path;
+            let fillPath = path.fill ? path.fill : "none";
+            let strokePath = path.stroke ? path.stroke : "none";
+            let strokeWidth = path.strokeWidth ? path.strokeWidth : 0;
+            let display = path.visible ? 'block' : 'none';
+            // get path length
+            let pathData = this.path.path;
+            let pathInfo = fabric.util.getPathSegmentsInfo(pathData);
+            let pathLength = pathInfo[pathInfo.length - 1].length;
+            console.log(pathInfo, "------------path")
+
+            // reverse pathdata to emulate side="right"
+            if (this.pathSide === "right") {
+                // clone pathdata for reversing
+                pathData = JSON.parse(JSON.stringify(pathData));
+                pathData = reversePathData(pathData);
+            }
+            // get pathdata d string
+            let d = pathData.flat().join(" ");
+
+            let id = Math.random().toString(36).substr(2, 9);
+            let dominantbaseline = "auto";
+            let pathStartOffset = this.pathStartOffset;
+            let dy = 0;
+
+            // translate fabric.js baseline offsets to svg dominant baseline values
+            if (this.pathAlign === "center") {
+                dominantbaseline = "middle";
+            } else if (this.pathAlign === "baseline") {
+                dominantbaseline = "auto";
+            } else if (this.pathAlign === "ascender") {
+                dominantbaseline = "hanging";
+            } else if (this.pathAlign === "descender") {
+                dominantbaseline = "auto";
+                dy = (fontSize / 100) * -22;
+            }
+
+            let textAnchor = "start";
+            if (this.textAlign == "center") {
+                textAnchor = "middle";
+                pathStartOffset += pathLength / 2;
+            }
+
+            if (this.textAlign == "right") {
+                textAnchor = "end";
+                pathStartOffset += pathLength;
+            }
+
+            //----------------------------------------------
+
+            let textPaths = "";
+            let offset = pathStartOffset;
+            let PI = 3.141592
+            for (let i = 0; i < this.text.length; i++) {
+                let letter = this.text[i];
+                let text = new fabric.Text(letter, {
+                    fontFamily, // Font family
+                    fontSize, // Font size in pixels
+                  });
+                let textPathEl = `<textPath 
+                  xlink:href="#textOnPath${id}" 
+                  startOffset="${offset}"
+                  dominant-baseline="${dominantbaseline}"
+                  dy="${dy}"
+                >
+                  ${letter}
+                </textPath>`;
+                offset += (text.width + 1)
+                console.log(text.width, "--------------width")
+                textPaths += textPathEl;
+              }
+
+            //----------------------------------------------
+            // append texpath to defs or as rendered element
+            let textPathEl;
+            if (
+                (fillPath && fillPath !== "none") ||
+                (!strokePath && strokePath !== "none")
+            ) {
+                textPathEl = `<path id="textOnPath${id}" display="${display}" fill="${fillPath}" stroke="${strokePath}" stroke-width="${strokeWidth}" d="${d}" />`;
+            } else {
+                textPathEl = `<defs>
+          <path id="textOnPath${id}" d="${d}" />
+        </defs>`;
+            }
+            console.log(pathStartOffset, "------------offset")
+
+            return this._createBaseSVGMarkup(
+                this.path?.path
+                    ? [
+                        textPathEl,
+                        `<text 
+                font-family="${fontFamily.replace(/"/g, "'")}" 
+                fill="${fill}"
+                font-size="${fontSize}" 
+                font-style="${fontStyle}" 
+                font-weight="${fontWeight}"
+                letter-spacing="${letterSpacing}"
+                >
+                  ${textPaths}
+                </text>`
+                    ]
+                    : [
+                        `<text 
+              xml:space="preserve" 
+              font-family="${fontFamily}" 
+              font-size="${fontSize}" 
+              font-style="${fontStyle}" 
+              font-weight="${fontWeight}" 
+              > 
+              ${this.addPaintOrder()}
+              ${this.text}
+              </text>`
+                    ],
+                { reviver: args[0], noStyle: true, withShadow: true }
+            );
 
 
-//       // get path length
-//       let pathData = this.path.path;
-//       let pathInfo = fabric.util.getPathSegmentsInfo(pathData);
-//       let pathLength = pathInfo[pathInfo.length - 1].length;
-  
-//       // reverse pathdata to emulate side="right"
-//       if (this.pathSide === "right") {
-//         // clone pathdata for reversing
-//         pathData = JSON.parse(JSON.stringify(pathData));
-//         pathData = reversePathData(pathData);
-//       }
-//       // get pathdata d string
-//       let d = pathData.flat().join(" ");
-  
-//       let id = Math.random().toString(36).substr(2, 9);
-//       let dominantbaseline = "auto";
-//       let pathStartOffset = this.pathStartOffset;
-//       let dy = 0;
-  
-//       // translate fabric.js baseline offsets to svg dominant baseline values
-//       if (this.pathAlign === "center") {
-//         dominantbaseline = "middle";
-//       } else if (this.pathAlign === "baseline") {
-//         dominantbaseline = "auto";
-//       } else if (this.pathAlign === "ascender") {
-//         dominantbaseline = "hanging";
-//       } else if (this.pathAlign === "descender") {
-//         dominantbaseline = "auto";
-//         dy = (fontSize / 100) * -22;
-//       }
-  
-//       let textAnchor = "start";
-//       if (this.textAlign == "center") {
-//         textAnchor = "middle";
-//         pathStartOffset += pathLength / 2;
-//       }
-  
-//       if (this.textAlign == "right") {
-//         textAnchor = "end";
-//         pathStartOffset += pathLength;
-//       }
-  
-//       // append texpath to defs or as rendered element
-//       let textPathEl;
-//       if (
-//         (fillPath && fillPath !== "none") ||
-//         (!strokePath && strokePath !== "none")
-//       ) {
-//         textPathEl = `<path id="textOnPath${id}" display="${display}" fill="${fillPath}" stroke="${strokePath}" stroke-width="${strokeWidth}" d="${d}" />`;
-//       } else {
-//         textPathEl = `<defs>
-//           <path id="textOnPath${id}" d="${d}" />
-//         </defs>`;
-//       }
-  
-//       return this._createBaseSVGMarkup(
-//         this.path?.path
-//           ? [
-//               textPathEl,
-//               `<text 
-//                 font-family="${fontFamily.replace(/"/g, "'")}" 
-//                 fill="${fill}"
-//                 font-size="${fontSize}" 
-//                 font-style="${fontStyle}" 
-//                 font-weight="${fontWeight}"
-//                 letter-spacing="${letterSpacing}"
-//                 >
-//                   <textPath text-anchor="${textAnchor}" 
-//                   dominant-baseline="${dominantbaseline}" 
-//                   startOffset="${pathStartOffset}" 
-//                   href="#textOnPath${id}" 
-//                   xlink:href="#textOnPath${id}"> 
-//                   <tspan dy="${dy}">${this.text}</tspan>
-//                   </textPath>
-//                 </text>`
-//             ]
-//           : [
-//               `<text 
-//               xml:space="preserve" 
-//               font-family="${fontFamily}" 
-//               font-size="${fontSize}" 
-//               font-style="${fontStyle}" 
-//               font-weight="${fontWeight}" 
-//               > 
-//               ${this.addPaintOrder()}
-//               ${this.text}
-//               </text>`
-//             ],
-//         { reviver: args[0], noStyle: true, withShadow: true }
-//       );
-    
-    
-//         } else {
-//             return originalFn.call(this, ...args);  
-//         }
+        } else {
+            return originalFn.call(this, ...args);
+        }
 
-//     }
+    }
 
-// })(fabric.Text.prototype.toSVG);
+})(fabric.Text.prototype.toSVG);
 
 /**
  * Reverse pathdata
  */
-// function reversePathData(pathData) {
-//     // start compiling new path data
-//     let pathDataNew = [];
-  
-//     // helper to rearrange control points for all command types
-//     const reverseControlPoints = (values) => {
-//       let controlPoints = [];
-//       let endPoint = [];
-//       for (let p = 0; p < values.length; p += 2) {
-//         controlPoints.push([values[p], values[p + 1]]);
-//       }
-//       endPoint = controlPoints.pop();
-//       controlPoints.reverse();
-//       return [controlPoints, endPoint];
-//     };
-  
-//     let closed =
-//       pathData[pathData.length - 1][0].toLowerCase() === "z" ? true : false;
-//     if (closed) {
-//       // add lineto closing space between Z and M
-//       pathData = addClosePathLineto(pathData);
-//       // remove Z closepath
-//       pathData.pop();
-//     }
-  
-//     // define last point as new M if path isn't closed
-//     let valuesLast = pathData[pathData.length - 1];
-//     let valuesLastL = valuesLast.length;
-//     let M = closed
-//       ? pathData[0]
-//       : ["M", valuesLast[valuesLastL - 2], valuesLast[valuesLastL - 1]];
-//     // starting M stays the same – unless the path is not closed
-//     pathDataNew.push(M);
-  
-//     // reverse path data command order for processing
-//     pathData.reverse();
-//     for (let i = 1; i < pathData.length; i++) {
-//       let com = pathData[i];
-//       let values = com.slice(1);
-//       let comPrev = pathData[i - 1];
-//       let typePrev = comPrev[0];
-//       let valuesPrev = comPrev.slice(1);
-//       // get reversed control points and new end coordinates
-//       let [controlPointsPrev, endPointsPrev] = reverseControlPoints(valuesPrev);
-//       let [controlPoints, endPoints] = reverseControlPoints(values);
-  
-//       // create new path data
-//       let newValues = [];
-//       newValues = controlPointsPrev.flat().concat(endPoints);
-//       pathDataNew.push([typePrev, ...newValues]);
-//     }
-  
-//     // add previously removed Z close path
-//     if (closed) {
-//       pathDataNew.push(["z"]);
-//     }
-//     return pathDataNew;
-//   }
-  
-  /**
-   * Add closing lineto:
-   * needed for path reversing or adding points
-   */
-  function addClosePathLineto(pathData) {
+function reversePathData(pathData) {
+    // start compiling new path data
+    let pathDataNew = [];
+
+    // helper to rearrange control points for all command types
+    const reverseControlPoints = (values) => {
+        let controlPoints = [];
+        let endPoint = [];
+        for (let p = 0; p < values.length; p += 2) {
+            controlPoints.push([values[p], values[p + 1]]);
+        }
+        endPoint = controlPoints.pop();
+        controlPoints.reverse();
+        return [controlPoints, endPoint];
+    };
+
+    let closed =
+        pathData[pathData.length - 1][0].toLowerCase() === "z" ? true : false;
+    if (closed) {
+        // add lineto closing space between Z and M
+        pathData = addClosePathLineto(pathData);
+        // remove Z closepath
+        pathData.pop();
+    }
+
+    // define last point as new M if path isn't closed
+    let valuesLast = pathData[pathData.length - 1];
+    let valuesLastL = valuesLast.length;
+    let M = closed
+        ? pathData[0]
+        : ["M", valuesLast[valuesLastL - 2], valuesLast[valuesLastL - 1]];
+    // starting M stays the same – unless the path is not closed
+    pathDataNew.push(M);
+
+    // reverse path data command order for processing
+    pathData.reverse();
+    for (let i = 1; i < pathData.length; i++) {
+        let com = pathData[i];
+        let values = com.slice(1);
+        let comPrev = pathData[i - 1];
+        let typePrev = comPrev[0];
+        let valuesPrev = comPrev.slice(1);
+        // get reversed control points and new end coordinates
+        let [controlPointsPrev, endPointsPrev] = reverseControlPoints(valuesPrev);
+        let [controlPoints, endPoints] = reverseControlPoints(values);
+
+        // create new path data
+        let newValues = [];
+        newValues = controlPointsPrev.flat().concat(endPoints);
+        pathDataNew.push([typePrev, ...newValues]);
+    }
+
+    // add previously removed Z close path
+    if (closed) {
+        pathDataNew.push(["z"]);
+    }
+    return pathDataNew;
+}
+
+/**
+ * Add closing lineto:
+ * needed for path reversing or adding points
+ */
+function addClosePathLineto(pathData) {
     let pathDataL = pathData.length;
     let closed = pathData[pathDataL - 1][0] === "Z";
     let M = pathData[0];
@@ -206,11 +227,11 @@ fabric.Text.prototype.initialize = (function (originalFn) {
     let lastComL = lastCom.length;
     let [xE, yE] = [lastCom[lastComL - 2], lastCom[lastComL - 1]];
     if (closed && (x0 !== xE || y0 !== yE)) {
-      pathData.pop();
-      pathData.push(["L", x0, y0], ["Z"]);
+        pathData.pop();
+        pathData.push(["L", x0, y0], ["Z"]);
     }
     return path;
-  }
+}
 
 fabric.Text.prototype._constrainScale = (function (originalFn) {
 
@@ -282,12 +303,12 @@ fabric.Text.prototype._createTextCharSpan = function (_char, styleDecl, left, to
     var shouldUseWhitespace = _char !== _char.trim() || _char.match(multipleSpacesRegex),
         styleProps = this.getSvgSpanStyles(styleDecl, shouldUseWhitespace);
 
-        //FPD: add underlined text
-        styleProps += this.textDecoration === 'underline' ? ' text-decoration: underline;' : '';
-    
+    //FPD: add underlined text
+    styleProps += this.textDecoration === 'underline' ? ' text-decoration: underline;' : '';
+
     let fillStyles = styleProps ? 'style="' + styleProps + '"' : '',
         dy = styleDecl.deltaY, dySpan = '',
-        NUM_FRACTION_DIGITS = fabric.Object.NUM_FRACTION_DIGITS;    
+        NUM_FRACTION_DIGITS = fabric.Object.NUM_FRACTION_DIGITS;
 
     if (dy) {
         dySpan = ' dy="' + fabric.util.toFixed(dy, NUM_FRACTION_DIGITS) + '" ';
