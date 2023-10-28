@@ -1,3 +1,4 @@
+import { Pacifico, Lobster, Aller } from "../../helpers/constants";
 fabric.Text.prototype.initialize = (function (originalFn) {
 
     return function (...args) {
@@ -100,12 +101,28 @@ fabric.Text.prototype.toSVG = (function (originalFn) {
 
             //----------------------------------------------
             // append texpath to defs or as rendered element
-            let textPathEl;
+            let textPathEl, fontDataURI
+            switch(fontFamily) {
+                case "Lobster":
+                    fontDataURI = Lobster
+                    break
+                case "Pacifico":
+                    fontDataURI = Pacifico
+                    break
+                case "Aller":
+                    fontDataURI = Aller
+                    break
+            }
+            let fontData = `<style>
+            @font-face {
+                font-family: ${fontFamily};
+                src: url("${fontDataURI}");
+            }</style>`
             if (
                 (fillPath && fillPath !== "none") ||
                 (!strokePath && strokePath !== "none")
             ) {
-                textPathEl = `<path id="textOnPath${id}" display="${display}" fill="${fillPath}" stroke="${strokePath}" stroke-width="${strokeWidth}" d="${d}" />`;
+                textPathEl = `<path id="textOnPath${id}" display="${display}" fill="${fillPath}" stroke="${strokePath}" stroke-width="${strokeWidth}" d="${d}" style="display: none"/>`;
             } else {
                 textPathEl = `<defs>
           <path id="textOnPath${id}" d="${d}" />
@@ -116,6 +133,7 @@ fabric.Text.prototype.toSVG = (function (originalFn) {
             return this._createBaseSVGMarkup(
                 this.path?.path
                     ? [
+                        fontData,
                         textPathEl,
                         `<text 
                 font-family="${fontFamily.replace(/"/g, "'")}" 
