@@ -5,7 +5,7 @@ import {
     addEvents,
     getItemPrice, 
     createImgThumbnail
-} from '/src/helpers/utils';
+} from '../../../helpers/utils.js';
 
 export default class DesignsModule extends EventTarget {
     
@@ -14,7 +14,7 @@ export default class DesignsModule extends EventTarget {
     #categoryLevelIndexes = [];
     #currentCategories = null;
     #dynamicDesignsId = null;
-    
+
     constructor(fpdInstance, wrapper, dynamicDesignsId=null) {
         
         super();
@@ -287,8 +287,8 @@ export default class DesignsModule extends EventTarget {
     
         let catTitles = [];
         
-        //display dynamic designs        
-        if(this.#dynamicDesignsId) {
+        //display dynamic designs
+        if(typeof this.#dynamicDesignsId == 'string') {
             catTitles = this.fpdInstance.mainOptions.dynamicDesigns[this.#dynamicDesignsId].categories;
         }
         else if(this.fpdInstance.currentViewInstance) {

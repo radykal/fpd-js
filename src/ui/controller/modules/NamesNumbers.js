@@ -4,7 +4,7 @@ import {
     addEvents,
     addElemClasses,
     removeElemClasses
-} from '/src/helpers/utils';
+} from '../../../helpers/utils.js';
     
 export default class NamesNumbersModule extends EventTarget {
         

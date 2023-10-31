@@ -21,12 +21,12 @@ import {
     localStorageAvailable,
     formatPrice,
     fireEvent
-} from '/src/helpers/utils';
-import { getJSON, postJSON } from '/src/helpers/request';
+} from '../helpers/utils.js';
+import { getJSON, postJSON } from '../helpers/request.js';
 import { objectHasKeys, pixelToUnit, toggleElemClasses, unitToPixel } from '../helpers/utils.js';
 import {
     loadFonts
-} from '/src/helpers/fonts-loader';
+} from '../helpers/fonts-loader.js';
 
 /**
  * Creates a new FancyProductDesigner.

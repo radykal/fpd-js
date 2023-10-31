@@ -13,7 +13,7 @@ import {
     removeElemClasses,
     toggleElemClasses,
     getItemPrice
-} from '/src/helpers/utils';
+} from '../../../helpers/utils.js';
 
 export default class ImagesModule extends EventTarget {
     

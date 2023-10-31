@@ -1,9 +1,11 @@
-import ColorPalette from './ColorPalette.js';
+import Picker from 'vanilla-picker/csp'
+import tinycolor from "tinycolor2"
+
+import ColorPalette from './ColorPalette.js'
+
 import { 
     addEvents
 } from '../../../helpers/utils.js';
-import tinycolor from "tinycolor2";
-import Picker from 'vanilla-picker/csp';
 
 const ColorPicker = (props) => {
     

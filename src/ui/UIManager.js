@@ -17,7 +17,7 @@ import {
     toggleElemClasses,
     addElemClasses,
     removeElemClasses
-} from '/src/helpers/utils';
+} from '../helpers/utils.js';
 
 export default class UIManager extends EventTarget {
     

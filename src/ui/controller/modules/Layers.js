@@ -7,10 +7,10 @@ import {
     toggleElemClasses,
     removeElemClasses,
     addElemClasses
-} from '/src/helpers/utils';
+} from '../../../helpers/utils.js';
 
-import ColorPalette from '/src/ui/view/comps/ColorPalette';
-import ColorPanel from '/src/ui/view/comps/ColorPanel';
+import ColorPalette from '../../view/comps/ColorPalette.js';
+import ColorPanel from '../../view/comps/ColorPanel.js';
 import AreaSortable from '../../../vendor/js/areasortable.js';
 
 export default class LayersModule extends EventTarget {

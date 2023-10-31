@@ -13,7 +13,7 @@ import {
     isBitmap,
     elementAvailableColors,
     getBgCssFromElement
-} from '/src/helpers/utils';
+} from '../../helpers/utils.js';
 import { postJSON } from '../../helpers/request';
 import Snackbar from '../view/comps/Snackbar';
 

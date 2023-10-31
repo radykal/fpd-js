@@ -7,7 +7,7 @@ import {
     isEmpty,
     toggleElemClasses,
     elementAvailableColors
-} from '/src/helpers/utils';
+} from '../../../helpers/utils.js';
 
 /**
  * The class to create the Color Selection that is related to FancyProductDesigner class.

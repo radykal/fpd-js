@@ -1,6 +1,6 @@
 import '../fabricjs/Canvas.js';
 import Modal from '../ui/view/comps/Modal.js';
-import tinycolor from "tinycolor2";
+import tinycolor from "tinycolor2"
 
 import { 
     deepMerge,
@@ -8,7 +8,7 @@ import {
     toggleElemClasses
 } from '../helpers/utils';
 
-import { parseFontsToEmbed } from '/src/helpers/fonts-loader';
+import { parseFontsToEmbed } from '../helpers/fonts-loader';
 
 /**
  * Creates a new FancyProductDesignerView.
