@@ -614,7 +614,7 @@ fabric.Canvas.prototype.addElements = function (elements, callback) {
  * @param {object} [parameters] An object with the parameters, you would like to apply on the element.
  */
 fabric.Canvas.prototype.addElement = function (type, source, title, params = {}) {        
-
+    
     if (type === undefined || source === undefined || title === undefined) return;    
 
     /**

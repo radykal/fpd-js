@@ -39,6 +39,15 @@ export default class NamesNumbersModule extends EventTarget {
                 
 			    fpdInstance.currentViewInstance.names_numbers = this.getViewNamesNumbers();
 
+                if(fpdInstance.mainOptions.namesNumbersEntryPrice) {
+
+                    fpdInstance.currentViewInstance.changePrice(
+                        fpdInstance.mainOptions.namesNumbersEntryPrice, 
+                        '+'
+                    );
+        
+                }
+
             }
         )
 
@@ -149,16 +158,7 @@ export default class NamesNumbersModule extends EventTarget {
         }
 
         this.listElem.append(rowElem);
-        
-        if(this.fpdInstance.mainOptions.namesNumbersEntryPrice) {
-
-            this.fpdInstance.currentViewInstance.changePrice(
-                this.fpdInstance.mainOptions.namesNumbersEntryPrice, 
-                '+'
-            );
-
-        }
-	    
+                
         return rowElem;
 
     }

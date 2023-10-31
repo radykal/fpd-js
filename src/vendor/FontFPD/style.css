@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'FontFPD';
-  src:  url('fonts/FontFPD.eot?4t7t52');
-  src:  url('fonts/FontFPD.eot?4t7t52#iefix') format('embedded-opentype'),
-    url('fonts/FontFPD.ttf?4t7t52') format('truetype'),
-    url('fonts/FontFPD.woff?4t7t52') format('woff'),
-    url('fonts/FontFPD.svg?4t7t52#FontFPD') format('svg');
+  src:  url('fonts/FontFPD.eot?t7f9z2');
+  src:  url('fonts/FontFPD.eot?t7f9z2#iefix') format('embedded-opentype'),
+    url('fonts/FontFPD.ttf?t7f9z2') format('truetype'),
+    url('fonts/FontFPD.woff?t7f9z2') format('woff'),
+    url('fonts/FontFPD.svg?t7f9z2#FontFPD') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.fpd-icon-ai:before {
+  content: "\e923";
+}
 .fpd-icon-align-bottom:before {
   content: "\e900";
   color: #485563;

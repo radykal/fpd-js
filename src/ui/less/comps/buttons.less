@@ -4,10 +4,10 @@
     background: var(--fpd-btn-primary-color);
     color: var(--fpd-btn-primary-text-color);
     cursor: pointer;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     padding: 5px 15px;
     font-size: 14px;
-    line-height: 24px;
     margin: 10px 0;
     text-transform: uppercase;
     border-radius: var(--fpd-border-radius);
@@ -30,6 +30,11 @@
     &.fpd-secondary {
         background: var(--fpd-light-grey-color);
         color: var(--fpd-dark-grey-color);
+    }
+
+    &.fpd-full {
+        width: 100%;
+        justify-content: center;
     }
     
 }

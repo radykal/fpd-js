@@ -11,7 +11,6 @@ const getJSON = (props) => {
     xhr.open("GET", url);
     xhr.onreadystatechange = (evt) => {
         
-        
         if(xhr.readyState == 4 && xhr.status == 200) {
             
             if(props.onSuccess)

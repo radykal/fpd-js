@@ -66,7 +66,7 @@ export default class LayersModule extends EventTarget {
             fpdInstance,
             ['elementModify', 'elementChange'], 
             (evt) => {
-                
+                                
                 if(fpdInstance.productCreated) {
                     
                     const {element, options, type} = evt.detail;

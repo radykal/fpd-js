@@ -357,8 +357,11 @@ export default class UIManager extends EventTarget {
             
             if(currentElem.classList.contains('fpd-tooltip')) {
                 
-                const txt = currentElem.getAttribute('aria-label');
-                mainTooltip.innerHTML = txt;
+                let txt = currentElem.getAttribute('aria-label');
+                if(txt === null)
+                    txt = currentElem.getAttribute('title');
+
+                    mainTooltip.innerHTML = txt;
                 
                 const extraOffset = 5;
                 const { x, y, width, height } = currentElem.getBoundingClientRect();
