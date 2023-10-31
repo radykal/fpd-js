@@ -13,7 +13,7 @@ import {
     isBitmap,
     elementAvailableColors,
     getBgCssFromElement
-} from '/src/helpers/utils';
+} from '../../helpers/utils.js';
 
 export default class ElementToolbar extends EventTarget {
 

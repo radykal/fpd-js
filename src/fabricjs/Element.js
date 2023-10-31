@@ -9,7 +9,7 @@ import tinycolor from "tinycolor2";
 
 import {
     removeUrlParams
-} from '/src/helpers/utils';
+} from '../helpers/utils.js';
 
 import {
     isHexColor

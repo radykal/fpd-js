@@ -1,11 +1,11 @@
-import '/src/ui/view/modules/Layouts';
-import Modal from '/src/ui/view/comps/Modal';
+import '../../view/modules/Layouts';
+import Modal from '../../view/comps/Modal';
 
-import { getJSON } from '/src/helpers/request';
+import { getJSON } from '../../../helpers/request';
 import { 
     addEvents,
     createImgThumbnail
-} from '/src/helpers/utils';
+} from '../../../helpers/utils'
     
 export default class LayoutsModule extends EventTarget {
 

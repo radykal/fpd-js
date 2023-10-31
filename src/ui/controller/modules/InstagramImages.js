@@ -1,13 +1,13 @@
 import '../../../ui/view/modules/InstagramImages.js';
 
-import { getJSON } from '/src/helpers/request';
+import { getJSON } from '../../../helpers/request';
 import { 
     addEvents, 
     getItemPrice, 
     createImgThumbnail,
     localStorageAvailable,
     isEmpty
-} from '/src/helpers/utils';
+} from '../../../helpers/utils';
 
 export default class InstgramImagesModule extends EventTarget {
     

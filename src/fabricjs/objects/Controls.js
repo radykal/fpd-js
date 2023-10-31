@@ -1,7 +1,7 @@
 const renderIcon = (ctx, left, top, styleOverride, fabricObject, iconString, offsetX=8, offsetY=8) => {
 
     styleOverride = styleOverride || {};
-    
+
     let xSize = this.sizeX || styleOverride.cornerSize || fabricObject.cornerSize,
         ySize = this.sizeY || styleOverride.cornerSize || fabricObject.cornerSize,
         xSizeBy2 = xSize / 2, 

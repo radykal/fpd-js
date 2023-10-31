@@ -11,7 +11,7 @@ import {
     isUrl,
     isZero,
     isEmpty
-} from '/src/helpers/utils';
+} from '../helpers/utils.js';
 import {
     getFilter,
     getScaleByDimesions
