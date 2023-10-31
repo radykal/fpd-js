@@ -505,9 +505,23 @@
 
     </div><!-- Position Panel -->
 
-    <div class="fpd-panel-advanced-editing fpd-padding">
-        <div class="fpd-tool-filters fpd-grid fpd-scroll-area">
+    <div class="fpd-panel-advanced-editing">
+
+        <div class="fpd-panel-tabs">
+            <span data-tab="filters" data-defaulttext="Filters" class="fpd-active">toolbar.filters</span>
+            <span data-tab="remove-bg" data-defaulttext="Remove Background" class="fpd-tool-text-stroke">toolbar.remove_background</span>
         </div>
+
+        <div class="fpd-panel-tabs-content">
+            <div data-id="filters">
+                <div class="fpd-tool-filters fpd-grid fpd-scroll-area fpd-padding"></div>
+            </div>
+            <div data-id="remove-bg">
+                <span class="fpd-btn fpd-full fpd-tool-remove-bg" data-defaulttext="Remove Background with AI">toolbar.remove_background_btn</span>
+            </div>
+        </div>
+
+        
     </div><!-- Advanced Editing -->
 
 </div>

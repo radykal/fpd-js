@@ -45,7 +45,10 @@
 		"text_format": "Format",
 		"font_size": "Font Size",
 		"arrange": "Arrange",
-		"align": "Align"
+		"align": "Align",
+		"filters": "Filters",
+		"remove_background": "Remove Background",
+		"remove_background_btn": "Remove Background with AI"
 	},
 	"actions": {
 		"reset_product": "Reset",
@@ -90,8 +93,6 @@
 		"layouts": "Layouts",
 		"layouts_confirm_replacement": "Are you sure to replace all elements in the current view?",
 		"layouts_confirm_button": "Yes, got it!",
-        "text_to_image": "Text To Image",
-        "text_to_image_generate": "Generate",
 		"save_load": "Saved Designs",
 		"save_load_add_btn": "Save Design",
 		"save_load_input_placeholder": "Optional: Enter a title",
@@ -111,7 +112,11 @@
 		"drawing_line_width": "Line Width",
 		"drawing_draw_here": "Draw Here",
 		"drawing_clear": "Clear",
-		"drawing_add": "Add"
+		"drawing_add": "Add",
+		"uploads": "Uploads",
+		"text_to_images": "Text To Images",
+        "text_to_images_generate": "Generate",
+		"text_to_images_info": "Input a description of the desired image, and we'll create it for you."
 	},
 	"misc": {
 		"initializing": "Initializing Product Designer",
@@ -122,7 +127,6 @@
 		"minimum_dpi_info": "The JPEG image does not have the required DPI of %dpi.",
 		"maximum_size_info": "The image %filename exceeds the maximum file size of %mbMB.",
 		"customization_required_info": "You need to customize the default design!",
-		"not_supported_device_info": "Sorry! But the product designer can not be displayed on your device. Please use a device with a larger screen!",
 		"reset_confirm": "Are you sure to reset everything?",
 		"popup_blocker_alert": "Please disable your pop-up blocker and try again.",
 		"guided_tour_back": "Back",
@@ -143,6 +147,8 @@
 		"bulk_add_variations_title": "Bulk Order",
 		"bulk_add_variations_add": "Add",
 		"bulk_add_variations_term": "Please set all variations in the Bulk Order panel correctly!",
-		"dpi_warning": "The image has a low resolution. Upload a larger image or scale down for better print results."
+		"dpi_warning": "The image has a low resolution. Upload a larger image or scale down for better print results.",
+		"ai_superres_success": "Image Upscaled",
+		"ai_removebg_success": "Background Removed"
 	}
 }

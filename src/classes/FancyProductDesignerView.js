@@ -67,7 +67,8 @@ export default class FancyProductDesignerView extends EventTarget {
         'mobileGesturesBehaviour',
         'smartGuides',
         'snapGridSize',
-        'rulerUnit'
+        'rulerUnit',
+        'namesNumbersEntryPrice'
     ];
     
     /**

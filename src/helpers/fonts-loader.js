@@ -97,7 +97,7 @@ const loadFonts = (fpdInstance, callback) => {
     
         });
     
-        var _fontActiveState = function(state, familyName, fvd) {
+        var _fontActiveState = function(state, familyName, fvd) {            
     
             if(state == 'inactive') {
                 console.log(familyName+' font could not be loaded.');
@@ -112,7 +112,7 @@ const loadFonts = (fpdInstance, callback) => {
         };
     
         var WebFontOpts = {
-                fontactive: function(familyName, fvd) {
+            fontactive: function(familyName, fvd) {
                 _fontActiveState('active', familyName, fvd);
             },
             fontinactive: function(familyName, fvd) {

@@ -449,7 +449,7 @@ const createImgThumbnail = (opts = {}) => {
 export { createImgThumbnail }
 
 const getItemPrice = (fpdInstance, container, price = null) => {
-
+    
     if (!fpdInstance.currentViewInstance) return '';
 
     let currentViewOptions = fpdInstance.currentViewInstance.options;
@@ -550,6 +550,12 @@ const getFileExtension = (str) => {
 }
 
 export { getFileExtension }
+
+const getFilename = (str) => {
+    return str.split('/').pop();;
+}
+
+export { getFilename }
 
 const isBitmap = (url) => {
 

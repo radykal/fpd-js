@@ -14,6 +14,8 @@ import {
     elementAvailableColors,
     getBgCssFromElement
 } from '../../helpers/utils.js';
+import { postJSON } from '../../helpers/request';
+import Snackbar from '../view/comps/Snackbar';
 
 export default class ElementToolbar extends EventTarget {
 
@@ -567,6 +569,50 @@ export default class ElementToolbar extends EventTarget {
             }
         )
 
+        addEvents(
+            this.subPanel.querySelector('.fpd-tool-remove-bg'),
+            'click',
+            (evt) => {
+
+                let element = fpdInstance.currentElement;
+
+                fpdInstance.deselectElement();
+                fpdInstance.toggleSpinner(true, fpdInstance.translator.getTranslation('misc', 'loading_image'));
+
+                postJSON({
+                    url: fpdInstance.mainOptions.aiService.serverURL,
+                    body: {
+                        service: 'removeBG',
+                        image: element.source,
+                    },
+                    onSuccess: (data) => {                        
+                                
+                        if(data && data.new_image) {
+                                                        
+                            element.setSrc(data.new_image, () => {
+
+                                element.source = data.new_image;
+                                element.canvas.renderAll();
+
+                                Snackbar(fpdInstance.translator.getTranslation('misc', 'ai_removebg_success'));
+                                
+                            }, {crossOrigin: 'anonymous'})
+                        }
+                        else {
+        
+                            fpdInstance.aiRequestError(data.error);
+            
+                        }
+
+                        fpdInstance.toggleSpinner(false);
+                        
+                    },
+                    onError: fpdInstance.aiRequestError.bind(fpdInstance)
+                })                
+                
+            }
+        )
+
         //nav item                
         addEvents(
             Array.from(this.navElem.children),
@@ -947,6 +993,10 @@ export default class ElementToolbar extends EventTarget {
 
 		if(element.advancedEditing && element.source && isBitmap(element.source)) {
 			this.#toggleNavItem('advanced-editing');
+
+            this.#togglePanelTab('advanced-editing', 'filters', true);            
+            this.#togglePanelTab('advanced-editing', 'remove-bg', Boolean(this.fpdInstance.mainOptions.aiService.serverURL && this.fpdInstance.mainOptions.aiService.removeBG));
+
 		}
         
         this.#togglePanelTool('text-size', 'text-line-spacing', !element.curved);
@@ -1087,12 +1137,18 @@ export default class ElementToolbar extends EventTarget {
         if(this.fpdInstance.currentElement) {
 
             const fpdElem = this.fpdInstance.currentElement;
+            const fpdContRect = this.fpdInstance.container.getBoundingClientRect();
 
             //top
             const elemBoundingRect = fpdElem.getBoundingRect();            
             const lowestY = elemBoundingRect.top + elemBoundingRect.height + fpdElem.controls.mtr.offsetY + fpdElem.cornerSize;
             let posTop = this.fpdInstance.productStage.getBoundingClientRect().top + lowestY;
             
+            //below container            
+            if(posTop > fpdContRect.height + fpdContRect.top) {
+                posTop = fpdContRect.height + fpdContRect.top;
+            }
+
             //stay in viewport            
             if(posTop > window.innerHeight - this.container.clientHeight) {
                 posTop = window.innerHeight - this.container.clientHeight;

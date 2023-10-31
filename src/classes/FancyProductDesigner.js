@@ -1548,6 +1548,10 @@ export default class FancyProductDesigner extends EventTarget {
             }
         )
         
+        if(viewInstance.names_numbers && viewInstance.names_numbers.length > 1) {
+            viewInstance.changePrice((viewInstance.names_numbers.length-1) * viewInstance.options.namesNumbersEntryPrice, '+');
+        }
+        
         /**
          * Gets fired when a view is created.
          *
@@ -1601,8 +1605,17 @@ export default class FancyProductDesigner extends EventTarget {
                 const oCoords = element.oCoords;
                 const viewStageRect = this.currentViewInstance.fabricCanvas.wrapperEl.getBoundingClientRect();                
                 
-                this.mainTooltip.style.left = (viewStageRect.left + oCoords.mt.x - this.mainTooltip.clientWidth / 2)+'px';
-                this.mainTooltip.style.top = (viewStageRect.top + oCoords.mt.y - this.mainTooltip.clientHeight - 20)+'px';
+                let leftPos = (viewStageRect.left + oCoords.mt.x - this.mainTooltip.clientWidth / 2);
+                let topPos = (viewStageRect.top + oCoords.mt.y - this.mainTooltip.clientHeight - 20);
+                
+                const contRect = this.container.getBoundingClientRect();
+                if(topPos < contRect.top)
+                    topPos = contRect.top - this.mainTooltip.clientHeight;
+
+                topPos = topPos < 0 ? 0 : topPos;
+
+                this.mainTooltip.style.left = leftPos + 'px';
+                this.mainTooltip.style.top = topPos + 'px';
 
             }
 
@@ -1629,8 +1642,77 @@ export default class FancyProductDesigner extends EventTarget {
 
                 const sizeWarning = document.createElement('div');
                 sizeWarning.className = 'fpd-size-warning';
-                sizeWarning.innerHTML = this.translator.getTranslation('misc', 'dpi_warning', 'Low resolution!');
+                sizeWarning.innerHTML = '<span>'+this.translator.getTranslation('misc', 'dpi_warning', 'Low resolution!')+'</span>';
                 this.warningsWrapper.append(sizeWarning);
+                
+                if(this.mainOptions.aiService.serverURL && this.mainOptions.aiService.superRes) {
+
+                    const superResBtn = document.createElement('span');
+                    superResBtn.className = 'fpd-btn';
+                    superResBtn.innerText = 'Upscale with AI';
+                    sizeWarning.append(superResBtn);
+
+                    addEvents(superResBtn, 'click', (evt) => {
+
+                        const displaySize = this.calcDisplaySize(element);
+                        const lin = displaySize.unit == 'mm' ? 25.4 : 2.54;
+                        const toPx = parseInt( (this.mainOptions.customImageParameters.minDPI * displaySize.width) / lin );
+                        
+                        let scaleTo = toPx / element.width;
+                        scaleTo = Math.ceil(scaleTo);
+                        scaleTo = scaleTo > 4 ? 4 : scaleTo;
+                        console.log("AI SuperRes - Scale:", scaleTo);
+                        
+                        this.deselectElement();
+                        this.toggleSpinner(true, this.translator.getTranslation('misc', 'loading_image'));
+
+                        postJSON({
+                            url: this.mainOptions.aiService.serverURL,
+                            body: {
+                                service: 'superRes',
+                                image: element.source,
+                                scale: scaleTo
+                            },
+                            onSuccess: (data) => {
+                                        
+                                if(data && data.new_image) {
+                                    
+                                    let tempScaledWidth = element.getScaledWidth();
+                                    
+                                    element.setSrc(data.new_image, () => {
+
+                                        element.source = data.new_image;
+                                        
+                                        //fix: two times
+                                        element.scaleToWidth(tempScaledWidth);
+                                        element.scaleToWidth(tempScaledWidth);
+                                        element.canvas.renderAll();
+
+                                        Snackbar(this.translator.getTranslation('misc', 'ai_superres_success'));
+
+                                        fireEvent(this, 'elementModify', {
+                                            options: {scaleX: element.scaleX},
+                                            element: element
+                                        })
+                                        
+                                    }, {crossOrigin: 'anonymous'})
+                                }
+                                else {
+                
+                                    this.aiRequestError(data.error);
+                    
+                                }
+
+                                this.toggleSpinner(false);
+                
+                                
+                            },
+                            onError: this.aiRequestError.bind(this)
+                        })
+                        
+                    })
+
+                }
 
                 /**
                  * Gets fired when the DPI of an image is below the minDPI and the warning is shown.
@@ -1663,9 +1745,20 @@ export default class FancyProductDesigner extends EventTarget {
 
     }
 
+    aiRequestError(error) {
+
+        Snackbar(error);
+        this.toggleSpinner(false);
+
+    }
+
     calcElementDPI(element) {
 
-        if(element && element.isBitmap()) {
+        if( element 
+            && element.isBitmap()
+            && objectHasKeys(this.currentViewInstance.options.output, ['width','height'])
+            && objectHasKeys(this.currentViewInstance.options.printingBox, ['left','top','width','height']) 
+        ) {
 
             const dpi = Math.ceil(((this.currentViewInstance.options.printingBox.width * 25.4) / this.currentViewInstance.options.output.width) / element.scaleX);
             return dpi;

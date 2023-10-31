@@ -70,11 +70,20 @@
             font-size: 14px;
 
             > .fpd-size-warning {
-                padding: 10px;
+                display: flex;
+                flex-direction: row;
+                padding: 12px;
                 background: var(--fpd-yellow-color);
-                color: #000;
+                color: var(--fpd-yellow-contrast-color);
                 border-radius: var(--fpd-border-radius);
+                border: 1px solid var(--fpd-yellow-contrast-color);
                 box-shadow: 0 0 6px rgba(0,0,0,0.1);
+
+                .fpd-btn {
+                    background-color: #3f3f3f;
+                    margin: 0;
+                    white-space: nowrap;
+                }
             }
         }
         
