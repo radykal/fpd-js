@@ -79,7 +79,7 @@ fabric.Text.prototype.toSVG = (function (originalFn) {
 
             let textPaths = "";
             let offset = pathStartOffset;
-            let PI = 3.141592
+            console.log(pathLength, "--------------PathLength")
             for (let i = 0; i < this.text.length; i++) {
                 let letter = this.text[i];
                 let text = new fabric.Text(letter, {
@@ -88,7 +88,7 @@ fabric.Text.prototype.toSVG = (function (originalFn) {
                   });
                 let textPathEl = `<textPath 
                   xlink:href="#textOnPath${id}" 
-                  startOffset="${offset}"
+                  startOffset="${offset < 0 ? offset + pathLength : offset}"
                   dominant-baseline="${dominantbaseline}"
                   dy="${dy}"
                 >
