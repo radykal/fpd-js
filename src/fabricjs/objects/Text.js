@@ -15,8 +15,6 @@ fabric.Text.prototype.initialize = (function (originalFn) {
 fabric.Text.prototype.toSVG = (function (originalFn) {
 
     return function (...args) {
-        console.log(this.path, "------toSVG called")
-        console.log(fabric.util.degreesToRadians(50))
 
         if (this.curved && this.path) {
             
