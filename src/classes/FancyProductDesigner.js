@@ -1433,7 +1433,7 @@ export default class FancyProductDesigner extends EventTarget {
                 })
 
             }
-        
+                        
             /**
              * Gets fired as soon as a product has been fully added to the designer.
              *

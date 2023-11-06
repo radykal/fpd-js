@@ -287,7 +287,7 @@ export default class DesignsModule extends EventTarget {
     
         let catTitles = [];
         
-        //display dynamic designs
+        //display dynamic designs        
         if(typeof this.#dynamicDesignsId == 'string') {
             catTitles = this.fpdInstance.mainOptions.dynamicDesigns[this.#dynamicDesignsId].categories;
         }

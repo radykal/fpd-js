@@ -112,70 +112,63 @@ export default class TextToImageModule extends EventTarget {
         
         images.forEach((imgURL) => {
 
-            const img = new Image();
-            img.onload = () => {
-
-                const thumbnail = createImgThumbnail({
-                    url: imgURL,
-                    title: getFilename(imgURL),
-                    price: getItemPrice(this.fpdInstance, this.container),
-                    removable: true
-                });
-                
-                this.gridElem.append(thumbnail);
-                this.fpdInstance
-                .lazyBackgroundObserver.observe(thumbnail.querySelector('picture'));
-    
-                addEvents(
-                    thumbnail,
-                    ['click'],
-                    (evt) => {
-                        
-                        if(!this.fpdInstance.loadingCustomImage) {
-    
-                            this.fpdInstance._addGridItemToCanvas(
-                                evt.currentTarget,
-                                {},
-                                undefined,
-                                false
-                            );
-                        }
-                        
-                    }
-                )
-    
-                //remove stored image
-                addEvents(
-                    thumbnail.querySelector('.fpd-delete'),
-                    'click',
-                    (evt) => {
-                                            
-                        evt.stopPropagation();
-                        evt.preventDefault();
-                        
-                        const index = Array.from(this.gridElem.children).indexOf(thumbnail);
-                        
-                        if(!thumbnail.classList.contains('fpd-loading')) {
-                            
-                            let storageImages = JSON.parse(window.localStorage.getItem('fpd_ai_images'));
+            const thumbnail = createImgThumbnail({
+                url: imgURL,
+                title: getFilename(imgURL),
+                price: getItemPrice(this.fpdInstance, this.container),
+                removable: true
+            });
             
-                            storageImages.splice(index, 1);
-                            window.localStorage.setItem('fpd_ai_images', JSON.stringify(storageImages));
-                            
-                            if(thumbnail.xhr) {
-                                thumbnail.xhr.abort();
-                            }
-                            
-                            thumbnail.remove();
-                            
-                        }
-                                            
+            this.gridElem.prepend(thumbnail);
+            this.fpdInstance
+            .lazyBackgroundObserver.observe(thumbnail.querySelector('picture'));
+
+            addEvents(
+                thumbnail,
+                ['click'],
+                (evt) => {
+                    
+                    if(!this.fpdInstance.loadingCustomImage) {
+
+                        this.fpdInstance._addGridItemToCanvas(
+                            evt.currentTarget,
+                            {},
+                            undefined,
+                            false
+                        );
                     }
-                );
+                    
+                }
+            )
 
-            }
-
-            img.src = imgURL;
+            //remove stored image
+            addEvents(
+                thumbnail.querySelector('.fpd-delete'),
+                'click',
+                (evt) => {
+                                        
+                    evt.stopPropagation();
+                    evt.preventDefault();
+                    
+                    const index = Array.from(this.gridElem.children).indexOf(thumbnail);
+                    
+                    if(!thumbnail.classList.contains('fpd-loading')) {
+                        
+                        let storageImages = JSON.parse(window.localStorage.getItem('fpd_ai_images'));
+        
+                        storageImages.splice(index, 1);
+                        window.localStorage.setItem('fpd_ai_images', JSON.stringify(storageImages));
+                        
+                        if(thumbnail.xhr) {
+                            thumbnail.xhr.abort();
+                        }
+                        
+                        thumbnail.remove();
+                        
+                    }
+                                        
+                }
+            );
             
         })
                 

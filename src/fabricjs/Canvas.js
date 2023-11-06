@@ -351,9 +351,9 @@ fabric.Canvas.prototype._renderElementBoundingBox = function (element) {
 
     }
 
-    if (element) {
+    if (element && !element._printingBox) {
 
-        var bbCoords = element.getBoundingBoxCoords();
+        var bbCoords = element.getBoundingBoxCoords();        
 
         if (bbCoords && element.boundingBoxMode != 'none') {
 
