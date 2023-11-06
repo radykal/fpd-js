@@ -148,7 +148,8 @@
 		"bulk_add_variations_add": "Add",
 		"bulk_add_variations_term": "Please set all variations in the Bulk Order panel correctly!",
 		"dpi_warning": "The image has a low resolution. Upload a larger image or scale down for better print results.",
-		"ai_superres_success": "Image Upscaled",
-		"ai_removebg_success": "Background Removed"
+		"ai_upscale_btn": "Upscale with AI",
+		"ai_upscale_success": "Image Upscaled",
+		"ai_remove_bg_success": "Background Removed"
 	}
 }

@@ -594,7 +594,7 @@ export default class ElementToolbar extends EventTarget {
                                 element.source = data.new_image;
                                 element.canvas.renderAll();
 
-                                Snackbar(fpdInstance.translator.getTranslation('misc', 'ai_removebg_success'));
+                                Snackbar(fpdInstance.translator.getTranslation('misc', 'ai_remove_bg_success'));
                                 
                             }, {crossOrigin: 'anonymous'})
                         }

@@ -38,7 +38,7 @@ import {
  */
 export default class FancyProductDesigner extends EventTarget {
     
-    static version = '6.0.11';
+    static version = '6.1.0';
     static forbiddenTextChars = /<|>/g;
     static proxyFileServer = '';
     static uploadsToServer = true;
@@ -1649,7 +1649,7 @@ export default class FancyProductDesigner extends EventTarget {
 
                     const superResBtn = document.createElement('span');
                     superResBtn.className = 'fpd-btn';
-                    superResBtn.innerText = 'Upscale with AI';
+                    superResBtn.innerText = this.translator.getTranslation('misc', 'ai_upscale_btn');
                     sizeWarning.append(superResBtn);
 
                     addEvents(superResBtn, 'click', (evt) => {
@@ -1688,7 +1688,7 @@ export default class FancyProductDesigner extends EventTarget {
                                         element.scaleToWidth(tempScaledWidth);
                                         element.canvas.renderAll();
 
-                                        Snackbar(this.translator.getTranslation('misc', 'ai_superres_success'));
+                                        Snackbar(this.translator.getTranslation('misc', 'ai_upscale_success'));
 
                                         fireEvent(this, 'elementModify', {
                                             options: {scaleX: element.scaleX},

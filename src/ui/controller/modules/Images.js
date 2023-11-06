@@ -4,7 +4,7 @@ import FacebookImagesModule from './FacebookImages';
 import InstagramImagesModule from './InstagramImages';
 import PixabayImagesModule from './PixabayImages';
 import QRCodeModule from './QRCode';
-import TextToImageModule from './TextToImage.js';
+import TextToImageModule from './TextToImage';
 
 import { 
     addEvents, 

@@ -69,7 +69,7 @@ fabric.Object.prototype._elementControls = function () {
 
     let widthControls = Boolean(!this.lockUniScaling || this.__editorMode),
         heightControls = Boolean(!this.lockUniScaling || this.__editorMode),
-        copyControl = Boolean(this.copyable),
+        copyControl = Boolean(this.copyable || this.__editorMode),
         removeControl = Boolean(this.removable || this.__editorMode),
         resizeControl = Boolean((this.resizable || this.__editorMode) && !this.curved),
         rotateControl = Boolean(this.rotatable || this.__editorMode);    
