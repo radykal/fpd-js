@@ -83,7 +83,7 @@ export default class Translator extends EventTarget {
                 objString = htmlElem.innerHTML;
             }
 
-            //already translated, use content            
+            //already translated, use content                        
             if (!objString.includes('.') || /\s/.test(objString)) {
 
                 label = objString;
@@ -94,7 +94,7 @@ export default class Translator extends EventTarget {
 
                 let keys = objString.toLowerCase().split('.'),
                     rootObject = this.langJSON[keys[0]];   
-                    
+                                
                 if (rootObject) { //check if object exists
 
                     label = rootObject[keys[1]];

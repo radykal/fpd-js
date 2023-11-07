@@ -41,7 +41,6 @@ Open one of the html file and edit the source of it by changing the file imports
 <script src='./dist/js/FancyProductDesigner.min.js'></script>
 
 //...and import theses
-<script src='./dist/js/vendor.js'></script>
 <link href="./dist/css/vendor.css" rel="stylesheet" type="text/css">
 <script src='./dev/FancyProductDesigner.js'></script>
 ```
