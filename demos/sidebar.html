@@ -9,17 +9,18 @@
 
     <link href="./dist/css/FancyProductDesigner.min.css" rel="stylesheet" type="text/css">
     <script src='./dist/fabric-5.3.1.min.js'></script>
-    <script src='./dist/js/FancyProductDesigner.min.js'></script>
+    <script src='./dev/FancyProductDesigner.js'></script>
+    <script src='./dist/js/vendor.js'></script>
+    <link href="./dist/css/vendor.css" rel="stylesheet" type="text/css">
+    <!-- <script src='./dist/js/FancyProductDesigner.min.js'></script> -->
 </head>
 
 <body>
     <div class="container">
 
-        <div 
-            id="fpd-target" 
-            class="fpd-sidebar fpd-shadow-2 fpd-views-inside-right">
+        <div id="fpd-target" class="fpd-sidebar fpd-shadow-2 fpd-views-inside-right">
         </div>
-
+        <button onclick="handleAddClick()">Add</button>
         <script>
 
             const appOptions = {
@@ -96,7 +97,11 @@
             }
 
             const fpd = new FancyProductDesigner(document.getElementById('fpd-target'), appOptions);
-
+            function handleAddClick() {
+                console.log("button clicked--------------")
+                // fpd.currentViewInstance.fabricCanvas.toSVG()
+                console.log(fpd.getViewsSVG()[0])
+            }
         </script>
     </div>
 </body>

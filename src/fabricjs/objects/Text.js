@@ -1,4 +1,3 @@
-import { Pacifico, Lobster, Aller } from "../../helpers/constants";
 fabric.Text.prototype.initialize = (function (originalFn) {
 
     return function (...args) {
@@ -25,9 +24,13 @@ fabric.Text.prototype.toSVG = (function (originalFn) {
             let fontStyle = this.fontStyle;
             let fontWeight = this.fontWeight;
             let fill = this.fill;
-            let letterSpacing = `${this.letterSpacing / 10}em`;
-
+            let letterSpacing = this.letterSpacing / 10 * fontSize;
+            let textDecoration = this.textDecoration
+            let opacity = this.opacity
+            let textStroke = this.stroke
+            let textStrokeWidth = this.strokeWidth
             let path = this.path;
+            console.log(this, path, "-----------------PATH")
             let fillPath = path.fill ? path.fill : "none";
             let strokePath = path.stroke ? path.stroke : "none";
             let strokeWidth = path.strokeWidth ? path.strokeWidth : 0;
@@ -79,7 +82,7 @@ fabric.Text.prototype.toSVG = (function (originalFn) {
 
             let textPaths = "";
             let offset = pathStartOffset;
-            console.log(pathLength, "--------------PathLength")
+            console.log(letterSpacing, "--------------PathLength")
             for (let i = 0; i < this.text.length; i++) {
                 let letter = this.text[i];
                 let text = new fabric.Text(letter, {
@@ -91,33 +94,22 @@ fabric.Text.prototype.toSVG = (function (originalFn) {
                   startOffset="${offset < 0 ? offset + pathLength : offset}"
                   dominant-baseline="${dominantbaseline}"
                   dy="${dy}"
+                  style="
+                    stroke: ${textStroke};
+                    stroke-width: ${textStrokeWidth};
+                  "
                 >
                   ${letter}
                 </textPath>`;
-                offset += (text.width + 1)
+                offset += (text.width + 1 + letterSpacing)
                 console.log(text.width, "--------------width")
                 textPaths += textPathEl;
               }
 
             //----------------------------------------------
             // append texpath to defs or as rendered element
-            let textPathEl, fontDataURI
-            switch(fontFamily) {
-                case "Lobster":
-                    fontDataURI = Lobster
-                    break
-                case "Pacifico":
-                    fontDataURI = Pacifico
-                    break
-                case "Aller":
-                    fontDataURI = Aller
-                    break
-            }
-            let fontData = `<style>
-            @font-face {
-                font-family: ${fontFamily};
-                src: url("${fontDataURI}");
-            }</style>`
+            let textPathEl
+
             if (
                 (fillPath && fillPath !== "none") ||
                 (!strokePath && strokePath !== "none")
@@ -133,7 +125,6 @@ fabric.Text.prototype.toSVG = (function (originalFn) {
             return this._createBaseSVGMarkup(
                 this.path?.path
                     ? [
-                        fontData,
                         textPathEl,
                         `<text 
                 font-family="${fontFamily.replace(/"/g, "'")}" 
@@ -142,6 +133,10 @@ fabric.Text.prototype.toSVG = (function (originalFn) {
                 font-style="${fontStyle}" 
                 font-weight="${fontWeight}"
                 letter-spacing="${letterSpacing}"
+                style="
+                text-decoration: ${textDecoration};
+                opacity: ${opacity};
+                "
                 >
                   ${textPaths}
                 </text>`
