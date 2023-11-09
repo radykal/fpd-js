@@ -1632,6 +1632,8 @@ export default class FancyProductDesigner extends EventTarget {
 
         const element = this.currentElement;
 
+        if(!this.warningsWrapper || this.mainOptions.editorMode) return;
+        
         this.warningsWrapper.innerHTML = '';
 
         if(this.productCreated) {
