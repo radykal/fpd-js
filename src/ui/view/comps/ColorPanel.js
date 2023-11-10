@@ -48,21 +48,21 @@ const ColorPanel = (fpdInstance, props) => {
         
         colorPanel.append(colorPalette);
         
-        if(props.patterns) {
-            
-            const patternsPanel = Patterns({
-                images: props.patterns,
-                onChange: (patternImg) => {
+    }
 
-                    if(props.onPatternChange)
-                        props.onPatternChange(patternImg);
-                    
-                }
-            });
+    if(props.patterns) {
             
-            colorPanel.append(patternsPanel);
-            
-        }
+        const patternsPanel = Patterns({
+            images: props.patterns,
+            onChange: (patternImg) => {
+
+                if(props.onPatternChange)
+                    props.onPatternChange(patternImg);
+                
+            }
+        });
+        
+        colorPanel.append(patternsPanel);
         
     }
 

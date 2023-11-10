@@ -48,5 +48,12 @@
     "webpack-dev-server": "^4.11.1",
     "webpack-stream": "^7.0.0",
     "yargs": "^17.7.2"
+  },
+  "dependencies": {
+    "davidshimjs-qrcodejs": "^0.0.2",
+    "downloadjs": "^1.4.7",
+    "tinycolor2": "^1.6.0",
+    "vanilla-picker": "^2.12.2",
+    "webfontloader": "^1.6.28"
   }
 }

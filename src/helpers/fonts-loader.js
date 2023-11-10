@@ -1,3 +1,5 @@
+import WebFont from 'webfontloader';
+
 const parseFontsToEmbed = (fontItem) => {
 
     let embedString = '';
@@ -38,7 +40,7 @@ const parseFontsToEmbed = (fontItem) => {
 
 export { parseFontsToEmbed }
 
-const loadFonts = (fpdInstance, callback) => {
+const loadFonts = (fpdInstance, callback) => {    
     
     let fonts = fpdInstance.mainOptions.fonts;
             
@@ -95,7 +97,7 @@ const loadFonts = (fpdInstance, callback) => {
     
         });
     
-        var _fontActiveState = function(state, familyName, fvd) {
+        var _fontActiveState = function(state, familyName, fvd) {            
     
             if(state == 'inactive') {
                 console.log(familyName+' font could not be loaded.');
@@ -110,7 +112,7 @@ const loadFonts = (fpdInstance, callback) => {
         };
     
         var WebFontOpts = {
-                fontactive: function(familyName, fvd) {
+            fontactive: function(familyName, fvd) {
                 _fontActiveState('active', familyName, fvd);
             },
             fontinactive: function(familyName, fvd) {
@@ -127,7 +129,7 @@ const loadFonts = (fpdInstance, callback) => {
             WebFontOpts.custom = {families: customFonts};
         }
     
-        if(typeof WebFont !== 'undefined' && (googleFonts.length > 0 || customFonts.length > 0)) {
+        if((googleFonts.length > 0 || customFonts.length > 0)) {
             WebFont.load(WebFontOpts);
         }
         else {

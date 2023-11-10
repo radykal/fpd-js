@@ -6,7 +6,7 @@ import {
     removeElemClasses, 
     createImgThumbnail,
     getItemPrice
-} from '/src/helpers/utils';
+} from '../../../helpers/utils.js';
 
 export default class FacebookImagesModule extends EventTarget {
     

@@ -4,6 +4,7 @@ import FacebookImagesModule from './FacebookImages';
 import InstagramImagesModule from './InstagramImages';
 import PixabayImagesModule from './PixabayImages';
 import QRCodeModule from './QRCode';
+import TextToImageModule from './TextToImage';
 
 import { 
     addEvents, 
@@ -12,7 +13,7 @@ import {
     removeElemClasses,
     toggleElemClasses,
     getItemPrice
-} from '/src/helpers/utils';
+} from '../../../helpers/utils.js';
 
 export default class ImagesModule extends EventTarget {
     
@@ -140,6 +141,18 @@ export default class ImagesModule extends EventTarget {
             )
             
             tabs.find( t => t.dataset.context == 'pixabay' )
+            .classList.remove('fpd-hidden');
+            
+        }
+        
+        if(!isEmpty(mainOptions.aiService.serverURL) && mainOptions.aiService.text2Img) {
+            
+             new TextToImageModule(
+                fpdInstance,
+                tabContents.find( t => t.dataset.context == 'text2Img' )
+            )
+            
+            tabs.find( t => t.dataset.context == 'text2Img' )
             .classList.remove('fpd-hidden');
             
         }

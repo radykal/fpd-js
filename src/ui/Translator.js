@@ -80,11 +80,11 @@ export default class Translator extends EventTarget {
                 objString = htmlElem.dataset.title;
             }
             else {
-                objString = htmlElem.innerText;
+                objString = htmlElem.innerHTML;
             }
 
-            //already translated, use content
-            if (!objString.includes('.')) {
+            //already translated, use content                        
+            if (!objString.includes('.') || /\s/.test(objString)) {
 
                 label = objString;
                 
@@ -93,8 +93,8 @@ export default class Translator extends EventTarget {
             else {
 
                 let keys = objString.toLowerCase().split('.'),
-                    rootObject = this.langJSON[keys[0]];
-
+                    rootObject = this.langJSON[keys[0]];   
+                                
                 if (rootObject) { //check if object exists
 
                     label = rootObject[keys[1]];
@@ -117,7 +117,7 @@ export default class Translator extends EventTarget {
         else {
             label = htmlElem.dataset.defaulttext;
         }
-
+        
         if (htmlElem.getAttribute('placeholder')) {
             htmlElem.setAttribute('placeholder', label);
             htmlElem.innerText = '';
@@ -128,8 +128,8 @@ export default class Translator extends EventTarget {
         else if (htmlElem.dataset.title) {
             htmlElem.dataset.title = label;
         }
-        else {
-            htmlElem.innerText = label;
+        else {            
+            htmlElem.innerHTML = label;
         }
 
         return label;

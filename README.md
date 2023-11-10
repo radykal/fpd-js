@@ -2,7 +2,7 @@
 
 ## Documentation
 * [JSDoc](https://jsdoc.fancyproductdesigner.com/)
-* [Knowledge Base (Will ne updated soon)](https://support.fancyproductdesigner.com/support/solutions/5000115464)
+* [Knowledge Base](https://support.fancyproductdesigner.com/support/solutions/5000115464)
 
 ## Demos
 * [Sidebar Layout](https://jsdemos.fancyproductdesigner.com/sidebar.html)
@@ -32,7 +32,20 @@ Start dev server.
 npm run start
 ```
 
-Now this will run webpack dev server and opens the examples folder in your localhost. From now on you can edit the source files and you should see any changes immediately. 
+Now this will run webpack dev server and opens the examples folder in your localhost. 
+
+Open one of the html file and edit the source of it by changing the file imports:
+
+```
+//Remove that...
+<script src='./dist/js/FancyProductDesigner.min.js'></script>
+
+//...and import theses
+<link href="./dist/css/vendor.css" rel="stylesheet" type="text/css">
+<script src='./dev/FancyProductDesigner.js'></script>
+```
+
+From now on you can edit the source files and you should see any changes immediately. 
 
 ### Creating a production bundle
 As soon as you are ready with your customization, you just need to run:

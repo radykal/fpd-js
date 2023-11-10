@@ -4,6 +4,9 @@ import {
     deepMerge,
     fireEvent
 } from '../../../helpers/utils.js';
+import tinycolor from "tinycolor2";
+import Picker from 'vanilla-picker/csp';
+import QRCode from 'davidshimjs-qrcodejs';
 
 export default class QRCodeModule extends EventTarget {
 

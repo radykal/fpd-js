@@ -1,5 +1,6 @@
 import Modal from '../ui/view/comps/Modal.js';
 import Snackbar from '../ui/view/comps/Snackbar.js';
+import tinycolor from "tinycolor2";
 
 if (window) {
     window.FPDUtils = {};
@@ -428,11 +429,21 @@ const createImgThumbnail = (opts = {}) => {
     picElem.dataset.img = opts.thumbnailUrl ? opts.thumbnailUrl : opts.url;
     thumbnail.append(picElem);
 
+    const img = new Image();
+    img.onerror = () => {
+        thumbnail.remove();
+    }
+    img.src = picElem.dataset.img;
+    
     if (!opts.disablePrice) {
+        
         const priceElem = document.createElement('span');
         priceElem.className = "fpd-price";
         priceElem.innerHTML = opts.price;
         thumbnail.append(priceElem);
+
+        toggleElemClasses(priceElem, ['fpd-hidden'], !Boolean(opts.price));
+
     }
 
     if (opts.removable) {
@@ -448,7 +459,7 @@ const createImgThumbnail = (opts = {}) => {
 export { createImgThumbnail }
 
 const getItemPrice = (fpdInstance, container, price = null) => {
-
+    
     if (!fpdInstance.currentViewInstance) return '';
 
     let currentViewOptions = fpdInstance.currentViewInstance.options;
@@ -549,6 +560,12 @@ const getFileExtension = (str) => {
 }
 
 export { getFileExtension }
+
+const getFilename = (str) => {
+    return str.split('/').pop();;
+}
+
+export { getFilename }
 
 const isBitmap = (url) => {
 

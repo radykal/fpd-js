@@ -1,13 +1,13 @@
 import '../../../ui/view/modules/PixabayImages.js';
 
-import { getJSON } from '/src/helpers/request';
+import { getJSON } from '../../../helpers/request';
 import { 
     addEvents, 
     addElemClasses, 
     removeElemClasses, 
     createImgThumbnail,
     getItemPrice
-} from '/src/helpers/utils';
+} from '../../../helpers/utils';
 
 export default class PixabayImagesModule extends EventTarget {
     
