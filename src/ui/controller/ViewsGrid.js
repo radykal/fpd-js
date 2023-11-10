@@ -11,10 +11,7 @@ import {
     fireEvent,
     deepMerge,
 } from '../../helpers/utils';
-
-import {
-    getScaleByDimesions
-} from '../../fabricjs/utils.js';
+import AreaSortable from '../../vendor/js/areasortable.js';
 
 export default class ViewsGrid extends EventTarget {
 

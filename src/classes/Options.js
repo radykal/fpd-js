@@ -337,6 +337,7 @@ export default class Options {
 		* @memberof Options.defaults
 		* @type {Array}
 		* @default [50, 50]
+		* @ignore
 		*/
 		snapGridSize: [50, 50],
 		/**
@@ -594,12 +595,12 @@ export default class Options {
 		/**
 		* Shows the current image size (px, mm or cm) in a tooltip above the image element when its selected. The option rulerUnit controls the unit of measurement.
 		*
-		* @property imageSizeTooltip
+		* @property sizeTooltip
 		* @memberof Options.defaults
 		* @type {Boolean}
 		* @default false
 		*/
-		imageSizeTooltip: false,
+		sizeTooltip: false,
 		/**
 		* Highlight objects (editable texts and upload zones) with a dashed border. To enable this just define a hexadecimal color value.
 		*
@@ -986,6 +987,58 @@ export default class Options {
         * @version 6.0.9
         */
         rulerUnit: 'px',
+		/**
+        * An object to define the AI service.
+        *
+        * @property aiService
+        * @memberof Options.defaults
+        * @type {Object}
+        * @default {serverURL: null, removeBG: true, superRes: true}
+        * @version 6.1.0
+        */
+        aiService: {
+			/**
+			* URL to server that handles the AI requests.
+			*
+			* @property serverURL
+			* @memberof Options.defaults.aiService
+			* @type {String}
+			* @default null
+			* @version 6.1.0
+			*/
+			serverURL: null,
+			/**
+			* Toggles the remove background service.
+			*
+			* @property removeBG
+			* @memberof Options.defaults.aiService
+			* @type {Boolean}
+			* @default true
+			* @version 6.1.0
+			*/
+			removeBG: true,
+			/**
+			* Toggles the super resolution service.
+			*
+			* @property superRes
+			* @memberof Options.defaults.aiService
+			* @type {Boolean}
+			* @default true
+			* @version 6.1.0
+			*/
+			superRes: true,
+			/**
+			* Toggles the Text2Images tab in the images module.
+			*
+			* @property text2Img
+			* @memberof Options.defaults.aiService
+			* @type {Boolean}
+			* @default true
+			* @version 6.1.0
+			*/
+			text2Img: true
+
+		},
 		/**
 		* An object containing the default element parameters in addition to the default Fabric Object properties. See Options.defaults.elementParameters.
 		*

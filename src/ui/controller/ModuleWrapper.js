@@ -1,7 +1,6 @@
 import ProductsModule from './modules/Products.js';
 import TextModule from './modules/Text.js';
 import DesignsModule from './modules/Designs.js';
-//import TextToImageModule from './modules/TextToImage';
 import ImagesModule from './modules/Images.js';
 import LayersModule from './modules/Layers.js';
 import SaveLoadModule from './modules/SaveLoad.js';
@@ -18,6 +17,7 @@ export default class ModuleWrapper extends EventTarget {
         super();
         
         let moduleInstance;
+        
                 
         if(moduleKey === 'products') {
             moduleInstance = new ProductsModule(fpdInstance, wrapper);
@@ -25,9 +25,6 @@ export default class ModuleWrapper extends EventTarget {
         else if(moduleKey === 'text') {
             moduleInstance = new TextModule(fpdInstance, wrapper);
         }
-        // else if(moduleKey === 'text-to-image') {
-        //     moduleInstance = new TextToImageModule(fpdInstance, wrapper);
-        // }
         else if(moduleKey.includes('designs')) {
             
             let dynamicDesignId = null;

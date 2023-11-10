@@ -3,6 +3,7 @@ import './canvas/History.js';
 import ZoomPan from './canvas/ZoomPan.js';
 import Snap from './canvas/Snap.js';
 import Ruler from './canvas/Ruler.js';
+import tinycolor from "tinycolor2";
 
 import {
     deepMerge,
@@ -10,7 +11,7 @@ import {
     isUrl,
     isZero,
     isEmpty
-} from '/src/helpers/utils';
+} from '../helpers/utils.js';
 import {
     getFilter,
     getScaleByDimesions
@@ -160,7 +161,7 @@ fabric.Canvas.prototype._fpdCanvasInit = function () {
                         modifiedProps.angle = element.angle;
                     break;
                 }
-                
+                                
                 this.fire('elementModify', { element: element, options: modifiedProps })                
         
             }
@@ -219,7 +220,11 @@ fabric.Canvas.prototype._fpdCanvasInit = function () {
 
             })
     
-
+        },
+        'text:changed': ({target}) => {
+            
+            this.fire('elementModify', { element: target, options: {text: target.text} })
+    
         }
     });    
     
@@ -285,25 +290,30 @@ fabric.Canvas.prototype._onMultiSelected = function (selectedElements) {
     const activeSelection = this.getActiveObject();
 
     if (this.viewOptions.multiSelection) {
-
+        
         activeSelection.set({
-            lockScalingX: true,
-            lockScalingY: true,
-            lockRotation: true,
-            hasControls: false,
+            lockScalingX: !Boolean(this.viewOptions.editorMode),
+            lockScalingY: !Boolean(this.viewOptions.editorMode),
+            lockRotation: !Boolean(this.viewOptions.editorMode),
+            hasControls: Boolean(this.viewOptions.editorMode),
             borderDashArray: [8, 8],
-            cornerStyle: 'circle',
-            cornerSize: 16,
+            cornerSize: 24,
             transparentCorners: false,
             borderColor: this.viewOptions.multiSelectionColor,
             borderScaleFactor: 3,
         });
 
         selectedElements.forEach((obj) => {
-
-            if (!obj.draggable || obj.locked) {
+            
+            if ((!obj.draggable && !this.viewOptions.editorMode) || !obj.evented) {   
                 activeSelection.removeWithUpdate(obj);
             }
+        })
+
+        activeSelection.setControlsVisibility({
+            tr: false,
+            tl: false,
+            mtr: false
         })
 
     }
@@ -341,9 +351,9 @@ fabric.Canvas.prototype._renderElementBoundingBox = function (element) {
 
     }
 
-    if (element) {
+    if (element && (!element._printingBox || !this.viewOptions.printingBox.visibility)) {
 
-        var bbCoords = element.getBoundingBoxCoords();
+        var bbCoords = element.getBoundingBoxCoords();        
 
         if (bbCoords && element.boundingBoxMode != 'none') {
 
@@ -357,7 +367,9 @@ fabric.Canvas.prototype._renderElementBoundingBox = function (element) {
                 evented: false,
                 name: "bounding-box",
                 excludeFromExport: true,
-                _ignore: true
+                _ignore: true,
+                rx: 0,
+                ry: 0
             };
             
             boundingBoxProps = deepMerge(boundingBoxProps, this.viewOptions.boundingBoxProps);
@@ -602,7 +614,7 @@ fabric.Canvas.prototype.addElements = function (elements, callback) {
  * @param {object} [parameters] An object with the parameters, you would like to apply on the element.
  */
 fabric.Canvas.prototype.addElement = function (type, source, title, params = {}) {        
-
+    
     if (type === undefined || source === undefined || title === undefined) return;    
 
     /**
@@ -1591,12 +1603,12 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
             parameters.text = text;
 
         }
-        
+                
         if( parameters.hasOwnProperty('shadowColor') 
             || parameters.hasOwnProperty('shadowBlur') 
             || parameters.hasOwnProperty('shadowOffsetX') 
             || parameters.hasOwnProperty('shadowOffsetY')
-            && (element.engravedText || element.neonText)
+            && !(element.engravedText || element.neonText)
         ) {
                         
             if(parameters.shadowColor === null) {
@@ -1615,7 +1627,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
                     offsetX: parameters.hasOwnProperty('shadowOffsetX') ? parameters.shadowOffsetX : currentShadow.offsetX,
                     offsetY: parameters.hasOwnProperty('shadowOffsetY') ? parameters.shadowOffsetY : currentShadow.offsetY,
                 }
-                
+                                
                 element.set('shadow', shadowObj);
 
             }
@@ -1725,7 +1737,8 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
             }
         
             
-            //replace new lines in curved text
+            //replace new lines in curved text            
+            element.textAlign = 'left';
             element.set('text', element.text.replace(/[\r\n]+/g, ''));
             element.setCurvedTextPosition(); 
 

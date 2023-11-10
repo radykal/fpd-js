@@ -1,6 +1,7 @@
 import '../../ui/view/ActionsBar.js';
 import Modal from '../../ui/view/comps/Modal.js';
 import QRCodeModule from './modules/QRCode.js';
+import download from 'downloadjs';
 
 import {
 	addEvents,
@@ -64,6 +65,10 @@ export default class ActionsBar extends EventTarget {
 		'qr-code': {
 			icon: 'fpd-icon-qrcode',
 			title: 'QR-Code'
+		},
+		'snap': {
+			icon: 'fpd-icon-snap',
+			title: 'Snap'
 		}
 	};
 

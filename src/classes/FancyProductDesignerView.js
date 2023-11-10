@@ -1,5 +1,6 @@
 import '../fabricjs/Canvas.js';
 import Modal from '../ui/view/comps/Modal.js';
+import tinycolor from "tinycolor2"
 
 import { 
     deepMerge,
@@ -7,7 +8,7 @@ import {
     toggleElemClasses
 } from '../helpers/utils';
 
-import { parseFontsToEmbed } from '/src/helpers/fonts-loader';
+import { parseFontsToEmbed } from '../helpers/fonts-loader';
 
 /**
  * Creates a new FancyProductDesignerView.
@@ -66,7 +67,8 @@ export default class FancyProductDesignerView extends EventTarget {
         'mobileGesturesBehaviour',
         'smartGuides',
         'snapGridSize',
-        'rulerUnit'
+        'rulerUnit',
+        'namesNumbersEntryPrice'
     ];
     
     /**
@@ -364,10 +366,7 @@ export default class FancyProductDesignerView extends EventTarget {
 		if(deselectElement) {
 			this.fabricCanvas.deselectElement();
 		}
-
-		let tempDevicePixelRatio = fabric.devicePixelRatio;
-		fabric.devicePixelRatio = 1;
-
+        
 		this.fabricCanvas
         .setDimensions({width: this.options.stageWidth, height: this.options.stageHeight})
         .setZoom(1);
@@ -401,7 +400,6 @@ export default class FancyProductDesignerView extends EventTarget {
 
 			this.fabricCanvas.renderAll();
 
-			fabric.devicePixelRatio = tempDevicePixelRatio;
 			this.options.highlightEditableObjects = tempHighlightEditableObjects;
 
 		});

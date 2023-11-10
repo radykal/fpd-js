@@ -51,6 +51,16 @@
                         box-shadow: none;
                         margin: 0;
                     }
+
+                    .fpd-img-meta {
+                        font-size: 11px;
+                        font-weight: bold;
+
+                        span {
+                            font-weight: normal;
+                            margin-right: 5px;
+                        }
+                    }
                     
                 }
                 
@@ -132,11 +142,17 @@
                 opacity: 0.2;
                 pointer-events: none;
             }
+
+            &.fpd-hide-dpi {
+
+                .fpd-dpi {
+                    display: none;
+                }
+
+            }
             
         }
         
     }
-    
-    
     
 }

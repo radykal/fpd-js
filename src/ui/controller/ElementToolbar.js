@@ -3,6 +3,7 @@ import ColorPanel from '../view/comps/ColorPanel.js';
 import ColorPalette from '../view/comps/ColorPalette.js';
 import ColorPicker from '../view/comps/ColorPicker.js';
 import Filters from '../../helpers/Filters.js';
+import tinycolor from "tinycolor2";
 
 import { 
     addEvents,
@@ -12,7 +13,9 @@ import {
     isBitmap,
     elementAvailableColors,
     getBgCssFromElement
-} from '/src/helpers/utils';
+} from '../../helpers/utils.js';
+import { postJSON } from '../../helpers/request';
+import Snackbar from '../view/comps/Snackbar';
 
 export default class ElementToolbar extends EventTarget {
 
@@ -272,7 +275,7 @@ export default class ElementToolbar extends EventTarget {
                     if(propKey === 'scaleX' && fpdInstance.currentElement && fpdInstance.currentElement.lockUniScaling) {
                         props.scaleY = value;
                         this.#updateUIValue('scaleY', value)
-                    }
+                    }                    
 
                     fpdInstance.currentViewInstance.fabricCanvas.setElementOptions(
                         props
@@ -566,6 +569,50 @@ export default class ElementToolbar extends EventTarget {
             }
         )
 
+        addEvents(
+            this.subPanel.querySelector('.fpd-tool-remove-bg'),
+            'click',
+            (evt) => {
+
+                let element = fpdInstance.currentElement;
+
+                fpdInstance.deselectElement();
+                fpdInstance.toggleSpinner(true, fpdInstance.translator.getTranslation('misc', 'loading_image'));
+
+                postJSON({
+                    url: fpdInstance.mainOptions.aiService.serverURL,
+                    body: {
+                        service: 'removeBG',
+                        image: element.source,
+                    },
+                    onSuccess: (data) => {                        
+                                
+                        if(data && data.new_image) {
+                                                        
+                            element.setSrc(data.new_image, () => {
+
+                                element.source = data.new_image;
+                                element.canvas.renderAll();
+
+                                Snackbar(fpdInstance.translator.getTranslation('misc', 'ai_remove_bg_success'));
+                                
+                            }, {crossOrigin: 'anonymous'})
+                        }
+                        else {
+        
+                            fpdInstance.aiRequestError(data.error);
+            
+                        }
+
+                        fpdInstance.toggleSpinner(false);
+                        
+                    },
+                    onError: fpdInstance.aiRequestError.bind(fpdInstance)
+                })                
+                
+            }
+        )
+
         //nav item                
         addEvents(
             Array.from(this.navElem.children),
@@ -801,7 +848,7 @@ export default class ElementToolbar extends EventTarget {
                 
             }
             else {
-                
+                                
                 colorPanel = ColorPanel(this.fpdInstance, {
                     colors: availableColors,
                     patterns: Array.isArray(element.patterns) && (element.isSVG() || element.getType() === 'text') ? element.patterns : null,
@@ -833,12 +880,10 @@ export default class ElementToolbar extends EventTarget {
                 this.#colorWrapper.append(colorPanel);
 
             //stroke
-            const strokeColorWrapper = this.subPanel.querySelector('.fpd-stroke-color-wrapper');
+            const strokeColorWrapper = this.subPanel.querySelector('.fpd-stroke-color-wrapper');            
             strokeColorWrapper.innerHTML = '';            
-            const strokeColorPicker = ColorPicker({
-                initialColor: tinycolor(element.stroke).isValid() ? element.stroke : '#000',
-                colorNames: this.fpdInstance.mainOptions.hexNames,
-                palette: this.fpdInstance.mainOptions.colorPickerPalette,
+            const strokeColorPanel = ColorPanel(this.fpdInstance, {
+                colors: Array.isArray(element.strokeColors) && element.strokeColors.length > 0 ? element.strokeColors : [element.stroke ? element.stroke : '#000'],
                 onMove: (hexColor) => {
 
                     this.fpdInstance.currentViewInstance.fabricCanvas.setElementOptions(
@@ -856,7 +901,7 @@ export default class ElementToolbar extends EventTarget {
 
                 }
             });
-            strokeColorWrapper.append(strokeColorPicker);
+            strokeColorWrapper.append(strokeColorPanel);
 
             //shadow
             const shadowColorWrapper = this.subPanel.querySelector('.fpd-shadow-color-wrapper');
@@ -923,7 +968,7 @@ export default class ElementToolbar extends EventTarget {
 		if(element.getType() === 'text' && (element.editable || element.__editorMode)) {
             
 			this.#toggleNavItem('edit-text');
-            this.#toggleNavItem('text-size', element.resizable);
+            this.#toggleNavItem('text-size', Boolean(element.resizable || element.__editorMode));
 			this.#toggleNavItem('font-family');
             this.#toggleNavItem('text-format');
 
@@ -948,6 +993,10 @@ export default class ElementToolbar extends EventTarget {
 
 		if(element.advancedEditing && element.source && isBitmap(element.source)) {
 			this.#toggleNavItem('advanced-editing');
+
+            this.#togglePanelTab('advanced-editing', 'filters', true);            
+            this.#togglePanelTab('advanced-editing', 'remove-bg', Boolean(this.fpdInstance.mainOptions.aiService.serverURL && this.fpdInstance.mainOptions.aiService.removeBG));
+
 		}
         
         this.#togglePanelTool('text-size', 'text-line-spacing', !element.curved);
@@ -1088,12 +1137,18 @@ export default class ElementToolbar extends EventTarget {
         if(this.fpdInstance.currentElement) {
 
             const fpdElem = this.fpdInstance.currentElement;
+            const fpdContRect = this.fpdInstance.container.getBoundingClientRect();
 
             //top
             const elemBoundingRect = fpdElem.getBoundingRect();            
             const lowestY = elemBoundingRect.top + elemBoundingRect.height + fpdElem.controls.mtr.offsetY + fpdElem.cornerSize;
             let posTop = this.fpdInstance.productStage.getBoundingClientRect().top + lowestY;
             
+            //below container            
+            if(posTop > fpdContRect.height + fpdContRect.top) {
+                posTop = fpdContRect.height + fpdContRect.top;
+            }
+
             //stay in viewport            
             if(posTop > window.innerHeight - this.container.clientHeight) {
                 posTop = window.innerHeight - this.container.clientHeight;

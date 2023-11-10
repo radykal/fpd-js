@@ -5,6 +5,7 @@ import Translator from '../ui/Translator.js';
 import UIManager from '../ui/UIManager.js';
 import Snackbar from '../ui/view/comps/Snackbar.js';
 import EditorBox from '../ui/controller/EditorBox.js';
+import tinycolor from "tinycolor2";
 
 import { 
     addEvents,
@@ -20,12 +21,12 @@ import {
     localStorageAvailable,
     formatPrice,
     fireEvent
-} from '/src/helpers/utils';
-import { getJSON, postJSON } from '/src/helpers/request';
-import { objectHasKeys, toggleElemClasses } from '../helpers/utils.js';
+} from '../helpers/utils.js';
+import { getJSON, postJSON } from '../helpers/request.js';
+import { objectHasKeys, pixelToUnit, toggleElemClasses, unitToPixel } from '../helpers/utils.js';
 import {
     loadFonts
-} from '/src/helpers/fonts-loader';
+} from '../helpers/fonts-loader.js';
 
 /**
  * Creates a new FancyProductDesigner.
@@ -37,7 +38,7 @@ import {
  */
 export default class FancyProductDesigner extends EventTarget {
     
-    static version = '6.0.9';
+    static version = '6.1.01';
     static forbiddenTextChars = /<|>/g;
     static proxyFileServer = '';
     static uploadsToServer = true;
@@ -372,6 +373,8 @@ export default class FancyProductDesigner extends EventTarget {
          */
         fireEvent(this, 'ready', {
         })
+
+        this.warningsWrapper = this.container.querySelector('.fpd-warnings');
         
         if(this.mainOptions.productsJSON) {
         
@@ -1243,8 +1246,7 @@ export default class FancyProductDesigner extends EventTarget {
                  * @event elementSelect
                  * @param {Event} event
                  */
-                fireEvent(this, 'elementSelect', {
-                })
+                fireEvent(this, 'elementSelect', {})
 
                 if(this.mainOptions.openTextInputOnSelect 
                     && element
@@ -1256,6 +1258,8 @@ export default class FancyProductDesigner extends EventTarget {
                     this.toolbar.container.querySelector('.fpd-tool-edit-text').click();
                     
                 }
+
+                this.#setWarnings();
 
             },
             'elementCheckContainemt': ({target, boundingBoxMode}) => {
@@ -1315,6 +1319,10 @@ export default class FancyProductDesigner extends EventTarget {
             'elementChange': ({element, type}) => {
 
                 this.#updateElementTooltip();
+                
+                if(type === 'scaling') {
+                    this.#setWarnings(element);
+                }                
 
                 fireEvent(this, 'elementChange', {
                     type: type,
@@ -1323,8 +1331,10 @@ export default class FancyProductDesigner extends EventTarget {
 
             },
             'elementModify': ({element, options}) => {
-
+                
+                this.#updateElementTooltip();
                 this.applyTextLinkGroup(element, options);
+                this.#setWarnings(element);
                 
                 /**
                  * Gets fired when an element is modified.
@@ -1337,7 +1347,7 @@ export default class FancyProductDesigner extends EventTarget {
                 fireEvent(this, 'elementModify', {
                     options: options,
                     element: element
-                })
+                })                
 
                 fireEvent(this, 'viewCanvasUpdate', {
                     viewInstance: viewInstance
@@ -1423,7 +1433,7 @@ export default class FancyProductDesigner extends EventTarget {
                 })
 
             }
-        
+                        
             /**
              * Gets fired as soon as a product has been fully added to the designer.
              *
@@ -1538,6 +1548,10 @@ export default class FancyProductDesigner extends EventTarget {
             }
         )
         
+        if(viewInstance.names_numbers && viewInstance.names_numbers.length > 1) {
+            viewInstance.changePrice((viewInstance.names_numbers.length-1) * viewInstance.options.namesNumbersEntryPrice, '+');
+        }
+        
         /**
          * Gets fired when a view is created.
          *
@@ -1567,41 +1581,23 @@ export default class FancyProductDesigner extends EventTarget {
                 this.mainTooltip.classList.add('fpd-show');
 
 			}
-			else if(this.mainOptions.imageSizeTooltip && element.getType() === 'image') { 
+			else if(this.mainOptions.sizeTooltip) { 
                 
-                let unit = this.mainOptions.rulerUnit;
-                let unitFactor = unit == 'cm' ? 10 : 1;
-                let viewWidth = this.currentViewInstance.options.stageWidth;
-                let widthRatio = 1;
-                let viewHeight = this.currentViewInstance.options.stageHeight;
-                let heightRatio = 1;
-                            
-                if(unit != 'px' 
-                    && objectHasKeys(this.currentViewInstance.options.printingBox, ['left','top','width','height']) 
-                    && objectHasKeys(this.currentViewInstance.options.output, ['width','height'])
-                ) {
+                const displaySize = this.calcDisplaySize(element);                
+			    let displayText = displaySize.width +'x'+ displaySize.height + displaySize.unit;
 
-                    //one pixel in mm                    
-                    widthRatio = this.currentViewInstance.options.output.width / this.currentViewInstance.options.printingBox.width;
-                    heightRatio = this.currentViewInstance.options.output.height / this.currentViewInstance.options.printingBox.height;               
-
-                }
-                else {
-                    unitFactor = 1;
-                    unit = 'px';
+                if(displaySize.dpi) {
+                    displayText += ' | DPI:'+displaySize.dpi;
                 }
 
-                let sizeWidth = parseInt((element.width * element.scaleX) * widthRatio);
-                sizeWidth = parseInt(sizeWidth / unitFactor);
-
-                let sizeHeight = parseInt((element.height * element.scaleY) * heightRatio);
-                sizeHeight = parseInt(sizeHeight / unitFactor);
-                
-				this.mainTooltip.innerText = sizeWidth +'x'+ sizeHeight + unit;
+                this.mainTooltip.innerHTML = displayText;
                 this.mainTooltip.classList.add('fpd-show');
+
 			}
 			else {
+
                 this.mainTooltip.classList.remove('fpd-show');
+
 			}
 
             if(this.mainTooltip.classList.contains('fpd-show')) {
@@ -1609,17 +1605,214 @@ export default class FancyProductDesigner extends EventTarget {
                 const oCoords = element.oCoords;
                 const viewStageRect = this.currentViewInstance.fabricCanvas.wrapperEl.getBoundingClientRect();                
                 
-                this.mainTooltip.style.left = (viewStageRect.left + oCoords.mt.x - this.mainTooltip.clientWidth / 2)+'px';
-                this.mainTooltip.style.top = (viewStageRect.top + oCoords.mt.y - this.mainTooltip.clientHeight - 20)+'px';
+                let leftPos = (viewStageRect.left + oCoords.mt.x - this.mainTooltip.clientWidth / 2);
+                let topPos = (viewStageRect.top + oCoords.mt.y - this.mainTooltip.clientHeight - 20);
+                
+                const contRect = this.container.getBoundingClientRect();
+                if(topPos < contRect.top)
+                    topPos = contRect.top - this.mainTooltip.clientHeight;
+
+                topPos = topPos < 0 ? 0 : topPos;
+
+                this.mainTooltip.style.left = leftPos + 'px';
+                this.mainTooltip.style.top = topPos + 'px';
 
             }
 
 		}
         else {
+
             this.mainTooltip.classList.remove('fpd-show');
+
         }
 
 	}
+
+    #setWarnings() {
+
+        const element = this.currentElement;
+
+        if(!this.warningsWrapper || this.mainOptions.editorMode) return;
+        
+        this.warningsWrapper.innerHTML = '';
+
+        if(this.productCreated) {
+
+            const dpi = this.calcElementDPI(element);
+            
+            if(dpi !== null && dpi < this.mainOptions.customImageParameters.minDPI) {
+
+                const sizeWarning = document.createElement('div');
+                sizeWarning.className = 'fpd-size-warning';
+                sizeWarning.innerHTML = '<span>'+this.translator.getTranslation('misc', 'dpi_warning', 'Low resolution!')+'</span>';
+                this.warningsWrapper.append(sizeWarning);
+                
+                if(this.mainOptions.aiService.serverURL && this.mainOptions.aiService.superRes) {
+
+                    const superResBtn = document.createElement('span');
+                    superResBtn.className = 'fpd-btn';
+                    superResBtn.innerText = this.translator.getTranslation('misc', 'ai_upscale_btn');
+                    sizeWarning.append(superResBtn);
+
+                    addEvents(superResBtn, 'click', (evt) => {
+
+                        const displaySize = this.calcDisplaySize(element);
+                        const lin = displaySize.unit == 'mm' ? 25.4 : 2.54;
+                        const toPx = parseInt( (this.mainOptions.customImageParameters.minDPI * displaySize.width) / lin );
+                        
+                        let scaleTo = toPx / element.width;
+                        scaleTo = Math.ceil(scaleTo);
+                        scaleTo = scaleTo > 4 ? 4 : scaleTo;
+                        console.log("AI SuperRes - Scale:", scaleTo);
+                        
+                        this.deselectElement();
+                        this.toggleSpinner(true, this.translator.getTranslation('misc', 'loading_image'));
+
+                        postJSON({
+                            url: this.mainOptions.aiService.serverURL,
+                            body: {
+                                service: 'superRes',
+                                image: element.source,
+                                scale: scaleTo
+                            },
+                            onSuccess: (data) => {
+                                        
+                                if(data && data.new_image) {
+                                    
+                                    let tempScaledWidth = element.getScaledWidth();
+                                    
+                                    element.setSrc(data.new_image, () => {
+
+                                        element.source = data.new_image;
+                                        
+                                        //fix: two times
+                                        element.scaleToWidth(tempScaledWidth);
+                                        element.scaleToWidth(tempScaledWidth);
+                                        element.canvas.renderAll();
+
+                                        Snackbar(this.translator.getTranslation('misc', 'ai_upscale_success'));
+
+                                        fireEvent(this, 'elementModify', {
+                                            options: {scaleX: element.scaleX},
+                                            element: element
+                                        })
+                                        
+                                    }, {crossOrigin: 'anonymous'})
+                                }
+                                else {
+                
+                                    this.aiRequestError(data.error);
+                    
+                                }
+
+                                this.toggleSpinner(false);
+                
+                                
+                            },
+                            onError: this.aiRequestError.bind(this)
+                        })
+                        
+                    })
+
+                }
+
+                /**
+                 * Gets fired when the DPI of an image is below the minDPI and the warning is shown.
+                 *
+                 * @event imageDPIWarningOn
+                 * @param {Event} event
+                 */        
+                fireEvent(this, 'imageDPIWarningOn', {
+                    element: element,
+                    dpi: dpi
+                })
+                
+            }
+            else {
+
+                /**
+                 * Gets fired when the DPI of an image is in range.
+                 *
+                 * @event imageDPIWarningOff
+                 * @param {Event} event
+                 */        
+                fireEvent(this, 'imageDPIWarningOff', {
+                    element: element,
+                    dpi: dpi
+                })
+
+            }
+
+        }
+
+    }
+
+    aiRequestError(error) {
+
+        Snackbar(error);
+        this.toggleSpinner(false);
+
+    }
+
+    calcElementDPI(element) {
+
+        if( element 
+            && element.isBitmap()
+            && objectHasKeys(this.currentViewInstance.options.output, ['width','height'])
+            && objectHasKeys(this.currentViewInstance.options.printingBox, ['left','top','width','height']) 
+        ) {
+
+            const dpi = Math.ceil(((this.currentViewInstance.options.printingBox.width * 25.4) / this.currentViewInstance.options.output.width) / element.scaleX);
+            return dpi;
+
+        }
+
+        return null;
+
+    }
+
+    calcDisplaySize(element) {
+
+        let unit = this.mainOptions.rulerUnit;
+        let unitFactor = unit == 'cm' ? 10 : 1;
+        let widthRatio = 1;
+        let heightRatio = 1;
+        let dpi = null;
+                    
+        if(objectHasKeys(this.currentViewInstance.options.printingBox, ['left','top','width','height']) 
+            && objectHasKeys(this.currentViewInstance.options.output, ['width','height'])
+        ) {
+
+            dpi = this.calcElementDPI(element);
+
+            if(unit != 'px' ) {
+
+                //one pixel in mm                    
+                widthRatio = this.currentViewInstance.options.output.width / this.currentViewInstance.options.printingBox.width;
+                heightRatio = this.currentViewInstance.options.output.height / this.currentViewInstance.options.printingBox.height;
+
+            }
+
+        }
+        else {
+            unitFactor = 1;
+            unit = 'px';
+        }
+
+        let sizeWidth = parseInt((element.width * element.scaleX) * widthRatio);
+        sizeWidth = parseInt(sizeWidth / unitFactor);
+
+        let sizeHeight = parseInt((element.height * element.scaleY) * heightRatio);
+        sizeHeight = parseInt(sizeHeight / unitFactor);
+
+        return {
+            width: sizeWidth,
+            height: sizeHeight,
+            unit: unit,
+            dpi: dpi
+        }
+
+    }
 
     applyTextLinkGroup(element, options={}) {
 
@@ -2013,7 +2206,7 @@ export default class FancyProductDesigner extends EventTarget {
 	}
     
     _addGridItemToCanvas(item, additionalOpts={}, viewIndex, isRemoteImage=true) {
-        
+                
         if(!this.currentViewInstance) { return; }
         viewIndex = viewIndex === undefined ? this.currentViewIndex : viewIndex;
     
@@ -2273,8 +2466,7 @@ export default class FancyProductDesigner extends EventTarget {
         //create hidden canvas
         const hiddenCanvas = document.createElement('canvas');
 
-		let tempDevicePixelRatio = fabric.devicePixelRatio,
-			printCanvas = new fabric.Canvas(hiddenCanvas, {
+			let printCanvas = new fabric.Canvas(hiddenCanvas, {
 				containerClass: 'fpd-hidden fpd-hidden-canvas',
 				enableRetinaScaling: false
 			}),
@@ -2284,8 +2476,6 @@ export default class FancyProductDesigner extends EventTarget {
 
 		const _addCanvasImage = (viewInst) => {
             
-			fabric.devicePixelRatio = 1;
-
 			viewInst.toDataURL((dataURL) => {
 
 				fabric.Image.fromURL(dataURL, (img) => {
@@ -2308,7 +2498,6 @@ export default class FancyProductDesigner extends EventTarget {
 						setTimeout(function() {
 
 							callback(printCanvas.toDataURL(options));
-							fabric.devicePixelRatio = tempDevicePixelRatio;
 							printCanvas.dispose();
 
 							if(this.currentViewInstance) {
@@ -2650,7 +2839,7 @@ export default class FancyProductDesigner extends EventTarget {
 	 *
 	 * @method getPrintOrderData
 	 */
-	getPrintOrderData() {
+	getPrintOrderData(includeSVGData=true) {
 
 		let printOrderData = {
 			used_fonts: this.getUsedFonts(),
@@ -2658,15 +2847,19 @@ export default class FancyProductDesigner extends EventTarget {
 			custom_images: []
 		};
 
-        this.viewInstances.forEach(viewInst => {
+        if(includeSVGData) {
+
+            this.viewInstances.forEach(viewInst => {
             
-            printOrderData.svg_data.push({
-				svg: viewInst.toSVG({respectPrintingBox: true}),
-				output: viewInst.options.output
-			});
+                printOrderData.svg_data.push({
+                    svg: viewInst.toSVG({respectPrintingBox: true}),
+                    output: viewInst.options.output
+                });
+    
+            })
 
-        })
-
+        }
+        
 		this.getCustomElements('image').forEach(img => {
 
             if(!printOrderData.custom_images.includes(img.element.source))
@@ -2725,9 +2918,8 @@ export default class FancyProductDesigner extends EventTarget {
          *
          * @event priceChange
          * @param {Event} event
-         * @param {number} event.detail.elementPrice - The price of the element.
          */
-        fireEvent(this, 'priceChange', { elementPrice: this.currentPrice })
+        fireEvent(this, 'priceChange')
 
 		return this.currentPrice;
 
