@@ -20,7 +20,6 @@
 
         <div id="fpd-target" class="fpd-sidebar fpd-shadow-2 fpd-views-inside-right">
         </div>
-        <button onclick="handleAddClick()">Add</button>
         <script>
 
             const appOptions = {
@@ -94,13 +93,6 @@
                     removable: true,
                     colors: true,
                 },
-            }
-
-            const fpd = new FancyProductDesigner(document.getElementById('fpd-target'), appOptions);
-            function handleAddClick() {
-                console.log("button clicked--------------")
-                // fpd.currentViewInstance.fabricCanvas.toSVG()
-                console.log(fpd.getViewsSVG()[0])
             }
         </script>
     </div>

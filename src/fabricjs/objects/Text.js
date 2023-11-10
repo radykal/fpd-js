@@ -14,8 +14,6 @@ fabric.Text.prototype.initialize = (function (originalFn) {
 fabric.Text.prototype.toSVG = (function (originalFn) {
 
     return function (...args) {
-        console.log(this.path, "------toSVG called")
-        console.log(fabric.util.degreesToRadians(50))
 
         if (this.curved && this.path) {
             
@@ -30,7 +28,6 @@ fabric.Text.prototype.toSVG = (function (originalFn) {
             let textStroke = this.stroke
             let textStrokeWidth = this.strokeWidth
             let path = this.path;
-            console.log(this, path, "-----------------PATH")
             let fillPath = path.fill ? path.fill : "none";
             let strokePath = path.stroke ? path.stroke : "none";
             let strokeWidth = path.strokeWidth ? path.strokeWidth : 0;
@@ -39,7 +36,6 @@ fabric.Text.prototype.toSVG = (function (originalFn) {
             let pathData = this.path.path;
             let pathInfo = fabric.util.getPathSegmentsInfo(pathData);
             let pathLength = pathInfo[pathInfo.length - 1].length;
-            console.log(pathInfo, "------------path")
 
             // reverse pathdata to emulate side="right"
             if (this.pathSide === "right") {
@@ -82,7 +78,6 @@ fabric.Text.prototype.toSVG = (function (originalFn) {
 
             let textPaths = "";
             let offset = pathStartOffset;
-            console.log(letterSpacing, "--------------PathLength")
             for (let i = 0; i < this.text.length; i++) {
                 let letter = this.text[i];
                 let text = new fabric.Text(letter, {
@@ -102,7 +97,6 @@ fabric.Text.prototype.toSVG = (function (originalFn) {
                   ${letter}
                 </textPath>`;
                 offset += (text.width + 1 + letterSpacing)
-                console.log(text.width, "--------------width")
                 textPaths += textPathEl;
               }
 
@@ -120,7 +114,6 @@ fabric.Text.prototype.toSVG = (function (originalFn) {
           <path id="textOnPath${id}" d="${d}" />
         </defs>`;
             }
-            console.log(pathStartOffset, "------------offset")
 
             return this._createBaseSVGMarkup(
                 this.path?.path
