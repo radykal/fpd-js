@@ -154,7 +154,7 @@ export default class FancyProductDesignerView extends EventTarget {
         fabric.Object.prototype.borderColor = selectedColor;
         fabric.Object.prototype.cornerColor = selectedColor;
         fabric.Object.prototype.cornerIconColor = this.options.cornerIconColor;
-        
+                
         fabricCanvasOptions = deepMerge({
             containerClass: 'fpd-view-stage fpd-hidden',
             selection: this.options.multiSelection,

@@ -8,7 +8,7 @@ const ZoomPan = (canvas, type) => {
         pinchElementScaleX,
         pinchElementScaleY,
         initialDist = null;
- 
+            
     canvas.on({
         'mouse:down': (opts) => {
             
@@ -34,7 +34,7 @@ const ZoomPan = (canvas, type) => {
 
         },
         'mouse:move': function(opts) {
-
+            
             let scale = null;
             if((type == 'pinchImageScale' || type == 'pinchPanCanvas')
                 && opts.e.touches
@@ -67,14 +67,18 @@ const ZoomPan = (canvas, type) => {
                     scaleY: pinchElementScaleY * scale,
                 }, canvas.currentElement);
 
+            } 
+            //pinch
+            else if(type == 'pinchPanCanvas' && opts.e.touches && scale !== null) {                        
+                canvas.setResZoom(scale);
             }
-            else if(type == 'pinchPanCanvas') {
+            else if(canvas.panCanvas) {
                 
                 //on touch
                 if(opts.e.touches) {
                     
                     //pan                    
-                    if(opts.e.touches.length == 1 && canvas.panCanvas) {
+                    if(opts.e.touches.length == 1) {
 
                         let currentTouchX = opts.e.touches[0].clientX,
                             currentTouchY = opts.e.touches[0].clientY;
@@ -88,14 +92,10 @@ const ZoomPan = (canvas, type) => {
                         lastTouchY = currentTouchY;
 
                     }
-                    //pinch
-                    else if(scale !== null) {                        
-                        canvas.setResZoom(scale);
-                    }
 
                 }
                 //on mouse
-                else if(canvas.panCanvas) {
+                else {
 
                     //drag canvas with mouse
                     if(mouseDownStage) {

@@ -11,19 +11,27 @@ const Snackbar = (text='', autoRemove=true) => {
         
     }
     
-    const content = document.createElement('div');
+    let content = document.createElement('div');
     content.className = 'fpd-snackbar fpd-shadow-1';
     content.innerHTML = '<p>'+text+'</p>';
     content.addEventListener('click', (evt) => {
         content.remove();
+        content = null;
     })
     
     snackbarWrapper.append(content);
     
     if(autoRemove) {
-        setTimeout(function() {
-            content.remove();
+
+        setTimeout(() => {   
+
+            if(content)  {
+                content.remove();
+                content = null;
+            }        
+                
         }, 5000);
+
     }
     
     return content;  

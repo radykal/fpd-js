@@ -233,11 +233,8 @@ fabric.Canvas.prototype._fpdCanvasInit = function () {
 fabric.Canvas.prototype._onCreated = function () {
 
     this._canvasCreated = true;
-    
-    if(this.viewOptions.mobileGesturesBehaviour != 'none') {
-        ZoomPan(this, this.viewOptions.mobileGesturesBehaviour);
-    }
-
+        
+    ZoomPan(this, this.viewOptions.mobileGesturesBehaviour);
     Snap(this);
     Ruler(this);
 

@@ -2,9 +2,7 @@ import Modal from '../ui/view/comps/Modal.js';
 import Snackbar from '../ui/view/comps/Snackbar.js';
 import tinycolor from "tinycolor2";
 
-if (window) {
-    window.FPDUtils = {};
-}
+
 
 const isPlainObject = (value) => {
     return Object.prototype.toString.call(value) === '[object Object]';
@@ -109,15 +107,6 @@ const objectGet = (obj, path, defValue) => {
 
 export { objectGet }
 
-
-/**
- * Checks if a string is an URL.
- *
- * @method isUrl
- * @param {String} s The string.
- * @return {Boolean} Returns true if string is an URL.
- * @static
- */
 const isUrl = (s) => {
 
     var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
@@ -126,8 +115,7 @@ const isUrl = (s) => {
 }
 
 export { isUrl }
-if (window)
-    window.FPDUtils.isUrl = isUrl;
+    
 
 const removeUrlParams = (url) => {
     return url.replace(/\?.*$/, '');
@@ -166,6 +154,7 @@ export { arrayUnique }
  * @param {String} element The element value.
  * @return {Array} Returns the edited array.
  * @static
+ * @ignore
  */
 const removeFromArray = (array, element) => {
 
@@ -387,6 +376,7 @@ export { isEmpty }
  * @method localStorageAvailable
  * @return {Boolean} Returns true if local storage is available.
  * @static
+ * @ignore
  */
 const localStorageAvailable = () => {
 
@@ -502,6 +492,7 @@ export { getItemPrice }
  * @param {Number} imageH The image height.
  * @return {Array} Returns true if image dimension is within allowed range(minW, minH, maxW, maxH).
  * @static
+ * @ignore
  */
 const checkImageDimensions = (fpdInstance, imageW, imageH) => {
 
@@ -582,6 +573,7 @@ export { isBitmap }
  * @param {FancyProductDesigner} fpdInstance Instance of FancyProductDesigner.
  * @return {Array} Available colors.
  * @static
+ * @ignore
  */
 const elementAvailableColors = (element, fpdInstance) => {
 
@@ -741,7 +733,7 @@ const unitToPixel = (length, unit, dpi = 72) => {
 
 export { unitToPixel }
 
-const pixelToUnit = (pixel, unit, dpi = 72) => {
+const pixelToUnit = (pixel, unit='inch', dpi = 72) => {
 
     const inches = pixel / dpi;
 
@@ -757,9 +749,7 @@ const pixelToUnit = (pixel, unit, dpi = 72) => {
 
 }
 
-export { pixelToUnit }
-if (window)
-    window.FPDUtils.pixelToUnit = pixelToUnit;
+export { pixelToUnit }    
 
 const formatPrice = (price, priceFormatOpts = {}) => {
     
@@ -812,3 +802,62 @@ const formatPrice = (price, priceFormatOpts = {}) => {
 }
 
 export { formatPrice }
+
+if (window) {
+    
+    /**
+     * A class with some static helper functions. You do not need to initiate the class, just call the methods directly, e.g. FPDUtil.showModal();
+     *
+     * @class FPDUtils
+     */
+    window.FPDUtils = {};
+
+    /**
+	 * Displays a modal dialog.
+	 *
+	 * @method showModal
+	 * @param {String} htmlContent The html content for the modal.
+     * @param {Boolean} [fullscreen=false] Displays the modal in full screen.
+     * @param {String} [type=''] Empty, 'prompt' or 'confirm'.
+     * @param {HTMLElement} [container=document.body] The container for the modal.
+	 * @static
+	 */
+    window.FPDUtils.showModal = ((...args) => {   
+        Modal(...args);
+    });
+
+    /**
+	 * Displays a message in a snackbar (bottom-left).
+	 *
+	 * @method showMessage
+	 * @param {String} text The text for the message.
+     * @param {Boolean} [autoRemove=true] Either to remove the message automatcially or not.
+	 * @static
+	 */
+    window.FPDUtils.showMessage = ((...args) => {   
+        Snackbar(...args);
+    });
+        
+    /**
+     * Checks if a string is an URL.
+     *
+     * @method isUrl
+     * @param {String} s The string.
+     * @return {Boolean} Returns true if string is an URL.
+     * @static
+     */
+    window.FPDUtils.isUrl = isUrl;
+
+    /**
+     * Converts a pixel value to any metric value considering the DPI.
+     *
+     * @method pixelToUnit
+     * @param {Number} pixel The pixel value.
+     * @param {String} [unit='inch'] Target metric - 'inch', 'mm', 'cm'.
+     * @param {Number} [dpi=72] Target DPI.
+     * @return {Boolean} Returns true if string is an URL.
+     * @static
+     */
+    window.FPDUtils.pixelToUnit = pixelToUnit;
+
+}
