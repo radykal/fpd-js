@@ -1875,7 +1875,7 @@ export default class FancyProductDesigner extends EventTarget {
 	 * Gets the index of the view.
 	 *
 	 * @method getIndex
-	 * @return {Number} The index.
+	 * @returns {Number} The index.
 	 */
 	getViewIndexByWrapper(wrapperEl) {
 
@@ -1985,7 +1985,7 @@ export default class FancyProductDesigner extends EventTarget {
      * @param {Number} [viewIndex=-1] The index of the target view. By default all views are target.
      * @param {String} [elementType='all'] The type of elements to return. By default all types are returned. Possible values: text, image.
      * @param {String} [deselectElement=true] Deselect current selected element.
-     * @return {Array} An array containg the elements.
+     * @returns {Array} An array containg the elements.
      */
     getElements(viewIndex, elementType='all', deselectElement=true) {
     
@@ -2026,7 +2026,7 @@ export default class FancyProductDesigner extends EventTarget {
      * @param {string} [type='all'] The type of elements. Possible values: 'all', 'image', 'text'.
      * @param {Number} [viewIndex=-1] The index of the target view. By default all views are target.
      * @param {String} [deselectElement=true] Deselect current selected element.
-     * @return {array} An array with objects with the fabric object and the view index.
+     * @returns {array} An array with objects with the fabric object and the view index.
      */
     getCustomElements(type='all', viewIndex=-1, deselectElement=true) {
         
@@ -2056,7 +2056,7 @@ export default class FancyProductDesigner extends EventTarget {
      * @param {string} [type='all'] The type of elements. Possible values: 'all', 'image', 'text'.
      * @param {Number} [viewIndex=-1] The index of the target view. By default all views are target.
      * @param {String} [deselectElement=true] Deselect current selected element.
-     * @return {array} An array with objects with the fabric object and the view index.
+     * @returns {array} An array with objects with the fabric object and the view index.
      */
     getFixedElements(type='all', viewIndex=-1, deselectElement=true) {
         
@@ -2345,7 +2345,7 @@ export default class FancyProductDesigner extends EventTarget {
 	 *
 	 * @method toggleResponsive
 	 * @param {Boolean} [toggle] True or false.
-	 * @return {Boolean} Returns true or false.
+	 * @returns {Boolean} Returns true or false.
 	 */
 	toggleResponsive(toggle) {
 
@@ -2377,7 +2377,7 @@ export default class FancyProductDesigner extends EventTarget {
 	 * @method getProduct
 	 * @param {boolean} [onlyEditableElements=false] If true, only the editable elements will be returned.
 	 * @param {boolean} [customizationRequired=false] To receive the product the user needs to customize the initial elements.
-	 * @return {array} An array with all views. A view is an object containing the title, thumbnail, custom options and elements. An element object contains the title, source, parameters and type.
+	 * @returns {array} An array with all views. A view is an object containing the title, thumbnail, custom options and elements. An element object contains the title, source, parameters and type.
 	 */
 	getProduct(onlyEditableElements=false, customizationRequired=false) {
 
@@ -2530,7 +2530,7 @@ export default class FancyProductDesigner extends EventTarget {
 	 * @method getViewsDataURL
 	 * @param {Function} callback A function that will be called when the data URL is created. The function receives the data URL.
 	 * @param {string} [options] See {@link FancyProductDesignerView#toDataURL}.
-	 * @return {array} An array with all views as data URLs.
+	 * @returns {array} An array with all views as data URLs.
 	 */
 	getViewsDataURL(callback=() => {}, options={}) {
         
@@ -2609,7 +2609,7 @@ export default class FancyProductDesigner extends EventTarget {
 	 * Get all fonts used in the product.
 	 *
 	 * @method getUsedFonts
-	 * @return {array} An array with objects containing the font name and optional the URL to the font.
+	 * @returns {array} An array with objects containing the font name and optional the URL to the font.
 	 */
 	getUsedFonts() {        
 
@@ -2677,7 +2677,7 @@ export default class FancyProductDesigner extends EventTarget {
 	 * Returns the views as SVG.
 	 *
 	 * @param {Object} options See {@link FancyProductDesignerView#toSVG}.
-	 * @return {array} An array with all views as SVG.
+	 * @returns {array} An array with all views as SVG.
 	 */
 	getViewsSVG (options) {
 
@@ -2695,7 +2695,7 @@ export default class FancyProductDesigner extends EventTarget {
 	 * Get all used colors from a single or all views.
 	 *
 	 * @param {Number} [viewIndex=-1] The index of the target view. By default all views are target.
-	 * @return {array} An array with hexdecimal color values.
+	 * @returns {array} An array with hexdecimal color values.
 	 */
 	getUsedColors(viewIndex=-1) {
 
@@ -2795,7 +2795,7 @@ export default class FancyProductDesigner extends EventTarget {
 	 *
 	 * @method getOrder
 	 * @param {Object} [options={}] Options for the methods that are called inside this mehtod, e.g. getProduct() can receive two parameters.
-	 * @return {object} An object containing different objects representing important order data.
+	 * @returns {object} An object containing different objects representing important order data.
 	 * @example
 	 * // includes only editable elements and the user needs to customize the initial product
 	 * fpd.getOrder( {onlyEditableElements: true, customizationRequired: true} );
@@ -2891,7 +2891,7 @@ export default class FancyProductDesigner extends EventTarget {
 	 *
 	 * @method calculatePrice
 	 * @param {Boolean} [considerQuantity=true] Calculate with or without quantity.
-	 * @return {Number} The calculated price.
+	 * @returns {Number} The calculated price.
 	 */
 	calculatePrice(considerQuantity=true) {
 

@@ -415,7 +415,7 @@ export default class FancyProductDesignerView extends EventTarget {
 	 * @param {Function} [options.reviver] See fabricjs documentation http://fabricjs.com/docs/fabric.Canvas.html#toSVG
 	 * @param {Boolean} [options.respectPrintingBox=false] Only generate SVG from printing box
 	 * @param {Array} [fontsToEmbed=[]] Aan array containing fonts to embed in the SVG. You can use <a href="https://jquerydoc.fancyproductdesigner.com/classes/FancyProductDesigner.html#method_getUsedColors" target="_blank">getUsedFonts method</a>
-	 * @return {String} A XML representing a SVG.
+	 * @returns {String} A XML representing a SVG.
 	 */
 	toSVG(options={}, fontsToEmbed=[]) {
 
@@ -545,7 +545,7 @@ export default class FancyProductDesignerView extends EventTarget {
 	 *
 	 * @method toggleLock
 	 * @param {Boolean} toggle The toggle state.
-	 * @return {Boolean} The toggle state.
+	 * @returns {Boolean} The toggle state.
 	 */
 	toggleLock(locked=true) {
 
@@ -576,7 +576,7 @@ export default class FancyProductDesignerView extends EventTarget {
 	 * @method changePrice
 	 * @param {Number} price Price as number.
 	 * @param {String} operator "+" or "-".
-	 * @return {Number} The total price of the view.
+	 * @returns {Number} The total price of the view.
 	 */
 	changePrice(price, operator, additionalPrice=null) {
 

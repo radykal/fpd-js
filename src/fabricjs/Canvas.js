@@ -511,8 +511,9 @@ fabric.Canvas.prototype._bringToppedElementsToFront = function () {
  * Adds a set of elements into the view.
  *
  * @param {Array} elements An array containing elements.
- * @param {Function} callback A function that will be called when all elements have beed added.
- * @method addElements
+ * @param {Function} [callback] A function that will be called when all elements have beed added.
+ * @method addElement
+ * @extends fabric.Canvas
  */
 fabric.Canvas.prototype.addElements = function (elements, callback) {    
 
@@ -608,7 +609,8 @@ fabric.Canvas.prototype.addElements = function (elements, callback) {
  * @param {string} type The type of an element you would like to add, 'image' or 'text'.
  * @param {string} source For image the URL to the image and for text elements the default text.
  * @param {string} title Only required for image elements.
- * @param {object} [parameters] An object with the parameters, you would like to apply on the element.
+ * @param {object} [parameters={}] An object with the parameters, you would like to apply on the element.
+ * @extends fabric.Canvas
  */
 fabric.Canvas.prototype.addElement = function (type, source, title, params = {}) {        
     
@@ -980,6 +982,13 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
 
 }
 
+/**
+ * Deselects the current selected element.
+ *
+ * @method resetSize
+ * @param {Boolean} discardActiveObject Discards currently active object and fire events
+ * @extends fabric.Canvas
+ */
 fabric.Canvas.prototype.deselectElement = function (discardActiveObject = true) {
 
     if (this.currentBoundingObject) {
@@ -1005,9 +1014,10 @@ fabric.Canvas.prototype.deselectElement = function (discardActiveObject = true) 
 }
 
 /**
- * Resizes the canvas responsive.
+ * Resets the canvas size considering the available space on the device.
  *
  * @method resetSize
+ * @extends fabric.Canvas
  */
 fabric.Canvas.prototype.resetSize = function () {
     
@@ -1065,11 +1075,12 @@ fabric.Canvas.prototype.resetSize = function () {
 }
 
 /**
-	 * Sets the zoom of the stage. 1 is equal to no zoom.
-	 *
-	 * @method setResZoom
-	 * @param {number} value The zoom value.
-	 */
+ * Sets the zoom of the stage. 1 is equal to no zoom.
+ *
+ * @method setResZoom
+ * @param {number} value The zoom value.
+ * @extends fabric.Canvas
+ */
 fabric.Canvas.prototype.setResZoom = function(value) {
 
     this.deselectElement();
@@ -1084,6 +1095,12 @@ fabric.Canvas.prototype.setResZoom = function(value) {
 
 }
 
+/**
+ * Resets the the zoom.
+ *
+ * @method resetZoom
+ * @extends fabric.Canvas
+ */
 fabric.Canvas.prototype.resetZoom = function () {
 
     this.deselectElement();
@@ -1097,7 +1114,8 @@ fabric.Canvas.prototype.resetZoom = function () {
  * Returns an array with fabricjs objects.
  *
  * @method getElements
- * @return {Array} An array with fabricjs objects.
+ * @returns {Array} An array with fabricjs objects.
+ * @extends fabric.Canvas
  */
 fabric.Canvas.prototype.getElements = function(elementType='all', deselectElement=true) {
     
@@ -1134,9 +1152,10 @@ fabric.Canvas.prototype.getElements = function(elementType='all', deselectElemen
 /**
  * Returns an fabric object by title.
  *
- * @method getElements
+ * @method getElementsJSON
  * @param {string} title The title of an element.
- * @return {Object} FabricJS Object.
+ * @returns {Object} FabricJS Object.
+ * @extends fabric.Canvas
  */
 fabric.Canvas.prototype.getElementsJSON = function(onlyEditableElements=false, deselectElement=true) {
 
@@ -1193,7 +1212,8 @@ fabric.Canvas.prototype.getElementsJSON = function(onlyEditableElements=false, d
  *
  * @method getElementByTitle
  * @param {string} title The title of an element.
- * @return {Object} FabricJS Object.
+ * @returns {Object} FabricJS Object.
+ * @extends fabric.Canvas
  */
 fabric.Canvas.prototype.getElementByTitle = function (title) {
 
@@ -1208,7 +1228,14 @@ fabric.Canvas.prototype.getElementByTitle = function (title) {
 
 }
 
-//return an element by ID
+/**
+ * Returns an fabric object by ID.
+ *
+ * @method getElementByID
+ * @param {String} id The ID of an element.
+ * @returns {Object} FabricJS Object.
+ * @extends fabric.Canvas
+ */
 fabric.Canvas.prototype.getElementByID = function (id) {
 
     const objects = this.getObjects();
@@ -1228,6 +1255,7 @@ fabric.Canvas.prototype.getElementByID = function (id) {
  * Removes the canvas and resets all relevant view properties.
  *
  * @method reset
+ * @extends fabric.Canvas
  */
 fabric.Canvas.prototype.reset = function (removeCanvas = true) {
 
@@ -1246,6 +1274,7 @@ fabric.Canvas.prototype.reset = function (removeCanvas = true) {
  *
  * @method removeElement
  * @param {object|string} element Needs to be a fabric object or the title of an element.
+ * @extends fabric.Canvas
  */
 fabric.Canvas.prototype.removeElement = function (element) {
 
@@ -1266,6 +1295,7 @@ fabric.Canvas.prototype.removeElement = function (element) {
      * @event fabric.Canvas#elementRemove
      * @param {Event} event
      * @param {fabric.Object} element - The fabric object that has been removed.
+     * @extends fabric.Canvas
      */
     this.fire('elementRemove', { element: element })
 
@@ -1275,6 +1305,7 @@ fabric.Canvas.prototype.removeElement = function (element) {
  * Gets an elment by replace property.
  *
  * @method getElementByReplace
+ * @extends fabric.Canvas
  */
 fabric.Canvas.prototype.getElementByReplace = function (replaceValue) {
 
@@ -1299,6 +1330,7 @@ fabric.Canvas.prototype.getElementByReplace = function (replaceValue) {
  * @method setElementOptions
  * @param {object} parameters An object with the parameters that should be applied to the element.
  * @param {fabric.Object | string} [element] A fabric object or the title of an element. If no element is set, the parameters will be applied to the current selected element.
+ * @extends fabric.Canvas
  */
 fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 
@@ -1788,6 +1820,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
      * @event fabric.Canvas#elementModify
      * @param {Event} event
      * @param {fabric.Object} currentElement - The current selected element.
+     * @extends fabric.Canvas
      */
     this.fire('elementModify', { element: element, options: parameters })
 
@@ -1814,6 +1847,13 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 
 }
 
+/**
+ * Duplicates an element in the canvas.
+ *
+ * @method duplicateElement
+ * @param {fabric.Object} element The target element.
+ * @extends fabric.Canvas
+ */
 fabric.Canvas.prototype.duplicateElement = function (element) {
 
     var newOpts = element.getElementJSON();
@@ -1839,7 +1879,8 @@ fabric.Canvas.prototype.duplicateElement = function (element) {
  *
  * @method getUploadZone
  * @param {String} title The target title of an element.
- * @return {fabric.Object} A fabric object representing the upload zone.
+ * @returns {fabric.Object} A fabric object representing the upload zone.
+ * @extends fabric.Canvas
  */
 fabric.Canvas.prototype.getUploadZone = function (title) {
 
@@ -1861,6 +1902,8 @@ fabric.Canvas.prototype.getUploadZone = function (title) {
  *
  * @method setMask
  * @param {Object|Null} maskOptions An object containing the URL to the svg. Optional: scaleX, scaleY, left and top.
+ * @param {Function} [callback] A function when mask is loaded and set. Returns the mask or null, when mask could not be loaded.
+ * @extends fabric.Canvas
  */
 fabric.Canvas.prototype.setMask = function(maskOptions={}, callback=() => {}) {
 
@@ -1917,6 +1960,7 @@ fabric.Canvas.prototype.setMask = function(maskOptions={}, callback=() => {}) {
     else {
         this.maskObject = this.maskOptions = this.clipPath = null;
         this.renderAll();
+        callback(null);
     }
 
 };

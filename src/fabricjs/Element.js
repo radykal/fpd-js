@@ -15,6 +15,13 @@ import {
     isHexColor
 } from './utils.js';
 
+/**
+ * An array containting properties to include when exporting.
+ *
+ * @property propertiesToInclude
+ * @type {Array}
+ * @extends fabric.Object 
+ */
 fabric.Object.propertiesToInclude = [
     '_isInitial', 'lockMovementX', 'lockMovementY', 'lockRotation', 'lockScalingX', 'lockScalingY', 'lockScalingFlip', 'lockUniScaling',
     'resizeType', 'boundingBox', 'boundingBoxMode', 'selectable', 'evented', 'title', 'editable', 'cornerColor', 'cornerIconColor',
@@ -102,300 +109,6 @@ fabric.Object.prototype._elementControls = function () {
         mtr: rotateControl,
         br: resizeControl,
     });
-
-}
-
-fabric.Object.prototype.getType = function (fabricType) {
-
-    fabricType = fabricType ? fabricType : this.type;
-    
-    if (fabricType === 'text' || fabricType === 'i-text' || fabricType === 'textbox' || fabricType === 'neon-text' || fabricType === 'engraved-text' ) {
-        return 'text';
-    }
-    else {
-        return 'image';
-    }
-
-};
-
-fabric.Object.prototype.isSVG = function () {
-
-    return this.type === 'group' ||
-        this.type === 'path' ||
-        (this.source && this.source.includes('.svg'));
-
-};
-
-fabric.Object.prototype.isColorizable = function () {
-
-    if (this.getType() === 'text') {
-        return 'text';
-    }
-
-    if (!this.source) {
-        return false;
-    }
-
-    const imageParts = this.source.split('.');
-    //its base64 encoded
-    if (imageParts.length == 1) {
-
-        if (this.source.includes('data:image/png;')) {
-            return 'dataurl';
-        }
-        else {
-            this.fill = this.colors = false;
-            return false;
-        }
-
-    }
-    //its a url
-    else {
-
-        let url = removeUrlParams(this.source);
-
-        //only png and svg are colorizable
-        if (url.includes('.png') || this.isSVG()) {
-            return this.isSVG() ? 'svg' : 'png';
-        }
-        else {
-            this.fill = this.colors = false;
-            return false;
-        }
-
-    }
-
-};
-
-fabric.Object.prototype.isBitmap = function () {
-    
-    return this.type === 'image';
-
-};
-
-fabric.Object.prototype.hasColorSelection = function () {
-
-    return (Array.isArray(this.colors) || Boolean(this.colors) || this.colorLinkGroup || this.__editorMode) && this.isColorizable() !== false;
-
-};
-
-fabric.Object.prototype.checkEditable = function (checkProps) {
-
-    checkProps = checkProps ? checkProps : this;
-
-    return typeof checkProps.colors === 'object' ||
-        checkProps.colors === true ||
-        checkProps.colors == 1 ||
-        checkProps.removable ||
-        checkProps.draggable ||
-        checkProps.resizable ||
-        checkProps.rotatable ||
-        checkProps.zChangeable ||
-        checkProps.advancedEditing ||
-        checkProps.editable ||
-        checkProps.uploadZone ||
-        (checkProps.colorLinkGroup && checkProps.colorLinkGroup.length > 0) ||
-        checkProps.__editorMode;
-
-};
-
-fabric.Object.prototype.changeColor = function (colorData, colorLinking = true) {
-
-    const colorizable = this.isColorizable();    
-    
-    //check if hex color has only 4 digits, if yes, append 3 more    
-    if (typeof colorData === 'string' && isHexColor(colorData))
-        colorData = tinycolor(colorData).toHexString();    
-
-    //text
-    if (this.getType() === 'text') {
-
-        if (typeof colorData == 'object') {
-            colorData = colorData[0];
-        }
-
-        //set color of a text element
-        this.set('fill', colorData);
-        this.canvas.renderAll();
-        this.pattern = null;
-
-    }
-    //path groups (svg)
-    else if (this.type == 'group' && typeof colorData == 'object') {
-
-        const objects = this.getObjects();
-        colorData.forEach((hexColor, i) => {
-
-            if (objects[i]) {
-                objects[i].set('fill', hexColor);
-            }
-
-        })
-        this.canvas.renderAll();
-
-        this.svgFill = colorData;
-        delete this['fill'];
-
-    }
-    //image
-    else {
-
-        if (typeof colorData == 'object') {
-            colorData = colorData[0];
-        }
-
-        if (typeof colorData !== 'string') {
-            colorData = false;
-        }
-        
-        //colorize png or dataurl image
-        if (colorizable == 'png' || colorizable == 'dataurl') {
-
-            this.filters = [];
-
-            if (colorData) {
-                this.filters.push(new fabric.Image.filters.BlendColor({ mode: 'tint', color: colorData }));
-            }
-
-            this.applyFilters();
-            this.canvas.renderAll();
-            this.fill = colorData;
-
-        }
-        //colorize svg (single path)
-        else if (colorizable == 'svg') {
-
-            this.set('fill', colorData);
-            this.canvas.renderAll();
-
-        }
-
-    }
-
-    this.canvas.fire('elementFillChange', { element: this, colorLinking: colorLinking });
-
-};
-
-fabric.Object.prototype.setPattern = function (patternUrl) {
-
-    if (patternUrl) {
-        
-        if (this.canvas.proxyFileServer) {
-            patternUrl = this.canvas.proxyFileServer + patternUrl;
-        }
-        
-        fabric.util.loadImage(patternUrl, (img) => {
-
-            if (this.isSVG()) {
-
-                //group of paths
-                if (this.hasOwnProperty('getObjects')) {
-
-                    const paths = this.getObjects();
-                    for (var i = 0; i < paths.length; ++i) {
-
-                        paths[i].set('fill', new fabric.Pattern({
-                            source: img,
-                            repeat: 'repeat'
-                        }));
-                    }
-
-                }
-                //single path
-                else {
-
-                    this.set('fill', new fabric.Pattern({
-                        source: img,
-                        repeat: 'repeat'
-                    }));
-
-                }
-
-            }
-            //text
-            else if (this.getType() == 'text') {
-
-                this.set('fill', new fabric.Pattern({
-                    source: img,
-                    repeat: 'repeat'
-                }));
-
-            }
-            //for all other revert to color
-            else {
-
-                let color = this.fill ? this.fill : this.colors[0];
-                color = color ? color : '#000000';
-                this.set('fill', color);
-
-            }
-
-            this.canvas.renderAll();
-            this.canvas.fire('elementFillChange', { element: this });
-
-        });
-
-        this.pattern = patternUrl;
-
-    }
-
-};
-
-/**
- * Gets the z-index of an element.
- *
- * @method getZIndex
- * @param {fabric.Object} [element] The element to center. If not set, it centers the current selected element.
- * @return {Number} The index.
- */
-fabric.Object.prototype.getZIndex = function () {
-
-    const objects = this.canvas.getObjects();
-    return objects.indexOf(this);
-}
-
-/**
- * Centers an element horizontal or/and vertical.
- *
- * @method centerElement
- * @param {Boolean} h Center horizontal.
- * @param {Boolean} v Center vertical.
- * @param {fabric.Object} [element] The element to center. If not set, it centers the current selected element.
- */
-fabric.Object.prototype.centerElement = function (hCenter = true, vCenter = true) {
-
-    let boundingBox = this.getBoundingBoxCoords(),
-        left = this.left,
-        top = this.top;
-
-    if (hCenter) {
-
-        if (boundingBox) {
-            left = boundingBox.cp ? boundingBox.cp.x : boundingBox.left + boundingBox.width * 0.5;
-        }
-        else {
-            left = this.canvas.viewOptions.stageWidth * 0.5;
-        }
-
-    }
-
-    if (vCenter) {
-        if (boundingBox) {
-            top = boundingBox.cp ? boundingBox.cp.y : boundingBox.top + boundingBox.height * 0.5;
-        }
-        else {
-            top = this.canvas.viewOptions.stageHeight * 0.5;
-        }
-
-    }
-
-    this.setPositionByOrigin(new fabric.Point(left, top), 'center', 'center');
-
-    this.canvas.renderAll();
-    this.setCoords();
-    this._checkContainment();
-
-    this.autoCenter = false;
 
 }
 
@@ -518,12 +231,411 @@ fabric.Object.prototype._checkContainment = function () {
 
 }
 
+fabric.Object.prototype._clipElement = function () {
+
+    var clippingObj = this.getClippingObject();
+
+    if (clippingObj) {
+
+        if (clippingObj.type) {
+
+            clippingObj.clone((clonedPath) => {
+
+                clonedPath.set({
+                    absolutePositioned: true,
+                    opacity: 1,
+                })
+
+                this.clipPath = clonedPath;
+
+            })
+
+        }
+        else {
+
+            const clipRect = new fabric.Rect({
+                originX: 'left',
+                originY: 'top',
+                angle: clippingObj.angle || 0,
+                left: clippingObj.left,
+                top: clippingObj.top,
+                width: clippingObj.width,
+                height: clippingObj.height,
+                fill: '#DDD',
+                absolutePositioned: true,
+                rx: 0,
+                ry: 0
+            });
+
+            this.clipPath = clipRect;
+
+        }
+
+        this.canvas.renderAll();
+
+    }
+
+};
+
+/**
+ * Gets the type of an element.
+ *
+ * @method getType
+ * @param {String} [fabricType] Checks this fabrich type instead of this.
+ * @returns {String} The element type - text or image.
+ * @extends fabric.Canvas
+ */
+fabric.Object.prototype.getType = function (fabricType) {
+
+    fabricType = fabricType ? fabricType : this.type;
+    
+    if (fabricType === 'text' || fabricType === 'i-text' || fabricType === 'textbox' || fabricType === 'neon-text' || fabricType === 'engraved-text' ) {
+        return 'text';
+    }
+    else {
+        return 'image';
+    }
+
+};
+
+/**
+ * Checks if the element is a SVG.
+ *
+ * @method isSVG
+ * @returns {Boolean} State
+ * @extends fabric.Canvas
+ */
+fabric.Object.prototype.isSVG = function () {
+
+    return this.type === 'group' ||
+        this.type === 'path' ||
+        (this.source && this.source.includes('.svg'));
+
+};
+
+/**
+ * Checks if the element is colorizable.
+ *
+ * @method isColorizable
+ * @returns {Boolean} State
+ * @extends fabric.Canvas
+ */
+fabric.Object.prototype.isColorizable = function () {
+
+    if (this.getType() === 'text') {
+        return 'text';
+    }
+
+    if (!this.source) {
+        return false;
+    }
+
+    const imageParts = this.source.split('.');
+    //its base64 encoded
+    if (imageParts.length == 1) {
+
+        if (this.source.includes('data:image/png;')) {
+            return 'dataurl';
+        }
+        else {
+            this.fill = this.colors = false;
+            return false;
+        }
+
+    }
+    //its a url
+    else {
+
+        let url = removeUrlParams(this.source);
+
+        //only png and svg are colorizable
+        if (url.includes('.png') || this.isSVG()) {
+            return this.isSVG() ? 'svg' : 'png';
+        }
+        else {
+            this.fill = this.colors = false;
+            return false;
+        }
+
+    }
+
+};
+
+/**
+ * Checks if the element is a bitmap image.
+ *
+ * @method isBitmap
+ * @returns {Boolean} State
+ * @extends fabric.Canvas
+ */
+fabric.Object.prototype.isBitmap = function () {
+    
+    return this.type === 'image';
+
+};
+
+/**
+ * Checks if the element has a color selection.
+ *
+ * @method hasColorSelection
+ * @returns {Boolean} State
+ * @extends fabric.Canvas
+ */
+fabric.Object.prototype.hasColorSelection = function () {
+
+    return (Array.isArray(this.colors) || Boolean(this.colors) || this.colorLinkGroup || this.__editorMode) && this.isColorizable() !== false;
+
+};
+
+/**
+ * Checks if the element can be edited by the user.
+ *
+ * @method checkEditable
+ * @param {Object} checkProps Pass an object of properties instead of using this element.
+ * @returns {Boolean} Editable state
+ * @extends fabric.Canvas
+ */
+fabric.Object.prototype.checkEditable = function (checkProps) {
+
+    checkProps = checkProps ? checkProps : this;
+
+    return typeof checkProps.colors === 'object' ||
+        checkProps.colors === true ||
+        checkProps.colors == 1 ||
+        checkProps.removable ||
+        checkProps.draggable ||
+        checkProps.resizable ||
+        checkProps.rotatable ||
+        checkProps.zChangeable ||
+        checkProps.advancedEditing ||
+        checkProps.editable ||
+        checkProps.uploadZone ||
+        (checkProps.colorLinkGroup && checkProps.colorLinkGroup.length > 0) ||
+        checkProps.__editorMode;
+
+};
+
+/**
+ * Changes the color of an element.
+ *
+ * @method changeColor
+ * @param {String | Array} colorData Hex color value or any array of hex color values.
+ * @param {Boolean} [colorLinking=true] If element is color linked, execute it.
+ * @extends fabric.Canvas
+ */
+fabric.Object.prototype.changeColor = function (colorData, colorLinking = true) {
+
+    const colorizable = this.isColorizable();    
+    
+    //check if hex color has only 4 digits, if yes, append 3 more    
+    if (typeof colorData === 'string' && isHexColor(colorData))
+        colorData = tinycolor(colorData).toHexString();    
+
+    //text
+    if (this.getType() === 'text') {
+
+        if (typeof colorData == 'object') {
+            colorData = colorData[0];
+        }
+
+        //set color of a text element
+        this.set('fill', colorData);
+        this.canvas.renderAll();
+        this.pattern = null;
+
+    }
+    //path groups (svg)
+    else if (this.type == 'group' && typeof colorData == 'object') {
+
+        const objects = this.getObjects();
+        colorData.forEach((hexColor, i) => {
+
+            if (objects[i]) {
+                objects[i].set('fill', hexColor);
+            }
+
+        })
+        this.canvas.renderAll();
+
+        this.svgFill = colorData;
+        delete this['fill'];
+
+    }
+    //image
+    else {
+
+        if (typeof colorData == 'object') {
+            colorData = colorData[0];
+        }
+
+        if (typeof colorData !== 'string') {
+            colorData = false;
+        }
+        
+        //colorize png or dataurl image
+        if (colorizable == 'png' || colorizable == 'dataurl') {
+
+            this.filters = [];
+
+            if (colorData) {
+                this.filters.push(new fabric.Image.filters.BlendColor({ mode: 'tint', color: colorData }));
+            }
+
+            this.applyFilters();
+            this.canvas.renderAll();
+            this.fill = colorData;
+
+        }
+        //colorize svg (single path)
+        else if (colorizable == 'svg') {
+
+            this.set('fill', colorData);
+            this.canvas.renderAll();
+
+        }
+
+    }
+
+    this.canvas.fire('elementFillChange', { element: this, colorLinking: colorLinking });
+
+};
+
+/**
+ * Sets the pattern for an element.
+ *
+ * @method setPattern
+ * @param {String} patternUrl The URL of the image used as pattern.
+ * @extends fabric.Canvas
+ */
+fabric.Object.prototype.setPattern = function (patternUrl) {
+
+    if (patternUrl) {
+        
+        if (this.canvas.proxyFileServer) {
+            patternUrl = this.canvas.proxyFileServer + patternUrl;
+        }
+        
+        fabric.util.loadImage(patternUrl, (img) => {
+
+            if (this.isSVG()) {
+
+                //group of paths
+                if (this.hasOwnProperty('getObjects')) {
+
+                    const paths = this.getObjects();
+                    for (var i = 0; i < paths.length; ++i) {
+
+                        paths[i].set('fill', new fabric.Pattern({
+                            source: img,
+                            repeat: 'repeat'
+                        }));
+                    }
+
+                }
+                //single path
+                else {
+
+                    this.set('fill', new fabric.Pattern({
+                        source: img,
+                        repeat: 'repeat'
+                    }));
+
+                }
+
+            }
+            //text
+            else if (this.getType() == 'text') {
+
+                this.set('fill', new fabric.Pattern({
+                    source: img,
+                    repeat: 'repeat'
+                }));
+
+            }
+            //for all other revert to color
+            else {
+
+                let color = this.fill ? this.fill : this.colors[0];
+                color = color ? color : '#000000';
+                this.set('fill', color);
+
+            }
+
+            this.canvas.renderAll();
+            this.canvas.fire('elementFillChange', { element: this });
+
+        });
+
+        this.pattern = patternUrl;
+
+    }
+
+};
+
+/**
+ * Gets the z-index of an element.
+ *
+ * @method getZIndex
+ * @returns {Number} The z-index.
+ * @extends fabric.Object
+ */
+fabric.Object.prototype.getZIndex = function () {
+
+    const objects = this.canvas.getObjects();
+    return objects.indexOf(this);
+}
+
+/**
+ * Centers an element horizontal or/and vertical.
+ *
+ * @method centerElement
+ * @param {Boolean} [hCenter=true] Center horizontal.
+ * @param {Boolean} [vCenter=true] Center vertical.
+ * @extends fabric.Object
+ */
+fabric.Object.prototype.centerElement = function (hCenter = true, vCenter = true) {
+
+    let boundingBox = this.getBoundingBoxCoords(),
+        left = this.left,
+        top = this.top;
+
+    if (hCenter) {
+
+        if (boundingBox) {
+            left = boundingBox.cp ? boundingBox.cp.x : boundingBox.left + boundingBox.width * 0.5;
+        }
+        else {
+            left = this.canvas.viewOptions.stageWidth * 0.5;
+        }
+
+    }
+
+    if (vCenter) {
+        if (boundingBox) {
+            top = boundingBox.cp ? boundingBox.cp.y : boundingBox.top + boundingBox.height * 0.5;
+        }
+        else {
+            top = this.canvas.viewOptions.stageHeight * 0.5;
+        }
+
+    }
+
+    this.setPositionByOrigin(new fabric.Point(left, top), 'center', 'center');
+
+    this.canvas.renderAll();
+    this.setCoords();
+    this._checkContainment();
+
+    this.autoCenter = false;
+
+}
+
 /**
  * Returns the bounding box of an element.
  *
  * @method getBoundingBoxCoords
  * @param {fabric.Object} element A fabric object
- * @return {Object | Boolean} The bounding box object with x,y,width and height or false.
+ * @returns {Object | Boolean} The bounding box object with x,y,width and height or false.
  */
 fabric.Object.prototype.getBoundingBoxCoords = function () {
 
@@ -575,6 +687,13 @@ fabric.Object.prototype.getBoundingBoxCoords = function () {
 
 }
 
+/**
+ * Gets the object for the clipping. Could be an object with coordinates or a fabric.Object.
+ *
+ * @method getClippingObject
+ * @returns {Object | fabric.Object} The object used for clipping.
+ * @extends fabric.Canvas
+ */
 fabric.Object.prototype.getClippingObject = function () {
 
     if (this.boundingBox || this.uploadZone) {
@@ -605,52 +724,15 @@ fabric.Object.prototype.getClippingObject = function () {
 
 }
 
-fabric.Object.prototype._clipElement = function () {
-
-    var clippingObj = this.getClippingObject();
-
-    if (clippingObj) {
-
-        if (clippingObj.type) {
-
-            clippingObj.clone((clonedPath) => {
-
-                clonedPath.set({
-                    absolutePositioned: true,
-                    opacity: 1,
-                })
-
-                this.clipPath = clonedPath;
-
-            })
-
-        }
-        else {
-
-            const clipRect = new fabric.Rect({
-                originX: 'left',
-                originY: 'top',
-                angle: clippingObj.angle || 0,
-                left: clippingObj.left,
-                top: clippingObj.top,
-                width: clippingObj.width,
-                height: clippingObj.height,
-                fill: '#DDD',
-                absolutePositioned: true,
-                rx: 0,
-                ry: 0
-            });
-
-            this.clipPath = clipRect;
-
-        }
-
-        this.canvas.renderAll();
-
-    }
-
-};
-
+/**
+ * Gets the JSON representation of the element.
+ *
+ * @method getElementJSON
+ * @param {Boolean} [addPropertiesToInclude=false] Add properties from propertiesToInclude property.
+ * @param {Array} [propertyKeys=[]] Addtional property keys to include.
+ * @returns {Object} A JSON representation of the element.
+ * @extends fabric.Canvas
+ */
 fabric.Object.prototype.getElementJSON = function (addPropertiesToInclude = false, propertyKeys = []) {
 
     if (this.canvas) {
@@ -715,11 +797,12 @@ fabric.Object.prototype.getElementJSON = function (addPropertiesToInclude = fals
 };
 
 /**
-     * Aligns an element.
-     *
-     * @method alignToPosition
-     * @param {String} pos Allowed values: left, right, top or bottom.
-     */
+ * Aligns an element.
+ *
+ * @method alignToPosition
+ * @param {String} [pos='left'] Allowed values: left, right, top or bottom.
+ * @extends fabric.Canvas
+ */
 fabric.Object.prototype.alignToPosition = function (pos = 'left') {
 
 
@@ -759,6 +842,13 @@ fabric.Object.prototype.alignToPosition = function (pos = 'left') {
 
 };
 
+/**
+ * Toggles the visibility of an upload zone.
+ * The upload zone is visible if it contains an element and hidden when empty.
+ *
+ * @method toggleUploadZone
+ * @extends fabric.Canvas
+ */
 fabric.Object.prototype.toggleUploadZone = function () {
 
     if (this.hasUploadZone && this.canvas) {
