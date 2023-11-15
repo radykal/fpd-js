@@ -605,7 +605,7 @@ export default class Mainbar extends EventTarget {
         this.currentModules = [];
 
         let selectedModule = this.fpdInstance.mainOptions.initialActiveModule ? this.fpdInstance.mainOptions.initialActiveModule : '';
-        
+
         const navElem = this.container.querySelector('.fpd-navigation');
         
         //if only one modules exist, select it and hide nav
@@ -711,7 +711,7 @@ export default class Mainbar extends EventTarget {
             }  
                                 
         });
-        
+                
         const selectedNav = navElem.querySelector(`[data-module="${selectedModule}"]`);      
         if(!this.contentClosable && selectedNav) {
             selectedNav.click()

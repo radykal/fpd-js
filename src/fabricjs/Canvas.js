@@ -1021,7 +1021,7 @@ fabric.Canvas.prototype.deselectElement = function (discardActiveObject = true) 
  */
 fabric.Canvas.prototype.resetSize = function () {
     
-    if(!this.wrapperEl.parentNode) return;
+    if(!this.wrapperEl || !this.wrapperEl.parentNode) return;
 
     const viewStage = this.wrapperEl;
     const viewStageWidth = viewStage.parentNode.clientWidth;   
@@ -1346,9 +1346,9 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
     const elemType = element.getType();
 
     if(parameters.scale !== undefined) {
-        parameters.scaleX = parameters.scaleY = parameters.scale;
+        parameters.scaleX = parameters.scaleY = Number(parameters.scale);
     }
-    
+        
     //scale image into bounding box (cover or fit)        
     if (elemType == 'image' 
         && !element._isInitial 
@@ -1947,7 +1947,6 @@ fabric.Canvas.prototype.setMask = function(maskOptions={}, callback=() => {}) {
                 this.maskObject = svgGroup;
                 this.clipPath = svgGroup;
 
-                this.renderAll();
                 this.resetSize();
 
             }
@@ -1958,9 +1957,11 @@ fabric.Canvas.prototype.setMask = function(maskOptions={}, callback=() => {}) {
 
     }
     else {
+
         this.maskObject = this.maskOptions = this.clipPath = null;
-        this.renderAll();
+        this.renderAll();        
         callback(null);
+        
     }
 
 };

@@ -83,8 +83,16 @@ export default class ProductsModule extends EventTarget {
             }
     
         }
-        
+                
         this.fpdInstance.container.classList.toggle('fpd-products-module-hidden', hideProductsModule);
+
+        //select another item if products module is selected
+        const selectedNavItem = this.fpdInstance.mainBar.navElem.querySelector('.fpd-active');
+        if(hideProductsModule && selectedNavItem && selectedNavItem.dataset.module == 'products') {
+
+            selectedNavItem.nextSibling && selectedNavItem.nextSibling.click();
+            
+        }
     
     };
     

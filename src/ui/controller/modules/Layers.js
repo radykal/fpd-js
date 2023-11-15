@@ -522,8 +522,12 @@ export default class LayersModule extends EventTarget {
 
             const imgSize = this.fpdInstance.calcDisplaySize(element);
 
-            rowElem.querySelector('[data-prop="width"]').innerText = imgSize.width+imgSize.unit;
-            rowElem.querySelector('[data-prop="height"]').innerText = imgSize.height+imgSize.unit;
+            if(rowElem.querySelector('[data-prop="width"]')) {
+
+                rowElem.querySelector('[data-prop="width"]').innerText = imgSize.width+imgSize.unit;
+                rowElem.querySelector('[data-prop="height"]').innerText = imgSize.height+imgSize.unit;
+
+            }
 
             if(imgSize.dpi) {
 
