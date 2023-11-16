@@ -9,7 +9,7 @@ const renderIcon = (ctx, left, top, styleOverride, fabricObject, iconString, off
 
     const borderRadius = 4;
     const iconSize = xSize * 0.6;
-    const iconColor = fabricObject.cornerIconColor || '#000000';
+    const iconColor = styleOverride.cornerIconColor || fabricObject.cornerIconColor || '#000000';
 
     ctx.save();
     ctx.translate(left, top);
@@ -84,8 +84,8 @@ const renderRectX = (ctx, left, top, styleOverride, fabricObject) => {
     
 }
 
-fabric.Control.prototype.touchSizeX = 60;
-fabric.Control.prototype.touchSizeY = 60;
+fabric.Control.prototype.touchSizeX = 40;
+fabric.Control.prototype.touchSizeY = 40;
 fabric.Object.prototype.transparentCorners = false;
 
 //copy
@@ -211,3 +211,89 @@ fabric.Textbox.prototype.controls.mr.render = renderRectY;
 
 //hide bottom-left corner
 fabric.Object.prototype.controls.bl.visible = false;   
+
+
+//crop-mask done
+fabric.Object.prototype.controls.cropMaskDoneControl = new fabric.Control({
+    x: 0.5,
+    y: -0.5,
+    actionName: 'crop-mask-done',
+    offsetY: -20,
+    offsetX: -45,
+    cursorStyle: 'pointer',
+    mouseDownHandler: cropMaskDone,
+    render: (ctx, left, top, styleOverride, fabricObject) => {
+
+        if(fabricObject.name !== 'crop-mask') return;
+        
+        styleOverride.cornerColor = '#2ecc71';
+        styleOverride.cornerIconColor = '#fff';
+
+        renderIcon(
+            ctx, 
+            left, 
+            top, 
+            styleOverride, 
+            fabricObject,
+            String.fromCharCode('0xe90a'),
+            0,
+            0
+        )
+    },
+    cornerSize: 24
+});
+
+function cropMaskDone(eventData, transform) {
+
+    const maskObj = transform.target;
+    if(maskObj.targetElement) {
+
+        maskObj.targetElement.clipPath = maskObj;
+        maskObj.targetElement.cropMask = maskObj.toObject();
+
+        maskObj.canvas.removeElement(maskObj);
+
+    }
+    
+}
+
+//crop-mask cancel
+fabric.Object.prototype.controls.cropMaskCancelControl = new fabric.Control({
+    x: 0.5,
+    y: -0.5,
+    actionName: 'crop-mask-cancel',
+    offsetY: -20,
+    offsetX: -12,
+    cursorStyle: 'pointer',
+    mouseDownHandler: cropMaskCancel,
+    render: (ctx, left, top, styleOverride, fabricObject) => {
+
+        if(fabricObject.name !== 'crop-mask') return;
+        
+        styleOverride.cornerColor = '#c44d56';
+        styleOverride.cornerIconColor = '#fff';
+
+        renderIcon(
+            ctx, 
+            left, 
+            top, 
+            styleOverride, 
+            fabricObject,
+            String.fromCharCode('0xe944'),
+            0,
+            0
+        )
+    },
+    cornerSize: 24
+});
+
+function cropMaskCancel(eventData, transform) {
+
+    const maskObj = transform.target;
+    if(maskObj.targetElement) {
+        maskObj.canvas.removeElement(maskObj);
+        maskObj.targetElement.cropMask = null;
+    }
+    
+}
+
