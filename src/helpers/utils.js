@@ -803,6 +803,17 @@ const formatPrice = (price, priceFormatOpts = {}) => {
 
 export { formatPrice }
 
+const showModal = ((...args) => {   
+    Modal(...args);
+});
+
+export { showModal }
+
+const showMessage = ((...args) => {   
+    Snackbar(...args);
+});
+export { showMessage }
+
 if (window) {
     
     /**
@@ -822,9 +833,7 @@ if (window) {
      * @param {HTMLElement} [container=document.body] The container for the modal.
 	 * @static
 	 */
-    window.FPDUtils.showModal = ((...args) => {   
-        Modal(...args);
-    });
+    window.FPDUtils.showModal = showModal
 
     /**
 	 * Displays a message in a snackbar (bottom-left).
@@ -834,9 +843,7 @@ if (window) {
      * @param {Boolean} [autoRemove=true] Either to remove the message automatcially or not.
 	 * @static
 	 */
-    window.FPDUtils.showMessage = ((...args) => {   
-        Snackbar(...args);
-    });
+    window.FPDUtils.showMessage = showMessage
         
     /**
      * Checks if a string is an URL.
