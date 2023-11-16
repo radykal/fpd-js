@@ -150,6 +150,7 @@
 		"dpi_warning": "The image has a low resolution. Upload a larger image or scale down for better print results.",
 		"ai_upscale_btn": "Upscale with AI",
 		"ai_upscale_success": "Image Upscaled",
-		"ai_remove_bg_success": "Background Removed"
+		"ai_remove_bg_success": "Background Removed",
+		"view_unlocked_info": "The view is unlocked"
 	}
 }

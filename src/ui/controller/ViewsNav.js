@@ -4,6 +4,7 @@ import {
     addEvents,
     toggleElemClasses
 } from '../../helpers/utils';
+import Snackbar from '../view/comps/Snackbar.js';
 
 export default class ViewsNav extends EventTarget {
     
@@ -86,8 +87,22 @@ export default class ViewsNav extends EventTarget {
 
                 if(fpdInstance.currentViewInstance) {
 
+                    fpdInstance.deselectElement();
                     fpdInstance.currentViewInstance.toggleLock(!fpdInstance.currentViewInstance.locked);  
-                    this.#toggleViewLock(fpdInstance.currentViewInstance);   
+                    this.#toggleViewLock(fpdInstance.currentViewInstance);  
+                    
+                    if(!fpdInstance.currentViewInstance.locked) {
+
+                        Snackbar(
+                            fpdInstance.translator.getTranslation(
+                                'misc', 
+                                'view_unlocked_info', 
+                                'The view is unlocked'
+                            )
+                        );
+
+                    }
+                    
 
                 }        
 

@@ -1498,6 +1498,8 @@ export default class FancyProductDesigner extends EventTarget {
 
     doAutoSelect() {
 
+        if(this.currentViewInstance.locked) return;
+
         let selectElement = null;
         const viewElements = this.currentViewInstance.fabricCanvas.getObjects();
         viewElements.forEach((obj) => {
@@ -1638,7 +1640,7 @@ export default class FancyProductDesigner extends EventTarget {
 
         if(this.productCreated) {
 
-            const dpi = this.calcElementDPI(element);
+            const dpi = this.calcElementDPI(element);            
             
             if(dpi !== null && dpi < this.mainOptions.customImageParameters.minDPI) {
 
@@ -1757,6 +1759,7 @@ export default class FancyProductDesigner extends EventTarget {
     calcElementDPI(element) {
 
         if( element 
+            && !element.uploadZone
             && element.isBitmap()
             && objectHasKeys(this.currentViewInstance.options.output, ['width','height'])
             && objectHasKeys(this.currentViewInstance.options.printingBox, ['left','top','width','height']) 

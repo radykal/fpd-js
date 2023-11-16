@@ -1,5 +1,6 @@
 import { 
     addEvents,
+	objectHasKeys,
 	pixelToUnit
 } from '../helpers/utils.js';
 
@@ -26,12 +27,12 @@ export default class PricingRules {
 
 	}
 
-	doPricingRules() {
+	doPricingRules(evt) {
 
 		const unitFormat =this.fpdInstance.mainOptions.dynamicViewsOptions ? this.fpdInstance.mainOptions.dynamicViewsOptions.unit : 'mm';
 
 		this.fpdInstance.pricingRulesPrice = 0;
-
+					
 		var pricingRules = this.fpdInstance.mainOptions.pricingRules;
 		if( pricingRules && pricingRules.length > 0) {
 
@@ -43,7 +44,7 @@ export default class PricingRules {
 				var targetElems = [];
 				
 				//get view instance as target
-				if(pGroup.property == 'canvasSize') {
+				if(pGroup.property == 'canvasSize' || pGroup.property == 'coverage') {
 
 					targetElems = this.fpdInstance.viewInstances;
 
@@ -113,6 +114,9 @@ export default class PricingRules {
 					}
 					else if(pGroup.property === 'canvasSize') { //views: all
 						property = {width: pixelToUnit(targetElem.options.stageWidth, unitFormat), height: pixelToUnit(targetElem.options.stageHeight, unitFormat) };
+					}
+					else if(pGroup.property === 'coverage') { //views: all						
+						property = this.#getCoverageinPB(targetElem);
 					}
 					else if(pGroup.property === 'pattern') { //text and svg in all views
 						property = targetElem.pattern;
@@ -207,6 +211,71 @@ export default class PricingRules {
 		else if(oper === '<=') {
 			return prop <= value;
 		}
+
+	}
+
+	#getCoverageinPB(viewInst) {
+		
+		if(!viewInst || !viewInst.fabricCanvas || !objectHasKeys(viewInst.options.printingBox, ['left','top','width','height'])) return null;
+
+		let minX, minY, maxX, maxY;
+		viewInst.fabricCanvas.forEachObject((fObj) => {
+
+			if(!fObj.excludeFromExport && !fObj._ignore) {
+
+				var boundingRect = fObj.getBoundingRect();
+
+				if (minX === undefined || boundingRect.left < minX) {
+					minX = boundingRect.left;
+				}
+				if (minY === undefined || boundingRect.top < minY) {
+					minY = boundingRect.top;
+				}
+				if (maxX === undefined || boundingRect.left + boundingRect.width > maxX) {
+					maxX = boundingRect.left + boundingRect.width;
+				}
+				if (maxY === undefined || boundingRect.top + boundingRect.height > maxY) {
+					maxY = boundingRect.top + boundingRect.height;
+				}
+
+			}			
+
+		})
+
+		let allObjsBB = {};
+		if(minX) {
+
+			allObjsBB = {
+				minX: minX,
+				minY: minY,
+				maxX: maxX,
+				maxY: maxY
+			};
+
+		}
+				
+		if(!objectHasKeys(allObjsBB, ['minX','minY','maxX','maxY'])) return null;
+
+		const pb = viewInst.options.printingBox;
+
+		//calc the left point & total width
+		const minLeft = Math.max(pb.left, allObjsBB.minX);
+		const maxLeft = Math.min(pb.left+pb.width, allObjsBB.maxX);
+		const totalWidth = maxLeft - minLeft;
+
+		//calc the top point & total height
+		const minTop = Math.max(pb.top, allObjsBB.minY);
+		const maxTop = Math.min(pb.top+pb.height, allObjsBB.maxY);
+		const totalHeight = maxTop - minTop;
+
+		const allObjsArea = totalWidth * totalHeight;
+		const pbArea = pb.width * pb.height;
+
+		//calculate and return the percentage coverage
+		const percentage = (allObjsArea / pbArea) * 100;
+
+		return percentage;
+		
 
 	}
 

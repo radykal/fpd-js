@@ -452,25 +452,12 @@
     <div class="fpd-panel-position">
 
         <div class="fpd-panel-tabs">
-            <span data-tab="arrange" data-defaulttext="Arrange" class="fpd-active">toolbar.arrange</span>
             <span data-tab="align" data-defaulttext="Align" class="fpd-tool-text-stroke">toolbar.align</span>
+            <span data-tab="arrange" data-defaulttext="Arrange" class="fpd-active">toolbar.arrange</span>
         </div>
 
         <div class="fpd-panel-tabs-content fpd-scroll-area">
-            <div data-id="arrange">
 
-                <div class="fpd-tool-layer-depth fpd-tools-group">
-                    <div data-do="layer-up">
-                        <span class="fpd-icon-move-up"></span>
-                        <span data-defaulttext="Move Up">toolbar.move_up</span>
-                    </div>
-                    <div data-do="layer-down">
-                        <span class="fpd-icon-move-down"></span>
-                        <span data-defaulttext="Move Down">toolbar.move_down</span>
-                    </div>
-                </div>
-                
-            </div>
             <div data-id="align">
 
                 <div class="fpd-tool-position-align fpd-tools-group">
@@ -501,6 +488,22 @@
                 </div>
                 
             </div>
+
+            <div data-id="arrange">
+
+                <div class="fpd-tool-layer-depth fpd-tools-group">
+                    <div data-do="layer-up">
+                        <span class="fpd-icon-move-up"></span>
+                        <span data-defaulttext="Move Up">toolbar.move_up</span>
+                    </div>
+                    <div data-do="layer-down">
+                        <span class="fpd-icon-move-down"></span>
+                        <span data-defaulttext="Move Down">toolbar.move_down</span>
+                    </div>
+                </div>
+                
+            </div>
+            
         </div>
 
     </div><!-- Position Panel -->
@@ -509,12 +512,16 @@
 
         <div class="fpd-panel-tabs">
             <span data-tab="filters" data-defaulttext="Filters" class="fpd-active">toolbar.filters</span>
-            <span data-tab="remove-bg" data-defaulttext="Remove Background" class="fpd-tool-text-stroke">toolbar.remove_background</span>
+            <span data-tab="crop" data-defaulttext="Crop">toolbar.crop</span>
+            <span data-tab="remove-bg" data-defaulttext="Remove Background">toolbar.remove_background</span>
         </div>
 
         <div class="fpd-panel-tabs-content">
             <div data-id="filters">
                 <div class="fpd-tool-filters fpd-grid fpd-scroll-area fpd-padding"></div>
+            </div>
+            <div data-id="crop">
+                <div class="fpd-tool-crop fpd-grid fpd-scroll-area fpd-padding"></div>
             </div>
             <div data-id="remove-bg">
                 <span class="fpd-btn fpd-full fpd-tool-remove-bg" data-defaulttext="Remove Background with AI">toolbar.remove_background_btn</span>

@@ -263,8 +263,8 @@ fabric.Object.prototype._clipElement = function () {
                 height: clippingObj.height,
                 fill: '#DDD',
                 absolutePositioned: true,
-                rx: 0,
-                ry: 0
+                rx: clippingObj.borderRadius,
+                ry: clippingObj.borderRadius
             });
 
             this.clipPath = clipRect;
@@ -653,7 +653,8 @@ fabric.Object.prototype.getBoundingBoxCoords = function () {
                     left: this.boundingBox.x,
                     top: this.boundingBox.y,
                     width: this.boundingBox.width,
-                    height: this.boundingBox.height
+                    height: this.boundingBox.height,
+                    borderRadius: this.boundingBox.borderRadius || 0
                 };
             }
             else {

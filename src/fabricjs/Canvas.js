@@ -353,7 +353,7 @@ fabric.Canvas.prototype._renderElementBoundingBox = function (element) {
         var bbCoords = element.getBoundingBoxCoords();        
 
         if (bbCoords && element.boundingBoxMode != 'none') {
-
+            
             let boundingBoxProps = {
                 stroke: this.viewOptions.boundingBoxColor,
                 strokeWidth: 1,
@@ -365,8 +365,8 @@ fabric.Canvas.prototype._renderElementBoundingBox = function (element) {
                 name: "bounding-box",
                 excludeFromExport: true,
                 _ignore: true,
-                rx: 0,
-                ry: 0
+                rx: bbCoords.borderRadius,
+                ry: bbCoords.borderRadius
             };
             
             boundingBoxProps = deepMerge(boundingBoxProps, this.viewOptions.boundingBoxProps);
@@ -1356,7 +1356,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
         && !element._addToUZ 
         && element.scaleX === 1
     ) {
-
+        
         //only scale to bb when no scale value is set
         let scale = null;
         if (!isZero(element.resizeToW) || !isZero(element.resizeToH)) {
@@ -1388,7 +1388,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
             );
 
         }
-        else if (this.viewOptions.fitImagesInCanvas) {
+        else if (this.viewOptions.fitImagesInCanvas && element.isCustom) {
 
             const iconTolerance = element.cornerSize * 3;
             

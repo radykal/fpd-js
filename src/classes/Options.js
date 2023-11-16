@@ -1131,18 +1131,24 @@ export default class Options {
 			*/
 			zChangeable: false,
 			/**
-			* Defines a bounding box (printing area) for the element. If false no bounding box. The title of an element in the same view, then the boundary of the target element will be used as bounding box. An object with x,y,width and height defines the bounding box.
+			* Defines a bounding box for the element.
+			* <ul>
+			* <li>False = no bounding box. </li>
+			* <li>The title of an element in the same view, then the boundary of that target element will be used as bounding box. </li>
+			* <li>An object with x,y,width and height defines the bounding box. You can use also borderRadius to define a border radius.</li>
+			* </ul>
 			*
 			* @property boundingBox
 			* @type {Boolean}
 			* @memberof Options.defaults.elementParameters
 			* @default false
+			* @example {x: 10, y: 30, width: 300, height: 400, borderRadius: 40}
 			*/
 			boundingBox: false,
 			/**
 			* Set the mode for the bounding box. Possible values: 'none', 'clipping', 'limitModify', 'inside'
 			*
-			* @property boundingBoxMode
+			* @property {'none'|'clipping'|'limitModify'|'inside'} boundingBoxMode
 			* @type {String}
 			* @memberof Options.defaults.elementParameters
 			* @default 'clipping'

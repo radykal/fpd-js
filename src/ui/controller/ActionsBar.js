@@ -2,6 +2,7 @@ import '../../ui/view/ActionsBar.js';
 import Modal from '../../ui/view/comps/Modal.js';
 import QRCodeModule from './modules/QRCode.js';
 import download from 'downloadjs';
+import SaveLoadModule from './modules/SaveLoad.js';
 
 import {
 	addEvents,
@@ -69,6 +70,10 @@ export default class ActionsBar extends EventTarget {
 		'snap': {
 			icon: 'fpd-icon-snap',
 			title: 'Snap'
+		},
+		'savings': {
+			icon: 'fpd-icon-save',
+			title: 'Saved Designs'
 		}
 	};
 
@@ -480,6 +485,27 @@ export default class ActionsBar extends EventTarget {
 				}
 			)
 
+			
+		}
+		else if (action === 'savings') {
+
+			const existingModal = this.fpdInstance.container.querySelector('.fpd-modal-internal');
+			if(existingModal)
+				existingModal.remove();
+			
+			const modal = Modal(
+				'',
+				false,
+				'',
+				this.fpdInstance.container
+			);
+			
+			const saveLoadModule = new SaveLoadModule(
+				this.fpdInstance,
+				modal.querySelector('.fpd-modal-content') 
+			)
+
+			this.fpdInstance.translator.translateArea(modal);
 			
 		}
 
