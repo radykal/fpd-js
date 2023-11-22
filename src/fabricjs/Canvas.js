@@ -244,6 +244,15 @@ fabric.Canvas.prototype._onCreated = function () {
 
 fabric.Canvas.prototype._onSelected = function (element) {
 
+    //remove crop mask object when exists
+    if(element.name !== 'crop-mask') {
+
+        const cropMaskObj = this.getObjects().find(obj => obj.name === 'crop-mask');
+        if(cropMaskObj)
+            this.remove(cropMaskObj);
+
+    }
+
     this.deselectElement(false);
 
     //dont select anything when in dragging mode
@@ -1788,6 +1797,11 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
             element.path.visible = true;   
         }
 
+    }
+
+    if(parameters.cropMask) {
+        //todo: reload crop mask from object options
+        console.log(parameters.cropMask);
     }
 
     if (element.uploadZone) {

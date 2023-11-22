@@ -781,6 +781,7 @@ fabric.Object.prototype.getElementJSON = function (addPropertiesToInclude = fals
     propertyKeys.push('_printingBox');
     propertyKeys.push('_optionsSet');
     propertyKeys.push('_isQrCode');
+    propertyKeys.push('cropMask');
     propertyKeys = propertyKeys.sort();
 
 

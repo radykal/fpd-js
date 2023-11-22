@@ -1040,6 +1040,16 @@ export default class Options {
 
 		},
 		/**
+        * An array containing the SVG urls for the crop masks, when advanced editing is enabled. Use only one path per SVG, only the first path will be used as mask shape.
+        *
+        * @property cropMasks
+        * @memberof Options.defaults
+        * @type {Array}
+        * @default []
+        * @version 6.1.1
+        */
+        cropMasks: [],
+		/**
 		* An object containing the default element parameters in addition to the default Fabric Object properties. See Options.defaults.elementParameters.
 		*
 		* @property elementParameters

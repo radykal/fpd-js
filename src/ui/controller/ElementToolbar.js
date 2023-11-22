@@ -12,7 +12,8 @@ import {
     removeElemClasses,
     isBitmap,
     elementAvailableColors,
-    getBgCssFromElement
+    getBgCssFromElement,
+    getFilename
 } from '../../helpers/utils.js';
 import { postJSON } from '../../helpers/request';
 import Snackbar from '../view/comps/Snackbar';
@@ -77,6 +78,13 @@ export default class ElementToolbar extends EventTarget {
                         fpdInstance.currentViewInstance.fabricCanvas
                         .setElementOptions({fontFamily: fontName});
 
+                        addElemClasses(
+                            this.container.querySelectorAll('.fpd-panel-tabs > span'),
+                            ['fpd-disabled']
+                        )
+
+                        this.#updateVariantStylesBtn(fpdInstance.currentElement);
+
                     }
                 )
 
@@ -110,7 +118,7 @@ export default class ElementToolbar extends EventTarget {
         }
 
         //advanced editing - filters
-        const filtersGrid = this.subPanel.querySelector('.fpd-tool-filters')
+        const filtersGrid = this.subPanel.querySelector('.fpd-tool-filters');
         for(const filterKey in Filters) {
 
             const filterItem = document.createElement('div');
@@ -133,6 +141,79 @@ export default class ElementToolbar extends EventTarget {
             
         }
 
+        //advanced editing - crop
+        const cropMasksGrid = this.subPanel.querySelector('.fpd-tool-crop-masks');
+
+       if(Array.isArray(fpdInstance.mainOptions.cropMasks)) {
+
+            fpdInstance.mainOptions.cropMasks.forEach((maskURL) => {
+
+                const maskItem = document.createElement('div');
+                maskItem.className = 'fpd-item';
+                maskItem.setAttribute('aria-label', getFilename(maskURL));
+                maskItem.style.backgroundImage = `url(${maskURL})`;
+                cropMasksGrid.append(maskItem);
+
+                addEvents(
+                    maskItem,
+                    'click',
+                    (evt) => {
+                        
+                        const currentElement = fpdInstance.currentElement;
+                        currentElement.clipPath = null;
+
+                        fabric.loadSVGFromURL(maskURL, (objects, options) => {            
+
+                            let svgGroup = null;
+                            if(objects) {
+
+                                svgGroup = objects ? fabric.util.groupSVGElements(objects, options) : null;
+
+                                svgGroup.setOptions({
+                                    left: currentElement.left,
+                                    top: currentElement.top,
+                                    selectable: true,
+                                    evented: true,
+                                    resizable: true,
+                                    rotatable: true,
+                                    lockUniScaling: false,
+                                    lockRotation: false,
+                                    borderColor: 'transparent',
+                                    fill: 'rgba(184,233,134,0.4)',
+                                    centeredScaling: true,
+                                    transparentCorners: true,
+                                    absolutePositioned: false, //todo: position to cropped element, so element is moving with the cropping and not inside the crop
+                                    cornerSize: 24,
+                                    originX: currentElement.originX,
+                                    originY: currentElement.originY,
+                                    name: "crop-mask",
+                                    objectCaching: false,
+                                    excludeFromExport: true,
+                                    _ignore: true,
+                                    targetElement: currentElement
+                                })
+
+                                if(currentElement.getScaledWidth() < currentElement.getScaledHeight()) {
+                                    svgGroup.scaleToWidth(currentElement.getScaledWidth());
+                                }
+                                else {
+                                    svgGroup.scaleToHeight(currentElement.getScaledHeight());
+                                }
+                                
+                                fpdInstance.currentViewInstance.fabricCanvas.add(svgGroup);
+                                fpdInstance.currentViewInstance.fabricCanvas.setActiveObject(svgGroup);
+
+                            }
+
+                        });
+                        
+                    }
+                )
+
+            })
+
+        }
+
         addEvents(
             fpdInstance,
             'elementSelect',
@@ -151,6 +232,8 @@ export default class ElementToolbar extends EventTarget {
                         selectedElem.on('changed', this.#updatePosition.bind(this))
                         
                     }
+
+                    this.#updateVariantStylesBtn(selectedElem);
 
                 }
                 else {                    
@@ -680,7 +763,55 @@ export default class ElementToolbar extends EventTarget {
 
     }
 
-    #toggleNavItem = function(tool, toggle=true) {
+    #updateVariantStylesBtn(elem) {
+        
+        if(elem.hasOwnProperty('fontFamily')) {
+
+            this.#toggleVariantStylesBtn(true, true);
+
+            if(Array.isArray(this.fpdInstance.mainOptions.fonts) && this.fpdInstance.mainOptions.fonts.length) {
+
+                const targetFontObj = this.fpdInstance.mainOptions.fonts.find(fontObj => fontObj.name == elem.fontFamily);
+
+                //hide style buttons for custom font and custom font does not have a bold or italic variant
+                if(targetFontObj.url.toLowerCase().includes('.ttf')) {
+                    
+                    if(targetFontObj.variants) {
+
+                        this.#toggleVariantStylesBtn(
+                            Boolean(targetFontObj.variants.n7),
+                            Boolean(targetFontObj.variants.i4)
+                        );
+
+                    }
+                    else {
+                        this.#toggleVariantStylesBtn(false, false);
+                    }
+                }
+
+            } 
+
+        }        
+
+    }
+
+    #toggleVariantStylesBtn(bold=true, italic=true) {
+        
+        toggleElemClasses(
+            this.subPanel.querySelector('.fpd-tool-text-bold'),
+            ['fpd-disabled'],
+            !bold
+        );
+
+        toggleElemClasses(
+            this.subPanel.querySelector('.fpd-tool-text-italic'),
+            ['fpd-disabled'],
+            !italic
+        );
+
+    }
+
+    #toggleNavItem(tool, toggle=true) {
 
 		const tools = this.navElem.querySelectorAll('.fpd-tools-nav > .fpd-tool-'+tool);        
 
@@ -994,8 +1125,8 @@ export default class ElementToolbar extends EventTarget {
 		if(element.advancedEditing && element.source && isBitmap(element.source)) {
 			this.#toggleNavItem('advanced-editing');
 
-            this.#togglePanelTab('advanced-editing', 'filters', true);
-            this.#togglePanelTab('advanced-editing', 'crop', true);            
+            this.#togglePanelTab('advanced-editing', 'filters', true);            
+            this.#togglePanelTab('advanced-editing', 'crop', Boolean(Array.isArray(this.fpdInstance.mainOptions.cropMasks) && this.fpdInstance.mainOptions.cropMasks.length));            
             this.#togglePanelTab('advanced-editing', 'remove-bg', Boolean(this.fpdInstance.mainOptions.aiService.serverURL && this.fpdInstance.mainOptions.aiService.removeBG));
 
 		}
