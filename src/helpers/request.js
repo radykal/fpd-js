@@ -38,8 +38,10 @@ const postJSON = (props) => {
     let headers = {
         'Accept': 'application/json'
     };
-    if(!props.body instanceof FormData)
+    
+    if(!(props.body instanceof FormData)) {
         headers['Content-Type'] = 'application/json';
+    }
         
     return fetch(url, {
         method: 'POST',
