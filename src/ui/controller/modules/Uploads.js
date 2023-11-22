@@ -197,7 +197,7 @@ export default class UploadsModule extends EventTarget {
     
             });
     
-        }
+        }        
         
         this.fpdInstance.loadingCustomImage = true;        
         Array.from(files).forEach((file, i) => {
@@ -210,6 +210,8 @@ export default class UploadsModule extends EventTarget {
         
         this.container.querySelector('.fpd-upload-image')
         .classList.remove('fpd-hover');
+
+        this.container.querySelector('.fpd-upload-input').value = '';
     
     }
     
@@ -529,11 +531,10 @@ export default class UploadsModule extends EventTarget {
     }
         
     #addToStage(item, addToStage) {
-    
+                
         if(!this.#firstUploadDone && this.fpdInstance.mainOptions.autoFillUploadZones) {
     
-            const targetUploadzone = this.#allUploadZones[this.#uploadCounter] ? this.#allUploadZones[this.#uploadCounter] : null;
-    
+            const targetUploadzone = this.#allUploadZones[this.#uploadCounter] ? this.#allUploadZones[this.#uploadCounter] : null;    
             if(targetUploadzone) {
     
                 this.fpdInstance._addGridItemToCanvas(

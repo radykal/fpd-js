@@ -78,6 +78,13 @@ export default class ElementToolbar extends EventTarget {
                         fpdInstance.currentViewInstance.fabricCanvas
                         .setElementOptions({fontFamily: fontName});
 
+                        addElemClasses(
+                            this.container.querySelectorAll('.fpd-panel-tabs > span'),
+                            ['fpd-disabled']
+                        )
+
+                        this.#updateVariantStylesBtn(fpdInstance.currentElement);
+
                     }
                 )
 
@@ -175,7 +182,7 @@ export default class ElementToolbar extends EventTarget {
                                     fill: 'rgba(184,233,134,0.4)',
                                     centeredScaling: true,
                                     transparentCorners: true,
-                                    absolutePositioned: true, //todo: position to cropped element
+                                    absolutePositioned: false, //todo: position to cropped element, so element is moving with the cropping and not inside the crop
                                     cornerSize: 24,
                                     originX: currentElement.originX,
                                     originY: currentElement.originY,
@@ -225,6 +232,8 @@ export default class ElementToolbar extends EventTarget {
                         selectedElem.on('changed', this.#updatePosition.bind(this))
                         
                     }
+
+                    this.#updateVariantStylesBtn(selectedElem);
 
                 }
                 else {                    
@@ -754,7 +763,55 @@ export default class ElementToolbar extends EventTarget {
 
     }
 
-    #toggleNavItem = function(tool, toggle=true) {
+    #updateVariantStylesBtn(elem) {
+        
+        if(elem.hasOwnProperty('fontFamily')) {
+
+            this.#toggleVariantStylesBtn(true, true);
+
+            if(Array.isArray(this.fpdInstance.mainOptions.fonts) && this.fpdInstance.mainOptions.fonts.length) {
+
+                const targetFontObj = this.fpdInstance.mainOptions.fonts.find(fontObj => fontObj.name == elem.fontFamily);
+
+                //hide style buttons for custom font and custom font does not have a bold or italic variant
+                if(targetFontObj.url.toLowerCase().includes('.ttf')) {
+                    
+                    if(targetFontObj.variants) {
+
+                        this.#toggleVariantStylesBtn(
+                            Boolean(targetFontObj.variants.n7),
+                            Boolean(targetFontObj.variants.i4)
+                        );
+
+                    }
+                    else {
+                        this.#toggleVariantStylesBtn(false, false);
+                    }
+                }
+
+            } 
+
+        }        
+
+    }
+
+    #toggleVariantStylesBtn(bold=true, italic=true) {
+        
+        toggleElemClasses(
+            this.subPanel.querySelector('.fpd-tool-text-bold'),
+            ['fpd-disabled'],
+            !bold
+        );
+
+        toggleElemClasses(
+            this.subPanel.querySelector('.fpd-tool-text-italic'),
+            ['fpd-disabled'],
+            !italic
+        );
+
+    }
+
+    #toggleNavItem(tool, toggle=true) {
 
 		const tools = this.navElem.querySelectorAll('.fpd-tools-nav > .fpd-tool-'+tool);        
 
