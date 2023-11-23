@@ -331,7 +331,7 @@ export default class ActionsBar extends EventTarget {
 				image.onload = () => {
 
 					Modal(
-						'<img style="text-align: center; height: 100vh; display:inline-block;" src="' + image.src + '" download="product.png" />',
+						'<div style="background: url('+ image.src +'); height: 90vh; width:100%; background-size:contain; background-repeat:no-repeat; background-position:center;"></div>',
 						true
 					);
 
