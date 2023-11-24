@@ -2,19 +2,41 @@ import '../../ui/view/ViewsNav.js';
 
 import { 
     addEvents,
-    toggleElemClasses
+    deepMerge,
+    objectHasKeys,
+    pixelToUnit,
+    removeElemClasses,
+    toggleElemClasses,
+    unitToPixel
 } from '../../helpers/utils';
 import Snackbar from '../view/comps/Snackbar.js';
 
 export default class ViewsNav extends EventTarget {
+
+    #maxStageSize = 1000; //when adding blank page or editing size, this will be max. canvas width/height
+    #pbOffset = 50;
     
     constructor(fpdInstance) {
         
         super();
         
+        this.fpdInstance = fpdInstance;
         this.container = document.createElement("fpd-views-nav");
+        this.unitFormat = fpdInstance.mainOptions.dynamicViewsOptions.unit;
+		this.minWidth = fpdInstance.mainOptions.dynamicViewsOptions.minWidth;
+		this.minHeight = fpdInstance.mainOptions.dynamicViewsOptions.minHeight;
+		this.maxWidth = fpdInstance.mainOptions.dynamicViewsOptions.maxWidth;
+		this.maxHeight = fpdInstance.mainOptions.dynamicViewsOptions.maxHeight;
 
         fpdInstance.mainWrapper.container.append(this.container);
+
+        let editSizeWrapper = null;
+        if(Boolean(fpdInstance.mainOptions.enableDynamicViews)) {
+
+            editSizeWrapper = this.container.querySelector('.fpd-view-edit-size');
+            removeElemClasses(editSizeWrapper, ['fpd-hidden']);
+
+        }
 
         addEvents(
             fpdInstance,
@@ -41,8 +63,35 @@ export default class ViewsNav extends EventTarget {
 
                 this.#toggleViewLock(fpdInstance.currentViewInstance);
 
+                if(editSizeWrapper) {
+
+                    const viewInstance = fpdInstance.currentViewInstance;
+
+                    let viewWidthUnit = pixelToUnit(viewInstance.options.stageWidth, this.unitFormat),
+					    viewHeightUnit = pixelToUnit(viewInstance.options.stageHeight, this.unitFormat);
+
+                    //check if canvas output is set
+                    if(objectHasKeys(viewInstance.options.output, ['width', 'height'])) {
+                        viewWidthUnit = viewInstance.options.output.width;
+                        viewHeightUnit = viewInstance.options.output.height;                        
+                    }
+                    
+                    const inputWidth = editSizeWrapper.querySelector('[data-type="width"]');
+                    const inputHeight = editSizeWrapper.querySelector('[data-type="height"]');
+
+                    inputWidth.min = this.minWidth;
+                    inputWidth.max = this.maxWidth;
+                    inputWidth.value = viewWidthUnit;
+
+                    inputHeight.min = this.minHeight;
+                    inputHeight.max = this.maxHeight;
+                    inputHeight.value = viewHeightUnit;
+
+                }
+
             }
         )
+        
 
         addEvents(
             this.container.querySelector('.fpd-view-prev'),
@@ -108,6 +157,54 @@ export default class ViewsNav extends EventTarget {
 
             } 
         )
+
+        //edit size
+        if(editSizeWrapper) {
+
+            addEvents(
+                editSizeWrapper.querySelectorAll('input'),
+                'keyup',
+                (evt) => {
+    
+                    const inputElem = evt.currentTarget;
+                    
+                    if(inputElem.dataset.type == 'width') {
+    
+                        this.checkDimensionLimits('width', inputElem);
+        
+                    }
+                    else {
+        
+                        this.checkDimensionLimits('height', inputElem);
+        
+                    }                            
+                    
+                }
+            )
+    
+            addEvents(
+                editSizeWrapper.querySelectorAll('input'),
+                'change',
+                (evt) => {
+    
+                    const viewInstance = fpdInstance.currentViewInstance;
+    
+                    let widthPx = unitToPixel(editSizeWrapper.querySelector('[data-type="width"]').value, this.unitFormat),
+                        heightPx = unitToPixel(editSizeWrapper.querySelector('[data-type="height"]').value, this.unitFormat);
+                        
+                    let viewOptions = this.fpdInstance.viewsNav.calcPageOptions(widthPx, heightPx);
+                    viewInstance.options = deepMerge(viewInstance.options, viewOptions);                            
+                    viewInstance.fabricCanvas.viewOptions = viewInstance.options;
+    
+                    viewInstance.fabricCanvas._renderPrintingBox();
+                    viewInstance.fabricCanvas.resetSize();
+                    
+                    this.doPricing(viewInstance);                                          
+                    
+                }
+            )
+
+        }
         
     }
 
@@ -126,6 +223,74 @@ export default class ViewsNav extends EventTarget {
             ['fpd-hidden'],
             viewInstance.locked
         )
+
+    }
+
+    checkDimensionLimits(type, input) {
+
+		if(type == 'width') {
+
+			if(input.value < this.minWidth) { input.value = this.minWidth; }
+			else if(input.value > this.maxWidth) { input.value = this.maxWidth; }
+
+		}
+		else {
+
+			if(input.value < this.minHeight) { input.value = this.minHeight; }
+			else if(input.value > this.maxHeight) { input.value = this.maxHeight; }
+
+		}        
+
+		return input.value;
+
+	}
+
+    calcPageOptions(widthPx, heightPx) {
+
+        let aspectRatio = Math.min((this.#maxStageSize - this.#pbOffset) / widthPx,  (this.#maxStageSize - this.#pbOffset) / heightPx);
+        const pbWidth = parseInt(widthPx * aspectRatio);
+        const pbHeight = parseInt(heightPx * aspectRatio);
+
+        let viewOptions = {
+            stageWidth: pbWidth+this.#pbOffset,
+            stageHeight: pbHeight+this.#pbOffset,
+            printingBox: {
+                width: pbWidth,
+                height: pbHeight,
+                left: ((pbWidth+this.#pbOffset) / 2) - (pbWidth / 2),
+                top: ((pbHeight+this.#pbOffset) / 2) - (pbHeight / 2),
+                visibility: true
+            },
+            usePrintingBoxAsBounding: true,
+            output: {
+                width: pixelToUnit(widthPx, 'mm'),
+                height: pixelToUnit(heightPx, 'mm')
+            }
+        };
+
+        return viewOptions;
+
+    }
+
+    doPricing(viewInstance) {
+        
+        if(viewInstance && this.fpdInstance.mainOptions.dynamicViewsOptions.pricePerArea) {
+
+            let width = pixelToUnit(viewInstance.options.stageWidth, 'cm'),
+                height = pixelToUnit(viewInstance.options.stageHeight, 'cm');
+
+            //check if canvas output is set
+            if(objectHasKeys(viewInstance.options.output, ['width', 'height'])) {
+                width = viewInstance.options.output.width / 10;
+                height = viewInstance.options.output.height / 10;                
+            }
+
+            let cm2 = Math.ceil(width * height),
+                cm2Price = cm2 * Number(this.fpdInstance.mainOptions.dynamicViewsOptions.pricePerArea);
+                            
+            viewInstance.changePrice(0, '+', cm2Price);
+
+        }
 
     }
 

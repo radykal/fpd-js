@@ -1522,7 +1522,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
         }
 
     }
-
+    
     if (parameters.uploadZone) {
 
         if (!this.viewOptions.editorMode) {
@@ -1674,7 +1674,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 
     }
 
-    delete parameters['paths']; //no paths in parameters
+    delete parameters['paths']; //no paths in parameters    
     element.setOptions(parameters);
 
     if((parameters.fontSize || parameters.fontFamily || parameters.letterSpacing) && element.setCurvedTextPosition)

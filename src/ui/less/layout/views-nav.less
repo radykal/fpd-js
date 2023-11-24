@@ -1,16 +1,19 @@
-fpd-views-nav {
+.fpd-container fpd-views-nav {
 
     position: absolute;
     z-index: 20;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 4px 8px;
     bottom: 10px;
     right: 10px;
     background: #fff;
     box-shadow: 0px 0px 10px rgba(110, 111, 114, 0.22);
     border-radius: var(--fpd-border-radius);
-    height: 35px;
+    min-height: 35px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 150px;
 
     > .fpd-view-locker {
         font-size: 20px;
@@ -70,6 +73,35 @@ fpd-views-nav {
 
         }
 
+    }
+
+    > .fpd-view-edit-size {
+        display: flex;
+        flex-direction: row;
+        flex: 1 1 100%;
+        width: 50px;
+        border-bottom: 1px solid var(--fpd-border-color);
+
+        .fpd-input {
+            box-shadow: none;
+            border-radius: 0;
+            
+            border: none;
+            height: 100%;
+
+            &:first-child {
+                border-top-left-radius: var(--fpd-border-radius);
+            }
+
+            > span {
+                background: var(--fpd-border-color);
+                padding: 6px 6px;
+            }
+
+            > input {
+                padding: 0;
+            }
+        }
     }
 
 }

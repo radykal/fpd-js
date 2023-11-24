@@ -1684,7 +1684,8 @@ export default class Options {
 		* @type {Object}
 		*/
 		customTextParameters: {
-			autoCenter: true
+			autoCenter: true,
+			copyable: true
 		},
 		/**
 		* An object containing the supported media types the user can add in the product designer.

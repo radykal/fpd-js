@@ -15,22 +15,14 @@ import AreaSortable from '../../vendor/js/areasortable.js';
 
 export default class ViewsGrid extends EventTarget {
 
-    #maxStageSize = 1000; //when adding blank page or editing size, this will be max. canvas width/height
-    #pbOffset = 50;
-
     constructor(fpdInstance) {
 
         super();
 
         this.fpdInstance = fpdInstance;
-        this.unitFormat = fpdInstance.mainOptions.dynamicViewsOptions.unit;
 		this.formats = fpdInstance.mainOptions.dynamicViewsOptions.formats;
-		this.minWidth = fpdInstance.mainOptions.dynamicViewsOptions.minWidth;
-		this.minHeight = fpdInstance.mainOptions.dynamicViewsOptions.minHeight;
-		this.maxWidth = fpdInstance.mainOptions.dynamicViewsOptions.maxWidth;
-		this.maxHeight = fpdInstance.mainOptions.dynamicViewsOptions.maxHeight;
 		this.currentLayouts = [];        
-
+        
         this.container = document.createElement("fpd-views-grid");
         fpdInstance.container.append(this.container);
 
@@ -43,13 +35,13 @@ export default class ViewsGrid extends EventTarget {
         this.gridElem = this.container.querySelector('.fpd-grid');
         this.blankPageModal = this.container.querySelector('.fpd-blank-page-modal');
         this.layoutsModal = this.container.querySelector('.fpd-layouts-modal');
-        
+                
         if(fpdInstance.mainOptions.enableDynamicViews) {
 
             this.blankPageCustomWidthInput = this.blankPageModal.querySelectorAll('.fpd-head input')[0];
             this.blankPageCustomHeightInput = this.blankPageModal.querySelectorAll('.fpd-head input')[1];
-            this.blankPageCustomWidthInput.setAttribute('placeholder', this.unitFormat);
-            this.blankPageCustomHeightInput.setAttribute('placeholder', this.unitFormat);
+            this.blankPageCustomWidthInput.setAttribute('placeholder', this.fpdInstance.viewsNav.unitFormat);
+            this.blankPageCustomHeightInput.setAttribute('placeholder', this.fpdInstance.viewsNav.unitFormat);
 
             if(Array.isArray(this.formats) && this.formats.length) {
 
@@ -80,7 +72,7 @@ export default class ViewsGrid extends EventTarget {
 
                     const formatItem = document.createElement('div');
                     formatItem.className = 'fpd-shadow-1 fpd-item';
-                    formatItem.innerHTML = '<span>'+formatWidth+'x'+formatHeight+'<br>'+this.unitFormat+'</span>';
+                    formatItem.innerHTML = '<span>'+formatWidth+'x'+formatHeight+'<br>'+this.fpdInstance.viewsNav.unitFormat+'</span>';
                     formatItem.style.width = itemWidth+'px';
                     formatItem.style.height = itemHeight+'px';
                     this.blankPageModal.querySelector('.fpd-grid').append(formatItem);
@@ -263,14 +255,14 @@ export default class ViewsGrid extends EventTarget {
                 }
             )
             
-            this.blankPageModal.querySelector('.fpd-input input[data-type="width"]').value = this.minWidth;
-            this.blankPageModal.querySelector('.fpd-input input[data-type="height"]').value = this.minHeight;
+            this.blankPageModal.querySelector('.fpd-input input[data-type="width"]').value = this.fpdInstance.viewsNav.minWidth;
+            this.blankPageModal.querySelector('.fpd-input input[data-type="height"]').value = this.fpdInstance.viewsNav.minHeight;
             addEvents(
                 this.blankPageModal.querySelectorAll('.fpd-input input'),
                 'keyup',
                 (evt) => {
 
-                    evt.currentTarget.value = this.#checkDimensionLimits(evt.currentTarget.dataset.type, evt.currentTarget);
+                    evt.currentTarget.value = this.fpdInstance.viewsNav.checkDimensionLimits(evt.currentTarget.dataset.type, evt.currentTarget);
 
                 }
             )
@@ -312,10 +304,10 @@ export default class ViewsGrid extends EventTarget {
                     `;
                     optionsElem.append(dropdownMenu);
 
-                    let viewWidthUnit = pixelToUnit(viewInstance.options.stageWidth, this.unitFormat),
-					    viewHeightUnit = pixelToUnit(viewInstance.options.stageHeight, this.unitFormat);
+                    let viewWidthUnit = pixelToUnit(viewInstance.options.stageWidth, this.fpdInstance.viewsNav.unitFormat),
+					    viewHeightUnit = pixelToUnit(viewInstance.options.stageHeight, this.fpdInstance.viewsNav.unitFormat);
 
-                               //check if canvas output is set
+                    //check if canvas output is set
                     if(objectHasKeys(viewInstance.options.output, ['width', 'height'])) {
                         viewWidthUnit = viewInstance.options.output.width;
                         viewHeightUnit = viewInstance.options.output.height;                        
@@ -324,8 +316,8 @@ export default class ViewsGrid extends EventTarget {
                     const editSizeOverlay = document.createElement('div');
                     editSizeOverlay.className = 'fpd-edit-size-overlay';
                     editSizeOverlay.innerHTML = `
-                        <input type="number" data-type="width" step=1 min=${this.minWidth} max=${this.maxWidth} value=${viewWidthUnit} />
-                        <input type="number" data-type="height" step=1 min=${this.minHeight} max=${this.maxHeight} value=${viewHeightUnit} />
+                        <input type="number" data-type="width" step=1 min=${this.fpdInstance.viewsNav.minWidth} max=${this.fpdInstance.viewsNav.maxWidth} value=${viewWidthUnit} />
+                        <input type="number" data-type="height" step=1 min=${this.fpdInstance.viewsNav.minHeight} max=${this.fpdInstance.viewsNav.maxHeight} value=${viewHeightUnit} />
                         <span class="fpd-btn"><span class="fpd-icon-done"></span></span>
                         <span class="fpd-btn fpd-secondary"><span class="fpd-icon-close"></span></span>
                     `;
@@ -340,10 +332,10 @@ export default class ViewsGrid extends EventTarget {
 
                             if(!evt.currentTarget.classList.contains('fpd-secondary')) {
 
-                                let widthPx = unitToPixel(editSizeOverlay.querySelector('[data-type="width"]').value, this.unitFormat),
-                                heightPx = unitToPixel(editSizeOverlay.querySelector('[data-type="height"]').value, this.unitFormat);
+                                let widthPx = unitToPixel(editSizeOverlay.querySelector('[data-type="width"]').value, this.fpdInstance.viewsNav.unitFormat),
+                                heightPx = unitToPixel(editSizeOverlay.querySelector('[data-type="height"]').value, this.fpdInstance.viewsNav.unitFormat);
                                 
-                                let viewOptions = this.#calcPageOptions(widthPx, heightPx);
+                                let viewOptions = this.fpdInstance.viewsNav.calcPageOptions(widthPx, heightPx);
                                 viewInstance.options = deepMerge(viewInstance.options, viewOptions);                            
                                 viewInstance.fabricCanvas.viewOptions = viewInstance.options;
 
@@ -352,14 +344,13 @@ export default class ViewsGrid extends EventTarget {
                                     viewInstance.fabricCanvas.resetSize();
                                 }
                                 
-                                this.#doPricing(viewInstance);
+                                this.fpdInstance.viewsNav.doPricing(viewInstance);
 
                                 this.reset();
 
                             }
 
                             removeElemClasses(editSizeOverlay, ['fpd-show']);
-                            
                             
                         }
                     )
@@ -374,14 +365,14 @@ export default class ViewsGrid extends EventTarget {
                             
                             if(inputElem.dataset.type == 'width') {
 
-                                this.#checkDimensionLimits('width', inputElem);
-                                this.#checkDimensionLimits('height', inputElem.nextElementSibling);
+                                this.fpdInstance.viewsNav.checkDimensionLimits('width', inputElem);
+                                this.fpdInstance.viewsNav.checkDimensionLimits('height', inputElem.nextElementSibling);
                 
                             }
                             else {
                 
-                                this.#checkDimensionLimits('height', inputElem);
-                               this.#checkDimensionLimits('width', inputElem.previousElementSibling)
+                                this.fpdInstance.viewsNav.checkDimensionLimits('height', inputElem);
+                                this.fpdInstance.viewsNav.checkDimensionLimits('width', inputElem.previousElementSibling)
                 
                             }                            
                             
@@ -434,7 +425,7 @@ export default class ViewsGrid extends EventTarget {
                         }
                     )
 
-                    this.#doPricing(viewInstance);
+                    this.fpdInstance.viewsNav.doPricing(viewInstance);
                     
                 }
                 
@@ -489,65 +480,16 @@ export default class ViewsGrid extends EventTarget {
             this.reset.bind(this)
         )
 
-    }
-
-    #calcPageOptions(widthPx, heightPx) {
-
-        let aspectRatio = Math.min((this.#maxStageSize - this.#pbOffset) / widthPx,  (this.#maxStageSize - this.#pbOffset) / heightPx);
-        const pbWidth = parseInt(widthPx * aspectRatio);
-        const pbHeight = parseInt(heightPx * aspectRatio);
-
-        let viewOptions = {
-            stageWidth: pbWidth+this.#pbOffset,
-            stageHeight: pbHeight+this.#pbOffset,
-            printingBox: {
-                width: pbWidth,
-                height: pbHeight,
-                left: ((pbWidth+this.#pbOffset) / 2) - (pbWidth / 2),
-                top: ((pbHeight+this.#pbOffset) / 2) - (pbHeight / 2),
-                visibility: true
-            },
-            usePrintingBoxAsBounding: true,
-            output: {
-                width: pixelToUnit(widthPx, 'mm'),
-                height: pixelToUnit(heightPx, 'mm')
-            }
-        };
-
-        return viewOptions;
-
     }   
-
-    #doPricing(viewInstance) {
-        
-        if(viewInstance && this.fpdInstance.mainOptions.dynamicViewsOptions.pricePerArea) {
-
-            let width = pixelToUnit(viewInstance.options.stageWidth, 'cm'),
-                height = pixelToUnit(viewInstance.options.stageHeight, 'cm');
-
-            //check if canvas output is set
-            if(objectHasKeys(viewInstance.options.output, ['width', 'height'])) {
-                width = viewInstance.options.output.width / 10;
-                height = viewInstance.options.output.height / 10;                
-            }
-
-            let cm2 = Math.ceil(width * height),
-                cm2Price = cm2 * Number(this.fpdInstance.mainOptions.dynamicViewsOptions.pricePerArea);
-                            
-            viewInstance.changePrice(0, '+', cm2Price);
-
-        }
-
-    }
 
     #addBlankPage(width, height) {
 
         if(!width || !height) return;
         
-        const widthPx = unitToPixel(Number(width), this.unitFormat);
-        const heightPx = unitToPixel(Number(height), this.unitFormat);
+        const widthPx = unitToPixel(Number(width), this.fpdInstance.viewsNav.unitFormat);
+        const heightPx = unitToPixel(Number(height), this.fpdInstance.viewsNav.unitFormat);
 
-        let viewOptions = this.#calcPageOptions(widthPx, heightPx);
+        let viewOptions = this.fpdInstance.viewsNav.calcPageOptions(widthPx, heightPx);
         this.fpdInstance.addView({
             title: width+'x'+height,
             thumbnail: '',
@@ -594,25 +536,6 @@ export default class ViewsGrid extends EventTarget {
 	    let element = arr[fromIndex];
 		arr.splice(fromIndex, 1);
 	    arr.splice(toIndex, 0, element);
-	}
-
-    #checkDimensionLimits(type, input) {
-
-		if(type == 'width') {
-
-			if(input.value < this.minWidth) { input.value = this.minWidth; }
-			else if(input.value > this.maxWidth) { input.value = this.maxWidth; }
-
-		}
-		else {
-
-			if(input.value < this.minHeight) { input.value = this.minHeight; }
-			else if(input.value > this.maxHeight) { input.value = this.maxHeight; }
-
-		}        
-
-		return input.value;
-
 	}
 
     hideModals() {

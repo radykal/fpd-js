@@ -42,7 +42,7 @@ fabric.Object.prototype._elementInit = function () {
 
     this.on({
         'added': () => {
-
+            
             if (this.isCustom && !this.hasUploadZone && !this.replace) {
                 this.copyable = this.originParams.copyable = true;
             }
@@ -79,7 +79,7 @@ fabric.Object.prototype._elementControls = function () {
         copyControl = Boolean(this.copyable || this.__editorMode),
         removeControl = Boolean(this.removable || this.__editorMode),
         resizeControl = Boolean((this.resizable || this.__editorMode) && !this.curved),
-        rotateControl = Boolean(this.rotatable || this.__editorMode);    
+        rotateControl = Boolean(this.rotatable || this.__editorMode);        
         
     if (this.textBox && !this.curved)
         widthControls = true;
