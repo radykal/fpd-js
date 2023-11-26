@@ -2208,7 +2208,7 @@ export default class FancyProductDesigner extends EventTarget {
 
 	}
     
-    _addGridItemToCanvas(item, additionalOpts={}, viewIndex, isRemoteImage=true) {
+    _addGridItemToCanvas(item, additionalOpts={}, viewIndex, isRemoteImage=true) {        
                 
         if(!this.currentViewInstance) { return; }
         viewIndex = viewIndex === undefined ? this.currentViewIndex : viewIndex;

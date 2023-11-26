@@ -129,13 +129,7 @@ export default class TextToImageModule extends EventTarget {
                 (evt) => {
                     
                     if(!this.fpdInstance.loadingCustomImage) {
-
-                        this.fpdInstance._addGridItemToCanvas(
-                            evt.currentTarget,
-                            {},
-                            undefined,
-                            false
-                        );
+                        this.fpdInstance._addGridItemToCanvas(evt.currentTarget);
                     }
                     
                 }
