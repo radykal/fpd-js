@@ -69,7 +69,8 @@
 		"menu_file": "File",
 		"menu_more": "More",
 		"modal_done": "Done",
-		"qr_code": "QR-Code"
+		"qr_code": "QR-Code",
+		"save_load": "Saved Designs"
 	},
 	"modules": {
 		"products": "Products",
@@ -96,7 +97,6 @@
 		"save_load": "Saved Designs",
 		"save_load_add_btn": "Save Design",
 		"save_load_input_placeholder": "Optional: Enter a title",
-		"save_load_saved_designs": "Saved Designs",
 		"qr_code_input": "Enter a URL, some text...",
 		"qr_code_add_btn": "Add QR-Code",
 		"names_numbers": "Names & Numbers",

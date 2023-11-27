@@ -726,7 +726,22 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
         this.isCustomized = true;
     }
 
-    if (this.viewOptions.usePrintingBoxAsBounding && !fabricParams.boundingBox && objectHasKeys(this.viewOptions.printingBox, ['left', 'top', 'width', 'height'])) {
+    let elemHasBB = false;
+    if(typeof fabricParams.boundingBox == 'string' && fabricParams.boundingBox.length > 0) {
+        elemHasBB = true;
+    }
+    else if(typeof fabricParams.boundingBox == 'object' 
+        && objectHasKeys(fabricParams.boundingBox, ['width', 'height'])
+        && fabricParams.boundingBox.width > 0
+        && fabricParams.boundingBox.height > 0
+        ) {
+            elemHasBB = true;
+    }
+    
+    if (this.viewOptions.usePrintingBoxAsBounding 
+        && !elemHasBB
+        && objectHasKeys(this.viewOptions.printingBox, ['left', 'top', 'width', 'height'])
+    ) {
 
         fabricParams.boundingBox = {
             x: this.viewOptions.printingBox.left - 1,

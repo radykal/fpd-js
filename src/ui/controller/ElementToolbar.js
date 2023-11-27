@@ -159,7 +159,7 @@ export default class ElementToolbar extends EventTarget {
                     'click',
                     (evt) => {
                         
-                        const currentElement = fpdInstance.currentElement;
+                        const currentElement = fpdInstance.currentElement;                        
                         currentElement.clipPath = null;
 
                         fabric.loadSVGFromURL(maskURL, (objects, options) => {            

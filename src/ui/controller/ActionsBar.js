@@ -71,7 +71,7 @@ export default class ActionsBar extends EventTarget {
 			icon: 'fpd-icon-snap',
 			title: 'Snap'
 		},
-		'savings': {
+		'save-load': {
 			icon: 'fpd-icon-save',
 			title: 'Saved Designs'
 		}
@@ -487,7 +487,7 @@ export default class ActionsBar extends EventTarget {
 
 			
 		}
-		else if (action === 'savings') {
+		else if (action === 'save-load') {
 
 			const existingModal = this.fpdInstance.container.querySelector('.fpd-modal-internal');
 			if(existingModal)
@@ -500,7 +500,7 @@ export default class ActionsBar extends EventTarget {
 				this.fpdInstance.container
 			);
 			
-			const saveLoadModule = new SaveLoadModule(
+			new SaveLoadModule(
 				this.fpdInstance,
 				modal.querySelector('.fpd-modal-content') 
 			)

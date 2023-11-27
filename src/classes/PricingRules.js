@@ -223,7 +223,7 @@ export default class PricingRules {
 
 			if(!fObj.excludeFromExport && !fObj._ignore) {
 
-				var boundingRect = fObj.getBoundingRect();
+				var boundingRect = fObj.getBoundingRect(true);
 
 				if (minX === undefined || boundingRect.left < minX) {
 					minX = boundingRect.left;
@@ -253,6 +253,7 @@ export default class PricingRules {
 			};
 
 		}
+		
 				
 		if(!objectHasKeys(allObjsBB, ['minX','minY','maxX','maxY'])) return null;
 
