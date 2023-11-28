@@ -18,6 +18,7 @@ import {
     addElemClasses,
     removeElemClasses
 } from '../helpers/utils.js';
+import AdvancedImageEditor from './controller/AdvancedImageEditor.js';
 
 export default class UIManager extends EventTarget {
     
@@ -156,6 +157,7 @@ export default class UIManager extends EventTarget {
         this.fpdInstance.productStage = this.fpdInstance.mainWrapper.container.querySelector('.fpd-product-stage');
         this.fpdInstance.viewsNav = new ViewsNav(this.fpdInstance);
         this.fpdInstance.viewsGrid = new ViewsGrid(this.fpdInstance);
+        this.fpdInstance.advancedImageEditor = new AdvancedImageEditor(this.fpdInstance);
 
         //addons
         this.fpdInstance.bulkVariations = new BulkVariations(this.fpdInstance);

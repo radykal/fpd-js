@@ -36,6 +36,15 @@ export default class ViewsNav extends EventTarget {
             editSizeWrapper = this.container.querySelector('.fpd-view-edit-size');
             removeElemClasses(editSizeWrapper, ['fpd-hidden']);
 
+            const inputWidth = editSizeWrapper.querySelector('[data-type="width"]');
+            inputWidth.setAttribute('aria-label', this.minWidth+this.unitFormat + ' - ' + this.maxWidth+this.unitFormat)
+            inputWidth.setAttribute('placeholder', this.minWidth+this.unitFormat + ' - ' + this.maxWidth+this.unitFormat);
+
+            const inputHeight = editSizeWrapper.querySelector('[data-type="height"]');
+            inputHeight.setAttribute('aria-label', this.minHeight+this.unitFormat + ' - ' + this.maxHeight+this.unitFormat)
+            inputHeight.setAttribute('placeholder', this.minHeight+this.unitFormat + ' - ' + this.maxHeight+this.unitFormat);
+            
+
         }
 
         addEvents(
@@ -160,39 +169,21 @@ export default class ViewsNav extends EventTarget {
 
         //edit size
         if(editSizeWrapper) {
-
-            addEvents(
-                editSizeWrapper.querySelectorAll('input'),
-                'keyup',
-                (evt) => {
-    
-                    const inputElem = evt.currentTarget;
-                    
-                    if(inputElem.dataset.type == 'width') {
-    
-                        this.checkDimensionLimits('width', inputElem);
-        
-                    }
-                    else {
-        
-                        this.checkDimensionLimits('height', inputElem);
-        
-                    }                            
-                    
-                }
-            )
     
             addEvents(
                 editSizeWrapper.querySelectorAll('input'),
                 'change',
                 (evt) => {
-    
+
+                    const inputElem = evt.currentTarget;
+                    this.checkDimensionLimits(inputElem.dataset.type, inputElem);
+                    
                     const viewInstance = fpdInstance.currentViewInstance;
-    
+                                        
                     let widthPx = unitToPixel(editSizeWrapper.querySelector('[data-type="width"]').value, this.unitFormat),
                         heightPx = unitToPixel(editSizeWrapper.querySelector('[data-type="height"]').value, this.unitFormat);
                         
-                    let viewOptions = this.fpdInstance.viewsNav.calcPageOptions(widthPx, heightPx);
+                    let viewOptions = this.calcPageOptions(widthPx, heightPx);
                     viewInstance.options = deepMerge(viewInstance.options, viewOptions);                            
                     viewInstance.fabricCanvas.viewOptions = viewInstance.options;
     

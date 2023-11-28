@@ -338,9 +338,14 @@ fpd-element-toolbar {
 
         .fpd-tool-crop-masks {
 
-            gap: 20px !important;
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-evenly;
+            gap: 40px 20px !important;
 
             .fpd-item {
+                flex: 0 0 25%;
+                height: 70px;
                 background-repeat: no-repeat;
                 background-position: center;
                 background-size: contain;
@@ -426,11 +431,24 @@ fpd-element-toolbar.fpd-smart {
 
     }
 
-    .fpd-tool-filters {
+    .fpd-tool-filters,
+    .fpd-tool-crop-masks {
+        display: flex;
         flex-wrap: nowrap;
         padding-bottom: 30px;
         overflow-x: auto;
         overflow-y: hidden;
+    }
+
+    .fpd-tool-crop-masks {
+
+        gap: 0 20px !important;
+        justify-content: flex-start;
+
+        .fpd-item {
+            height: 50px;
+        }
+
     }
 
     &.fpd-layout-small {

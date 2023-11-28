@@ -98,7 +98,7 @@ fabric.Object.prototype._elementControls = function () {
         removeControl = false;
 
     }
-    
+        
     this.setControlsVisibility({
         ml: widthControls,
         mr: widthControls,

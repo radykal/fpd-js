@@ -256,10 +256,16 @@ export default class ViewsGrid extends EventTarget {
             )
             
             this.blankPageModal.querySelector('.fpd-input input[data-type="width"]').value = this.fpdInstance.viewsNav.minWidth;
+            this.blankPageModal.querySelector('.fpd-input input[data-type="width"]')
+            .setAttribute('aria-label', this.fpdInstance.viewsNav.minWidth+this.fpdInstance.viewsNav.unitFormat + ' - ' + this.fpdInstance.viewsNav.maxWidth+this.fpdInstance.viewsNav.unitFormat);
+
             this.blankPageModal.querySelector('.fpd-input input[data-type="height"]').value = this.fpdInstance.viewsNav.minHeight;
+            this.blankPageModal.querySelector('.fpd-input input[data-type="height"]')
+            .setAttribute('aria-label', this.fpdInstance.viewsNav.minHeight+this.fpdInstance.viewsNav.unitFormat + ' - ' + this.fpdInstance.viewsNav.maxHeight+this.fpdInstance.viewsNav.unitFormat);
+            
             addEvents(
                 this.blankPageModal.querySelectorAll('.fpd-input input'),
-                'keyup',
+                'change',
                 (evt) => {
 
                     evt.currentTarget.value = this.fpdInstance.viewsNav.checkDimensionLimits(evt.currentTarget.dataset.type, evt.currentTarget);
@@ -316,8 +322,8 @@ export default class ViewsGrid extends EventTarget {
                     const editSizeOverlay = document.createElement('div');
                     editSizeOverlay.className = 'fpd-edit-size-overlay';
                     editSizeOverlay.innerHTML = `
-                        <input type="number" data-type="width" step=1 min=${this.fpdInstance.viewsNav.minWidth} max=${this.fpdInstance.viewsNav.maxWidth} value=${viewWidthUnit} />
-                        <input type="number" data-type="height" step=1 min=${this.fpdInstance.viewsNav.minHeight} max=${this.fpdInstance.viewsNav.maxHeight} value=${viewHeightUnit} />
+                        <input type="number" data-type="width" step=1 class="fpd-tooltip" min=${this.fpdInstance.viewsNav.minWidth} max=${this.fpdInstance.viewsNav.maxWidth} value=${viewWidthUnit} aria-label="${this.fpdInstance.viewsNav.minWidth+this.fpdInstance.viewsNav.unitFormat + ' - ' + this.fpdInstance.viewsNav.maxWidth+this.fpdInstance.viewsNav.unitFormat}" />
+                        <input type="number" data-type="height" step=1 class="fpd-tooltip" min=${this.fpdInstance.viewsNav.minHeight} max=${this.fpdInstance.viewsNav.maxHeight} value=${viewHeightUnit} aria-label="${this.fpdInstance.viewsNav.minHeight+this.fpdInstance.viewsNav.unitFormat + ' - ' + this.fpdInstance.viewsNav.maxHeight+this.fpdInstance.viewsNav.unitFormat}" />
                         <span class="fpd-btn"><span class="fpd-icon-done"></span></span>
                         <span class="fpd-btn fpd-secondary"><span class="fpd-icon-close"></span></span>
                     `;
@@ -333,8 +339,8 @@ export default class ViewsGrid extends EventTarget {
                             if(!evt.currentTarget.classList.contains('fpd-secondary')) {
 
                                 let widthPx = unitToPixel(editSizeOverlay.querySelector('[data-type="width"]').value, this.fpdInstance.viewsNav.unitFormat),
-                                heightPx = unitToPixel(editSizeOverlay.querySelector('[data-type="height"]').value, this.fpdInstance.viewsNav.unitFormat);
-                                
+                                    heightPx = unitToPixel(editSizeOverlay.querySelector('[data-type="height"]').value, this.fpdInstance.viewsNav.unitFormat);
+                                                                
                                 let viewOptions = this.fpdInstance.viewsNav.calcPageOptions(widthPx, heightPx);
                                 viewInstance.options = deepMerge(viewInstance.options, viewOptions);                            
                                 viewInstance.fabricCanvas.viewOptions = viewInstance.options;
@@ -358,7 +364,7 @@ export default class ViewsGrid extends EventTarget {
                     //limits of changing view size
                     addEvents(
                         editSizeOverlay.querySelectorAll('input'),
-                        'keyup',
+                        'change',
                         (evt) => {
 
                             const inputElem = evt.currentTarget;

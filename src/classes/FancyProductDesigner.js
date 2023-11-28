@@ -2261,7 +2261,7 @@ export default class FancyProductDesigner extends EventTarget {
     
     }
 
-    _downloadRemoteImage(source, title, options={}) {
+    _downloadRemoteImage(source, title, options={}, callback=null) {
 
         if(!this.mainOptions.fileServerURL) {
             alert('You need to set the fileServerURL in the option, otherwise file uploading does not work!')
@@ -2296,16 +2296,35 @@ export default class FancyProductDesigner extends EventTarget {
                                 
                 if(data && data.image_src) {
                     
-                    this.addCustomImage(
-                        data.image_src,
-                        data.filename ? data.filename : title,
-                        options
-                    );
+                    if(callback) {
+
+                        callback({url: data.image_src});
+                        
+                    }
+                    else {
+
+                        this.addCustomImage(
+                            data.image_src,
+                            data.filename ? data.filename : title,
+                            options
+                        );
+
+                    }
+                    
     
                 }
                 else {
 
-                    _errorHandler(data.error);
+                    if(callback) {
+
+                        callback({error: data.image_src});
+                        
+                    }
+                    else {
+
+                        _errorHandler(data.error);
+
+                    }
     
                 }
 

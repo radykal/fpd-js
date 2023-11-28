@@ -223,7 +223,7 @@ fabric.Object.prototype.controls.cropMaskDoneControl = new fabric.Control({
     cursorStyle: 'pointer',
     mouseDownHandler: cropMaskDone,
     render: (ctx, left, top, styleOverride, fabricObject) => {
-
+        
         if(fabricObject.name !== 'crop-mask') return;
         
         styleOverride.cornerColor = '#2ecc71';
@@ -247,12 +247,7 @@ function cropMaskDone(eventData, transform) {
 
     const maskObj = transform.target;
     if(maskObj.targetElement) {
-
-        maskObj.targetElement.clipPath = maskObj;
-        maskObj.targetElement.cropMask = maskObj.toObject();
-
-        maskObj.canvas.removeElement(maskObj);
-
+        
     }
     
 }

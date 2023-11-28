@@ -70,7 +70,7 @@ fabric.Canvas.prototype._fpdCanvasInit = function () {
                 this._onCreated();
             }
             
-            if (this.viewOptions && this.viewOptions.highlightEditableObjects.length > 3) {
+            if (this.viewOptions && this.viewOptions.highlightEditableObjects && this.viewOptions.highlightEditableObjects.length > 3) {
 
                 this.contextContainer.strokeStyle = this.viewOptions.highlightEditableObjects;
                 this.forEachObject((obj) => {
@@ -1009,7 +1009,7 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
 /**
  * Deselects the current selected element.
  *
- * @method resetSize
+ * @method deselectElement
  * @param {Boolean} discardActiveObject Discards currently active object and fire events
  * @extends fabric.Canvas
  */
@@ -1044,12 +1044,12 @@ fabric.Canvas.prototype.deselectElement = function (discardActiveObject = true) 
  * @extends fabric.Canvas
  */
 fabric.Canvas.prototype.resetSize = function () {
-    
+        
     if(!this.wrapperEl || !this.wrapperEl.parentNode) return;
-
+    
     const viewStage = this.wrapperEl;
     const viewStageWidth = viewStage.parentNode.clientWidth;   
-    let allowedHeight = window.innerHeight * parseFloat(this.viewOptions.maxCanvasHeight); 
+    let allowedHeight = window.innerHeight * parseFloat(this.viewOptions.maxCanvasHeight || 1); 
     let canvasHeight = this.viewOptions.stageHeight;
     let fixedHeight = null;
 
@@ -1058,7 +1058,7 @@ fabric.Canvas.prototype.resetSize = function () {
     let potentialHeight = canvasHeight * this.responsiveScale;
 
     //set a fixed height
-    if (this.viewOptions.canvasHeight !== 'auto') {
+    if (this.viewOptions.canvasHeight && this.viewOptions.canvasHeight !== 'auto') {
 
         if (this.viewOptions.canvasHeight.includes('px')) {
 
@@ -1079,7 +1079,7 @@ fabric.Canvas.prototype.resetSize = function () {
         
     if (!this.viewOptions.responsive) {
         this.responsiveScale = 1;
-    }
+    }    
     
     this.setDimensions({
         width: this.viewOptions.stageWidth * this.responsiveScale,
@@ -1812,11 +1812,6 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
             element.path.visible = true;   
         }
 
-    }
-
-    if(parameters.cropMask) {
-        //todo: reload crop mask from object options
-        console.log(parameters.cropMask);
     }
 
     if (element.uploadZone) {

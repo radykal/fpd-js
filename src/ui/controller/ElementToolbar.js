@@ -159,53 +159,7 @@ export default class ElementToolbar extends EventTarget {
                     'click',
                     (evt) => {
                         
-                        const currentElement = fpdInstance.currentElement;                        
-                        currentElement.clipPath = null;
-
-                        fabric.loadSVGFromURL(maskURL, (objects, options) => {            
-
-                            let svgGroup = null;
-                            if(objects) {
-
-                                svgGroup = objects ? fabric.util.groupSVGElements(objects, options) : null;
-
-                                svgGroup.setOptions({
-                                    left: currentElement.left,
-                                    top: currentElement.top,
-                                    selectable: true,
-                                    evented: true,
-                                    resizable: true,
-                                    rotatable: true,
-                                    lockUniScaling: false,
-                                    lockRotation: false,
-                                    borderColor: 'transparent',
-                                    fill: 'rgba(184,233,134,0.4)',
-                                    centeredScaling: true,
-                                    transparentCorners: true,
-                                    absolutePositioned: false, //todo: position to cropped element, so element is moving with the cropping and not inside the crop
-                                    cornerSize: 24,
-                                    originX: currentElement.originX,
-                                    originY: currentElement.originY,
-                                    name: "crop-mask",
-                                    objectCaching: false,
-                                    excludeFromExport: true,
-                                    _ignore: true,
-                                    targetElement: currentElement
-                                })
-
-                                if(currentElement.getScaledWidth() < currentElement.getScaledHeight()) {
-                                    svgGroup.scaleToWidth(currentElement.getScaledWidth());
-                                }
-                                else {
-                                    svgGroup.scaleToHeight(currentElement.getScaledHeight());
-                                }
-                                
-                                fpdInstance.currentViewInstance.fabricCanvas.add(svgGroup);
-                                fpdInstance.currentViewInstance.fabricCanvas.setActiveObject(svgGroup);
-
-                            }
-
-                        });
+                        fpdInstance.advancedImageEditor.loadImage(fpdInstance.currentElement, maskURL);
                         
                     }
                 )
