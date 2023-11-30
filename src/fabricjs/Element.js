@@ -38,7 +38,7 @@ fabric.Object.prototype.initialize = (function (originalFn) {
     };
 })(fabric.Object.prototype.initialize);
 
-fabric.Object.prototype._elementInit = function () {
+fabric.Object.prototype._elementInit = function () {    
 
     this.on({
         'added': () => {

@@ -6,6 +6,7 @@ import UIManager from '../ui/UIManager.js';
 import Snackbar from '../ui/view/comps/Snackbar.js';
 import EditorBox from '../ui/controller/EditorBox.js';
 import tinycolor from "tinycolor2";
+import {initAdvancedCorners} from  '../fabricjs/objects/Controls.js';
 
 import { 
     addEvents,
@@ -329,6 +330,12 @@ export default class FancyProductDesigner extends EventTarget {
             newHexNames[hexKey.toLowerCase()] = this.mainOptions.hexNames[hexKey];            
         })
         this.mainOptions.hexNames = newHexNames;
+
+        
+        if(this.mainOptions.cornerControlsStyle == 'advanced') {
+            
+            initAdvancedCorners(fabric.Object);
+        }
 
         if(elem.classList.contains('fpd-off-canvas') || elem.classList.contains('fpd-topbar'))
             this.mainOptions.toolbarPlacement = 'smart';

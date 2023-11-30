@@ -1,4 +1,4 @@
-import { addEvents, toggleElemClasses } from "../../helpers/utils";
+import { addEvents, removeElemClasses, toggleElemClasses } from "../../helpers/utils";
 import Snackbar from "../view/comps/Snackbar";
 
 export default class AdvancedImageEditor extends EventTarget {
@@ -69,6 +69,11 @@ export default class AdvancedImageEditor extends EventTarget {
                         else if(data.error) {
                             Snackbar(data.error);
                         }
+
+                        removeElemClasses(
+                            fpdInstance.viewsNav.container,
+                            ['fpd-disabled']
+                        );
 
                         fpdInstance.loadingCustomImage = false;
                         fpdInstance.toggleSpinner(false);        

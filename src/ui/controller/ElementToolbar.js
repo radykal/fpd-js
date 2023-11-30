@@ -143,7 +143,6 @@ export default class ElementToolbar extends EventTarget {
 
         //advanced editing - crop
         const cropMasksGrid = this.subPanel.querySelector('.fpd-tool-crop-masks');
-
        if(Array.isArray(fpdInstance.mainOptions.cropMasks)) {
 
             fpdInstance.mainOptions.cropMasks.forEach((maskURL) => {
