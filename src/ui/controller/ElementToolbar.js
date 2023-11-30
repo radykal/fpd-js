@@ -606,7 +606,7 @@ export default class ElementToolbar extends EventTarget {
         )
 
         addEvents(
-            this.subPanel.querySelector('.fpd-tool-remove-bg'),
+            this.navElem.querySelector('.fpd-tool-remove-bg'),
             'click',
             (evt) => {
 
@@ -1076,11 +1076,12 @@ export default class ElementToolbar extends EventTarget {
         }
 
 		if(element.advancedEditing && element.source && isBitmap(element.source)) {
-			this.#toggleNavItem('advanced-editing');
 
+			this.#toggleNavItem('advanced-editing');
             this.#togglePanelTab('advanced-editing', 'filters', true);            
             this.#togglePanelTab('advanced-editing', 'crop', Boolean(Array.isArray(this.fpdInstance.mainOptions.cropMasks) && this.fpdInstance.mainOptions.cropMasks.length));            
-            this.#togglePanelTab('advanced-editing', 'remove-bg', Boolean(this.fpdInstance.mainOptions.aiService.serverURL && this.fpdInstance.mainOptions.aiService.removeBG));
+
+            this.#toggleNavItem('remove-bg', Boolean(this.fpdInstance.mainOptions.aiService.serverURL && this.fpdInstance.mainOptions.aiService.removeBG));
 
 		}
         
