@@ -39,7 +39,7 @@ import {
  */
 export default class FancyProductDesigner extends EventTarget {
     
-    static version = '6.1.1';
+    static version = '6.1.2';
     static forbiddenTextChars = /<|>/g;
     static proxyFileServer = '';
     static uploadsToServer = true;
@@ -333,8 +333,7 @@ export default class FancyProductDesigner extends EventTarget {
 
         
         if(this.mainOptions.cornerControlsStyle == 'advanced') {
-            
-            initAdvancedCorners(fabric.Object);
+            initAdvancedCorners();
         }
 
         if(elem.classList.contains('fpd-off-canvas') || elem.classList.contains('fpd-topbar'))

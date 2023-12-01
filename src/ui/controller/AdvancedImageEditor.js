@@ -99,6 +99,12 @@ export default class AdvancedImageEditor extends EventTarget {
             !state
         )
 
+        toggleElemClasses(
+            this.fpdInstance.container,
+            ['fpd-aie-visible'],
+            state
+        )
+
     }
 
     loadImage(targetElement, maskURL) {

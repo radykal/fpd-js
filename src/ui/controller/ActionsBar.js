@@ -77,12 +77,6 @@ export default class ActionsBar extends EventTarget {
 		}
 	};
 
-	static toggleActions = [
-		'snap',
-		'ruler',
-		'zoom'
-	];
-
 	currentActions = {};
 
 	constructor(fpdInstance) {
@@ -94,20 +88,13 @@ export default class ActionsBar extends EventTarget {
 		this.container = document.createElement("fpd-actions-bar");
 		fpdInstance.container.append(this.container);
 
-		addEvents(
-			fpdInstance.container.querySelectorAll('.fpd-dropdown-btn'),
-			'click',
-			(evt) => {
+		this.leftActionsMenu = this.container.querySelector('[data-pos="left"] fpd-actions-menu');
+		this.leftActionsMenu.setAttribute('placeholder', this.fpdInstance.translator.getTranslation('actions', 'menu_file'));
 
-				const menu = evt.currentTarget.querySelector('.fpd-dropdown-menu');
-				toggleElemClasses(
-					menu,
-					['fpd-show'],
-					!menu.classList.contains('fpd-show')
-				)
+		this.centerActionsMenu = this.container.querySelector('[data-pos="center"] fpd-actions-menu');
 
-			}
-		)
+		this.rightActionsMenu = this.container.querySelector('[data-pos="right"] fpd-actions-menu');
+		this.rightActionsMenu.setAttribute('placeholder', this.fpdInstance.translator.getTranslation('actions', 'menu_more'));
 
 		addEvents(
 			fpdInstance.container.querySelectorAll('.fpd-close'),
@@ -185,17 +172,17 @@ export default class ActionsBar extends EventTarget {
 				let wrapper;
 				if (pos == 'left') {
 
-					wrapper = this.container.querySelector('[data-pos="left"] .fpd-actions-wrapper');
+					wrapper = this.leftActionsMenu;
 
 				}
 				else if (pos == 'center') {
 
-					wrapper = this.container.querySelector('[data-pos="' + pos + '"].fpd-actions-wrapper')
+					wrapper = this.centerActionsMenu;
 
 				}
 				else if (pos == 'right') {
 
-					wrapper = this.container.querySelector('[data-pos="right"] .fpd-actions-wrapper');
+					wrapper = this.rightActionsMenu;
 
 				}
 
@@ -208,9 +195,14 @@ export default class ActionsBar extends EventTarget {
 		else {
 
 			//hide actions wrapper			
-			if (pos == 'left' || pos == 'right')
-				addElemClasses(this.container.querySelector('[data-pos="'+pos+'"]'), ['fpd-visible-hidden'])
-			
+			if (pos == 'left' || pos == 'right') {
+
+				addElemClasses(
+					this.container.querySelector('[data-pos="'+pos+'"]'), 
+					['fpd-visible-hidden']
+				)
+
+			}	
 
 		}
 
@@ -221,40 +213,25 @@ export default class ActionsBar extends EventTarget {
 		if (ActionsBar.availableActions.hasOwnProperty(action)) {
 
 			const actionData = ActionsBar.availableActions[action];
-
 			const label = this.fpdInstance.translator.getTranslation(
 				'actions', 
 				action.replace(/-/g, '_'),
 				actionData.title
 			);
-			const actionBtn = document.createElement('div');
-			actionBtn.className = 'fpd-btn fpd-tooltip';
-			actionBtn.setAttribute('aria-label', label);
-			actionBtn.dataset.action = action;
-			actionBtn.innerHTML = `<i class="${actionData.icon}"></i><span>${label}</span>`;
+			
+			actionData.type = action;
+			actionData.title = label;
+			actionData.handler = (evt) => {
 
-			if (ActionsBar.toggleActions.includes(action)) {
-				actionBtn.insertAdjacentHTML(
-					'beforeend',
-					'<input type="checkbox" class="fpd-switch" />'
-				)
-			}
-
-			wrapper.append(actionBtn);
-
-			addEvents(
-				actionBtn,
-				'click',
-				(evt) => {
-
-					const switchElem = evt.currentTarget.querySelector('.fpd-switch');
-					if (switchElem && !evt.target.classList.contains('fpd-switch')) {
-						switchElem.checked = !switchElem.checked;
-					}
-
-					this.doAction(evt.currentTarget.dataset.action)
+				const switchElem = evt.currentTarget.querySelector('.fpd-switch');
+				if (switchElem && !evt.target.classList.contains('fpd-switch')) {
+					switchElem.checked = !switchElem.checked;
 				}
-			)
+
+				this.doAction(evt.currentTarget.dataset.action)
+			}
+			
+			wrapper.items = [...wrapper.items, actionData];
 
 		}
 

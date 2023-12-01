@@ -158,6 +158,7 @@ export default class ElementToolbar extends EventTarget {
                     'click',
                     (evt) => {
                         
+                        this.#toggle(false);
                         fpdInstance.advancedImageEditor.loadImage(fpdInstance.currentElement, maskURL);
                         
                     }
@@ -896,7 +897,7 @@ export default class ElementToolbar extends EventTarget {
     }
 
     #update(element) {
-        
+                
         this.#reset();
         removeElemClasses(this.container, ['fpd-type-image'])
 
@@ -1216,7 +1217,10 @@ export default class ElementToolbar extends EventTarget {
 
     #updatePosition() {
                 
-        if(this.currentPlacement !== 'smart' || !this.#hasToolbar(this.fpdInstance.currentElement)) return;
+        if(this.currentPlacement !== 'smart' 
+            || !this.#hasToolbar(this.fpdInstance.currentElement) 
+            || this.fpdInstance.container.classList.contains('fpd-aie-visible')
+        ) return;
 
         this.#toggle(Boolean(this.fpdInstance.currentElement))
 
@@ -1255,7 +1259,7 @@ export default class ElementToolbar extends EventTarget {
 
 	};
 
-    #toggle(toggle=true) {   
+    #toggle(toggle=true) {           
                 
         toggleElemClasses(this.container, ['fpd-show'], toggle);
         toggleElemClasses(document.body, ['fpd-toolbar-visible'], toggle);
@@ -1317,7 +1321,7 @@ export default class ElementToolbar extends EventTarget {
 	};
 
     #reset() {
-        
+                
         this.#colorWrapper.innerHTML = '';
 
         removeElemClasses(

@@ -1,5 +1,6 @@
-import './view/comps/Dropdown';
-import './view/comps/RangeSlider';
+import './view/comps/Dropdown.js';
+import './view/comps/RangeSlider.js';
+import './view/comps/ActionsMenu.js';
 import MainLoaderHTML from './html/main-loader.html';
 import Mainbar from './controller/Mainbar.js';
 import MainWrapper from './controller/MainWrapper.js';
@@ -110,6 +111,10 @@ export default class UIManager extends EventTarget {
                      */
                     this.fpdInstance.dispatchEvent(
                         new CustomEvent('modalDesignerOpen')
+                    );
+
+                    window.dispatchEvent(
+                        new CustomEvent('fpdModalDesignerOpen')
                     );
 
                 }
