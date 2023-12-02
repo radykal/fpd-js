@@ -303,13 +303,13 @@ export default class Mainbar extends EventTarget {
         const viewAdds = viewOpts.customAdds;
         
         toggleElemClasses(
-            document.querySelectorAll('.fpd-nav-item[data-module^="designs"]'),
+            document.querySelectorAll('.fpd-nav-item[data-module^="designs"], fpd-module-designs'),
             ['fpd-disabled'],
             !viewAdds.designs
         );
         
         toggleElemClasses(
-            document.querySelectorAll('.fpd-nav-item[data-module="images"]'),
+            document.querySelectorAll('.fpd-nav-item[data-module="images"], fpd-module-images'),
             ['fpd-disabled'],
             !viewAdds.uploads
         );
@@ -321,22 +321,36 @@ export default class Mainbar extends EventTarget {
         );
         
         toggleElemClasses(
-            document.querySelectorAll('.fpd-nav-item[data-module="drawing"]'),
-            ['fpd-disabled'],
-            !viewAdds.drawing
-        );
-        
-        toggleElemClasses(
-            document.querySelectorAll('.fpd-nav-item[data-module="text"]'),
+            document.querySelectorAll('.fpd-nav-item[data-module="text"], fpd-module-text'),
             ['fpd-disabled'],
             !viewAdds.texts
         );
                 
         toggleElemClasses(
-            document.querySelectorAll('.fpd-nav-item[data-module="names-numbers"]'),
+            document.querySelectorAll('.fpd-nav-item[data-module="names-numbers"], fpd-module-names-numbers'),
             ['fpd-disabled'],
             !viewInst.fabricCanvas.textPlaceholder && !viewInst.fabricCanvas.numberPlaceholder
         );
+
+        //for sidebar
+        if(!this.contentClosable) {
+            
+            //select first firsr visible module if current one is disabled for the view
+            document.querySelectorAll('.fpd-nav-item[data-module="'+this.currentModuleKey+'"]')
+            .forEach((navItem) => {
+
+                if(navItem.classList.contains('fpd-disabled')) {
+
+                    const firstActiveNavItem = this.navElem.querySelector('.fpd-nav-item:not(.fpd-disabled)');
+                    if(firstActiveNavItem) {
+                        this.callModule(firstActiveNavItem.dataset.module)
+                    }
+                    
+                }
+
+            })
+
+        }
 
         this.toggleContentDisplay(false);
         
@@ -388,8 +402,8 @@ export default class Mainbar extends EventTarget {
                         
         }
                 
-        this.toggleContentDisplay();
-        this.currentModuleKey = name;
+        this.toggleContentDisplay();        
+        this.currentModuleKey = name;        
 
         this.fpdInstance.dispatchEvent(
             new CustomEvent('moduleCalled', {
@@ -437,12 +451,11 @@ export default class Mainbar extends EventTarget {
     }
     
     toggleContentDisplay(toggle=true) {
-        
-        const fpdContainer = this.fpdInstance.container;
-        
+                
         removeElemClasses([this.fpdInstance.container, this.#draggableDialog], ['fpd-secondary-visible']);
         toggleElemClasses([this.fpdInstance.container, this.#draggableDialog], ['fpd-module-visible'], toggle);
-        
+                
+        //for topbar, off-canvas
         if(this.contentClosable) {
             
             if(!toggle) {
@@ -454,7 +467,7 @@ export default class Mainbar extends EventTarget {
                 
             }
             
-        }       
+        }   
         
         if(this.#offCanvasEnabled) {
             
@@ -488,7 +501,7 @@ export default class Mainbar extends EventTarget {
                                     
         }
         
-        if(!toggle) {
+        if(!toggle && this.contentClosable) {
             this.currentModuleKey = '';
         }
         
