@@ -1623,9 +1623,6 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
             
             parameters.text = text;
 
-            if(element.setCurvedTextPosition)
-                element.setCurvedTextPosition();
-
         }
 
         if (parameters.hasOwnProperty('textDecoration')) {
@@ -1717,9 +1714,11 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 
     }
 
-    if (parameters.autoCenter) {
+    if(element.setCurvedTextPosition)
+        element.setCurvedTextPosition();
+
+    if (parameters.autoCenter)
         element.centerElement();
-    }
 
     if(parameters.hasOwnProperty('lockUniScaling'))
         element._elementControls();

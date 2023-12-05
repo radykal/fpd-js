@@ -55,7 +55,7 @@ fabric.IText.prototype._ITextInit = function() {
                 this.set('text', text);
 
             }
-
+            
             if(this.widthFontSize) {
 
                 let resizedFontSize;
@@ -69,7 +69,7 @@ fabric.IText.prototype._ITextInit = function() {
                 resizedFontSize = parseInt(resizedFontSize);
                 this.set('fontSize', resizedFontSize);
 
-            }
+            }          
 
         }
     });
@@ -96,7 +96,7 @@ fabric.IText.prototype.setCurvedTextPath = function() {
 
 fabric.IText.prototype.setCurvedTextPosition = function() {
 
-    if(this.curved && this.path) {
+    if(this.curved && this.path) {             
 
         this.pathSide = this.curveReverse ? 'left' : 'right';
         const offset = this.curveReverse ? (Math.PI * this.curveRadius * 2) * 0.25 : (Math.PI * this.curveRadius) / 2;

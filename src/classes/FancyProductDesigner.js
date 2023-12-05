@@ -1840,10 +1840,11 @@ export default class FancyProductDesigner extends EventTarget {
                         && fabricObj.getType() === 'text' 
                         && fabricObj.textLinkGroup === element.textLinkGroup
                     ) {
-                        
+                                                
                         if(options.text) {
 
                             fabricObj.set('text', element.text);
+                            fabricObj.fire('changed');
 
                             fireEvent(this, 'textLinkApply', {
                                 element: fabricObj,
@@ -1858,6 +1859,7 @@ export default class FancyProductDesigner extends EventTarget {
                         const linkedPropKeys = Object.keys(options).filter(key => textLinkGroupProps.includes(key));
                         //copy linked props to other text elements
                         linkedPropKeys.forEach(propKey => {
+
                             fabricObj.set(propKey, element[propKey]);
                             
                             fireEvent(this, 'textLinkApply', {
@@ -2919,9 +2921,10 @@ export default class FancyProductDesigner extends EventTarget {
 	 *
 	 * @method calculatePrice
 	 * @param {Boolean} [considerQuantity=true] Calculate with or without quantity.
+     * @param {Boolean} [triggerEvent=true] Trigger the priceChange event.
 	 * @returns {Number} The calculated price.
 	 */
-	calculatePrice(considerQuantity=true) {
+	calculatePrice(considerQuantity=true, triggerEvent=true) {
 
 		this.#calculateViewsPrice();
 
@@ -2941,14 +2944,18 @@ export default class FancyProductDesigner extends EventTarget {
 
         this.currentPrice = calculatedPrice;
 
-        /**
-         * Gets fired as soon as the price changes in a view.
-         *
-         * @event priceChange
-         * @param {Event} event
-         */
-        fireEvent(this, 'priceChange')
+        if(triggerEvent) {
 
+            /**
+             * Gets fired as soon as the price changes in a view.
+             *
+             * @event priceChange
+             * @param {Event} event
+             */
+            fireEvent(this, 'priceChange');
+
+        }
+        
 		return this.currentPrice;
 
 	}
