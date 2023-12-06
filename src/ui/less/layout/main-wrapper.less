@@ -79,11 +79,13 @@
                 border: 1px solid var(--fpd-yellow-contrast-color);
                 box-shadow: 0 0 6px rgba(0,0,0,0.1);
                 justify-content: space-between;
+                gap: 10px;
 
                 .fpd-btn {
                     background-color: #3f3f3f;
                     margin: 0;
                     white-space: nowrap;
+                    max-height: 35px;
                 }
             }
         }
@@ -127,4 +129,15 @@
         
     }
             
+}
+
+.fpd-wrapper.fpd-layout-small {
+    
+    .fpd-size-warning {
+        flex-direction: column !important;
+
+        .fpd-btn {
+            justify-content: center;
+        }
+    }
 }
