@@ -590,9 +590,9 @@ export default class ActionsBar extends EventTarget {
 	}
 
 	reset() {
-
+		
 		//uncheck all switches
-		const switchElems = this.container.querySelectorAll('.fpd-actions-wrapper .fpd-switch');
+		const switchElems = this.container.querySelectorAll('.fpd-switch');
 		if (switchElems) {
 
 			switchElems.forEach(switchElem => {
@@ -618,10 +618,10 @@ export default class ActionsBar extends EventTarget {
 
 		if (typeof actions === 'object') {
 
-			this.container.querySelectorAll('.fpd-actions-wrapper').forEach(wrapper => {
+			this.container.querySelectorAll('fpd-actions-menu').forEach(actionMenu => {
 
-				wrapper.innerHTML = '';
-
+				actionMenu.items = [];
+				
 			})
 
 			for (const pos in actions) {
