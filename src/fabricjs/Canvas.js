@@ -1727,6 +1727,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
     if (parameters.filter) {
         
         const fabricFilter = getFilter(parameters.filter);
+        console.log("🚀 ~ file: Canvas.js:1730 ~ fabricFilter:", fabricFilter)
         
         if(fabricFilter && element.applyFilters) {
 

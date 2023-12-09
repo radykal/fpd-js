@@ -284,9 +284,19 @@ export default class Mainbar extends EventTarget {
         
     }
     
-    #closeDialog(evt) {
+    #closeDialog(evt) {        
 
         evt.preventDefault();
+
+        //close for element toolbar when using sidebar        
+        if(document.body.classList.contains('fpd-toolbar-visible') 
+            && this.fpdInstance.container.classList.contains('fpd-sidebar')) {
+
+            this.fpdInstance.toolbar.toggle(false);
+            this.fpdInstance.deselectElement();
+            return;
+
+        }
                 
         if(this.fpdInstance.currentViewInstance && this.fpdInstance.currentViewInstance.currentUploadZone) {
             this.fpdInstance.currentViewInstance.fabricCanvas.deselectElement();

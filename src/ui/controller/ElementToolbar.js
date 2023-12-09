@@ -158,7 +158,7 @@ export default class ElementToolbar extends EventTarget {
                     'click',
                     (evt) => {
                         
-                        this.#toggle(false);
+                        this.toggle(false);
                         fpdInstance.advancedImageEditor.loadImage(fpdInstance.currentElement, maskURL);
                         
                     }
@@ -191,7 +191,7 @@ export default class ElementToolbar extends EventTarget {
 
                 }
                 else {                    
-                    this.#toggle(false);
+                    this.toggle(false);
                 }
                 
             }
@@ -203,7 +203,7 @@ export default class ElementToolbar extends EventTarget {
             () => {
 
                 if(this.currentPlacement == 'smart')
-                    this.#toggle(false);
+                    this.toggle(false);
 
             }
         )
@@ -690,7 +690,7 @@ export default class ElementToolbar extends EventTarget {
             'click',
             (evt) => {
 
-                this.#toggle(false);
+                this.toggle(false);
                 fpdInstance.deselectElement();
                 
             }
@@ -1204,7 +1204,7 @@ export default class ElementToolbar extends EventTarget {
 			this.navElem.querySelector('[data-panel]:not(.fpd-hidden)').click();
 		}
 
-        this.#toggle();
+        this.toggle();
 
         //reset scroll
         this.container.querySelectorAll('.fpd-scroll-area').forEach(scrollArea => {
@@ -1222,7 +1222,7 @@ export default class ElementToolbar extends EventTarget {
             || this.fpdInstance.container.classList.contains('fpd-aie-visible')
         ) return;
 
-        this.#toggle(Boolean(this.fpdInstance.currentElement))
+        this.toggle(Boolean(this.fpdInstance.currentElement))
 
         if(this.fpdInstance.currentElement) {
 
@@ -1259,7 +1259,7 @@ export default class ElementToolbar extends EventTarget {
 
 	};
 
-    #toggle(toggle=true) {           
+    toggle(toggle=true) {           
                 
         toggleElemClasses(this.container, ['fpd-show'], toggle);
         toggleElemClasses(document.body, ['fpd-toolbar-visible'], toggle);

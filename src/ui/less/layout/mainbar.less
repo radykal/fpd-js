@@ -6,15 +6,17 @@
     position: absolute;
     top: -0;
     right: 0;
+    left: auto;
+    bottom: auto;
     height: 30px;
     line-height: 30px;
     background: var(--fpd-primary-fg-color);
     z-index: 1000;
-    box-shadow: 0px -2px 6px rgb(0 0 0 / 10%);
     cursor: pointer;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     box-shadow: none;
+    border: none;
 
     &:before {
         content: "";
@@ -39,8 +41,24 @@ fpd-main-bar {
     position: relative;
     background: var(--fpd-primary-fg-color);
     
-    .fpd-close {
+    > .fpd-close {
         display: none;
+        position: absolute;
+        bottom:  ~"calc(var(--fpd-topbar-nav-height))";
+        left: -100%;
+        width: 50px;
+        height: 50px;
+        padding: 0 15px;
+        line-height: 50px;
+        text-align: center;
+        font-size: 16px;
+        background: rgba(255,255,255, 0.96);
+        z-index: 99;
+        cursor: pointer;
+        border-top: 1px solid var(--fpd-border-color);
+        border-right: 1px solid var(--fpd-border-color);
+        border-radius: 0 4px 0 0;
+        box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.1);
     }
     
     .fpd-navigation {
@@ -113,6 +131,27 @@ fpd-main-bar {
 /* Side Bar */
 
 .fpd-container.fpd-sidebar {
+
+    .fpd-navigation {
+
+        flex: 0 0 var(--fpd-sidebar-nav-width);
+        overflow: auto;
+        
+        > div > span {
+            padding: 10px 0;
+            display: inline-block;
+            font-size: 28px;
+        }
+        
+        > div > .fpd-label {
+            display: block;
+            font-size: 12px;
+            line-height: 14px;
+            padding: 0;
+            word-break: break-word;
+        }
+        
+    }
     
     > fpd-main-bar {
         
@@ -236,33 +275,6 @@ fpd-main-bar {
     
 }
 
-/* Side Bar: Navigation */
-
-.fpd-sidebar {
-    
-    .fpd-navigation {
-
-        flex: 0 0 var(--fpd-sidebar-nav-width);
-        overflow: auto;
-        
-        > div > span {
-            padding: 10px 0;
-            display: inline-block;
-            font-size: 28px;
-        }
-        
-        > div > .fpd-label {
-            display: block;
-            font-size: 12px;
-            line-height: 14px;
-            padding: 0;
-            word-break: break-word;
-        }
-        
-    }
-    
-} 
-
 /* Top Bar */
 
 .fpd-topbar,
@@ -338,6 +350,11 @@ fpd-main-bar {
     fpd-main-bar {
         
         order: 3;
+
+        > .fpd-close {
+            display: block;
+            
+        }
         
         .fpd-navigation {
             border-top: 1px solid var(--fpd-border-color);
@@ -355,26 +372,6 @@ fpd-main-bar {
             z-index: 100;
             background: rgba(255,255,255, 0.96);
             box-shadow: 2px 0px 8px 0px rgba(0,0,0,0.1);
-        }
-        
-        .fpd-close {
-            display: block;
-            position: absolute;
-            bottom:  ~"calc(var(--fpd-topbar-nav-height))";
-            left: -100%;
-            width: 50px;
-            height: 50px;
-            padding: 0 15px;
-            line-height: 50px;
-            text-align: center;
-            font-size: 16px;
-            background: rgba(255,255,255, 0.96);
-            z-index: 99;
-            cursor: pointer;
-            border-top: 1px solid var(--fpd-border-color);
-            border-right: 1px solid var(--fpd-border-color);
-            border-radius: 0 4px 0 0;
-            box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.1);
         }
         
         &.fpd-show  {
