@@ -158,6 +158,20 @@ export default class ActionsBar extends EventTarget {
 
 			}
 		)
+		
+		addEvents(
+            window,
+            ['resize', 'fpdModalDesignerOpen'],
+            () => {
+                
+				if(this.leftActionsMenu)
+                	this.leftActionsMenu.toggleMenus();
+
+				if(this.rightActionsMenu)
+                	this.rightActionsMenu.toggleMenus();
+
+            }
+        )
 
 		this.setup(fpdInstance.mainOptions.actions)
 

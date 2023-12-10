@@ -183,7 +183,7 @@ const addEvents = (elements, events = [], listener = () => { }, useCapture = fal
 
     events.forEach(eventType => {
 
-        if (elements instanceof HTMLElement) {
+        if (elements instanceof HTMLElement || elements instanceof window.constructor) {
 
             elements.addEventListener(eventType, listener, useCapture);
 
@@ -191,10 +191,11 @@ const addEvents = (elements, events = [], listener = () => { }, useCapture = fal
         else if (Array.from(elements).length) {
 
             if (elements && elements.forEach) {
-
+                
                 elements.forEach(elem => {
                     elem.addEventListener(eventType, listener, useCapture);
                 })
+                
 
             }
 

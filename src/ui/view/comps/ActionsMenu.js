@@ -38,16 +38,6 @@ class FPD_ActionsMenu extends HTMLElement {
 
 			}
 		)
-        
-        addEvents(
-            window,
-            ['resize', 'fpdModalDesignerOpen'],
-            () => {
-                
-                this.#toggleMenus();
-
-            }
-        )
 
     }
 
@@ -111,11 +101,11 @@ class FPD_ActionsMenu extends HTMLElement {
             
         });
         
-        this.#toggleMenus();
+        this.toggleMenus();
         
     }
 
-    #toggleMenus() {
+    toggleMenus() {
         
         if(this.isConnected && this.uncollapsedMenu) {
 
@@ -124,7 +114,7 @@ class FPD_ActionsMenu extends HTMLElement {
                 ['fpd-hidden']
             )
             
-            //show collapsed menu (dropdown)
+            //show collapsed menu (dropdown)            
             if(this.uncollapsedMenu.offsetWidth > this.offsetWidth && !this.classList.contains('fpd-only-uncollapsed')) {
 
                 addElemClasses(
