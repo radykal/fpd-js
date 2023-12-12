@@ -1200,7 +1200,7 @@ export default class ElementToolbar extends EventTarget {
 		});
 
 		//select first visible nav item
-		if(this.currentPlacement == 'mainbar') {            
+		if(this.currentPlacement == 'sidebar') {            
 			this.navElem.querySelector('[data-panel]:not(.fpd-hidden)').click();
 		}
 
@@ -1294,11 +1294,11 @@ export default class ElementToolbar extends EventTarget {
         }
         else {
 
-            if(this.currentPlacement != 'mainbar') {
+            if(this.currentPlacement != 'sidebar') {
                 this.fpdInstance.mainBar.container.appendChild(this.container);
             }
                 
-            this.currentPlacement = 'mainbar';
+            this.currentPlacement = 'sidebar';
             this.container.className += ' fpd-container fpd-sidebar';
 
         }
@@ -1306,6 +1306,16 @@ export default class ElementToolbar extends EventTarget {
         this.navElem = this.container.querySelector('.fpd-tools-nav');
         this.subPanel = this.container.querySelector('.fpd-sub-panel');
         this.#colorWrapper = this.subPanel.querySelector('.fpd-color-wrapper');
+
+        removeElemClasses(
+            this.fpdInstance.container,
+            ['fpd-toolbar-smart', 'fpd-toolbar-sidebar']
+        )
+
+        addElemClasses(
+            this.fpdInstance.container,
+            ['fpd-toolbar-'+this.currentPlacement]
+        )
 
     }
 
