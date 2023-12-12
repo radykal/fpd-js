@@ -50,10 +50,15 @@
 
     >.fpd-show-views-grid {
         display: flex;
-        align-items: baseline;
+        align-items: center;
         justify-content: center;
         cursor: pointer;
         line-height: 1;
+
+        > .fpd-icon-pages {
+            font-size: 18px;
+            margin-right: 4px;
+        }
 
         > .fpd-current-view {
             font-size: 16px;
@@ -66,6 +71,7 @@
             padding: 4px 0;
             text-align: center;
             color: var(--fpd-dark-grey-color);
+            font-size: 12px;
 
             &:before {
                 content: "/";
