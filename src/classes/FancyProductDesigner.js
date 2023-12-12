@@ -2743,7 +2743,7 @@ export default class FancyProductDesigner extends EventTarget {
 						element.getObjects().forEach((path) => {
 
 							if(tinycolor(path.fill).isValid()) {
-								usedColors.push(path.fill);
+								usedColors.push(tinycolor(path.fill).toHexString());
 							}
 
 						});
@@ -2752,7 +2752,7 @@ export default class FancyProductDesigner extends EventTarget {
 					else { //single path
 
 						if(tinycolor(element.fill).isValid()) {
-							usedColors.push(element.fill);
+							usedColors.push(tinycolor(element.fill).toHexString());
 						}
 
 					}
@@ -2761,14 +2761,14 @@ export default class FancyProductDesigner extends EventTarget {
 				else {
 
 					if(tinycolor(element.fill).isValid()) {
-						usedColors.push(element.fill);
+						usedColors.push(tinycolor(element.fill).toHexString());
 					}
 
 				}
 			}
 
 		});
-
+        
 		return arrayUnique(usedColors);
 
 	}
