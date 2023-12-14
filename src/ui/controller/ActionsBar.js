@@ -67,10 +67,6 @@ export default class ActionsBar extends EventTarget {
 			icon: 'fpd-icon-qrcode',
 			title: 'QR-Code'
 		},
-		'snap': {
-			icon: 'fpd-icon-snap',
-			title: 'Snap'
-		},
 		'save-load': {
 			icon: 'fpd-icon-save',
 			title: 'Saved Designs'
