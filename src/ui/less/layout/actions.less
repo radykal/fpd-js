@@ -305,15 +305,29 @@
     
         }
 
+        [data-pos="left"],
+        [data-pos="right"] {
+            max-width: 45px;
+        }
+
         [data-pos="modal"] {
 
             > .fpd-btn.fpd-done {
 
-                .fpd-label,
-                i {
+                .fpd-label {
                     display: none;
                 }
 
+                i {
+                    font-size: 14px;
+                }
+
+            }
+
+            > .fpd-btn.fpd-close:last-child {
+                padding-left: 6px;
+                padding-right: 0;
+                font-size: 16px;
             }
 
         }
