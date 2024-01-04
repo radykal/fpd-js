@@ -331,6 +331,36 @@ export default class LayersModule extends EventTarget {
                 ['fpd-locked'],
                 element.locked
             );
+
+            //toggle visbility
+            const visibleClass = element.visible ? 'fpd-icon-eye-hide' : 'fpd-icon-eye';     
+            const visibleElem = document.createElement('span');
+            visibleElem.className = 'fpd-visible-element';
+            visibleElem.innerHTML = `<span class="${visibleClass}"></span>`;
+            actionsWrapper.append(visibleElem);
+
+            addEvents(
+                visibleElem,
+                'click',
+                (evt) => {
+
+                    element.set('visible', !element.visible);
+                    element.canvas.renderAll();
+                    
+                    toggleElemClasses(
+                        visibleElem.querySelector('span'),
+                        ['fpd-icon-eye-hide'],
+                        element.visible
+                    )
+                    
+                    toggleElemClasses(
+                        visibleElem.querySelector('span'),
+                        ['fpd-icon-eye'],
+                        !element.visible
+                    )
+
+                }
+            )
             
         }
         

@@ -66,6 +66,13 @@ fabric.IText.prototype._ITextInit = function() {
                     resizedFontSize = this.fontSize * (this.widthFontSize / (this.width - 1)); //increase font size
                 }
 
+                if (resizedFontSize < this.minFontSize) {
+                    resizedFontSize = this.minFontSize;
+                }
+                else if (resizedFontSize > this.maxFontSize) {
+                    resizedFontSize = this.maxFontSize;
+                }
+
                 resizedFontSize = parseInt(resizedFontSize);
                 this.set('fontSize', resizedFontSize);
 

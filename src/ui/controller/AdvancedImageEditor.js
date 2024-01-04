@@ -1,4 +1,4 @@
-import { addEvents, removeElemClasses, toggleElemClasses } from "../../helpers/utils";
+import { addEvents, fireEvent, removeElemClasses, toggleElemClasses } from "../../helpers/utils";
 import Snackbar from "../view/comps/Snackbar";
 
 export default class AdvancedImageEditor extends EventTarget {
@@ -62,6 +62,10 @@ export default class AdvancedImageEditor extends EventTarget {
 
                                 this.currentElement.source = data.url;
                                 this.currentElement.canvas.renderAll();
+                                
+                                fireEvent(fpdInstance, 'viewCanvasUpdate', {
+                                    viewInstance: fpdInstance.currentViewInstance
+                                })
                                 
                             }, {crossOrigin: 'anonymous'})
 

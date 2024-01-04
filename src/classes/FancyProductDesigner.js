@@ -39,7 +39,7 @@ import {
  */
 export default class FancyProductDesigner extends EventTarget {
     
-    static version = '6.1.3';
+    static version = '6.1.4';
     static forbiddenTextChars = /<|>/g;
     static proxyFileServer = '';
     static uploadsToServer = true;
@@ -331,6 +331,8 @@ export default class FancyProductDesigner extends EventTarget {
         })
         this.mainOptions.hexNames = newHexNames;
 
+        //set rtl or ltr for text elements
+        this.mainOptions.textParameters.direction = window.getComputedStyle(document.body || document.documentElement).direction;        
         
         if(this.mainOptions.cornerControlsStyle == 'advanced') {
             initAdvancedCorners();
@@ -1855,8 +1857,8 @@ export default class FancyProductDesigner extends EventTarget {
                         }
                             
 
-                        //get all property keys that are in textLinkGroupProps option
-                        const linkedPropKeys = Object.keys(options).filter(key => textLinkGroupProps.includes(key));
+                        //get all property keys that are in textLinkGroupProps option                        
+                        const linkedPropKeys = Object.keys(element).filter(key => textLinkGroupProps.includes(key));
                         //copy linked props to other text elements
                         linkedPropKeys.forEach(propKey => {
 

@@ -901,7 +901,7 @@ export default class ElementToolbar extends EventTarget {
         this.#reset();
         removeElemClasses(this.container, ['fpd-type-image'])
 
-		//COLOR: colors array, true=svg colorization                        
+		//COLOR: colors array, true=svg colorization       
 		if(element.hasColorSelection()) {
 
             let availableColors = elementAvailableColors(element, this.fpdInstance);
@@ -1016,10 +1016,30 @@ export default class ElementToolbar extends EventTarget {
 
 			this.#toggleNavItem('color');
 			this.#togglePanelTab('color', 'fill', true);
+            this.#togglePanelTab('color', 'stroke', true);
+			this.#togglePanelTab('color', 'shadow', true);
 
 		}
 
+        //enable only patterns
 		if((element.isSVG() || element.getType() === 'text') && element.patterns && element.patterns.length) {
+
+            let colorPanel = ColorPanel(this.fpdInstance, {
+                colors: [],
+                patterns: element.patterns,
+                onPatternChange: (patternImg) => {
+
+                    this.navElem.querySelector('.fpd-current-fill').style.background = `url("${patternImg}")`;
+                    
+                    this.fpdInstance.currentViewInstance.fabricCanvas.setElementOptions(
+                        {pattern: patternImg}, 
+                        element
+                    );
+
+                }
+            })
+
+            this.#colorWrapper.append(colorPanel);
 
 			this.#toggleNavItem('color');
 			this.#togglePanelTab('color', 'fill', true);
@@ -1056,9 +1076,6 @@ export default class ElementToolbar extends EventTarget {
             this.#toggleNavItem('text-size', Boolean(element.resizable || element.__editorMode));
 			this.#toggleNavItem('font-family');
             this.#toggleNavItem('text-format');
-
-			this.#togglePanelTab('color', 'stroke', true);
-			this.#togglePanelTab('color', 'shadow', true);
 
 			if(element.curvable) {
 				this.#toggleNavItem('curved-text');
