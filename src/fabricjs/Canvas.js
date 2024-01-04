@@ -1653,34 +1653,34 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
             parameters.text = text;
 
         }
-                
-        if( parameters.hasOwnProperty('shadowColor') 
+
+    }
+
+    if( parameters.hasOwnProperty('shadowColor') 
             || parameters.hasOwnProperty('shadowBlur') 
-            || parameters.hasOwnProperty('shadowOffsetX') 
-            || parameters.hasOwnProperty('shadowOffsetY')
-            && !(element.engravedText || element.neonText)
-        ) {
+        || parameters.hasOwnProperty('shadowOffsetX') 
+        || parameters.hasOwnProperty('shadowOffsetY')
+        && !(element.engravedText || element.neonText)
+    ) {
+                    
+        if(parameters.shadowColor === null) {
+            element.set('shadow', null);
+        }
+        else {
+
+            let currentShadow = {};
+            if(element.shadow) {
+                currentShadow = element.shadow.toObject();
+            }
                         
-            if(parameters.shadowColor === null) {
-                element.set('shadow', null);
+            let shadowObj = {
+                color: parameters.hasOwnProperty('shadowColor') ? parameters.shadowColor : currentShadow.color,
+                blur: parameters.hasOwnProperty('shadowBlur') ? parameters.shadowBlur : currentShadow.blur,
+                offsetX: parameters.hasOwnProperty('shadowOffsetX') ? parameters.shadowOffsetX : currentShadow.offsetX,
+                offsetY: parameters.hasOwnProperty('shadowOffsetY') ? parameters.shadowOffsetY : currentShadow.offsetY,
             }
-            else {
-
-                let currentShadow = {};
-                if(element.shadow) {
-                    currentShadow = element.shadow.toObject();
-                }
                             
-                let shadowObj = {
-                    color: parameters.hasOwnProperty('shadowColor') ? parameters.shadowColor : currentShadow.color,
-                    blur: parameters.hasOwnProperty('shadowBlur') ? parameters.shadowBlur : currentShadow.blur,
-                    offsetX: parameters.hasOwnProperty('shadowOffsetX') ? parameters.shadowOffsetX : currentShadow.offsetX,
-                    offsetY: parameters.hasOwnProperty('shadowOffsetY') ? parameters.shadowOffsetY : currentShadow.offsetY,
-                }
-                                
-                element.set('shadow', shadowObj);
-
-            }
+            element.set('shadow', shadowObj);
 
         }
 

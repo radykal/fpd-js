@@ -1321,7 +1321,9 @@ export default class FancyProductDesigner extends EventTarget {
 
                 fireEvent(this, 'viewCanvasUpdate', {
                     viewInstance: viewInstance
-                })            
+                })   
+                
+                this.applyTextLinkGroup(element, {fill: element.fill});
             
             },
             'elementChange': ({element, type}) => {
@@ -1861,7 +1863,7 @@ export default class FancyProductDesigner extends EventTarget {
                         const linkedPropKeys = Object.keys(element).filter(key => textLinkGroupProps.includes(key));
                         //copy linked props to other text elements
                         linkedPropKeys.forEach(propKey => {
-
+                            
                             fabricObj.set(propKey, element[propKey]);
                             
                             fireEvent(this, 'textLinkApply', {

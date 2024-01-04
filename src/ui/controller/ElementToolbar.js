@@ -77,12 +77,7 @@ export default class ElementToolbar extends EventTarget {
 
                         fpdInstance.currentViewInstance.fabricCanvas
                         .setElementOptions({fontFamily: fontName});
-
-                        addElemClasses(
-                            this.container.querySelectorAll('.fpd-panel-tabs > span'),
-                            ['fpd-disabled']
-                        )
-
+                        
                         this.#updateVariantStylesBtn(fpdInstance.currentElement);
 
                     }
@@ -750,7 +745,7 @@ export default class ElementToolbar extends EventTarget {
     }
 
     #toggleVariantStylesBtn(bold=true, italic=true) {
-        
+                
         toggleElemClasses(
             this.subPanel.querySelector('.fpd-tool-text-bold'),
             ['fpd-disabled'],
@@ -801,7 +796,7 @@ export default class ElementToolbar extends EventTarget {
 
         toggleElemClasses(
             panelElem.querySelectorAll('.fpd-panel-tabs [data-tab="'+tab+'"]'),
-            ['fpd-disabled'],
+            ['fpd-hidden'],
             !toggle
         )
 
@@ -1016,7 +1011,7 @@ export default class ElementToolbar extends EventTarget {
 
 			this.#toggleNavItem('color');
 			this.#togglePanelTab('color', 'fill', true);
-            this.#togglePanelTab('color', 'stroke', true);
+            this.#togglePanelTab('color', 'stroke', element.getType() === 'text');
 			this.#togglePanelTab('color', 'shadow', true);
 
 		}
@@ -1111,7 +1106,7 @@ export default class ElementToolbar extends EventTarget {
 		//display only enabled tabs and when tabs length > 1
         this.subPanel.querySelectorAll('.fpd-panel-tabs').forEach(tabs => {
 
-            const visibleTabs = tabs.querySelectorAll('[data-tab]:not(.fpd-disabled)');
+            const visibleTabs = tabs.querySelectorAll('[data-tab]:not(.fpd-hidden)');
 
             toggleElemClasses(
                 tabs,
@@ -1373,13 +1368,7 @@ export default class ElementToolbar extends EventTarget {
             ['fpd-active']
         )
 
-        //disable all tabs
         addElemClasses(
-            this.subPanel.querySelectorAll('.fpd-panel-tabs > span'),
-            ['fpd-disabled']
-        )
-
-        removeElemClasses(
             this.subPanel.querySelectorAll('.fpd-panel-tabs > span'),
             ['fpd-hidden']
         )

@@ -1293,6 +1293,42 @@ export default class Options {
 			* @default false
 			*/
 			fixed: false,
+			/**
+			* The color of the shadow.
+			*
+			* @property shadowColor
+			* @type {String}
+			* @memberof Options.defaults.elementParameters
+			* @default ''
+			*/
+			shadowColor: '',
+			/**
+			* Shadow Blur.
+			*
+			* @property shadowBlur
+			* @type {Number}
+			* @memberof Options.defaults.elementParameters
+			* @default 0
+			*/
+			shadowBlur: 0,
+			/**
+			* Shadow horizontal offset.
+			*
+			* @property shadowOffsetX
+			* @type {Number}
+			* @memberof Options.defaults.elementParameters
+			* @default 0
+			*/
+			shadowOffsetX: 0,
+			/**
+			* Shadow vertical offset.
+			*
+			* @property shadowOffsetY
+			* @type {Number}
+			* @memberof Options.defaults.elementParameters
+			* @default 0
+			*/
+			shadowOffsetY: 0,
 			originX: 'center',
 			originY: 'center',
 			cornerSize: 24,
@@ -1451,42 +1487,6 @@ export default class Options {
 			* @default 1
 			*/
 			maxFontSize: 200,
-			/**
-			* The color of the shadow.
-			*
-			* @property shadowColor
-			* @type {String}
-			* @memberof Options.defaults.textParameters
-			* @default ''
-			*/
-			shadowColor: '',
-			/**
-			* Shadow Blur.
-			*
-			* @property shadowBlur
-			* @type {Number}
-			* @memberof Options.defaults.textParameters
-			* @default 0
-			*/
-			shadowBlur: 0,
-			/**
-			* Shadow horizontal offset.
-			*
-			* @property shadowOffsetX
-			* @type {Number}
-			* @memberof Options.defaults.textParameters
-			* @default 0
-			*/
-			shadowOffsetX: 0,
-			/**
-			* Shadow vertical offset.
-			*
-			* @property shadowOffsetY
-			* @type {Number}
-			* @memberof Options.defaults.textParameters
-			* @default 0
-			*/
-			shadowOffsetY: 0,
 			/**
 			* Link the text of different text elements, changing the text of one element will also change the text of text elements with the same textLinkGroup value.
 			*
