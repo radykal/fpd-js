@@ -23,10 +23,10 @@ export default class ViewsNav extends EventTarget {
         this.fpdInstance = fpdInstance;
         this.container = document.createElement("fpd-views-nav");
         this.unitFormat = fpdInstance.mainOptions.dynamicViewsOptions.unit;
-		this.minWidth = fpdInstance.mainOptions.dynamicViewsOptions.minWidth;
-		this.minHeight = fpdInstance.mainOptions.dynamicViewsOptions.minHeight;
-		this.maxWidth = fpdInstance.mainOptions.dynamicViewsOptions.maxWidth;
-		this.maxHeight = fpdInstance.mainOptions.dynamicViewsOptions.maxHeight;
+		this.minWidth = parseInt(fpdInstance.mainOptions.dynamicViewsOptions.minWidt);
+		this.minHeight = parseInt(fpdInstance.mainOptions.dynamicViewsOptions.minHeight);
+		this.maxWidth = parseInt(fpdInstance.mainOptions.dynamicViewsOptions.maxWidth);
+		this.maxHeight = parseInt(fpdInstance.mainOptions.dynamicViewsOptions.maxHeight);
 
         fpdInstance.mainWrapper.container.append(this.container);
 
@@ -219,20 +219,22 @@ export default class ViewsNav extends EventTarget {
 
     checkDimensionLimits(type, input) {
 
+        const inputVal = parseInt(input.value);
+
 		if(type == 'width') {
 
-			if(input.value < this.minWidth) { input.value = this.minWidth; }
-			else if(input.value > this.maxWidth) { input.value = this.maxWidth; }
+			if(inputVal < this.minWidth) { inputVal = this.minWidth; }
+			else if(inputVal > this.maxWidth) { inputVal = this.maxWidth; }
 
 		}
 		else {
 
-			if(input.value < this.minHeight) { input.value = this.minHeight; }
-			else if(input.value > this.maxHeight) { input.value = this.maxHeight; }
+			if(inputVal < this.minHeight) { inputVal = this.minHeight; }
+			else if(inputVal > this.maxHeight) { inputVal = this.maxHeight; }
 
 		}        
 
-		return input.value;
+		return inputVal;
 
 	}
 
