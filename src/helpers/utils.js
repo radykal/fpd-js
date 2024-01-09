@@ -716,7 +716,7 @@ const getScript = (src) => {
 
 export { getScript }
 
-const unitToPixel = (length, unit, dpi = 72) => {
+const unitToPixel = (length, unit='inch', dpi = 72) => {
 
     const ppi = length * dpi;
 
@@ -863,9 +863,21 @@ if (window) {
      * @param {Number} pixel The pixel value.
      * @param {String} [unit='inch'] Target metric - 'inch', 'mm', 'cm'.
      * @param {Number} [dpi=72] Target DPI.
-     * @return {Boolean} Returns true if string is an URL.
+     * @return {Boolean} Returns the pixel value.
      * @static
      */
     window.FPDUtils.pixelToUnit = pixelToUnit;
+
+    /**
+     * Converts a metric value to pixel considering the DPI.
+     *
+     * @method unitToPixel
+     * @param {Number} pixel The pixel value.
+     * @param {String} [unit='inch'] Target metric - 'inch', 'mm', 'cm'.
+     * @param {Number} [dpi=72] Target DPI.
+     * @return {Boolean} Returns the metric value.
+     * @static
+     */
+    window.FPDUtils.unitToPixel = unitToPixel;
 
 }
