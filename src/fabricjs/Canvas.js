@@ -1,3 +1,4 @@
+import { fabric } from "fabric";
 import './Element.js';
 import './canvas/History.js';
 import ZoomPan from './canvas/ZoomPan.js';

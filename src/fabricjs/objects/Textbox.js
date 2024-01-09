@@ -1,3 +1,4 @@
+import { fabric } from "fabric";
 fabric.Textbox.prototype.initialize = (function(originalFn) {
     return function(...args) {
         originalFn.call(this, ...args);

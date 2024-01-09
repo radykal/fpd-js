@@ -815,7 +815,7 @@ const showMessage = ((...args) => {
 });
 export { showMessage }
 
-if (window) {
+if (typeof window !== 'undefined') {
     
     /**
      * A class with some static helper functions. You do not need to initiate the class, just call the methods directly, e.g. FPDUtil.showModal();

@@ -1,3 +1,5 @@
+import { fabric } from "fabric";
+
 const NeonText = fabric.util.createClass(fabric.Group, {
 
     type: 'neon-text',

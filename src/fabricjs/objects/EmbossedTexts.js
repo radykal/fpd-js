@@ -1,3 +1,5 @@
+import { fabric } from "fabric";
+
 const EmbossedText = fabric.util.createClass(fabric.IText, {
 
     type: 'embossed-text',
