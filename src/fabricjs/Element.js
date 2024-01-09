@@ -1,3 +1,5 @@
+import { fabric } from "fabric";
+
 import './objects/Controls.js';
 import './objects/Group.js';
 import './objects/Text.js';

@@ -1,3 +1,4 @@
+import { fabric } from 'fabric';
 fabric.Text.prototype.initialize = (function (originalFn) {
 
     return function (...args) {

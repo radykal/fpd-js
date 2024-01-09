@@ -1,3 +1,4 @@
+import { fabric } from 'fabric';
 import {
     drawCirclePath
 } from '../utils.js';

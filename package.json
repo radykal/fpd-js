@@ -54,6 +54,7 @@
     "downloadjs": "^1.4.7",
     "tinycolor2": "^1.6.0",
     "vanilla-picker": "^2.12.2",
-    "webfontloader": "^1.6.28"
+    "webfontloader": "^1.6.28",
+    "fabric": "5.3.1"
   }
 }

@@ -1,3 +1,5 @@
+import { fabric } from "fabric";
+
 const EngravedText = fabric.util.createClass(fabric.Group, {
 
     type: 'engraved-text',

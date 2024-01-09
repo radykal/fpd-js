@@ -1,3 +1,5 @@
+import { fabric } from "fabric";
+
 const renderRectY = (ctx, left, top, styleOverride, fabricObject) => {
 
     styleOverride = styleOverride || {};
