@@ -635,7 +635,7 @@ export default class Mainbar extends EventTarget {
         if(modules.length <= 1 && !this.fpdInstance.container.classList.contains('fpd-topbar')) {
         
             selectedModule = modules[0] ? modules[0] : '';
-            navElem.classList.add('fpd-hidden');
+            addElemClasses(this.fpdInstance.container, ['fpd-one-module-mode']);
         
         }
         else if(this.fpdInstance.container.classList.contains('fpd-sidebar') && selectedModule == '') {

@@ -14,7 +14,7 @@ fpd-element-toolbar {
         display: none;
         position: absolute;
         right: 0;
-        top: 2px;
+        top: 5px;
         width: 35px;
         height: 30px;
         line-height: 30px;
@@ -31,23 +31,29 @@ fpd-element-toolbar {
     >.fpd-tools-nav {
 
         display: flex;
+        flex-direction: column;
 
-        >div {
+        > div {
+            display: flex;
+        
+        }
+
+        > div > div {
             flex: 1;
-            padding: 0 20px;
+            padding: 0 15px;
             white-space: nowrap;
             text-align: center;
             cursor: pointer;
 
             >span[class^=fpd-icon-] {
                 display: block;
-                font-size: 22px !important;
+                font-size: 20px !important;
                 line-height: 28px;
             }
 
             >.fpd-label {
                 margin-top: 5px;
-                font-size: 12px;
+                font-size: 11px;
                 display: inline-block;
                 line-height: 1;
                 vertical-align: bottom;
@@ -365,7 +371,8 @@ fpd-element-toolbar.fpd-smart {
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 375px;
+    max-width: var(--fpd-et-max-width);
+    min-width: 300px;
     border-radius: var(--fpd-border-radius);
     transform: translateX(-50%);
     z-index: 10000000000;
@@ -375,12 +382,88 @@ fpd-element-toolbar.fpd-smart {
 
     > .fpd-tools-nav {
 
-        margin-bottom: 5px;
+        > div {
+            margin: 10px 0;
+            
 
-
-        >div {
-            margin: 20px 0;
+            > div {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                flex: 0;
+            }
         }
+
+        > .fpd-primary-tools {
+
+            justify-content: space-between;
+            padding-left: 5px;
+
+            > div {
+                padding: 0 10px;
+            }
+
+            .fpd-tool-text-size {
+                flex: 0 70px;
+
+                input {
+                    margin: 0;
+                    width: 100%;
+                    pointer-events: none;
+                    text-align: center;
+                }
+            }
+
+            .fpd-tool-font-family {
+
+                flex: 0 180px;
+
+                fpd-dropdown {
+                    width: 100%;
+                    pointer-events: none;
+                }
+
+            }
+            
+            .fpd-tool-text-size,
+            .fpd-tool-font-family {
+
+                align-self: flex-end;
+
+                > [class^="fpd-icon-"] {
+                    display: none;
+                }
+
+                .fpd-label {
+                    display: none;
+                }
+
+            }
+
+        }
+
+        > .fpd-secondary-tools {
+            padding-bottom: 10px;
+        }
+    }
+
+    &[data-element-type="image"] {
+
+        .fpd-tools-nav {
+            flex-direction: row;
+
+            > div {
+                margin: 20px 0;
+                overflow: hidden;
+                flex: 1 0 auto;
+
+            }
+
+            > .fpd-secondary-tools {
+                padding-bottom: 0;
+            }
+        }
+
     }
 
     > .fpd-sub-panel {
@@ -389,6 +472,8 @@ fpd-element-toolbar.fpd-smart {
     }
 
     &.fpd-panel-visible {
+
+        width: var(--fpd-et-max-width);
 
         .fpd-close {
             display: none !important;
@@ -477,6 +562,29 @@ fpd-element-toolbar.fpd-sidebar {
     .fpd-tool-filters {
         row-gap: 35px !important;
     }
+    
+    .fpd-tools-nav {
+
+        flex-direction: column;
+
+        > div {
+            flex-direction: column;
+            gap: 25px 0;
+            height: auto;
+            overflow: visible;
+
+        }
+
+        > .fpd-primary-tools {
+            
+            .fpd-tool-text-size input,
+            .fpd-tool-font-family fpd-dropdown {
+                display: none !important;
+            }
+
+        }
+
+    }
 
 }
 
@@ -502,7 +610,6 @@ fpd-main-bar {
 
                 flex: 0;
                 margin: 10px 0;
-                padding: 0 3px;
 
                 .fpd-label {
                     white-space: normal;
@@ -518,8 +625,8 @@ fpd-main-bar {
 
 fpd-element-toolbar {
 
-    &[data-element-type="engraved-text"],
-    &[data-element-type="neon-text"] {
+    &[data-fabric-type="engraved-text"],
+    &[data-fabric-type="neon-text"] {
 
         .fpd-panel-color > .fpd-panel-tabs,
         .fpd-tool-text-format,

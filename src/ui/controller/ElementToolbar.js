@@ -211,7 +211,12 @@ export default class ElementToolbar extends EventTarget {
                 const { options } = evt.detail;
 
                 if(options.fontSize !== undefined) {
-                    this.#updateUIValue('fontSize', options.fontSize)
+                    this.#updateUIValue('fontSize', options.fontSize);
+                    this.navElem.querySelector('.fpd-tool-text-size > input').value = options.fontSize;
+                }
+
+                if(options.fontFamily !== undefined) {
+                    this.navElem.querySelector('.fpd-tool-font-family fpd-dropdown > input').value = options.fontFamily;
                 }
 
                 if(options.scaleX !== undefined) {
@@ -647,7 +652,7 @@ export default class ElementToolbar extends EventTarget {
 
         //nav item                
         addEvents(
-            Array.from(this.navElem.children),
+            this.navElem.querySelectorAll('[class^=fpd-tool-]'),
             'click',
             (evt) => {
                 
@@ -656,7 +661,7 @@ export default class ElementToolbar extends EventTarget {
                 if(navItem.dataset.panel) { //has a sub a panel
 
                     //add active state to nav item
-                    removeElemClasses(Array.from(this.navElem.children), ['fpd-active']);
+                    removeElemClasses(this.navElem.querySelectorAll('[class^=fpd-tool-]'), ['fpd-active']);
                     addElemClasses(navItem, ['fpd-active']);
                     
                     const subPanels = Array.from(this.subPanel.children);
@@ -762,7 +767,7 @@ export default class ElementToolbar extends EventTarget {
 
     #toggleNavItem(tool, toggle=true) {
 
-		const tools = this.navElem.querySelectorAll('.fpd-tools-nav > .fpd-tool-'+tool);        
+		const tools = this.navElem.querySelectorAll('.fpd-tools-nav .fpd-tool-'+tool);        
 
         toggleElemClasses(
             tools,
@@ -1184,6 +1189,8 @@ export default class ElementToolbar extends EventTarget {
 
             }
 			else if(parameter == 'fontFamily') {
+                
+                this.navElem.querySelector('.fpd-tool-font-family fpd-dropdown > input').value = element[parameter];
 
 				if(element[parameter] !== undefined) {
 
@@ -1200,6 +1207,11 @@ export default class ElementToolbar extends EventTarget {
 				}
 
 			}
+            else if(parameter == 'fontSize') {
+
+                this.navElem.querySelector('.fpd-tool-text-size > input').value = element[parameter];
+
+            }
 
 			const bgCss = getBgCssFromElement(element);
 			if(bgCss) {
@@ -1223,7 +1235,8 @@ export default class ElementToolbar extends EventTarget {
             scrollArea.scrollLeft = scrollArea.scrollTop = 0; 
         })
 
-        this.container.dataset.elementType = element.type;
+        this.container.dataset.fabricType = element.type;
+        this.container.dataset.elementType = element.getType();
 
     }
 
@@ -1351,14 +1364,14 @@ export default class ElementToolbar extends EventTarget {
             ['fpd-panel-visible']
         )
         
-        //hide tool in row
+        //hide tool in row        
         addElemClasses(
-            Array.from(this.navElem.children),
+            this.navElem.querySelectorAll('[class^=fpd-tool-]'),
             ['fpd-hidden']
         )
 
         removeElemClasses(
-            Array.from(this.navElem.children),
+            this.navElem.querySelectorAll('[class^=fpd-tool-]'),
             ['fpd-active']
         )
         
