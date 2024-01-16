@@ -59,7 +59,7 @@ fabric.IText.prototype._ITextInit = function() {
             
             if(this.widthFontSize) {
 
-                let resizedFontSize;
+                let resizedFontSize;                
                 if (this.width > this.widthFontSize) {
                     resizedFontSize = this.fontSize * (this.widthFontSize / (this.width + 1)); //decrease font size
                 }

@@ -1073,7 +1073,7 @@ export default class ElementToolbar extends EventTarget {
 		if(element.getType() === 'text' && (element.editable || element.__editorMode)) {
             
 			this.#toggleNavItem('edit-text');
-            this.#toggleNavItem('text-size', Boolean(element.resizable || element.__editorMode));
+            this.#toggleNavItem('text-size', Boolean(element.resizable || element.__editorMode) && !element.widthFontSize);
 			this.#toggleNavItem('font-family');
             this.#toggleNavItem('text-format');
 
