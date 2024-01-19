@@ -6,7 +6,7 @@ import {
 } from '../../../helpers/utils.js';
 import tinycolor from "tinycolor2";
 import Picker from 'vanilla-picker/csp';
-import QRCode from 'davidshimjs-qrcodejs';
+import QRious from 'qrious';
 
 export default class QRCodeModule extends EventTarget {
 
@@ -53,47 +53,39 @@ export default class QRCodeModule extends EventTarget {
             }
         });
 
-        const qrCodeWrapper = this.container.querySelector('.fpd-qr-code-wrapper');
         addEvents(
             this.container.querySelector('.fpd-btn'),
             'click',
             (evt) => {
 
-                fireEvent(this, 'qrCodeModuleBtnClick');
-
-                qrCodeWrapper.innerHTML = '';
+                fireEvent(this, 'qrCodeModuleBtnClick');                
 
                 const text = this.container.querySelector('input[type="text"]').value;
+                
                 if(text && text.length > 0) {
-
-                    new QRCode(qrCodeWrapper, {
-                        text: this.container.querySelector('input[type="text"]').value,
-                        width: 256,
-                        height: 256,
-                        colorDark : this.darkColor,
-                        colorLight : this.lightColor,
-                        correctLevel : QRCode.CorrectLevel.H
-                    });
                     
-                    qrCodeWrapper.querySelector('img').onload = ((evt) => {
+                    const qr = new QRious({
+                        background: this.lightColor,
+                        backgroundAlpha: 1,
+                        foreground: this.darkColor,
+                        foregroundAlpha: 1,
+                        size: 500,
+                        value: this.container.querySelector('input[type="text"]').value
+                    });
 
-                        const options = deepMerge(
-                            fpdInstance.mainOptions.qrCodeProps,
-                            {
-                                _addToUZ: fpdInstance.currentViewInstance.currentUploadZone,
-                                _isQrCode: true
-                            }
-                        );
+                    const options = deepMerge(
+                        fpdInstance.mainOptions.qrCodeProps,
+                        {
+                            _addToUZ: fpdInstance.currentViewInstance.currentUploadZone,
+                            _isQrCode: true
+                        }
+                    );
 
-                        fpdInstance._addCanvasImage(
-                            evt.currentTarget.src,
-                            'QR-Code: ' + text,
-                            options
-                        )                        
-
-                        this.container.querySelector('input[type="text"]').value = '';
-                        
-                    })
+                    fpdInstance._addCanvasImage(
+                        qr.toDataURL(),
+                        'QR-Code: ' + text,
+                        options
+                    )                        
 
                 }
 
