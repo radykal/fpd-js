@@ -23,10 +23,10 @@ export default class ViewsNav extends EventTarget {
         this.fpdInstance = fpdInstance;
         this.container = document.createElement("fpd-views-nav");
         this.unitFormat = fpdInstance.mainOptions.dynamicViewsOptions.unit;
-		this.minWidth = parseInt(fpdInstance.mainOptions.dynamicViewsOptions.minWidt);
-		this.minHeight = parseInt(fpdInstance.mainOptions.dynamicViewsOptions.minHeight);
-		this.maxWidth = parseInt(fpdInstance.mainOptions.dynamicViewsOptions.maxWidth);
-		this.maxHeight = parseInt(fpdInstance.mainOptions.dynamicViewsOptions.maxHeight);
+		this.minWidth = fpdInstance.mainOptions.dynamicViewsOptions.minWidth;
+		this.minHeight = fpdInstance.mainOptions.dynamicViewsOptions.minHeight;
+		this.maxWidth = fpdInstance.mainOptions.dynamicViewsOptions.maxWidth;
+		this.maxHeight = fpdInstance.mainOptions.dynamicViewsOptions.maxHeight;
 
         fpdInstance.mainWrapper.container.append(this.container);
 
@@ -219,22 +219,20 @@ export default class ViewsNav extends EventTarget {
 
     checkDimensionLimits(type, input) {
 
-        const inputVal = parseInt(input.value);
-
 		if(type == 'width') {
 
-			if(inputVal < this.minWidth) { inputVal = this.minWidth; }
-			else if(inputVal > this.maxWidth) { inputVal = this.maxWidth; }
+			if(input.value < this.minWidth) { input.value = this.minWidth; }
+			else if(input.value > this.maxWidth) { input.value = this.maxWidth; }
 
 		}
 		else {
 
-			if(inputVal < this.minHeight) { inputVal = this.minHeight; }
-			else if(inputVal > this.maxHeight) { inputVal = this.maxHeight; }
+			if(input.value < this.minHeight) { input.value = this.minHeight; }
+			else if(input.value > this.maxHeight) { input.value = this.maxHeight; }
 
 		}        
 
-		return inputVal;
+		return input.value;
 
 	}
 
@@ -269,19 +267,21 @@ export default class ViewsNav extends EventTarget {
         
         if(viewInstance && this.fpdInstance.mainOptions.dynamicViewsOptions.pricePerArea) {
 
-            let width = pixelToUnit(viewInstance.options.stageWidth, 'cm'),
-                height = pixelToUnit(viewInstance.options.stageHeight, 'cm');
+            let width = pixelToUnit(viewInstance.options.stageWidth, this.unitFormat),
+                height = pixelToUnit(viewInstance.options.stageHeight, this.unitFormat);
 
             //check if canvas output is set
             if(objectHasKeys(viewInstance.options.output, ['width', 'height'])) {
-                width = viewInstance.options.output.width / 10;
-                height = viewInstance.options.output.height / 10;                
+                width = unitToPixel(viewInstance.options.output.width, "mm");
+                width = pixelToUnit(width, this.unitFormat)
+                height = unitToPixel(viewInstance.options.output.height, "mm");
+                height = pixelToUnit(height, this.unitFormat)
             }
 
-            let cm2 = Math.ceil(width * height),
-                cm2Price = cm2 * Number(this.fpdInstance.mainOptions.dynamicViewsOptions.pricePerArea);
+            let unit2 = Math.ceil(width * height),
+                unit2Price = unit2 * Number(this.fpdInstance.mainOptions.dynamicViewsOptions.pricePerArea);
                             
-            viewInstance.changePrice(0, '+', cm2Price);
+            viewInstance.changePrice(0, '+', unit2Price);
 
         }
 
