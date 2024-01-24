@@ -22,7 +22,7 @@ class FPD_ActionsMenu extends HTMLElement {
         this.uncollapsedMenu = this.querySelector('.fpd-uncollapsed-menu');
         this.collapsedMenu = this.querySelector('.fpd-collapsed-menu');
 
-        this.collapsedMenu.querySelector('.fpd-dropdown-btn > i').className = this.dataset.icon || '';
+        this.collapsedMenu.querySelector('.fpd-dropdown-btn > i').className = this.dataset.fontIcon || '';
         
         addEvents(
 			this.collapsedMenu.querySelectorAll('.fpd-dropdown-btn'),
