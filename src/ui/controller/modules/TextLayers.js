@@ -121,7 +121,7 @@ export default class TextLayersModule extends EventTarget {
         const rowElem = document.createElement('div');
         rowElem.className = 'fpd-list-row';
         rowElem.id = element.id;
-        this.listElem.prepend(rowElem);
+        this.listElem.append(rowElem);
 
         if (element.editable) {
 
@@ -148,6 +148,7 @@ export default class TextLayersModule extends EventTarget {
 
                 textInput = document.createElement('textarea');
                 textInput.value = element.text;
+                textInput.rows = element.maxLines;
                 textWrapper.append(textInput);
 
             }
