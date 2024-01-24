@@ -41,6 +41,12 @@ export default class ColorSelection extends EventTarget {
                     this.#updateList.bind(this)
                 )
 
+                addEvents(
+                    fpdInstance,
+                    'elementAdd',
+                    this.#updateList.bind(this)
+                )
+
             }
 
         }
@@ -185,3 +191,5 @@ export default class ColorSelection extends EventTarget {
     }
 
 }
+
+window.FPDColorSelection = ColorSelection;

@@ -166,7 +166,7 @@ export default class UIManager extends EventTarget {
 
         //addons
         this.fpdInstance.bulkVariations = new BulkVariations(this.fpdInstance);
-        new ColorSelection(this.fpdInstance);
+        this.fpdInstance.colorSelection = new ColorSelection(this.fpdInstance);
 
         //view thumbnails
         this.fpdInstance.viewThumbnails = new ViewThumbnails(this.fpdInstance);
