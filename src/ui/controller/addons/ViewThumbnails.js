@@ -1,6 +1,7 @@
 import { 
     addElemClasses,
     addEvents,
+    toggleElemClasses,
 } from "../../../helpers/utils.js";
 
 export default class ViewThumbnails {
@@ -11,7 +12,18 @@ export default class ViewThumbnails {
         
         if(fpdInstance.mainOptions.viewThumbnailsWrapper) {
 
-            this.container = document.querySelector(fpdInstance.mainOptions.viewThumbnailsWrapper);
+            let targetWrapper;
+            if(fpdInstance.mainOptions.viewThumbnailsWrapper == 'main-wrapper') {                
+
+                targetWrapper = document.createElement('div');
+                this.fpdInstance.mainWrapper.container.append(targetWrapper);
+                
+            }
+            else {
+                targetWrapper = fpdInstance.mainOptions.viewThumbnailsWrapper;
+            }
+
+            this.container = typeof targetWrapper === 'string' ? document.querySelector(targetWrapper) : targetWrapper;
             if(this.container) {
 
                 addElemClasses(
@@ -53,6 +65,12 @@ export default class ViewThumbnails {
             )            
 
         });
+
+        toggleElemClasses(
+            this.container,
+            ['fpd-hidden'],
+            this.fpdInstance.viewInstances.length < 2
+        )
 
     }
 

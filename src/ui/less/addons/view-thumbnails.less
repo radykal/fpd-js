@@ -6,13 +6,45 @@
     flex-wrap: wrap;
 
     > .fpd-item {
-        flex: 0 0 100px;
+        width: 100px;
         height: 100px;
         background-repeat: no-repeat;
         background-position: center;
         background-size: 80%;
         border-radius: 8px;
         cursor: pointer;
+        background-color: rgba(255,255,252, 0.9);
+    }
+
+}
+
+fpd-main-wrapper {
+
+    > .fpd-view-thumbnails-wrapper {
+        position: absolute;
+        left: 10px;
+        bottom: calc(10px + env(safe-area-inset-bottom));
+        margin: 0;
+        z-index: 21;
+
+        .fpd-item {
+            height: 70px;
+            flex-basis: 60px;
+        }
+    }
+
+}
+
+.fpd-wrapper.fpd-views-inside-left {
+
+    fpd-main-wrapper {
+
+        > .fpd-view-thumbnails-wrapper {
+            right: 10px;
+            left: auto;
+            justify-content: flex-end;
+        }
+
     }
 
 }

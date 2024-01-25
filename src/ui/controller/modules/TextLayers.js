@@ -148,6 +148,8 @@ export default class TextLayersModule extends EventTarget {
 
                 textInput = document.createElement('textarea');
                 textInput.value = element.text;
+                if(element.maxLines)
+                    textInput.rows = element.maxLines;
                 textWrapper.append(textInput);
 
             }

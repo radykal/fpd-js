@@ -968,7 +968,7 @@ export default class Options {
         */
         customTextAsTextbox: false,
 		/**
-        * Display the views as thumbnails in an own HTML wrapper by defining a CSS selector.
+        * Display the views as thumbnails in an own HTML wrapper by defining a CSS selector or use 'main-wrapper' to display inside main wrapper of the designer.
         *
         * @property viewThumbnailsWrapper
         * @memberof Options.defaults
