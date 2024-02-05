@@ -556,6 +556,7 @@ export default class ElementToolbar extends EventTarget {
             (evt) => {
 
                 let originParams = fpdInstance.currentElement.originParams;
+                console.log("🚀 ~ ElementToolbar ~ constructor ~ originParams:", originParams)
                 delete originParams['clipPath'];
                 delete originParams['path'];
 
@@ -728,7 +729,7 @@ export default class ElementToolbar extends EventTarget {
                 const targetFontObj = this.fpdInstance.mainOptions.fonts.find(fontObj => fontObj.name == elem.fontFamily);
 
                 //hide style buttons for custom font and custom font does not have a bold or italic variant
-                if(targetFontObj.url.toLowerCase().includes('.ttf')) {
+                if(targetFontObj && targetFontObj.url.toLowerCase().includes('.ttf')) {
                     
                     if(targetFontObj.variants) {
 
@@ -741,6 +742,9 @@ export default class ElementToolbar extends EventTarget {
                     else {
                         this.#toggleVariantStylesBtn(false, false);
                     }
+                }
+                else {
+                    this.#toggleVariantStylesBtn(false, false);
                 }
 
             } 
@@ -1070,6 +1074,8 @@ export default class ElementToolbar extends EventTarget {
         }
 
 		//EDIT TEXT
+        console.log(element.editable);
+        
 		if(element.getType() === 'text' && (element.editable || element.__editorMode)) {
             
 			this.#toggleNavItem('edit-text');
@@ -1087,8 +1093,8 @@ export default class ElementToolbar extends EventTarget {
 			this.#toggleNavItem('edit-text', !element.textPlaceholder && !element.numberPlaceholder);
 
 		}
-		else {
-
+		else if(element.getType() !== 'text') {
+            
             addElemClasses(this.container, ['fpd-type-image'])
 
         }

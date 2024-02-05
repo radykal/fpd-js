@@ -977,21 +977,10 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
             fabricText = new fabric.IText(source, fabricParams);
 
         }
-        
 
         if (fabricParams.textPlaceholder || fabricParams.numberPlaceholder) {
-
-            if (fabricParams.textPlaceholder) {
-                this.textPlaceholder = fabricText;
-                fabricParams.removable = false;
-                fabricParams.editable = false;
-            }
-
-            if (fabricParams.numberPlaceholder) {
-                this.numberPlaceholder = fabricText;
-                fabricParams.removable = false;
-                fabricParams.editable = false;
-            }
+            
+            this[fabricParams.textPlaceholder ? 'textPlaceholder': 'numberPlaceholder'] = fabricText;            
 
         }
 
@@ -1820,6 +1809,13 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
     }
     else if (element.isEditable && !this.viewOptions.editorMode) {
         element.evented = !parameters.locked;
+    }
+
+    if (element.textPlaceholder || element.numberPlaceholder) {
+
+        element.removable = false;
+        element.editable = false;
+
     }
 
 
