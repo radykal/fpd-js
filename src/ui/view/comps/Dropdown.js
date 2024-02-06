@@ -19,13 +19,21 @@ class FPD_Dropdown extends HTMLElement {
         this.innerHTML = html;
         this.inputElem = this.querySelector('input.fpd-dropdown-current');
         this.listElem = this.querySelector('.fpd-dropdown-list');
+
+        //close dropdown when clicked outside of container
+        document.addEventListener('click', (evt) => {
+
+            if(!this.contains(evt.target)) {
+                this.classList.remove('fpd-active');
+            }
+            
+        });
         
         this.addEventListener('click', () => {
 
             this.#updatePosition();
             this.classList.toggle('fpd-active');
             
-
         });
         
         this.querySelector('.fpd-dropdown-arrow').addEventListener('click', (evt) => {
@@ -126,8 +134,8 @@ class FPD_Dropdown extends HTMLElement {
 
         this.listElem.style.width = bounding.width+'px';
         this.listElem.style.left = bounding.left+'px';
-        this.listElem.style.top = (bounding.top+bounding.height)+'px';
-
+        this.listElem.style.top = (bounding.top+bounding.height)+'px';        
+    
     }
 
 }
