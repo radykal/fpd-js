@@ -15,8 +15,9 @@ fpd-element-toolbar {
         position: absolute;
         right: 0;
         top: 5px;
-        width: 35px;
         height: 30px;
+        min-width: 35px;
+        padding: 0 7px;
         line-height: 30px;
         text-align: center;
         cursor: pointer;
@@ -26,6 +27,12 @@ fpd-element-toolbar {
         box-shadow: 0px -1px 2px rgba(110, 111, 114, 0.2);
         border-top-left-radius: var(--fpd-border-radius);
         border-top-right-radius: var(--fpd-border-radius);
+        gap: 3px;
+        align-items: center;
+    }
+
+    .fpd-close-sub-panel > .fpd-label {
+        font-size: 12px;
     }
 
     >.fpd-tools-nav {
@@ -503,7 +510,7 @@ fpd-element-toolbar.fpd-smart {
     &.fpd-panel-visible {
 
         > .fpd-close-sub-panel {
-            display: block;
+            display: flex;
         }
 
     }

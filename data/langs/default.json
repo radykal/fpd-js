@@ -48,7 +48,8 @@
 		"align": "Align",
 		"filters": "Filters",
 		"remove_background": "Remove Background",
-		"crop": "Crop"
+		"crop": "Crop",
+		"sub_panel_back": "Back"
 	},
 	"actions": {
 		"reset_product": "Reset",
