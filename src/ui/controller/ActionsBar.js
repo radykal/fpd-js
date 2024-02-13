@@ -14,6 +14,12 @@ import {
 
 export default class ActionsBar extends EventTarget {
 
+	static toggleActions = [
+		'snap',
+		'ruler',
+		'zoom'
+	];
+
 	static availableActions = {
 		'print': {
 			icon: 'fpd-icon-print',
@@ -197,7 +203,7 @@ export default class ActionsBar extends EventTarget {
 				}
 
 				if (wrapper)
-					this.addActionBtn(wrapper, action);
+					this.addActionBtn(wrapper, action, true);
 
 			})
 
@@ -218,7 +224,7 @@ export default class ActionsBar extends EventTarget {
 
 	}
 
-	addActionBtn(wrapper, action) {
+	addActionBtn(wrapper, action, smartMenu=false) {
 
 		if (ActionsBar.availableActions.hasOwnProperty(action)) {
 
@@ -229,19 +235,58 @@ export default class ActionsBar extends EventTarget {
 				actionData.title
 			);
 			
-			actionData.type = action;
-			actionData.title = label;
-			actionData.handler = (evt) => {
+			if(smartMenu) {
 
-				const switchElem = evt.currentTarget.querySelector('.fpd-switch');
-				if (switchElem && !evt.target.classList.contains('fpd-switch')) {
-					switchElem.checked = !switchElem.checked;
+				actionData.type = action;
+				actionData.title = label;
+				actionData.handler = (evt) => {
+
+					const switchElem = evt.currentTarget.querySelector('.fpd-switch');
+					if (switchElem && !evt.target.classList.contains('fpd-switch')) {
+						switchElem.checked = !switchElem.checked;
+					}
+
+					this.doAction(evt.currentTarget.dataset.action)
+				}
+							
+				wrapper.items = [...wrapper.items, actionData];
+
+			}
+			else {
+
+				const actionBtn = document.createElement('div');
+				actionBtn.className = 'fpd-btn fpd-tooltip';
+				actionBtn.setAttribute('aria-label', label);
+				actionBtn.dataset.action = action;
+				actionBtn.innerHTML = `<i class="${actionData.icon}"></i><span>${label}</span>`;
+
+				if (ActionsBar.toggleActions.includes(action)) {
+
+					actionBtn.insertAdjacentHTML(
+						'beforeend',
+						'<input type="checkbox" class="fpd-switch" />'
+					)
+
 				}
 
-				this.doAction(evt.currentTarget.dataset.action)
+				wrapper.append(actionBtn);
+
+				addEvents(
+					actionBtn,
+					'click',
+					(evt) => {
+
+						const switchElem = evt.currentTarget.querySelector('.fpd-switch');
+						if (switchElem && !evt.target.classList.contains('fpd-switch')) {
+							switchElem.checked = !switchElem.checked;
+						}
+
+						this.doAction(evt.currentTarget.dataset.action)
+
+					}
+				)
+
 			}
-			
-			wrapper.items = [...wrapper.items, actionData];
 
 		}
 

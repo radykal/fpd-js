@@ -1,18 +1,13 @@
 import { addElemClasses, addEvents, removeElemClasses, toggleElemClasses } from '../../../helpers/utils';
 import html from '../../../ui/html/comps/actions-menu.html';
+import ActionsBar from '../../controller/ActionsBar';
 
 class FPD_ActionsMenu extends HTMLElement {
-
-    static toggleActions = [
-		'snap',
-		'ruler',
-		'zoom'
-	];
 
     constructor() {
         
         super();
-        this.items = [];
+        this.items = [];        
     
     }
     
@@ -82,7 +77,7 @@ class FPD_ActionsMenu extends HTMLElement {
 			actionBtn.dataset.action = actionItem.type;
 			actionBtn.innerHTML = `<i class="${actionItem.icon}"></i><span>${actionItem.title}</span>`;            
 
-            if (FPD_ActionsMenu.toggleActions.includes(actionItem.type)) {
+            if (ActionsBar.toggleActions.includes(actionItem.type)) {
 				actionBtn.insertAdjacentHTML(
 					'beforeend',
 					'<input type="checkbox" class="fpd-switch" />'
