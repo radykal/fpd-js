@@ -460,7 +460,7 @@ export default class Mainbar extends EventTarget {
         
     }
     
-    toggleContentDisplay(toggle=true) {
+    toggleContentDisplay(toggle=true) {        
                 
         removeElemClasses([this.fpdInstance.container, this.#draggableDialog], ['fpd-secondary-visible']);
         toggleElemClasses([this.fpdInstance.container, this.#draggableDialog], ['fpd-module-visible'], toggle);
@@ -514,6 +514,12 @@ export default class Mainbar extends EventTarget {
         if(!toggle && this.contentClosable) {
             this.currentModuleKey = '';
         }
+
+        if(!toggle && this.fpdInstance.currentViewInstance) {
+
+            this.fpdInstance.currentViewInstance.currentUploadZone = null;
+
+        }
         
     }
     
@@ -555,7 +561,7 @@ export default class Mainbar extends EventTarget {
                 
     }
     
-    toggleUploadZonePanel(toggle=true, customAdds={}) {        
+    toggleUploadZonePanel(toggle=true, customAdds={}) {                
                     
         //do nothing when custom image is loading
         if(this.fpdInstance.loadingCustomImage) {

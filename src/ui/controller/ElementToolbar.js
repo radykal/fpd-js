@@ -556,7 +556,6 @@ export default class ElementToolbar extends EventTarget {
             (evt) => {
 
                 let originParams = fpdInstance.currentElement.originParams;
-                console.log("🚀 ~ ElementToolbar ~ constructor ~ originParams:", originParams)
                 delete originParams['clipPath'];
                 delete originParams['path'];
 
@@ -1073,9 +1072,7 @@ export default class ElementToolbar extends EventTarget {
 
         }
 
-		//EDIT TEXT
-        console.log(element.editable);
-        
+		//EDIT TEXT        
 		if(element.getType() === 'text' && (element.editable || element.__editorMode)) {
             
 			this.#toggleNavItem('edit-text');
