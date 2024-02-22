@@ -40,18 +40,12 @@ export default class ModuleWrapper extends EventTarget {
                         
                         const moduleAttrs = {};
                         moduleAttrs['data-dynamic-designs-id'] = dynamicDesignId;
-        
-                        if(!isEmpty(dynamicDesignConfig.icon) && dynamicDesignConfig.icon.includes('.svg')) {
-                            
-                            this.configs = {
-                                icon: dynamicDesignConfig.icon,
-                                defaultText: dynamicDesignConfig.name,
-                                attrs: moduleAttrs
-                            };     
-                        }
-                        else {
-                            console.info('FPD: Dynamic Designs Module does not contain an icon for the main bar.');
-                        }
+                        
+                        this.configs = {
+                            icon: !isEmpty(dynamicDesignConfig.icon) && dynamicDesignConfig.icon.includes('.svg') ? dynamicDesignConfig.icon : 'fpd-icon-design-library',
+                            defaultText: dynamicDesignConfig.name,
+                            attrs: moduleAttrs
+                        };                         
         
                     }
                     else { //dynamic designs module does not exist

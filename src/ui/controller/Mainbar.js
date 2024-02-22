@@ -683,7 +683,7 @@ export default class Mainbar extends EventTarget {
             
             //create nav icon
             let moduleIcon = document.createElement('span');
-            
+                        
             if( typeof moduleWrapper.configs.icon == 'string' && 
                 moduleWrapper.configs.icon.includes('.svg')
             ) {
