@@ -138,7 +138,7 @@ export default class ElementToolbar extends EventTarget {
 
         //advanced editing - crop
         const cropMasksGrid = this.subPanel.querySelector('.fpd-tool-crop-masks');
-       if(Array.isArray(fpdInstance.mainOptions.cropMasks)) {
+        if(Array.isArray(fpdInstance.mainOptions.cropMasks)) {
 
             fpdInstance.mainOptions.cropMasks.forEach((maskURL) => {
 
@@ -1083,6 +1083,10 @@ export default class ElementToolbar extends EventTarget {
 			if(element.curvable) {
 				this.#toggleNavItem('curved-text');
                 this.#toggleCurvedOptions(element);
+
+                this.subPanel.querySelector('fpd-range-slider[data-control="curveRadius"]')
+                .setAttribute('max', element.maxCurveRadius);
+                
 			}
             
 			this.subPanel.querySelector('textarea[data-control="text"]').value = element.text;

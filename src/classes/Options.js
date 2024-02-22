@@ -1389,6 +1389,15 @@ export default class Options {
 			*/
 			curveRadius: 80,
 			/**
+			* The max. curve radius an user can set trough toolbar.
+			*
+			* @property maxCurveRadius
+			* @type {Number}
+			* @memberof Options.defaults.textParameters
+			* @default 400
+			*/
+			maxCurveRadius: 400,
+			/**
 			* Reverses the curved text.
 			*
 			* @property curveReverse
