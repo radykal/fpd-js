@@ -1072,7 +1072,7 @@ export default class ElementToolbar extends EventTarget {
 
         }
 
-		//EDIT TEXT        
+		//EDIT TEXT                
 		if(element.getType() === 'text' && (element.editable || element.__editorMode)) {
             
 			this.#toggleNavItem('edit-text');
@@ -1083,7 +1083,7 @@ export default class ElementToolbar extends EventTarget {
 			if(element.curvable) {
 				this.#toggleNavItem('curved-text');
                 this.#toggleCurvedOptions(element);
-
+                
                 this.subPanel.querySelector('fpd-range-slider[data-control="curveRadius"]')
                 .setAttribute('max', element.maxCurveRadius);
                 

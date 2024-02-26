@@ -24,10 +24,8 @@ import {
     fireEvent
 } from '../helpers/utils.js';
 import { getJSON, postJSON } from '../helpers/request.js';
-import { objectHasKeys, pixelToUnit, toggleElemClasses, unitToPixel } from '../helpers/utils.js';
-import {
-    loadFonts
-} from '../helpers/fonts-loader.js';
+import { objectHasKeys, toggleElemClasses } from '../helpers/utils.js';
+import { loadFonts } from '../helpers/fonts-loader.js';
 
 /**
  * Creates a new FancyProductDesigner.
@@ -39,7 +37,7 @@ import {
  */
 export default class FancyProductDesigner extends EventTarget {
     
-    static version = '6.1.6';
+    static version = '6.1.7';
     static forbiddenTextChars = /<|>/g;
     static proxyFileServer = '';
     static uploadsToServer = true;
@@ -332,7 +330,10 @@ export default class FancyProductDesigner extends EventTarget {
         this.mainOptions.hexNames = newHexNames;
 
         //set rtl or ltr for text elements
-        this.mainOptions.textParameters.direction = window.getComputedStyle(document.body || document.documentElement).direction;        
+        this.mainOptions.textParameters.direction = window.getComputedStyle(document.body || document.documentElement).direction;     
+        if(this.mainOptions.textParameters.direction == 'rtl') {
+            this.mainOptions.textParameters.textAlign = 'right';
+        }   
         
         if(this.mainOptions.cornerControlsStyle == 'advanced') {
             initAdvancedCorners();

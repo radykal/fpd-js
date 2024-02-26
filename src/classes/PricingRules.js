@@ -71,10 +71,16 @@ export default class PricingRules {
 				}
 				//get mutliple elements as target
 				else {
-					
+										
 					targetElems = this.fpdInstance.getElements(pGroup.target.views, pGroup.target.elements, false);
+					
 
-				}				
+				}	
+				
+				//ignore upload zones
+				targetElems = targetElems.filter((obj) => {                
+					return !obj.uploadZone;
+				});
 
 				//loop all target elements in group
 				var property,

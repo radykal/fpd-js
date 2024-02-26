@@ -548,10 +548,7 @@ fabric.Object.prototype.setPattern = function (patternUrl) {
                 this.set('fill', new fabric.Pattern({
                     source: img,
                     repeat: 'repeat'
-                }));
-
-                console.log(this.fill);
-                
+                }));                
 
             }
             //for all other revert to color

@@ -1140,7 +1140,7 @@ fabric.Canvas.prototype.getElements = function(elementType='all', deselectElemen
     let allElements = this.getObjects();
     
     //remove ignore objects
-    allElements = allElements.filter((obj) => {        
+    allElements = allElements.filter((obj) => {                
         return !obj._ignore;
     });
 
