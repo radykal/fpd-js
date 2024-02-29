@@ -1643,17 +1643,16 @@ export default class FancyProductDesigner extends EventTarget {
 
     #setWarnings() {
 
-        const element = this.currentElement;
-
         if(!this.warningsWrapper || this.mainOptions.editorMode) return;
-        
         this.warningsWrapper.innerHTML = '';
 
-        if(this.productCreated) {
+        const element = this.currentElement;
+
+        if(this.productCreated && element) {
 
             const dpi = this.calcElementDPI(element);            
-            
-            if(dpi !== null && dpi < this.mainOptions.customImageParameters.minDPI) {
+                        
+            if(element.isCustomImage && dpi !== null && dpi < this.mainOptions.customImageParameters.minDPI) {
 
                 const sizeWarning = document.createElement('div');
                 sizeWarning.className = 'fpd-size-warning';
@@ -2184,6 +2183,7 @@ export default class FancyProductDesigner extends EventTarget {
 
 			let fixedParams = {
 				isCustom: true,
+                isCustomImage: true
 			};
 
 			//enable color wheel for svg and when no colors are set

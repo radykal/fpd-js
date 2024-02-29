@@ -781,6 +781,7 @@ fabric.Object.prototype.getElementJSON = function (addPropertiesToInclude = fals
     propertyKeys.push('_optionsSet');
     propertyKeys.push('_isQrCode');
     propertyKeys.push('cropMask');
+    propertyKeys.push('isCustomImage');
     propertyKeys = propertyKeys.sort();
 
 
