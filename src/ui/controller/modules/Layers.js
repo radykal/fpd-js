@@ -205,7 +205,7 @@ export default class LayersModule extends EventTarget {
         if(element.getType() === 'text' && element.editable) {
         
             sourceContent = document.createElement('textarea');
-            sourceContent.innerText = element.text;
+            sourceContent.value = element.text;
             
             addEvents(
                 sourceContent,
