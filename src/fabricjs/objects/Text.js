@@ -330,3 +330,17 @@ fabric.Text.prototype._createTextCharSpan = function (_char, styleDecl, left, to
 
 
 }
+
+fabric.Text.prototype._renderChars = (function (originalFn) {
+
+    return function (...args) {
+
+        originalFn.call(this, ...args);
+
+        //fix for rtl site
+        this.canvas.lowerCanvasEl.setAttribute('dir', 'ltr')
+
+
+    }
+
+})(fabric.Text.prototype._renderChars);

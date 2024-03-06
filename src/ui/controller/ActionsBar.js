@@ -9,7 +9,8 @@ import {
 	toggleElemClasses,
 	removeElemClasses,
 	getScript,
-	addElemClasses
+	addElemClasses,
+	fireEvent
 } from '../../helpers/utils.js';
 
 export default class ActionsBar extends EventTarget {
@@ -362,10 +363,20 @@ export default class ActionsBar extends EventTarget {
 
 				image.onload = () => {
 
-					Modal(
+					const previewModal = Modal(
 						'<div style="background: url('+ image.src +'); height: 90vh; width:100%; background-size:contain; background-repeat:no-repeat; background-position:center;"></div>',
 						true
 					);
+
+					/**
+					 * Gets fired when an element is added.
+					 *
+					 * @event FancyProductDesigner#actionPreviewModalOpen
+					 * @param {Event} event
+					 */
+					fireEvent(this.fpdInstance, 'actionPreviewModalOpen', {
+						modal: previewModal
+					})
 
 				}
 
@@ -546,15 +557,11 @@ export default class ActionsBar extends EventTarget {
 		 *
 		 * @event FancyProductDesigner#actionClick
 		 * @param {Event} event
-		 * @param {fabric.Object} element
+		 * @param {String} event.detail.action - The action type.
 		 */
-		this.dispatchEvent(
-			new CustomEvent('actionClick', {
-				detail: {
-					action: action
-				}
-			})
-		);
+		fireEvent(this.fpdInstance, 'actionClick', {
+            action: action,
+        })
 
 	}
 

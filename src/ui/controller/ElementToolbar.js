@@ -728,7 +728,7 @@ export default class ElementToolbar extends EventTarget {
                 const targetFontObj = this.fpdInstance.mainOptions.fonts.find(fontObj => fontObj.name == elem.fontFamily);
 
                 //hide style buttons for custom font and custom font does not have a bold or italic variant
-                if(targetFontObj && targetFontObj.url.toLowerCase().includes('.ttf')) {
+                if(targetFontObj && targetFontObj.url && targetFontObj.url.toLowerCase().includes('.ttf')) {
                     
                     if(targetFontObj.variants) {
 

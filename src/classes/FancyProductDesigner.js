@@ -37,7 +37,7 @@ import { loadFonts } from '../helpers/fonts-loader.js';
  */
 export default class FancyProductDesigner extends EventTarget {
     
-    static version = '6.1.7';
+    static version = '6.1.8';
     static forbiddenTextChars = /<|>/g;
     static proxyFileServer = '';
     static uploadsToServer = true;
@@ -1400,7 +1400,7 @@ export default class FancyProductDesigner extends EventTarget {
         }
         //all views added
         else {
-            
+
             this.removeEventListener('viewCreate', this.#onViewCreated);
     
             this.toggleSpinner(false);            
