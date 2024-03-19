@@ -2349,11 +2349,8 @@ export default class FancyProductDesigner extends EventTarget {
 
 	}
     
-<<<<<<< HEAD
-    addCanvasDesign(source, title, params={}, viewIndex) {
-=======
+
     addCanvasDesign(source, title, params={}) {
->>>>>>> 36979127 (init)
         
         if(!this.currentViewInstance) { return; }
     
@@ -2369,16 +2366,6 @@ export default class FancyProductDesigner extends EventTarget {
         if(this.productCreated && this.mainOptions.hideDialogOnAdd && this.mainBar) {
             this.mainBar.toggleContentDisplay(false);
         }
-<<<<<<< HEAD
-
-        this.currentViewInstance.fabricCanvas.addElement(
-            'image', 
-            source, 
-            title, 
-            params, 
-            viewIndex
-        );
-=======
         
         if(Array.isArray(params.relatedViewImages)) {
 
@@ -2430,7 +2417,6 @@ export default class FancyProductDesigner extends EventTarget {
             );
 
         }
->>>>>>> 36979127 (init)
     
     }
 
