@@ -23,7 +23,7 @@ export default class ViewsNav extends EventTarget {
         this.fpdInstance = fpdInstance;
         this.container = document.createElement("fpd-views-nav");
         this.unitFormat = fpdInstance.mainOptions.dynamicViewsOptions.unit;
-		this.minWidth = parseInt(fpdInstance.mainOptions.dynamicViewsOptions.minWidt);
+		this.minWidth = parseInt(fpdInstance.mainOptions.dynamicViewsOptions.minWidth);
 		this.minHeight = parseInt(fpdInstance.mainOptions.dynamicViewsOptions.minHeight);
 		this.maxWidth = parseInt(fpdInstance.mainOptions.dynamicViewsOptions.maxWidth);
 		this.maxHeight = parseInt(fpdInstance.mainOptions.dynamicViewsOptions.maxHeight);

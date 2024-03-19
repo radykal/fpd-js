@@ -89,6 +89,8 @@ export default class TextLayersModule extends EventTarget {
         const listArea = fontsDropdown.querySelector('.fpd-dropdown-list > .fpd-scroll-area');
         fonts.forEach((fontObj, i) => {
 
+            if(!listArea) return;
+            
             if (typeof fontObj == 'object') {
                 fontObj = fontObj.name;
             }

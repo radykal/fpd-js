@@ -622,6 +622,17 @@ export default class Options {
 		*/
 		applyFillWhenReplacing: true,
 		/**
+
+		* When an element is replaced, apply the size (scaleX and scaleX) from the replace element to added element.
+		*
+		* @property applySizeWhenReplacing
+		* @memberof Options.defaults
+		* @type {Boolean}
+		* @default true
+		* @version 6.1.9
+		*/
+		applySizeWhenReplacing: false,
+		/**
 		* An array containing layouts. A layout is technically a view that will replace all elements in a view when selected.
 		*
 		* @property layouts

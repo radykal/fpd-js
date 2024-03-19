@@ -69,6 +69,8 @@ export default class FancyProductDesignerView extends EventTarget {
         'snapGridSize',
         'rulerUnit',
         'namesNumbersEntryPrice'
+        'namesNumbersEntryPrice',
+        'applySizeWhenReplacing',
     ];
     
     /**

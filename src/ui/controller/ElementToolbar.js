@@ -1071,7 +1071,6 @@ export default class ElementToolbar extends EventTarget {
             this.#togglePanelTab('position', 'align', Boolean(element.draggable || element.__editorMode));
 
         }
-
 		//EDIT TEXT                
 		if(element.getType() === 'text' && (element.editable || element.__editorMode)) {
             

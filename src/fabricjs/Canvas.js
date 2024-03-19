@@ -1418,7 +1418,11 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 
             }
         }
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 36979127 (init)
         if (scale !== null) {
             parameters = deepMerge(parameters, { scaleX: scale, scaleY: scale });
         }
@@ -1568,6 +1572,19 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
             parameters.left = element.originParams.left = replacedElement.left;
             parameters.top = element.originParams.top = replacedElement.top;
             parameters.autoCenter = false;
+<<<<<<< HEAD
+=======
+                        
+            if(this.viewOptions.applySizeWhenReplacing) {
+
+                const scale =  replacedElement.getScaledWidth() / element.getScaledWidth();
+                console.log(scale, replacedElement.title);
+                
+                parameters.scaleX = element.originParams.scaleX = scale;
+                parameters.scaleY = element.originParams.scaleY = scale;
+                
+            }
+>>>>>>> 36979127 (init)
             
             if (this.viewOptions.applyFillWhenReplacing && !element._isQrCode) {
                 parameters.fill = replacedElement.fill;
@@ -1814,7 +1831,10 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
     if (element.textPlaceholder || element.numberPlaceholder) {
 
         element.removable = false;
+<<<<<<< HEAD
         element.editable = false;
+=======
+>>>>>>> 36979127 (init)
 
     }
 

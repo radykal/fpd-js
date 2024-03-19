@@ -1096,7 +1096,8 @@ export default class FancyProductDesigner extends EventTarget {
                     this.toggleSpinner(false);
                 }
 
-                //element should be replaced in all views
+
+                //element should be replaced in all views                              
                 if(element.replace && element.replaceInAllViews) {
 
                     this.viewInstances.forEach((viewInst, i) => {
@@ -2348,7 +2349,11 @@ export default class FancyProductDesigner extends EventTarget {
 
 	}
     
+<<<<<<< HEAD
     addCanvasDesign(source, title, params={}, viewIndex) {
+=======
+    addCanvasDesign(source, title, params={}) {
+>>>>>>> 36979127 (init)
         
         if(!this.currentViewInstance) { return; }
     
@@ -2364,6 +2369,7 @@ export default class FancyProductDesigner extends EventTarget {
         if(this.productCreated && this.mainOptions.hideDialogOnAdd && this.mainBar) {
             this.mainBar.toggleContentDisplay(false);
         }
+<<<<<<< HEAD
 
         this.currentViewInstance.fabricCanvas.addElement(
             'image', 
@@ -2372,6 +2378,59 @@ export default class FancyProductDesigner extends EventTarget {
             params, 
             viewIndex
         );
+=======
+        
+        if(Array.isArray(params.relatedViewImages)) {
+
+            params.replaceInAllViews = false;
+            
+           
+            //add main design to first view
+            this.viewInstances[0].fabricCanvas.addElement(
+                'image', 
+                source, 
+                title, 
+                params, 
+            );
+
+            //loop through related view images
+            params.relatedViewImages.forEach((item) => {
+
+                //only add if viewIndex > 0 and view insatance view index exists
+                if( !isEmpty(item.viewIndex)
+                    && !isEmpty(item.url)
+                    && !isEmpty(item.title)
+                    && item.viewIndex > 0
+                    && this.viewInstances[item.viewIndex]
+                    ) {
+
+                        this.viewInstances[item.viewIndex].fabricCanvas.addElement(
+                            'image', 
+                            item.url, 
+                            item.title, 
+                            {  
+                                replaceInAllViews: false,
+                                replace: params.replace
+                            }
+                        );
+                        
+                }
+                
+                
+            }) 
+
+        }
+        else {
+
+            this.currentViewInstance.fabricCanvas.addElement(
+                'image', 
+                source, 
+                title, 
+                params, 
+            );
+
+        }
+>>>>>>> 36979127 (init)
     
     }
 
