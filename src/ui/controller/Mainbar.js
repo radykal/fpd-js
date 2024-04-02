@@ -638,7 +638,12 @@ export default class Mainbar extends EventTarget {
         const navElem = this.container.querySelector('.fpd-navigation');
         
         //if only one modules exist, select it and hide nav
-        if(modules.length <= 1 && !this.fpdInstance.container.classList.contains('fpd-topbar')) {
+        if(modules.length == 0) {
+
+            addElemClasses(this.fpdInstance.container, ['fpd-no-modules-mode']);
+
+        }
+        else if(modules.length == 1 && !this.fpdInstance.container.classList.contains('fpd-topbar')) {
         
             selectedModule = modules[0] ? modules[0] : '';
             addElemClasses(this.fpdInstance.container, ['fpd-one-module-mode']);

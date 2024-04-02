@@ -1572,7 +1572,6 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
             if(this.viewOptions.applySizeWhenReplacing) {
 
                 const scale =  replacedElement.getScaledWidth() / element.getScaledWidth();
-                console.log(scale, replacedElement.title);
                 
                 parameters.scaleX = element.originParams.scaleX = scale;
                 parameters.scaleY = element.originParams.scaleY = scale;

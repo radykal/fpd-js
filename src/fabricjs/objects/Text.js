@@ -338,7 +338,8 @@ fabric.Text.prototype._renderChars = (function (originalFn) {
         originalFn.call(this, ...args);
 
         //fix for rtl site
-        this.canvas.lowerCanvasEl.setAttribute('dir', 'ltr')
+        if(this.canvas)
+            this.canvas.lowerCanvasEl.setAttribute('dir', 'ltr')
 
 
     }

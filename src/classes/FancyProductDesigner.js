@@ -37,7 +37,7 @@ import { loadFonts } from '../helpers/fonts-loader.js';
  */
 export default class FancyProductDesigner extends EventTarget {
     
-    static version = '6.1.8';
+    static version = '6.1.9';
     static forbiddenTextChars = /<|>/g;
     static proxyFileServer = '';
     static uploadsToServer = true;
@@ -2371,7 +2371,6 @@ export default class FancyProductDesigner extends EventTarget {
 
             params.replaceInAllViews = false;
             
-           
             //add main design to first view
             this.viewInstances[0].fabricCanvas.addElement(
                 'image', 

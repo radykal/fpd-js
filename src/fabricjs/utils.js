@@ -1,3 +1,5 @@
+import { fabric } from "fabric";
+
 const getScaleByDimesions = (imgW, imgH, resizeToW=0, resizeToH=0, mode='fit') => {
 
     resizeToW = typeof resizeToW !== 'number' ? 0 : resizeToW;
