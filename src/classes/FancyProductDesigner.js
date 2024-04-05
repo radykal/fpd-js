@@ -1097,8 +1097,8 @@ export default class FancyProductDesigner extends EventTarget {
                 }
 
 
-                //element should be replaced in all views                              
-                if(element.replace && element.replaceInAllViews) {
+                //element should be replaced in all views                                              
+                if(!this.mainOptions.editorMode && element.replace && element.replaceInAllViews) {
 
                     this.viewInstances.forEach((viewInst, i) => {
 
@@ -1270,6 +1270,18 @@ export default class FancyProductDesigner extends EventTarget {
                 }
 
                 this.#setWarnings();
+
+            },
+            'multiSelect' : ({activeSelection}) => {
+
+                /**
+                 * Gets fired as soon as mutiple elements are selected.
+                 *
+                 * @event multiSelect
+                 * @param {Event} event
+                 * @param {fabric.Object} activeSelection - The current selected object.
+                 */
+                fireEvent(this, 'multiSelect', { activeSelection: activeSelection });
 
             },
             'elementCheckContainemt': ({target, boundingBoxMode}) => {

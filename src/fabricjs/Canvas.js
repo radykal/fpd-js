@@ -280,7 +280,7 @@ fabric.Canvas.prototype._onSelected = function (element) {
      * @param {Event} event
      * @param {fabric.Object} currentElement - The current selected element.
      */
-    this.fire('elementSelect', { element: element })
+    this.fire('elementSelect', { element: element });
 
     //change cursor to move when element is draggable
     this.hoverCursor = element.draggable ? 'move' : 'pointer';
@@ -322,6 +322,15 @@ fabric.Canvas.prototype._onMultiSelected = function (selectedElements) {
             tl: false,
             mtr: false
         })
+
+        /**
+         * Gets fired as soon as mutiple elements are selected.
+         *
+         * @event fabric.CanvasView#multiSelect
+         * @param {Event} event
+         * @param {fabric.Object} activeSelection - The current selected object.
+         */
+        this.fire('multiSelect', { activeSelection: activeSelection });
 
     }
 
@@ -1556,8 +1565,8 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
         }
 
     }
-
-    if (parameters.replace && parameters.replace != '') {
+    
+    if (!this.viewOptions.editorMode && parameters.replace && parameters.replace != '') {
 
         let replacedElement = this.getElementByReplace(parameters.replace);
 
