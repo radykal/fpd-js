@@ -1586,9 +1586,9 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
                 parameters.scaleY = element.originParams.scaleY = scale;
                 
             }
-            
+                        
             if (this.viewOptions.applyFillWhenReplacing && !element._isQrCode) {
-                parameters.fill = replacedElement.fill;
+                parameters.fill = parameters.svgFill = replacedElement.fill;                
             }
 
             this.removeElement(replacedElement);
@@ -1750,7 +1750,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
         
     }
 
-    //change element color    
+    //change element color        
     if (parameters.fill !== undefined || parameters.svgFill !== undefined) {
 
         const fill = parameters.svgFill !== undefined ? parameters.svgFill : parameters.fill;

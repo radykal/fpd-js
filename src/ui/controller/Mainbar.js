@@ -753,17 +753,21 @@ export default class Mainbar extends EventTarget {
 
         //upload zone panel
         this.uploadZoneContent = this.secContent.querySelector('.fpd-upload-zone-content');
+        
+        if(!this.fpdInstance.mainOptions.editorMode) {
+
+            const imagesModuleWrapper = new ModuleWrapper(this.fpdInstance, this.uploadZoneContent, 'images');
+            this.fpdInstance['UZmoduleInstance_images'] = imagesModuleWrapper.moduleInstance;
+            
+            const textModuleWrapper = new ModuleWrapper(this.fpdInstance, this.uploadZoneContent, 'text');
+            this.fpdInstance['UZmoduleInstance_text'] = textModuleWrapper.moduleInstance;
+
+            const designModuleWrapper = new ModuleWrapper(this.fpdInstance, this.uploadZoneContent, 'designs');
+            this.fpdInstance['UZmoduleInstance_designs'] = designModuleWrapper.moduleInstance;
+
+        }
+        
         this.uploadZoneNavItems = Array.from(this.secContent.querySelectorAll('.fpd-upload-zone-panel .fpd-bottom-nav > div'));
-        
-        const imagesModuleWrapper = new ModuleWrapper(this.fpdInstance, this.uploadZoneContent, 'images');
-        this.fpdInstance['UZmoduleInstance_images'] = imagesModuleWrapper.moduleInstance;
-        
-        const textModuleWrapper = new ModuleWrapper(this.fpdInstance, this.uploadZoneContent, 'text');
-        this.fpdInstance['UZmoduleInstance_text'] = textModuleWrapper.moduleInstance;
-
-        const designModuleWrapper = new ModuleWrapper(this.fpdInstance, this.uploadZoneContent, 'designs');
-        this.fpdInstance['UZmoduleInstance_designs'] = designModuleWrapper.moduleInstance;
-
         addEvents(
             this.uploadZoneNavItems,
             'click',

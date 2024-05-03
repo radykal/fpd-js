@@ -37,7 +37,7 @@ import { loadFonts } from '../helpers/fonts-loader.js';
  */
 export default class FancyProductDesigner extends EventTarget {
     
-    static version = '6.1.9';
+    static version = '6.2.0';
     static forbiddenTextChars = /<|>/g;
     static proxyFileServer = '';
     static uploadsToServer = true;
@@ -1800,7 +1800,7 @@ export default class FancyProductDesigner extends EventTarget {
     calcDisplaySize(element) {
 
         let unit = this.mainOptions.rulerUnit;
-        let unitFactor = unit == 'cm' ? 10 : 1;
+        let unitFactor = unit == 'cm' ? 100 : 1;
         let widthRatio = 1;
         let heightRatio = 1;
         let dpi = null;

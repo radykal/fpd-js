@@ -75,7 +75,7 @@ export default class ImagesModule extends EventTarget {
         );
         
         const mainOptions = fpdInstance.mainOptions;
-        
+                
         new UploadsModule(
             fpdInstance,
             tabContents.find( t => t.dataset.context == 'upload' ),

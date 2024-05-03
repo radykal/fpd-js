@@ -16,8 +16,7 @@ export default class ModuleWrapper extends EventTarget {
         
         super();
         
-        let moduleInstance;
-        
+        let moduleInstance;        
                 
         if(moduleKey === 'products') {
             moduleInstance = new ProductsModule(fpdInstance, wrapper);

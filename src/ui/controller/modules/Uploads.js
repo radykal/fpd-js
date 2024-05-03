@@ -114,7 +114,7 @@ export default class UploadsModule extends EventTarget {
         ); 
         
         //window.localStorage.removeItem('fpd_uploaded_images');
-        //get stored uploaded images from browser storage
+        //get stored uploaded images from browser storage        
         if(localStorageAvailable() && window.localStorage.getItem('fpd_uploaded_images')) {
         
             const storageImages = JSON.parse(window.localStorage.getItem('fpd_uploaded_images'));
