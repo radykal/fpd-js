@@ -902,14 +902,16 @@ export default class ElementToolbar extends EventTarget {
     #update(element) {
                 
         this.#reset();
-        removeElemClasses(this.container, ['fpd-type-image'])
+        removeElemClasses(this.container, ['fpd-type-image']);
+
+        let colorPanel;
 
 		//COLOR: colors array, true=svg colorization       
 		if(element.hasColorSelection()) {
 
             let availableColors = elementAvailableColors(element, this.fpdInstance);
 
-            let colorPanel;
+            
             if(element.type === 'group' && element.getObjects().length > 1) {
 
                 const paletterPerPath = (Array.isArray(element.colors) && element.colors.length > 1);
@@ -1025,9 +1027,9 @@ export default class ElementToolbar extends EventTarget {
 		}
 
         //enable only patterns
-		if((element.isSVG() || element.getType() === 'text') && element.patterns && element.patterns.length) {
+		if(!colorPanel && (element.isSVG() || element.getType() === 'text') && element.patterns && element.patterns.length) {
 
-            let colorPanel = ColorPanel(this.fpdInstance, {
+            colorPanel = ColorPanel(this.fpdInstance, {
                 colors: [],
                 patterns: element.patterns,
                 onPatternChange: (patternImg) => {

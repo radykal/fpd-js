@@ -638,7 +638,7 @@ export default class Mainbar extends EventTarget {
         const navElem = this.container.querySelector('.fpd-navigation');
         
         //if only one modules exist, select it and hide nav
-        if(modules.length == 0) {
+        if(modules.length == 0 && !this.fpdInstance.mainOptions.editorMode) {
 
             addElemClasses(this.fpdInstance.container, ['fpd-no-modules-mode']);
 

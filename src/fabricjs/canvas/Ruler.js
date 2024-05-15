@@ -15,67 +15,123 @@ const Ruler = (canvas) => {
             const tickSize = 10;
             const majorTickSize = 100;
             const unit = canvas.viewOptions.rulerUnit;
+            const rulerPosition = canvas.viewOptions.rulerPosition;
+            const pb = canvas.viewOptions.printingBox;
+            const zoom = canvas.getZoom();
+            const ctx = canvas.getSelectionContext();    
+            const viewWidth = canvas.viewOptions.stageWidth;
+            const viewHeight = canvas.viewOptions.stageHeight; 
+
+            const _calculateTickInterval = (inputWidth) => {
+
+                const rawInterval = inputWidth / tickSize;
+                const magnitude = Math.pow(10, Math.floor(Math.log10(rawInterval)));
+                const residual = rawInterval / magnitude;
+
+                if (residual >= 5) {
+                    return 5 * magnitude;
+                } else if (residual >= 2) {
+                    return 2 * magnitude;
+                } else {
+                    return magnitude;
+                }
+            }
+
             let unitFactor = unit == 'cm' ? 10 : 1;
-            let viewWidth = canvas.viewOptions.stageWidth;
             let widthRatio = 1;
-            let viewHeight = canvas.viewOptions.stageHeight;
             let heightRatio = 1;
-                        
+            let viewOutput;
+
             if(unit != 'px' 
-                && objectHasKeys(canvas.viewOptions.printingBox, ['left','top','width','height']) 
+                && objectHasKeys(pb, ['left','top','width','height']) 
                 && objectHasKeys(canvas.viewOptions.output, ['width','height'])
             ) {
 
-                //one pixel in mm
-                widthRatio = canvas.viewOptions.output.width / canvas.viewOptions.printingBox.width;
-                heightRatio = canvas.viewOptions.output.height / canvas.viewOptions.printingBox.height;               
+                viewOutput = canvas.viewOptions.output;
 
+                //one pixel in mm                
+                widthRatio = viewOutput.width / pb.width;                
+                heightRatio = viewOutput.height / pb.height; 
+                
+                
             }
             else {
                 unitFactor = 1;
             }
 
-            const zoom = canvas.getZoom();
-            const ctx = canvas.getSelectionContext();
+            let rulerXHeight = 20 * zoom,
+                rulerYWidth = 20 * zoom,
+                rulerXLeft = 0,
+                rulerXTop = 0,
+                rulerYLeft = canvas.width - rulerYWidth,
+                rulerYTop = 0,
+                rulerXWidth = viewWidth,
+                
+                rulerYHeight = viewHeight,
+                loopXWidth = viewWidth * widthRatio,
+                loopYHeight = viewHeight * heightRatio;
+
+            if(rulerPosition == 'pb' && viewOutput) {
+                
+                rulerXLeft = pb.left * zoom;
+                rulerXTop = (pb.top-rulerXHeight) * zoom;
+                rulerXWidth = pb.width * zoom;
+
+                rulerYLeft = (pb.left+pb.width) * zoom;
+                rulerYTop = pb.top * zoom;
+                rulerYHeight = pb.height * zoom;
+
+                loopXWidth = viewOutput.width;
+                loopYHeight = viewOutput.height;
+
+            }
 
             // Render the ruler on the X axis
-            const rulerXHeight = 20;
             ctx.fillStyle = canvas.rulerBg;
-            ctx.fillRect(0, 0, viewWidth, rulerXHeight);
-            
-            for (var i = 0; i <= viewWidth * widthRatio; i += tickSize) {
+            ctx.fillRect(rulerXLeft, rulerXTop, rulerXWidth, rulerXHeight);
+                            
+            for (var i = 0; i <= loopXWidth; i += _calculateTickInterval(loopXWidth)) {
                                 
-                const tickHeight = i % majorTickSize === 0 ? rulerXHeight : rulerXHeight / 2;
-                const tickX = ((i * zoom) / widthRatio) * unitFactor;           
-                ctx.fillRect(tickX, 0, 1, tickHeight);
+                const tickHeight = i % majorTickSize === 0 ? rulerXHeight : rulerXHeight / 3;
+                const tickX = ((i * zoom) / widthRatio);
 
+                ctx.fillRect(rulerXLeft+tickX, rulerXTop, 1, tickHeight);
+                
                 if (i % majorTickSize === 0) {
 
                     ctx.fillStyle = canvas.rulerTickColor;
-                    ctx.font = '10px Arial';                    
-                    ctx.fillText(Math.round(i / unitFactor), tickX+2, rulerXHeight);
+                    ctx.font = '10px Arial';   
+                    
+                    let tickLabelX = rulerXLeft + tickX;
+                    const textMetrics = ctx.measureText(Math.round(i / unitFactor));
+                    tickLabelX += i == 0 ? 2 : -(textMetrics.width+2);
+                    
+                    ctx.fillText(Math.round(i / unitFactor) + (i == 0 ? ' '+unit.toUpperCase() : ''), tickLabelX, rulerXTop+rulerXHeight-2);
 
                 }
 
             }
 
             // Render the ruler on the Y axis
-            const rulerYWidth = 20;
             ctx.fillStyle = canvas.rulerBg;
-            ctx.fillRect(canvas.width - rulerYWidth, 0, rulerYWidth, viewHeight);
+            ctx.fillRect(rulerYLeft, rulerYTop, rulerYWidth, rulerYHeight);
 
-            for (var j = 0; j <= viewHeight * heightRatio; j += tickSize) {
-
-                const tickWidth = canvas.width - (i % majorTickSize === 0 ? rulerYWidth : rulerYWidth / 2);
-                const tickY = ((j * zoom) / heightRatio) * unitFactor; 
+            for (var j = 0; j <= loopYHeight; j += _calculateTickInterval(loopYHeight)) {
                 
-                ctx.fillRect(tickWidth, tickY, rulerYWidth, 1);
+                const tickWidth = (j % majorTickSize === 0 ? rulerYWidth : rulerYWidth / 3);
+                const tickY = ((j * zoom) / heightRatio); 
+                                    
+                ctx.fillRect(rulerYLeft, rulerYTop+tickY, tickWidth, 1);
 
                 if (j % majorTickSize === 0) {
 
                     ctx.fillStyle = canvas.rulerTickColor;
                     ctx.font = '10px Arial';
-                    ctx.fillText(Math.round(j / unitFactor), canvas.width - rulerYWidth, tickY + (10 * zoom));
+
+                    let tickLabelY = rulerYTop + tickY;
+                    tickLabelY += j == 0 ? 12 : -2;
+                    
+                    ctx.fillText(Math.round(j / unitFactor), rulerYLeft, tickLabelY);
                     
                 }
 

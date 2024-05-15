@@ -37,7 +37,7 @@ import { loadFonts } from '../helpers/fonts-loader.js';
  */
 export default class FancyProductDesigner extends EventTarget {
     
-    static version = '6.2.0';
+    static version = '6.2.1';
     static forbiddenTextChars = /<|>/g;
     static proxyFileServer = '';
     static uploadsToServer = true;
@@ -1800,7 +1800,7 @@ export default class FancyProductDesigner extends EventTarget {
     calcDisplaySize(element) {
 
         let unit = this.mainOptions.rulerUnit;
-        let unitFactor = unit == 'cm' ? 100 : 1;
+        let unitFactor = unit == 'cm' ? 10 : 1;
         let widthRatio = 1;
         let heightRatio = 1;
         let dpi = null;
@@ -1827,7 +1827,7 @@ export default class FancyProductDesigner extends EventTarget {
 
         let sizeWidth = parseInt((element.width * element.scaleX) * widthRatio);
         sizeWidth = parseInt(sizeWidth / unitFactor);
-
+        
         let sizeHeight = parseInt((element.height * element.scaleY) * heightRatio);
         sizeHeight = parseInt(sizeHeight / unitFactor);
 
@@ -1844,7 +1844,7 @@ export default class FancyProductDesigner extends EventTarget {
 
         if(!element) return;
 
-        //text link group        
+        //text link group                
         if(!isEmpty(element.textLinkGroup)) {
 
             const textLinkGroupProps = this.mainOptions.textLinkGroupProps || [];
@@ -1858,7 +1858,7 @@ export default class FancyProductDesigner extends EventTarget {
                         && fabricObj.textLinkGroup === element.textLinkGroup
                     ) {
                                                 
-                        if(options.text) {
+                        if(typeof options.text === 'string') {
 
                             fabricObj.set('text', element.text);
                             fabricObj.fire('changed');
@@ -1990,8 +1990,8 @@ export default class FancyProductDesigner extends EventTarget {
         )
                 
         this.#toggleUndoRedoBtns();
-        this.currentViewInstance.fabricCanvas.snapToGrid = false;
-        this.currentViewInstance.fabricCanvas.enableRuler = false;
+        this.currentViewInstance.fabricCanvas.snapToGrid = false;        
+        this.currentViewInstance.fabricCanvas.enableRuler = this.mainOptions.rulerFixed;
         
         //reset view canvas size
         this.currentViewInstance.fabricCanvas.resetSize();

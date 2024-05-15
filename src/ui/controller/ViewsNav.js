@@ -14,7 +14,7 @@ import Snackbar from '../view/comps/Snackbar.js';
 export default class ViewsNav extends EventTarget {
 
     #maxStageSize = 1000; //when adding blank page or editing size, this will be max. canvas width/height
-    #pbOffset = 50;
+    #pbOffset = 100;
     
     constructor(fpdInstance) {
         
@@ -219,10 +219,10 @@ export default class ViewsNav extends EventTarget {
 
     checkDimensionLimits(type, input) {
 
-        const inputVal = parseInt(input.value);
+        let inputVal = parseInt(input.value);
 
 		if(type == 'width') {
-
+            
 			if(inputVal < this.minWidth) { inputVal = this.minWidth; }
 			else if(inputVal > this.maxWidth) { inputVal = this.maxWidth; }
 

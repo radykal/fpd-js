@@ -356,6 +356,8 @@ export default class ActionsBar extends EventTarget {
 		}
 		else if (action === 'preview-lightbox') {
 
+			this.fpdInstance.currentViewInstance.fabricCanvas.enableRuler = false;
+
 			this.fpdInstance.getProductDataURL((dataURL) => {
 
 				const image = new Image();
@@ -379,6 +381,9 @@ export default class ActionsBar extends EventTarget {
 					})
 
 				}
+
+				this.fpdInstance.currentViewInstance.fabricCanvas.enableRuler = this.fpdInstance.mainOptions.rulerFixed;
+				this.fpdInstance.currentViewInstance.fabricCanvas.renderAll();
 
 			});
 
@@ -431,6 +436,24 @@ export default class ActionsBar extends EventTarget {
 				}
 			)
 
+			const closeElem = document.createElement('div');
+			closeElem.className = "fpd-close";
+			closeElem.innerHTML = '<span class="fpd-icon-close"></span>';
+			zoomWrapper.append(closeElem);
+			
+			addEvents(
+				closeElem,
+				'click',
+				(evt) => {
+
+					if (zoomWrapper) {
+						zoomWrapper.remove();
+					}
+					
+
+				}
+			)
+
 			this.fpdInstance.mainWrapper.container.append(zoomWrapper);
 
 		}
@@ -467,12 +490,18 @@ export default class ActionsBar extends EventTarget {
 				'click',
 				(evt) => {
 
+					this.fpdInstance.currentViewInstance.fabricCanvas.enableRuler = false;
+
 					this.downloadFile(
 						evt.currentTarget.dataset.value,
 						downloadModal.querySelector('.fpd-switch').checked
 					);
 
 					downloadModal.remove();
+
+					this.fpdInstance.currentViewInstance.fabricCanvas.enableRuler = this.fpdInstance.mainOptions.rulerFixed;
+					this.fpdInstance.currentViewInstance.fabricCanvas.renderAll();
+
 				}
 			)
 

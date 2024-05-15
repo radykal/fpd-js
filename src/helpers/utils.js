@@ -804,6 +804,19 @@ const formatPrice = (price, priceFormatOpts = {}) => {
 
 export { formatPrice }
 
+const toDecimal = (value) => {
+
+    if (value <= 1) {
+        return value;
+    }
+    
+    const intPartLength = Math.floor(value).toString().length;
+    return value / Math.pow(10, intPartLength);
+
+}
+
+export { toDecimal }
+
 const showModal = ((...args) => {   
     Modal(...args);
 });

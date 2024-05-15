@@ -999,6 +999,26 @@ export default class Options {
         */
         rulerUnit: 'px',
 		/**
+        * The position of ruler. Display the ruler for the whole canvas or for around the current view printing box. Possible values: 'canvas', 'pb'.
+        *
+        * @property rulerPosition
+        * @memberof Options.defaults
+        * @type {String}
+        * @default 'canvas'
+        * @version 6.2.1
+        */
+        rulerPosition: 'canvas',
+		/**
+        * The ruler is always visible.
+        *
+        * @property rulerFixed
+        * @memberof Options.defaults
+        * @type {Boolean}
+        * @default false
+        * @version 6.2.1
+        */
+        rulerFixed: false,
+		/**
         * An object to define the AI service.
         *
         * @property aiService

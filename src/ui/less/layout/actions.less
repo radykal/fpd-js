@@ -240,9 +240,10 @@
         border-radius: var(--fpd-border-radius);
         position: absolute;
         left: 50%;
-        top: 0px;
+        top: 10px;
         transform: translate(-50%, 50%);
         padding: 10px;
+        z-index: 10;
 
         > .fpd-stage-pan {
             margin-left: 10px;
@@ -251,6 +252,27 @@
 
             &.fpd-active {
                 color: var(--fpd-secondary-color);
+            }
+        }
+
+        > .fpd-close {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            right: 0px;
+            top: 4px;
+            transform: translateY(-100%);
+            background: #fff;
+            padding: 2px 10px;
+            z-index: 1;
+            border-radius: var(--fpd-border-radius) var(--fpd-border-radius) 0 0;
+            border: 1px solid var(--fpd-border-color);
+            border-bottom: none;
+            cursor: pointer;
+            font-size: 10px;
+
+            &:hover > * {
+                font-weight: bold;
             }
         }
     }
