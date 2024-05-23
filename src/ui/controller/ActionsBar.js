@@ -16,9 +16,7 @@ import {
 export default class ActionsBar extends EventTarget {
 
 	static toggleActions = [
-		'snap',
 		'ruler',
-		'zoom'
 	];
 
 	static availableActions = {

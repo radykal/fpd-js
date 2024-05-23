@@ -1081,6 +1081,21 @@ export default class Options {
         */
         cropMasks: [],
 		/**
+		* Enable specific behaviours for different printing industries.
+		* <ul>
+		* <li>'engraving': Custom Text will have an opacity. Bitmap images will be converted to black&white image with opacity. opts: {opacity:<0-1>, negative: false}</li>
+		* </ul>
+		*
+		* @property industry
+		* @memberof Options.defaults
+		* @type {Object}
+		* @default {type: null, opts: {}}
+		*/
+		industry: {
+			type: null,
+			opts: {}
+		},
+		/**
 		* An object containing the default element parameters in addition to the default Fabric Object properties. See Options.defaults.elementParameters.
 		*
 		* @property elementParameters

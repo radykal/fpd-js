@@ -6,7 +6,6 @@ import './objects/Text.js';
 import './objects/IText.js';
 import './objects/Textbox.js';
 import './objects/NeonText.js';
-import './objects/EngravedText.js';
 import tinycolor from "tinycolor2";
 
 import {
@@ -425,7 +424,7 @@ fabric.Object.prototype.checkEditable = function (checkProps) {
  * @param {Boolean} [colorLinking=true] If element is color linked, execute it.
  * @extends fabric.Canvas
  */
-fabric.Object.prototype.changeColor = function (colorData, colorLinking = true) {
+fabric.Object.prototype.changeColor = function (colorData, colorLinking = true) {     
 
     const colorizable = this.isColorizable();    
     
@@ -554,7 +553,7 @@ fabric.Object.prototype.setPattern = function (patternUrl) {
             //for all other revert to color
             else {
 
-                let color = this.fill ? this.fill : this.colors[0];
+                let color = this.fill ? this.fill : this.colors[0];                
                 color = color ? color : '#000000';
                 this.set('fill', color);
 

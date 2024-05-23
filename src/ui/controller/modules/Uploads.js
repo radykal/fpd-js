@@ -7,7 +7,8 @@ import {
     createImgThumbnail, 
     getItemPrice,
     checkImageDimensions,
-    getFileExtension
+    getFileExtension,
+    objectGet
 } from '../../../helpers/utils.js';
 
 export default class UploadsModule extends EventTarget {
@@ -287,7 +288,7 @@ export default class UploadsModule extends EventTarget {
                     
                     if(FancyProductDesigner.uploadsToServer) {
                         
-                        var formData = new FormData();
+                        const formData = new FormData();
                         formData.append('images[]', file);
                         
                         const xhr = new XMLHttpRequest();
@@ -347,8 +348,8 @@ export default class UploadsModule extends EventTarget {
                             Snackbar('Upload failed. Please try again or check your web console!');
                         
                         };
-                        
-                        xhr.open('POST', this.fpdInstance.mainOptions.fileServerURL);
+                                                                        
+                        xhr.open('POST', this.fpdInstance.getFileServerURL());
                         xhr.send(formData);
                         
                         thumbnail.xhr = xhr;
@@ -443,7 +444,7 @@ export default class UploadsModule extends EventTarget {
         
         };
         
-        xhr.open('POST', this.fpdInstance.mainOptions.fileServerURL);
+        xhr.open('POST', this.fpdInstance.getFileServerURL());
         xhr.send(formData);
         
     }

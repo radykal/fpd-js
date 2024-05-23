@@ -21,7 +21,8 @@ import {
     popupBlockerAlert,
     localStorageAvailable,
     formatPrice,
-    fireEvent
+    fireEvent,
+    objectGet
 } from '../helpers/utils.js';
 import { getJSON, postJSON } from '../helpers/request.js';
 import { objectHasKeys, toggleElemClasses } from '../helpers/utils.js';
@@ -37,7 +38,7 @@ import { loadFonts } from '../helpers/fonts-loader.js';
  */
 export default class FancyProductDesigner extends EventTarget {
     
-    static version = '6.2.1';
+    static version = '6.2.2';
     static forbiddenTextChars = /<|>/g;
     static proxyFileServer = '';
     static uploadsToServer = true;
@@ -286,6 +287,15 @@ export default class FancyProductDesigner extends EventTarget {
 	 * @default null
 	 */
 	bulkVariations = null;
+
+    /**
+	 * The product mode type set through main options.
+	 *
+	 * @property industryType
+	 * @type String
+	 * @default null
+	 */
+    industryType = null;
     
     loadingCustomImage = false;
     lazyBackgroundObserver = null;
@@ -345,6 +355,15 @@ export default class FancyProductDesigner extends EventTarget {
         if(Array.isArray(this.mainOptions.pricingRules) && this.mainOptions.pricingRules.length) {
 
             this.pricingRulesInstance = new PricingRules(this);
+
+        }
+
+        if(this.mainOptions.editorMode) {
+
+            addElemClasses(
+                document.body,
+                ['fpd-editor-mode']
+            )
 
         }
         
@@ -985,6 +1004,7 @@ export default class FancyProductDesigner extends EventTarget {
             const relevantOptions = {};
 
             if(isPlainObject(view.options)) {
+
                 FancyProductDesignerView.relevantOptions.forEach(key =>  {
 
                     if(typeof view.options[key] !== 'undefined') {
@@ -992,6 +1012,7 @@ export default class FancyProductDesigner extends EventTarget {
                     }
                     
                 });
+                
             }
             
 
@@ -1036,6 +1057,16 @@ export default class FancyProductDesigner extends EventTarget {
         })
             
         view.options = isPlainObject(view.options) ? deepMerge(relevantMainOptions, view.options) : relevantMainOptions;
+
+        //first view containing also product options        
+        document.body.dataset.fpdIndustryType = '';
+        this.industryType = null;
+        if(this.viewInstances.length == 0 && view.options.industry && view.options.industry.type) {
+
+            this.industryType = view.options.industry.type;
+            document.body.dataset.fpdIndustryType = this.industryType;
+            
+        }
                 
         let viewInstance = new FancyProductDesignerView(
             this.productStage, 
@@ -1056,6 +1087,8 @@ export default class FancyProductDesigner extends EventTarget {
 
             },
             'beforeElementAdd': (opts) => {
+
+                const params = opts.params;
 
                 if(this.mainBar && this.uiManager && this.uiManager.currentLayout == 'small') {
                     this.mainBar.toggleContentDisplay(false);
@@ -1294,16 +1327,16 @@ export default class FancyProductDesigner extends EventTarget {
 
             },
             'elementFillChange': ({element, colorLinking}) => {                
-                
+                                
                 if(this.productCreated && colorLinking && element.colorLinkGroup && element.colorLinkGroup.length > 0) {
         
-                    const group = this.colorLinkGroups[element.colorLinkGroup];
+                    const group = this.colorLinkGroups[element.colorLinkGroup];                    
 
                     if(group && group.elements) {
 
                         group.elements.forEach((groupElem) => {
-                            
-                            if(element.id, groupElem.id) {
+                                                        
+                            if(element.id != groupElem.id) {
 
                                 const targetView = this.viewInstances[groupElem.viewIndex];
                                 const targetElem = targetView.fabricCanvas.getElementByID(groupElem.id);
@@ -2170,7 +2203,7 @@ export default class FancyProductDesigner extends EventTarget {
 	addCustomImage(source, title, options={}, viewIndex) {
 
 		viewIndex = viewIndex === undefined ? this.currentViewIndex : viewIndex;
-
+        
 		const image = new Image;
 		image.crossOrigin = "anonymous";
     	image.src = source;
@@ -2206,7 +2239,7 @@ export default class FancyProductDesigner extends EventTarget {
 
             let imageParams = deepMerge(currentCustomImageParameters, fixedParams);
             imageParams = deepMerge(imageParams, options);
-            
+                        
             this.viewInstances[viewIndex].fabricCanvas.addElement(
     			'image',
     			source,
@@ -2314,9 +2347,9 @@ export default class FancyProductDesigner extends EventTarget {
             this.toggleSpinner(false);
             Snackbar(errorMsg);
         }
-
+        
         postJSON({
-            url: this.mainOptions.fileServerURL,
+            url: this.getFileServerURL(),
             body: formData,
             onSuccess: (data) => {
                                 
@@ -2362,7 +2395,7 @@ export default class FancyProductDesigner extends EventTarget {
 	}
     
 
-    addCanvasDesign(source, title, params={}) {
+    addCanvasDesign(source, title, params={}) {        
         
         if(!this.currentViewInstance) { return; }
     
@@ -2382,7 +2415,7 @@ export default class FancyProductDesigner extends EventTarget {
         if(Array.isArray(params.relatedViewImages)) {
 
             params.replaceInAllViews = false;
-            
+                        
             //add main design to first view
             this.viewInstances[0].fabricCanvas.addElement(
                 'image', 
@@ -3024,6 +3057,23 @@ export default class FancyProductDesigner extends EventTarget {
     formatPrice(price) {
 
         return formatPrice(price, this.mainOptions.priceFormat)
+
+    }
+
+    getFileServerURL() {
+
+        let fileServerURL = new URL(this.mainOptions.fileServerURL);      
+
+        if(objectGet(this.viewInstances[0].options, 'industry.type') == 'engraving') {
+
+            if(objectGet(this.viewInstances[0].options, 'industry.opts.negative'))
+                fileServerURL.searchParams.set('filter', 'threshold_negative');
+            else
+                fileServerURL.searchParams.set('filter', 'threshold');
+
+        }
+
+        return fileServerURL.href;
 
     }
 }

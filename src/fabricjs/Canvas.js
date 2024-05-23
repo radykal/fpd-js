@@ -11,7 +11,8 @@ import {
     objectHasKeys,
     isUrl,
     isZero,
-    isEmpty
+    isEmpty,
+    objectGet
 } from '../helpers/utils.js';
 import {
     getFilter,
@@ -633,7 +634,7 @@ fabric.Canvas.prototype.addElements = function (elements, callback) {
  */
 fabric.Canvas.prototype.addElement = function (type, source, title, params = {}) {        
     
-    if (type === undefined || source === undefined || title === undefined) return;    
+    if (type === undefined || source === undefined || title === undefined) return;        
 
     /**
      * Gets fired as soon as an element will be added (before its added to canvas).
@@ -659,6 +660,21 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
         title = title.replace(/(<([^>]+)>)/ig, "");
     }
 
+    if(params.colorLinkGroup) {
+
+        let currentElems = this.getElements();
+        if(currentElems) {
+
+            //get first element with the same color link group and copy the fill of that element to the new element
+            const targetElem = currentElems.find(elem => elem['colorLinkGroup'] === params.colorLinkGroup);
+            if(targetElem && targetElem.fill) {
+                params.fill = targetElem.fill;
+            }
+
+        }
+
+    }
+        
     //check that fill is a string
     if (typeof params.fill !== 'string' && !Array.isArray(params.fill)) {
         params.fill = false;
@@ -696,7 +712,7 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
 
     }
 
-    params._isInitial = !this.initialElementsLoaded;
+    params._isInitial = !this.initialElementsLoaded;    
 
     if (type.toLowerCase().includes('text')) {
         var defaultTextColor = params.colors[0] ? params.colors[0] : '#000000';
@@ -733,6 +749,14 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
     fabricParams = deepMerge(params, fabricParams);
 
     if (fabricParams.isCustom) {
+
+        //engraving mode
+        if(objectGet(this.viewOptions, 'industry.type') == 'engraving') {
+
+            fabricParams.opacity = objectGet(this.viewOptions, 'industry.opts.opacity', 0.5);
+
+        }
+                
         this.isCustomized = true;
     }
 
@@ -840,7 +864,6 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
                     fabricParams.svgFill = params.svgFill;
                 }
 
-
                 delete fabricParams['boundingBox'];
                 delete fabricParams['originParams'];
                 delete fabricParams['colors'];
@@ -902,6 +925,7 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
 
                     fabricParams.svgFill = params.svgFill;
                 }
+                
                 _fabricImageLoaded(svgGroup, fabricParams, true, { svgFill: params.svgFill });
 
             });
@@ -972,12 +996,6 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
         else if(params.neonText) {
 
             fabricText = new fabric.NeonText(source, fabricParams);
-
-        }
-        //neon-text
-        else if(params.engravedText) {
-            
-            fabricText = new fabric.EngravedText(source, fabricParams);
 
         }
         //i-text
@@ -1668,7 +1686,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
             || parameters.hasOwnProperty('shadowBlur') 
         || parameters.hasOwnProperty('shadowOffsetX') 
         || parameters.hasOwnProperty('shadowOffsetY')
-        && !(element.engravedText || element.neonText)
+        && !(element.neonText)
     ) {
                     
         if(parameters.shadowColor === null) {
@@ -1750,7 +1768,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
         
     }
 
-    //change element color        
+    //change element color            
     if (parameters.fill !== undefined || parameters.svgFill !== undefined) {
 
         const fill = parameters.svgFill !== undefined ? parameters.svgFill : parameters.fill;

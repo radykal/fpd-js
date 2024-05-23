@@ -68,7 +68,6 @@ fpd-element-toolbar {
 
             >.fpd-current-fill {
                 display: block;
-                margin: auto;
                 width: 28px;
                 height: 28px;
                 border-radius: 50%;
@@ -392,11 +391,10 @@ fpd-element-toolbar.fpd-smart {
         > div {
             margin: 10px 0;
             
-
             > div {
                 display: flex;
                 flex-direction: column;
-                justify-content: flex-start;
+                justify-content: space-between;
                 flex: 0;
             }
         }
@@ -443,6 +441,10 @@ fpd-element-toolbar.fpd-smart {
 
                 .fpd-label {
                     display: none;
+                }
+
+                > fpd-dropdown {
+                    min-height: 42px;
                 }
 
             }
@@ -670,6 +672,16 @@ fpd-element-toolbar {
 
         }
 
+    }
+
+}
+
+body[data-fpd-industry-type="engraving"]:not(.fpd-editor-mode)  {
+
+    .fpd-tool-fill-opacity,
+    .fpd-tool-advanced-editing,
+    .fpd-tool-remove-bg {
+        display: none !important;
     }
 
 }

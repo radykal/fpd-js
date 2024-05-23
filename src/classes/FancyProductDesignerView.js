@@ -71,7 +71,8 @@ export default class FancyProductDesignerView extends EventTarget {
         'namesNumbersEntryPrice',
         'applySizeWhenReplacing',
         'rulerPosition',
-        'rulerFixed'
+        'rulerFixed',
+        'industry'
     ];
     
     /**
