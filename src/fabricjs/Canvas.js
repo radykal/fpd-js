@@ -447,7 +447,7 @@ fabric.Canvas.prototype._renderPrintingBox = function () {
     if (this.printingBoxObject) {
         this.remove(this.printingBoxObject);
         this.printingBoxObject = null;
-    }
+    }    
     
     if (objectHasKeys(this.viewOptions.printingBox, ['left', 'top', 'width', 'height'])) {
 
@@ -489,6 +489,36 @@ fabric.Canvas.prototype._renderPrintingBox = function () {
             selectable: false,
             _ignore: true
         });
+        
+        const bleedinMM = this.viewOptions?.output?.bleed
+        if(bleedinMM && false) {
+
+            //one mm in pixel                    
+            const mmPxRatio = this.viewOptions.printingBox.width / this.viewOptions.output.width;
+            const bleedInPx = mmPxRatio * bleedinMM;
+            const bleedBoxWidth = printingBox.width - bleedInPx;
+            const bleedBoxHeight = printingBox.height - bleedInPx;
+                        
+            const bleedBox = new fabric.Rect({
+                left: printingBox.left,
+                top: printingBox.top,
+                width: bleedBoxWidth,
+                height: bleedBoxHeight,
+                stroke: this.viewOptions.printingBox.visibility || this.viewOptions.editorMode ? '#db2828' : 'transparent',
+                strokeWidth: bleedInPx,
+                opacity: 0.1,
+                strokeLineCap: 'square',
+                fill: false,
+                originX: 'left',
+                originY: 'top',
+                name: 'bleed-box',
+                excludeFromExport: true,
+                _ignore: true
+            });
+
+            this.printingBoxObject.add(bleedBox);
+
+        }
 
         this.add(this.printingBoxObject);
         this.printingBoxObject.setCoords();
@@ -1097,7 +1127,7 @@ fabric.Canvas.prototype.resetSize = function () {
     if (!this.viewOptions.responsive) {
         this.responsiveScale = 1;
     }    
-    
+        
     this.setDimensions({
         width: this.viewOptions.stageWidth * this.responsiveScale,
         height: this.viewOptions.stageHeight * this.responsiveScale
@@ -1284,7 +1314,6 @@ fabric.Canvas.prototype.getElementByID = function (id) {
     for (var i = 0; i < objects.length; ++i) {
         if (objects[i].id == id) {
             return objects[i];
-            break;
         }
     }
 
@@ -1397,9 +1426,9 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
         && !element._addToUZ 
         && element.scaleX === 1
     ) {
-        
+                
         //only scale to bb when no scale value is set
-        let scale = null;
+        let scale = null;        
         if (!isZero(element.resizeToW) || !isZero(element.resizeToH)) {
 
             let scaleToWidth = element.resizeToW,

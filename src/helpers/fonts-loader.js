@@ -43,9 +43,9 @@ export { parseFontsToEmbed }
 const loadFonts = (fpdInstance, callback) => {    
     
     let fonts = fpdInstance.mainOptions.fonts;
-            
+    
     if(fonts && fonts.length > 0 && typeof fonts[0] === 'object') {
-        
+                
         //sort fonts alphabetically
         fonts.sort((a, b) => {
             

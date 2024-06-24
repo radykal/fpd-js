@@ -38,7 +38,7 @@ import { loadFonts } from '../helpers/fonts-loader.js';
  */
 export default class FancyProductDesigner extends EventTarget {
     
-    static version = '6.2.2';
+    static version = '6.3.2';
     static forbiddenTextChars = /<|>/g;
     static proxyFileServer = '';
     static uploadsToServer = true;
@@ -373,7 +373,7 @@ export default class FancyProductDesigner extends EventTarget {
     }
     
     #langLoaded() {
-
+        
         loadFonts(this, (fonts) => {
 
             this.mainOptions.fonts = fonts;
@@ -1015,7 +1015,6 @@ export default class FancyProductDesigner extends EventTarget {
                 
             }
             
-
             view.options = relevantOptions;
 
         });
@@ -1465,16 +1464,14 @@ export default class FancyProductDesigner extends EventTarget {
             this.productCreated = true;
 
             const productLayouts = this.productViews[0].options.layouts;
-
             if(typeof productLayouts == 'string') {
 
                 getJSON({
                     url: productLayouts,
                     onSuccess: (data) => {
-    
+                                                
                         this.currentLayouts = data;
-                        fireEvent(this, 'layoutsSet', {
-                        })
+                        fireEvent(this, 'layoutsSet', {})
     
                     },
                     onError: () => {
@@ -1486,8 +1483,7 @@ export default class FancyProductDesigner extends EventTarget {
             else if(Array.isArray(productLayouts)) {
 
                 this.currentLayouts = productLayouts;
-                fireEvent(this, 'layoutsSet', {
-                })
+                fireEvent(this, 'layoutsSet', {})
 
             }
                         

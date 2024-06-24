@@ -1,11 +1,12 @@
 import '../../view/modules/Layouts';
 import Modal from '../../view/comps/Modal';
 
-import { getJSON } from '../../../helpers/request';
 import { 
     addEvents,
-    createImgThumbnail
+    createImgThumbnail,
+    isPlainObject
 } from '../../../helpers/utils'
+import FancyProductDesignerView from '../../../classes/FancyProductDesignerView';
     
 export default class LayoutsModule extends EventTarget {
 
@@ -62,7 +63,7 @@ export default class LayoutsModule extends EventTarget {
 
         this.gridElem.innerHTML = '';
 
-        if(Array.isArray(this.layoutsData)) {
+        if(Array.isArray(this.layoutsData)) {            
 
             this.layoutsData.forEach(layoutObj => {
                 
@@ -96,8 +97,8 @@ export default class LayoutsModule extends EventTarget {
                             'modules', 
                             'layouts_confirm_button',
                             'Sure?'
-                        );
-                        
+                        );                        
+                                                                        
                         addEvents(
                             confirmBtn,
                             'click',
@@ -115,6 +116,22 @@ export default class LayoutsModule extends EventTarget {
                                 this.fpdInstance.toggleSpinner(true);
                                 this.#toggleLoader = true;
 
+                                const relevantOptions = {};
+                                if(isPlainObject(layoutObj.options)) {
+
+                                    FancyProductDesignerView.relevantOptions.forEach(key =>  {
+
+                                        if(typeof layoutObj.options[key] !== 'undefined') {
+                                            relevantOptions[key] = layoutObj.options[key];
+                                        }
+                                        
+                                    });
+                                    
+                                }
+
+                                this.fpdInstance.currentViewInstance.options = {...this.fpdInstance.currentViewInstance.options, ...relevantOptions};
+                                this.fpdInstance.currentViewInstance.fabricCanvas.viewOptions = this.fpdInstance.currentViewInstance.options;
+
                                 this.fpdInstance.currentViewInstance.loadElements(layoutObj.elements, () => {
 
                                     this.#toggleLoader = false;
@@ -130,10 +147,13 @@ export default class LayoutsModule extends EventTarget {
                                     this.fpdInstance.dispatchEvent(
                                         new CustomEvent('layoutElementsAdded', {
                                             detail: {
-                                                elements: layoutObj.elements
+                                                layoutView: layoutObj
                                             }
                                         })
                                     );
+
+                                    this.fpdInstance.currentViewInstance.fabricCanvas._renderPrintingBox();
+                                    this.fpdInstance.currentViewInstance.fabricCanvas.resetSize();
 
                                 });
                                 

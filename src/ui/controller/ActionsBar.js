@@ -233,12 +233,13 @@ export default class ActionsBar extends EventTarget {
 				action.replace(/-/g, '_'),
 				actionData.title
 			);
-			
+						
 			if(smartMenu) {
 
 				actionData.type = action;
 				actionData.title = label;
 				actionData.handler = (evt) => {
+					
 
 					const switchElem = evt.currentTarget.querySelector('.fpd-switch');
 					if (switchElem && !evt.target.classList.contains('fpd-switch')) {

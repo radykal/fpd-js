@@ -180,12 +180,15 @@ export { isZero }
 const addEvents = (elements, events = [], listener = () => { }, useCapture = false) => {
 
     events = typeof events == 'string' ? [events] : events;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     events.forEach(eventType => {
 
         if (elements instanceof HTMLElement || elements instanceof window.constructor) {
 
-            elements.addEventListener(eventType, listener, useCapture);
+            elements.addEventListener(eventType, listener, { capture: useCapture, signal: signal });
+            elements.abortController = controller;
 
         }
         else if (Array.from(elements).length) {
@@ -193,7 +196,8 @@ const addEvents = (elements, events = [], listener = () => { }, useCapture = fal
             if (elements && elements.forEach) {
                 
                 elements.forEach(elem => {
-                    elem.addEventListener(eventType, listener, useCapture);
+                    elem.addEventListener(eventType, listener, { capture: useCapture, signal: signal });
+                    elem.abortController = controller;
                 })
                 
 
@@ -201,7 +205,8 @@ const addEvents = (elements, events = [], listener = () => { }, useCapture = fal
 
         }
         else {
-            elements.addEventListener(eventType, listener, useCapture);
+            elements.addEventListener(eventType, listener, { capture: useCapture, signal: signal });
+            elements.abortController = controller;
         }
 
     })

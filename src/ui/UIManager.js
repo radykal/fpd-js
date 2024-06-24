@@ -17,7 +17,8 @@ import {
     addEvents,
     toggleElemClasses,
     addElemClasses,
-    removeElemClasses
+    removeElemClasses,
+    fireEvent
 } from '../helpers/utils.js';
 import AdvancedImageEditor from './controller/AdvancedImageEditor.js';
 
@@ -109,13 +110,9 @@ export default class UIManager extends EventTarget {
                      * @event FancyProductDesigner#modalDesignerOpen
                      * @param {Event} event
                      */
-                    this.fpdInstance.dispatchEvent(
-                        new CustomEvent('modalDesignerOpen')
-                    );
+                    fireEvent(this.fpdInstance, 'modalDesignerOpen', {})
 
-                    window.dispatchEvent(
-                        new CustomEvent('fpdModalDesignerOpen')
-                    );
+                    fireEvent(window, 'fpdModalDesignerOpen', {})
 
                 }
             )
