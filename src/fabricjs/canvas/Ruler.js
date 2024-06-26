@@ -19,6 +19,9 @@ const Ruler = (canvas) => {
             const pb = canvas.viewOptions.printingBox;
             const zoom = canvas.getZoom();
             const ctx = canvas.getSelectionContext();    
+            
+            if(!ctx) return;
+            
             const viewWidth = canvas.viewOptions.stageWidth;
             const viewHeight = canvas.viewOptions.stageHeight; 
 
