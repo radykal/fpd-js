@@ -8,8 +8,13 @@ fabric.Text.prototype.initialize = (function (originalFn) {
 })(fabric.Text.prototype.initialize);
 
 fabric.Text.prototype.toImageSVG = function (args) {
-	const ctx = this._cacheCanvas?.toDataURL() ? this._cacheCanvas : this;
-	const svgDataURL = ctx.toDataURL({ withoutShadow: false });
+	//disable clippath otherwise shadow text is not working
+	let tempCliPath = this.clipPath;
+	this.clipPath = null;
+
+	const ctx = this._cacheCanvas?.toDataURL() && !this.shadow?.color ? this._cacheCanvas : this;
+
+	let svgDataURL = ctx.toDataURL({ withoutShadow: false });
 
 	let ctxWidth = ctx.width;
 	let ctxHeight = ctx.height;
@@ -21,13 +26,13 @@ fabric.Text.prototype.toImageSVG = function (args) {
 		ctxHeight += (Math.abs(shadow.offsetY) + shadow.blur) * 2;
 	}
 
+	this.clipPath = tempCliPath;
+
 	return this._createBaseSVGMarkup(
 		[
-			`<image href="${svgDataURL}" width = "${ctxWidth}" height = "${ctxHeight}" x = "${
-				-ctxWidth / 2
-			}" y="${-ctxHeight / 2}" style="scale: ${1.0 / this.scaleX} ${
-				1.0 / this.scaleY
-			}"/>`,
+			`<image href="${svgDataURL}" width = "${ctxWidth}" height = "${ctxHeight}" x = "${-ctxWidth / 2}" y="${
+				-ctxHeight / 2
+			}" style="scale: ${1.0 / this.scaleX} ${1.0 / this.scaleY}"/>`,
 		],
 		{
 			reviver: args[0],
@@ -42,10 +47,7 @@ fabric.Text.prototype.toSVG = (function (originalFn) {
 		//convert text to image data uri in print mode for specific text options
 		if (
 			this.canvas.printMode &&
-			((this.curved && this.path) ||
-				this.opacity != 1 ||
-				this.shadow?.color ||
-				this.pattern)
+			((this.curved && this.path) || this.opacity != 1 || this.shadow?.color || this.pattern)
 		) {
 			return this.toImageSVG(args);
 		}
@@ -138,10 +140,7 @@ fabric.Text.prototype.toSVG = (function (originalFn) {
 			// append texpath to defs or as rendered element
 			let textPathEl;
 
-			if (
-				(fillPath && fillPath !== "none") ||
-				(!strokePath && strokePath !== "none")
-			) {
+			if ((fillPath && fillPath !== "none") || (!strokePath && strokePath !== "none")) {
 				textPathEl = `<path id="textOnPath${id}" display="${display}" fill="${fillPath}" stroke="${strokePath}" stroke-width="${strokeWidth}" d="${d}" style="display: none"/>`;
 			} else {
 				textPathEl = `<defs>
@@ -207,8 +206,7 @@ function reversePathData(pathData) {
 		return [controlPoints, endPoint];
 	};
 
-	let closed =
-		pathData[pathData.length - 1][0].toLowerCase() === "z" ? true : false;
+	let closed = pathData[pathData.length - 1][0].toLowerCase() === "z" ? true : false;
 	if (closed) {
 		// add lineto closing space between Z and M
 		pathData = addClosePathLineto(pathData);
@@ -219,9 +217,7 @@ function reversePathData(pathData) {
 	// define last point as new M if path isn't closed
 	let valuesLast = pathData[pathData.length - 1];
 	let valuesLastL = valuesLast.length;
-	let M = closed
-		? pathData[0]
-		: ["M", valuesLast[valuesLastL - 2], valuesLast[valuesLastL - 1]];
+	let M = closed ? pathData[0] : ["M", valuesLast[valuesLastL - 2], valuesLast[valuesLastL - 1]];
 	// starting M stays the same – unless the path is not closed
 	pathDataNew.push(M);
 
@@ -234,8 +230,7 @@ function reversePathData(pathData) {
 		let typePrev = comPrev[0];
 		let valuesPrev = comPrev.slice(1);
 		// get reversed control points and new end coordinates
-		let [controlPointsPrev, endPointsPrev] =
-			reverseControlPoints(valuesPrev);
+		let [controlPointsPrev, endPointsPrev] = reverseControlPoints(valuesPrev);
 		let [controlPoints, endPoints] = reverseControlPoints(values);
 
 		// create new path data
@@ -275,18 +270,14 @@ fabric.Text.prototype._constrainScale = (function (originalFn) {
 		value = originalFn.call(this, value);
 
 		if (this.minFontSize !== undefined) {
-			const scaledFontSize = parseFloat(
-				Number(value * this.fontSize).toFixed(0)
-			);
+			const scaledFontSize = parseFloat(Number(value * this.fontSize).toFixed(0));
 			if (scaledFontSize < this.minFontSize) {
 				return this.minFontSize / this.fontSize;
 			}
 		}
 
 		if (this.maxFontSize !== undefined) {
-			const scaledFontSize = parseFloat(
-				Number(value * this.fontSize).toFixed(0)
-			);
+			const scaledFontSize = parseFloat(Number(value * this.fontSize).toFixed(0));
 			if (scaledFontSize > this.maxFontSize) {
 				return this.maxFontSize / this.fontSize;
 			}
@@ -322,27 +313,18 @@ fabric.Text.prototype._TextInit = function () {
 	});
 };
 
-fabric.Text.prototype._createTextCharSpan = function (
-	_char,
-	styleDecl,
-	left,
-	top
-) {
+fabric.Text.prototype._createTextCharSpan = function (_char, styleDecl, left, top) {
 	const multipleSpacesRegex = /  +/g;
 
 	//FPD: add text styles to tspan
 	styleDecl.fontWeight = this.fontWeight;
 	styleDecl.fontStyle = this.fontStyle;
 
-	var shouldUseWhitespace =
-			_char !== _char.trim() || _char.match(multipleSpacesRegex),
+	var shouldUseWhitespace = _char !== _char.trim() || _char.match(multipleSpacesRegex),
 		styleProps = this.getSvgSpanStyles(styleDecl, shouldUseWhitespace);
 
 	//FPD: add underlined text
-	styleProps +=
-		this.textDecoration === "underline"
-			? " text-decoration: underline;"
-			: "";
+	styleProps += this.textDecoration === "underline" ? " text-decoration: underline;" : "";
 
 	let fillStyles = styleProps ? 'style="' + styleProps + '"' : "",
 		dy = styleDecl.deltaY,
