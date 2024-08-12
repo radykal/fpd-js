@@ -12,9 +12,18 @@ fabric.Text.prototype.toImageSVG = function (args) {
 	let tempCliPath = this.clipPath;
 	this.clipPath = null;
 
-	const ctx = this._cacheCanvas?.toDataURL() && !this.shadow?.color ? this._cacheCanvas : this;
+	let multiplier = 1;
+	if (this?.canvas?.viewOptions?.printingBox && this?.canvas?.viewOptions?.output) {
+		const dpi = Math.ceil(
+			(this.canvas.viewOptions.printingBox.width * 25.4) / this.canvas.viewOptions.output.width
+		);
+		multiplier = parseInt(300 / dpi);
+	}
 
-	let svgDataURL = ctx.toDataURL({ withoutShadow: false });
+	let ctx = !this.shadow?.color && this._cacheCanvas?.toDataURL() ? this._cacheCanvas : this;
+	//ctx = this;
+
+	let svgDataURL = ctx.toDataURL({ withoutShadow: false, withoutTransform: true, multiplier: multiplier });
 
 	let ctxWidth = ctx.width;
 	let ctxHeight = ctx.height;
