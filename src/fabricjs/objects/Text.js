@@ -20,13 +20,23 @@ fabric.Text.prototype.toImageSVG = function (args) {
 		multiplier = parseInt(300 / dpi);
 	}
 
-	let ctx = !this.shadow?.color && this._cacheCanvas?.toDataURL() ? this._cacheCanvas : this;
-	//ctx = this;
-
-	let svgDataURL = ctx.toDataURL({ withoutShadow: false, withoutTransform: true, multiplier: multiplier });
+	//let ctx = this.curved ? this._cacheCanvas : this;
+	let ctx = this;
 
 	let ctxWidth = ctx.width;
 	let ctxHeight = ctx.height;
+
+	//attach a transparent shadow, so the text is not cropped off (downside: shadow is not supported for curved text)
+	if (this.curved) {
+		let shadowObj = {
+			color: "rgba(0,0,0,0)",
+			blur: 100,
+			offsetX: 0,
+			offsetY: 0,
+		};
+
+		this.set("shadow", shadowObj);
+	}
 
 	if (this.shadow?.color) {
 		var shadow = this.shadow;
@@ -34,6 +44,13 @@ fabric.Text.prototype.toImageSVG = function (args) {
 		ctxWidth += (Math.abs(shadow.offsetX) + shadow.blur) * 2;
 		ctxHeight += (Math.abs(shadow.offsetY) + shadow.blur) * 2;
 	}
+
+	let svgDataURL = ctx.toDataURL({
+		withoutShadow: false,
+		withoutTransform: true,
+		multiplier: multiplier,
+		enableRetinaScaling: false,
+	});
 
 	this.clipPath = tempCliPath;
 
