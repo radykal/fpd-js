@@ -73,7 +73,7 @@ fabric.Text.prototype.toSVG = (function (originalFn) {
 		//convert text to image data uri in print mode for specific text options
 		if (
 			this.canvas.printMode &&
-			((this.curved && this.path) || this.opacity != 1 || this.shadow?.color || this.pattern)
+			(this.canvas.rtl || (this.curved && this.path) || this.opacity != 1 || this.shadow?.color || this.pattern)
 		) {
 			return this.toImageSVG(args);
 		}
