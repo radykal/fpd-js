@@ -1,5 +1,4 @@
 .fpd-container.fpd-gt-step {
-
 	width: 320px;
 	padding: 15px;
 	position: fixed;
@@ -10,46 +9,56 @@
 	margin-top: 15px;
 	margin-left: -24px;
 	z-index: 100000000000;
-    background: var(--fpd-tooltip-bg-color);
+	background: var(--fpd-tooltip-bg-color);
 
-    > .fpd-gt-pointer {
-        font-size: 50px;
-        position: absolute;
-        top: -16px;
-        left: 0;
-        color: var(--fpd-tooltip-bg-color);
-        transform: scaleY(-1);
-    }
+	> .fpd-gt-pointer {
+		font-size: 50px;
+		position: absolute;
+		top: -16px;
+		left: 0;
+		color: var(--fpd-tooltip-bg-color);
+		transform: scaleY(-1);
+	}
 
-    .fpd-gt-close {
-        position: absolute;
-        right: 10px;
-        top: 10px;
-        font-size: 14px;
-        cursor: pointer;
-        z-index: 10;
-    }
+	.fpd-gt-close {
+		position: absolute;
+		right: 10px;
+		top: 10px;
+		font-size: 14px;
+		cursor: pointer;
+		z-index: 10;
+	}
 
-     .fpd-gt-text {
-        padding-right: 15px;
-    }
-    
-    .fpd-gt-actions {
-        margin-top: 20px;
-    }
-    
-    .fpd-gt-actions > .fpd-btn {
-        margin: 0;
-        float: right;
-        margin-left: 5px;
-        font-size: 12px;
-        padding: 3px 10px;
-    }
-    
-    .fpd-gt-actions > .fpd-gt-counter {
-        line-height: 34px;
-        font-size: 12px;
-        opacity: 0.5;
-    }
+	.fpd-gt-text {
+		padding-right: 15px;
+	}
+
+	.fpd-gt-actions {
+		margin-top: 20px;
+	}
+
+	.fpd-gt-actions > .fpd-btn {
+		margin: 0;
+		float: right;
+		margin-left: 5px;
+		font-size: 12px;
+		padding: 3px 10px;
+	}
+
+	.fpd-gt-actions > .fpd-gt-counter {
+		line-height: 34px;
+		font-size: 12px;
+		opacity: 0.5;
+	}
+
+	&.fpd-reverse {
+		margin-top: 30px;
+		transform: translateY(-100%);
+
+		.fpd-gt-pointer {
+			bottom: 7px;
+			top: auto;
+			transform: translateY(100%);
+		}
+	}
 }
-
