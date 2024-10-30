@@ -104,6 +104,111 @@ fabric.CurvedText = fabric.util.createClass(fabric.IText, {
 		this.pathStartOffset = 0;
 	},
 
+	//todo: calculate text position
+	_getLetterPositions: function () {
+		const chars = this.text.split("");
+		const length = chars.length;
+		const angleRange = this.range;
+
+		const tempCanvas = fabric.util.createCanvasElement();
+		const tempCtx = tempCanvas.getContext("2d");
+		tempCtx.font = this.fontSize + "px " + this.fontFamily;
+
+		const charMetrics = chars.map((char) => ({
+			char,
+			width: tempCtx.measureText(char).width,
+		}));
+
+		const totalWidth =
+			charMetrics.reduce((sum, metric) => sum + metric.width, 0) + this.letterSpacing * (length - 1);
+
+		const totalAngle = length > 1 ? angleRange : 0;
+		const arcLength = this.curveRadius * totalAngle;
+		const scaleFactor = arcLength / totalWidth;
+
+		const startAngle = this.startAngle;
+		let currentAngle = startAngle;
+		let currentOffset = 0;
+
+		return charMetrics.map((metric, i) => {
+			currentOffset += (metric.width * scaleFactor) / 2;
+			currentAngle = startAngle + currentOffset / this.curveRadius;
+
+			let x, y;
+			const spiralRadius = this.curveRadius + i * this.letterSpacing;
+			x = spiralRadius * Math.cos(currentAngle - Math.PI / 2);
+			y = spiralRadius * Math.sin(currentAngle - Math.PI / 2);
+
+			const rotation = (currentAngle * 180) / Math.PI;
+
+			currentOffset += (metric.width * scaleFactor) / 2 + this.letterSpacing * scaleFactor;
+
+			return {
+				char: metric.char,
+				x,
+				y,
+				rotation,
+			};
+		});
+	},
+
+	toSVG: function (reviver) {
+		const markup = ["<g ", this.getSvgTransform(), this.getSvgFilter()];
+
+		if (this.clipPath && !this.clipPath.excludeFromExport) {
+			markup.push(' clip-path="url(#', this.clipPath.clipPathId, ')"');
+		}
+		markup.push(">");
+
+		const letterPositions = this._getLetterPositions();
+
+		// Common text styles
+		const textStyles = [
+			'font-family="',
+			this.fontFamily ? this._escapeXml(this.fontFamily) : "Times New Roman",
+			'" ',
+			'font-size="',
+			this.fontSize,
+			'" ',
+			'font-style="',
+			this.fontStyle,
+			'" ',
+			'font-weight="',
+			this.fontWeight,
+			'" ',
+			'text-decoration="',
+			this.textDecoration || "",
+			'" ',
+			'style="',
+			this.getSvgStyles(true),
+			'"',
+			this.addPaintOrder(),
+		].join("");
+
+		// Add each letter as an individual text element
+		letterPositions.forEach((pos) => {
+			markup.push(
+				"<text ",
+				textStyles,
+				'text-anchor="middle" ',
+				'transform="translate(',
+				pos.x.toFixed(2),
+				",",
+				pos.y.toFixed(2),
+				") rotate(",
+				pos.rotation.toFixed(2),
+				')"',
+				">",
+				this._escapeXml(pos.char),
+				"</text>\n"
+			);
+		});
+
+		markup.push("</g>\n");
+
+		return markup.join("");
+	},
+
 	setTextPath: function () {
 		const path = new fabric.Path(drawCirclePath(0, 0, this.curveRadius), {
 			fill: "transparent",
