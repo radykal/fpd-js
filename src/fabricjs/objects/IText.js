@@ -12,7 +12,7 @@ fabric.IText.prototype.initialize = (function (originalFn) {
 fabric.IText.prototype._ITextInit = function () {
 	this.on({
 		added: () => {
-			this.setCurvedTextPath();
+			if (this.setTextPath) this.setTextPath();
 		},
 		"editing:entered": () => {
 			//prevent text editing in canvas, useful to make text editing only possible via external input
@@ -60,27 +60,4 @@ fabric.IText.prototype._ITextInit = function () {
 			}
 		},
 	});
-};
-
-fabric.IText.prototype.setCurvedTextPath = function () {
-	if (this.curved) {
-		const path = new fabric.Path(drawCirclePath(0, 0, this.curveRadius), {
-			fill: "transparent",
-			strokeWidth: 1,
-			stroke: "rgba(0,0,0, 0.1)",
-			visible: false,
-		});
-
-		this.set("path", path);
-		this.setCurvedTextPosition();
-	}
-};
-
-fabric.IText.prototype.setCurvedTextPosition = function () {
-	if (this.curved && this.path) {
-		this.pathSide = this.curveReverse ? "left" : "right";
-		const offset = this.curveReverse ? Math.PI * this.curveRadius * 2 * 0.25 : (Math.PI * this.curveRadius) / 2;
-		this.pathStartOffset = offset - this.calcTextWidth() / 2;
-		this.pathAlign = "center";
-	}
 };
