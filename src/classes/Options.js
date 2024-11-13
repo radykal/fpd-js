@@ -1617,6 +1617,16 @@ export default class Options {
 			 */
 			filter: null,
 			/**
+			 * Defines the colorization method for the element. Possible values: 
+			 *  'tint' (default) - The color will be applied fully to the element.
+			 *  'multiply' - The color will be multiplied with the element color.
+			 * @property colorMode
+			 * @type {String}
+			 * @memberof Options.defaults.imageParameters
+			 * @default 'tint'
+			 */
+			colorMode: 'tint',
+			/**
 			 * Set the scale mode when image is added into an upload zone or resizeToW/resizeToH properties are set. Possible values: 'fit', 'cover'
 			 *
 			 * @property scaleMode
