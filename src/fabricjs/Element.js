@@ -420,7 +420,9 @@ fabric.Object.prototype.changeColor = function (colorData, colorLinking = true) 
 		//colorize png or dataurl image
 		if ((colorizable == "png" || colorizable == "dataurl") && colorData) {
 			this.filters = [];
-			this.filters.push(new fabric.Image.filters.BlendColor({ mode: this.colorMode, color: colorData }));
+			this.filters.push(
+				new fabric.Image.filters.BlendColor({ mode: this.colorMode, color: colorData, alpha: 1 })
+			);
 
 			this.applyFilters();
 			this.canvas.renderAll();
