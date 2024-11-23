@@ -821,9 +821,7 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
 		//make text curved
 		var fabricText;
 		if (params.curved) {
-			//fabricText = new fabric.IText(source.replace(/(?:\r\n|\r|\n)/g, ''), fabricParams);
 			fabricText = new fabric.CurvedText(source.replace(/(?:\r\n|\r|\n)/g, ""), fabricParams);
-			console.log(fabricText.type);
 		}
 		//make text box
 		else if (params.textBox) {

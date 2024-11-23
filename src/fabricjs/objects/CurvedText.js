@@ -7,35 +7,28 @@ fabric.CurvedText = fabric.util.createClass(fabric.IText, {
 		options || (options = {});
 		this.callSuper("initialize", text, options);
 
-		this.radius = options.curveRadius || 50;
-		this.reverse = options.curveReverse || false;
+		this.curveRadius = options.curveRadius || 50;
+		this.curveReverse = options.curveReverse || false;
 		this.effect = options.effect || "curved";
-		this.range = options.range || Math.PI;
 		this.startAngle = options.startAngle || -Math.PI / 2;
 
 		this.on({
 			//selected
 			selected: () => {
-				this.path.visible = true;
+				if (this.path) this.path.visible = true;
 			},
 			deselected: () => {
-				this.path.visible = false;
+				if (this.path) this.path.visible = false;
 			},
 		});
-
-		this._updatePath();
 	},
 
 	_set: function (key, value) {
 		this.callSuper("_set", key, value);
 
-		if (["radius", "range", "effect", "reverse", "startAngle"].indexOf(key) > -1) {
-			this._updatePath();
-		}
 		return this;
 	},
 
-	// XML escaping helper function
 	_escapeXml: function (str) {
 		return str.replace(/[<>&'"]/g, function (match) {
 			switch (match) {
@@ -55,53 +48,121 @@ fabric.CurvedText = fabric.util.createClass(fabric.IText, {
 		});
 	},
 
-	_updatePath: function () {
-		const startAngle = this.startAngle;
-		const endAngle = startAngle + this.range;
-
-		let pathString;
-
-		if (this.effect === "curved") {
-			const rx = this.curveRadius;
-			const ry = this.curveRadius;
-			const sweep = 1;
-
-			const startX = this.curveRadius * Math.cos(startAngle);
-			const startY = this.curveRadius * Math.sin(startAngle);
-			const endX = this.curveRadius * Math.cos(endAngle);
-			const endY = this.curveRadius * Math.sin(endAngle);
-
-			pathString = `M ${startX} ${startY} A ${rx} ${ry} 0 ${
-				this.range > Math.PI ? 1 : 0
-			} ${sweep} ${endX} ${endY}`;
-		} else if (this.effect === "spiral") {
-			const steps = 100;
-			const stepAngle = (endAngle - startAngle) / steps;
-			const points = [];
-
-			for (let i = 0; i <= steps; i++) {
-				const angle = startAngle + stepAngle * i;
-				const radius = this.curveRadius + (i * this.letterSpacing) / steps;
-				const x = radius * Math.cos(angle);
-				const y = radius * Math.sin(angle);
-				points.push(i === 0 ? `M ${x} ${y}` : `L ${x} ${y}`);
-			}
-
-			pathString = points.join(" ");
+	_getLetterPositions: function () {
+		if (!(this.textLines?.length > 0 && this.textLines[0].length > 0 && this.curveRadius > 0)) {
+			console.error("ERROR: Can't calculate letter positions.");
+			return [];
 		}
 
-		const path = new fabric.Path(pathString, {
-			fill: "",
-			stroke: "",
-			objectCaching: false,
-			originX: "center",
-			originY: "center",
+		//Get the first line of text only.  Currently on the Canvas/PNG other lines are drawn on top of the first.
+		const text = this.textLines[0];
+
+		//Temp canvas and context.
+		const tempCanvas = fabric.util.createCanvasElement();
+		const tempCtx = tempCanvas.getContext("2d");
+		tempCtx.font = this.fontSize + "px " + this.fontFamily;
+
+		//Compute distance along path for each char.
+		const charMetrics = [];
+		const charSpacingPx = this.letterSpacing * 0.1 * this.fontSize;
+
+		let distance = 0;
+		let spacingLast = 0;
+		for (let i = 0; i < text.length; i++) {
+			const spacingCurrent = tempCtx.measureText(text[i]).width;
+			if (i === 0) {
+				//First char.
+				distance += spacingCurrent / 2;
+			} else {
+				const spacingBoth = tempCtx.measureText(text[i - 1] + text[i]).width;
+				//Chars can have different sizes, so get spacing between them.
+				const spacingDelta = spacingBoth - spacingCurrent / 2 - spacingLast / 2;
+				distance += charSpacingPx + spacingDelta;
+			}
+			spacingLast = spacingCurrent;
+
+			charMetrics.push({ char: text[i], distance });
+		}
+
+		const totalWidth = this.calcTextWidth();
+		const totalAngle = totalWidth / this.curveRadius;
+
+		//Works for the default textAlign = "left" only (which currently works more like "center").
+		const angleRadOffset = totalAngle / 2 + Math.PI;
+		const angleRadStart = this.startAngle + (this.curveReverse ? angleRadOffset : -angleRadOffset - Math.PI);
+
+		return charMetrics.map((metric) => {
+			const angleRad = angleRadStart + (metric.distance / this.curveRadius) * (this.curveReverse ? -1 : 1);
+
+			return {
+				char: metric.char,
+				x: this.curveRadius * Math.cos(angleRad),
+				y: this.curveRadius * Math.sin(angleRad),
+				rotation: (angleRad * 180) / Math.PI + (this.curveReverse ? 270 : 90),
+			};
+		});
+	},
+
+	toSVG: function (...args) {
+		if (this.canvas.printMode && (this.opacity != 1 || this.shadow?.color || this.pattern)) {
+			return this.toImageSVG(args);
+		}
+
+		const markup = ["<g ", this.getSvgTransform(), this.getSvgFilter()];
+
+		if (this.clipPath && !this.clipPath.excludeFromExport) {
+			markup.push(' clip-path="url(#', this.clipPath.clipPathId, ')"');
+		}
+		markup.push(">");
+
+		const letterPositions = this._getLetterPositions();
+
+		// Common text styles
+		const textStyles = [
+			'font-family="',
+			this.fontFamily ? this._escapeXml(this.fontFamily) : "Times New Roman",
+			'" ',
+			'font-size="',
+			this.fontSize,
+			'" ',
+			'font-style="',
+			this.fontStyle,
+			'" ',
+			'font-weight="',
+			this.fontWeight,
+			'" ',
+			'text-decoration="',
+			this.textDecoration || "",
+			'" ',
+			'style="',
+			this.getSvgStyles(true),
+			'"',
+			this.addPaintOrder(),
+		].join("");
+
+		// Add each letter as an individual text element
+		letterPositions.forEach((pos) => {
+			markup.push(
+				"<text ",
+				textStyles,
+				'text-anchor="middle" ',
+				'dominant-baseline="middle" ',
+				'transform="translate(',
+				pos.x.toFixed(2),
+				",",
+				pos.y.toFixed(2),
+				") rotate(",
+				pos.rotation.toFixed(2),
+				')"',
+				">",
+				this._escapeXml(pos.char),
+				"</text>\n"
+			);
 		});
 
-		//this.path = path;
-		this.pathAlign = this.reverse ? "right" : "left";
-		this.pathSide = "center";
-		this.pathStartOffset = 0;
+		markup.push("</g>\n");
+
+		return markup.join("");
 	},
 
 	setTextPath: function () {
@@ -127,10 +188,9 @@ fabric.CurvedText = fabric.util.createClass(fabric.IText, {
 
 	toObject: function (propertiesToInclude) {
 		return fabric.util.object.extend(this.callSuper("toObject", propertiesToInclude), {
-			radius: this.curveRadius,
-			reverse: this.reverse,
+			curveRadius: this.curveRadius,
+			curveReverse: this.curveReverse,
 			effect: this.effect,
-			range: this.range,
 			startAngle: this.startAngle,
 		});
 	},
