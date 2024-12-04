@@ -47,8 +47,8 @@
 					}
 				},
 				{
-					"title": "Right to left text",
-					"source": "Right to left text",
+					"title": "בזכויותיהם",
+					"source": "בזכויותיהם",
 					"type": "text",
 					"parameters": {
 						"left": 300,
