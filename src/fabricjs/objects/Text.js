@@ -227,8 +227,11 @@ fabric.Text.prototype._createTextCharSpan = function (_char, styleDecl, left, to
 
 fabric.Text.prototype._renderChars = (function (originalFn) {
 	return function (...args) {
-		//fix for rtl site
-		args[1].direction = this.direction;
+		if (this.direction === "rtl") {
+			const ctx = args[1];
+			if (ctx) ctx.direction = "rtl";
+		}
+
 		originalFn.call(this, ...args);
 	};
 })(fabric.Text.prototype._renderChars);

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Test | Curved Text</title>
+
+		<script src="https://cdn.tailwindcss.com"></script>
+
+		<link href="../../dist/css/vendor.css" rel="stylesheet" type="text/css" />
+		<script src="../../dev/FancyProductDesigner.js"></script>
+
+		<style>
+			body {
+				font-size: 12px;
+				font-family: "Arial", sans-serif;
+				padding-bottom: 1000px;
+				direction: rtl;
+			}
+
+			#fpd-target {
+				margin-top: 100px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container max-auto ml-auto mr-auto max-w-screen-xl px-4">
+			<div class="columns-auto my-8">
+				<div id="fpd-target" class="fpd-sidebar fpd-shadow-2"></div>
+			</div>
+
+			<div class="columns-auto my-8">
+				<div class="column-auto">
+					<button
+						class="rounded bg-white px-2 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+						onclick="svgTest()"
+					>
+						Compare SVG & PNG
+					</button>
+				</div>
+			</div>
+
+			<div class="columns-auto my-8">
+				<div class="column-auto flex space-x-2">
+					<div>
+						<h2 class="text-lg font-semibold">SVG</h2>
+						<div id="svg-display" class="bg-gray-100"></div>
+					</div>
+					<div>
+						<h2 class="text-lg font-semibold">PNG</h2>
+						<div id="png-display" class="bg-gray-100"></div>
+					</div>
+				</div>
+			</div>
+			<script>
+				const appOptions = {
+					mainBarModules: ["text", "manage-layers", "save-load"],
+					fonts: [
+						{
+							name: "Kanit",
+							url: "google",
+							variants: ["bold", "italic", "bold-italic"],
+						},
+						{ name: "Tourney", url: "google" },
+						{ name: "Grandstander", url: "google" },
+						{ name: "Lobster", url: "google" },
+						{ name: "Warnes", url: "google" },
+						{ name: "Neonderthaw", url: "google" },
+						{ name: "Tilt Neon", url: "google" },
+						{ name: "Holtwood One SC", url: "google" },
+					],
+					productsJSON: "product.json",
+					elementParameters: {},
+					textParameters: {},
+					customImageParameters: {
+						removable: true,
+						draggable: true,
+						resizable: true,
+						autoCenter: true,
+						price: 0,
+						autoSelect: true,
+					},
+					customTextParameters: {
+						autoCenter: true,
+						draggable: true,
+						removable: true,
+						draggable: true,
+						resizable: true,
+					},
+					actions: {
+						left: [
+							"info",
+							"download",
+							"print",
+							"preview-lightbox",
+							"reset-product",
+							"save-load",
+							"zoom",
+							"guided-tour",
+						],
+						center: ["undo", "redo", "ruler"],
+						right: ["zoom", "ruler"],
+					},
+					fabricCanvasOptions: {
+						allowTouchScrolling: true,
+						printMode: true,
+						rtl: true,
+					},
+				};
+
+				const fpd = new FancyProductDesigner(document.getElementById("fpd-target"), appOptions);
+				window.fpd = fpd;
+
+				fpd.addEventListener("ready", () => {});
+
+				const svgTest = () => {
+					let svgStr = fpd.currentViewInstance.fabricCanvas.toSVG();
+					const pngStr = fpd.currentViewInstance.fabricCanvas.toDataURL();
+
+					document.querySelector("#svg-display").innerHTML = svgStr;
+					document.querySelector("#png-display").innerHTML = `<img src="${pngStr}" />`;
+				};
+			</script>
+		</div>
+	</body>
+</html>
