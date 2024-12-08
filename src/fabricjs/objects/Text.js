@@ -225,11 +225,27 @@ fabric.Text.prototype._createTextCharSpan = function (_char, styleDecl, left, to
 	].join("");
 };
 
+fabric.Text.prototype._getSVGLeftTopOffsets = (function (originalFn) {
+	return function (...args) {
+		const offsets = originalFn.call(this, ...args);
+
+		//Change the left offset if direction is "rtl".  Note for "ltr" the original function sets textLeft to "-this.width / 2".
+		//This is to fix a bug where the SVG is placed in the wrong position when using "rtl".
+		if (this.direction === "rtl")
+			offsets.textLeft = this.width / 2;
+
+		return offsets;
+	}
+})(fabric.Text.prototype._getSVGLeftTopOffsets);
+
 fabric.Text.prototype._renderChars = (function (originalFn) {
 	return function (...args) {
+		//Change ctx direction to "rtl" if needed.  Fixes a bug where the text was drawn in the wrong position when 
+		//usePrintingBoxAsBounding set to 1.
 		if (this.direction === "rtl") {
 			const ctx = args[1];
-			if (ctx) ctx.direction = "rtl";
+			if (ctx)
+				ctx.direction = "rtl";
 		}
 
 		originalFn.call(this, ...args);
