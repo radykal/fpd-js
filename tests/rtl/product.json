@@ -92,7 +92,7 @@
 						"fontStyle": "normal",
 						"textAlign": "left",
 						"curvable": 1,
-						"curved": 0,
+						"curved": 1,
 						"curveSpacing": 10,
 						"curveRadius": 80,
 						"curveReverse": false,

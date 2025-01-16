@@ -344,25 +344,28 @@ fabric.Canvas.prototype._renderPrintingBox = function () {
 	}
 
 	if (objectHasKeys(this.viewOptions.printingBox, ["left", "top", "width", "height"])) {
+		const pbWidth = this.viewOptions.printingBox.width;
+		const pbHeight = this.viewOptions.printingBox.height;
+
+		const pbStrokeWidth = 1;
+		const pbVisibility = this.viewOptions.printingBox.visibility || this.viewOptions.editorMode;
+
 		const printingBox = new fabric.Rect({
-			left: 100,
-			top: 100,
-			width: this.viewOptions.printingBox.width,
-			height: this.viewOptions.printingBox.height,
-			stroke: this.viewOptions.printingBox.visibility || this.viewOptions.editorMode ? "#db2828" : "transparent",
-			strokeWidth: 1,
+			width: pbWidth + pbStrokeWidth,
+			height: pbHeight + pbStrokeWidth,
+			stroke: pbVisibility ? "#db2828" : "transparent",
+			strokeWidth: pbStrokeWidth,
 			strokeLineCap: "square",
 			fill: false,
 			originX: "left",
 			originY: "top",
 			name: "printing-box",
-			excludeFromExport: true,
-			_ignore: true,
+			visible: !this.printMode,
 		});
 
 		this.printingBoxObject = new fabric.Group([printingBox], {
-			left: this.viewOptions.printingBox.left,
-			top: this.viewOptions.printingBox.top,
+			left: this.viewOptions.printingBox.left - pbStrokeWidth,
+			top: this.viewOptions.printingBox.top - pbStrokeWidth,
 			evented: false,
 			resizable: true,
 			removable: false,
@@ -378,38 +381,127 @@ fabric.Canvas.prototype._renderPrintingBox = function () {
 			originX: "left",
 			originY: "top",
 			name: "printing-boxes",
-			excludeFromExport: true,
+			excludeFromExport: !this.printMode,
 			selectable: false,
 			_ignore: true,
 		});
 
 		const bleedinMM = this.viewOptions?.output?.bleed;
-		if (bleedinMM && false) {
+		if (bleedinMM && this.viewOptions.innerBleed && pbVisibility) {
 			//one mm in pixel
 			const mmPxRatio = this.viewOptions.printingBox.width / this.viewOptions.output.width;
 			const bleedInPx = mmPxRatio * bleedinMM;
-			const bleedBoxWidth = printingBox.width - bleedInPx;
-			const bleedBoxHeight = printingBox.height - bleedInPx;
+			const bleedBoxWidth = pbWidth - bleedInPx;
+			const bleedBoxHeight = pbHeight - bleedInPx;
 
 			const bleedBox = new fabric.Rect({
 				left: printingBox.left,
 				top: printingBox.top,
-				width: bleedBoxWidth,
-				height: bleedBoxHeight,
-				stroke:
-					this.viewOptions.printingBox.visibility || this.viewOptions.editorMode ? "#db2828" : "transparent",
+				width: bleedBoxWidth + pbStrokeWidth,
+				height: bleedBoxHeight + pbStrokeWidth,
+				stroke: "#db2828",
 				strokeWidth: bleedInPx,
-				opacity: 0.1,
+				opacity: 0.2,
 				strokeLineCap: "square",
 				fill: false,
 				originX: "left",
 				originY: "top",
 				name: "bleed-box",
-				excludeFromExport: true,
-				_ignore: true,
+				visible: !this.printMode,
 			});
 
 			this.printingBoxObject.add(bleedBox);
+
+			const cropsDashArray = [4, 4];
+			const cropMarksColor = "#000000";
+			// Create crop mark lines
+			const cropMarks = [
+				// Top-left-Horizontal
+				new fabric.Line(
+					[
+						-pbWidth * 0.5,
+						-pbHeight * 0.5 + bleedInPx - 1,
+						-pbWidth * 0.5 + bleedInPx,
+						-pbHeight * 0.5 + bleedInPx - 1,
+					],
+					{
+						stroke: cropMarksColor,
+						strokeDashArray: cropsDashArray,
+					}
+				),
+				// Top-left-Vertical
+				new fabric.Line(
+					[
+						-pbWidth * 0.5 + bleedInPx - 1,
+						-pbHeight * 0.5,
+						-pbWidth * 0.5 + bleedInPx - 1,
+						-pbHeight * 0.5 + bleedInPx,
+					],
+					{ stroke: cropMarksColor, strokeDashArray: cropsDashArray }
+				),
+				// Top-right-Horizontal
+				new fabric.Line(
+					[
+						pbWidth * 0.5,
+						-pbHeight * 0.5 + bleedInPx - 1,
+						pbWidth * 0.5 - bleedInPx,
+						-pbHeight * 0.5 + bleedInPx - 1,
+					],
+					{ stroke: cropMarksColor, strokeDashArray: cropsDashArray }
+				),
+				// Top-right-Vertical
+				new fabric.Line(
+					[
+						pbWidth * 0.5 - bleedInPx,
+						-pbHeight * 0.5,
+						pbWidth * 0.5 - bleedInPx,
+						-pbHeight * 0.5 + bleedInPx,
+					],
+					{ stroke: cropMarksColor, strokeDashArray: cropsDashArray }
+				),
+				// Bottom-left-Horizontal
+				new fabric.Line(
+					[
+						-pbWidth * 0.5,
+						pbHeight * 0.5 - bleedInPx,
+						-pbWidth * 0.5 + bleedInPx,
+						pbHeight * 0.5 - bleedInPx,
+					],
+					{
+						stroke: cropMarksColor,
+						strokeDashArray: cropsDashArray,
+					}
+				),
+				// Bottom-left-Vertical
+				new fabric.Line(
+					[
+						-pbWidth * 0.5 + bleedInPx - 1,
+						pbHeight * 0.5,
+						-pbWidth * 0.5 + bleedInPx - 1,
+						pbHeight * 0.5 - bleedInPx,
+					],
+					{ stroke: cropMarksColor, strokeDashArray: cropsDashArray }
+				),
+				// Bottom-right-Horizontal
+				new fabric.Line(
+					[pbWidth * 0.5, pbHeight * 0.5 - bleedInPx, pbWidth * 0.5 - bleedInPx, pbHeight * 0.5 - bleedInPx],
+					{ stroke: cropMarksColor, strokeDashArray: cropsDashArray }
+				),
+				// Bottom-right-Vertical
+				new fabric.Line(
+					[pbWidth * 0.5 - bleedInPx, pbHeight * 0.5, pbWidth * 0.5 - bleedInPx, pbHeight * 0.5 - bleedInPx],
+					{ stroke: cropMarksColor, strokeDashArray: cropsDashArray }
+				),
+			];
+
+			//add crop marks in an own group
+			const cropMarksGroup = new fabric.Group(cropMarks, {
+				evented: false,
+				selectable: false,
+				name: "crop-marks",
+			});
+
+			this.printingBoxObject.add(cropMarksGroup);
 		}
 
 		this.add(this.printingBoxObject);
@@ -825,7 +917,7 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
 		}
 		//make text box
 		else if (params.textBox) {
-			fabricText = new fabric.Textbox(source, fabricParams);
+			fabricText = new fabric.Textbox(source, { ...fabricParams, ...{ splitByGrapheme: true } });
 		}
 		//neon-text
 		else if (params.neonText) {

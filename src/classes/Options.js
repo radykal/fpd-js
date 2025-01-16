@@ -1094,6 +1094,16 @@ export default class Options {
 			opts: {},
 		},
 		/**
+		 * Shows the bleed box with crop marks inside printing box.
+		 *
+		 * @property innerBleed
+		 * @memberof Options.defaults
+		 * @type {Boolean}
+		 * @default false
+		 * @version 6.3.4
+		 */
+		innerBleed: false,
+		/**
 		 * An object containing the default element parameters in addition to the default Fabric Object properties. See Options.defaults.elementParameters.
 		 *
 		 * @property elementParameters
@@ -1617,7 +1627,7 @@ export default class Options {
 			 */
 			filter: null,
 			/**
-			 * Defines the colorization method for the element. Possible values: 
+			 * Defines the colorization method for the element. Possible values:
 			 *  'tint' (default) - The color will be applied fully to the element.
 			 *  'multiply' - The color will be multiplied with the element color.
 			 * @property colorMode
@@ -1625,7 +1635,7 @@ export default class Options {
 			 * @memberof Options.defaults.imageParameters
 			 * @default 'tint'
 			 */
-			colorMode: 'tint',
+			colorMode: "tint",
 			/**
 			 * Set the scale mode when image is added into an upload zone or resizeToW/resizeToH properties are set. Possible values: 'fit', 'cover'
 			 *

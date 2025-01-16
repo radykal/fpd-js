@@ -37,7 +37,7 @@ import { loadFonts } from "../helpers/fonts-loader.js";
  * @extends EventTarget
  */
 export default class FancyProductDesigner extends EventTarget {
-	static version = "6.3.3";
+	static version = "6.3.4";
 	static forbiddenTextChars = /<|>/g;
 	static proxyFileServer = "";
 	static uploadsToServer = true;
@@ -2000,7 +2000,7 @@ export default class FancyProductDesigner extends EventTarget {
 			this.mainBar.toggleContentDisplay(false);
 		}
 
-		if (Array.isArray(params.relatedViewImages)) {
+		if (Array.isArray(params.relatedViewImages) && params.relatedViewImages.length > 0) {
 			params.replaceInAllViews = false;
 
 			//add main design to first view
