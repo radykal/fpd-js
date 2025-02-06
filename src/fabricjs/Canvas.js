@@ -1471,6 +1471,11 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 				text = text.toLowerCase();
 			}
 
+			if (element.curved) {
+				//remove lines from text
+				text = text.replace(/[\n\r\t]/gm, "");
+			}
+
 			parameters.text = text;
 		}
 
@@ -1546,6 +1551,7 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 		}
 
 		resizedFontSize = parseInt(resizedFontSize);
+
 		element.set("fontSize", resizedFontSize);
 	}
 
@@ -1587,13 +1593,13 @@ fabric.Canvas.prototype.setElementOptions = function (parameters, element) {
 		this._bringToppedElementsToFront();
 	}
 
-	if (parameters.hasOwnProperty("curved") && element.setTextPath) {
+	if (parameters.hasOwnProperty("curved")) {
 		if (parameters.curved) {
-			if (element.type == "textbox") {
-				let textboxProps = element.getElementJSON();
-				delete textboxProps["width"];
-				this.addElement("text", textboxProps.text, element.title, textboxProps);
+			if (element.type == "i-text" || element.type == "textbox") {
+				let textProps = element.getElementJSON();
+				delete textProps["width"];
 
+				this.addElement("text", textProps.text, element.title, textProps);
 				this.removeElement(element);
 				return;
 			}

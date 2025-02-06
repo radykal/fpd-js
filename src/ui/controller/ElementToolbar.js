@@ -371,7 +371,6 @@ export default class ElementToolbar extends EventTarget {
 			}
 
 			fpdInstance.currentViewInstance.fabricCanvas.setElementOptions(curvedOpts);
-
 			this.#toggleCurvedOptions(curvedOpts);
 		});
 
@@ -621,6 +620,7 @@ export default class ElementToolbar extends EventTarget {
 				});
 			} else {
 				colorPanel = ColorPanel(this.fpdInstance, {
+					initialColor: element.fill,
 					colors: availableColors,
 					patterns:
 						Array.isArray(element.patterns) && (element.isSVG() || element.getType() === "text")
@@ -742,6 +742,7 @@ export default class ElementToolbar extends EventTarget {
 		//EDIT TEXT
 		if (element.getType() === "text" && (element.editable || element.__editorMode)) {
 			this.#toggleNavItem("edit-text");
+
 			this.#toggleNavItem(
 				"text-size",
 				Boolean(element.resizable || element.__editorMode) && !element.widthFontSize
