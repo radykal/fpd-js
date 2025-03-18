@@ -2544,6 +2544,14 @@ export default class FancyProductDesigner extends EventTarget {
 			if (objectGet(this.viewInstances[0].options, "industry.opts.negative"))
 				fileServerURL.searchParams.set("filter", "threshold_negative");
 			else fileServerURL.searchParams.set("filter", "threshold");
+		
+			const industryOptions = objectGet(this.viewInstances[0].options, "industry.opts")
+
+			if (isPlainObject(industryOptions)) {
+				Object.keys(industryOptions).forEach((key) => {
+					fileServerURL.searchParams.set(key, industryOptions[key]);
+				});
+			}
 		}
 
 		return fileServerURL.href;
