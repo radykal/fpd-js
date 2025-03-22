@@ -503,6 +503,8 @@ fabric.Canvas.prototype.addElements = function (elements, callback) {
 fabric.Canvas.prototype.addElement = function (type, source, title, params = {}) {
 	if (type === undefined || source === undefined || title === undefined) return;
 
+	if (isEmpty(title)) title = Date.now().toString();
+
 	/**
 	 * Gets fired as soon as an element will be added (before its added to canvas).
 	 *
@@ -652,7 +654,7 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
 			return;
 		}
 
-		const _modifySVGFill = (fabricParams, params) => {
+		const _modifySVGFill = (fabricParams, params, objects) => {
 			//replace fill prop with svgFill
 			if (fabricParams.fill) {
 				if (!fabricParams.svgFill) {
@@ -682,7 +684,7 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
 			fabric.loadSVGFromString(source, (objects, options) => {
 				var svgGroup = fabric.util.groupSVGElements(objects, options);
 
-				fabricParams = _modifySVGFill(fabricParams, params);
+				fabricParams = _modifySVGFill(fabricParams, params, objects);
 
 				delete fabricParams["boundingBox"];
 				delete fabricParams["originParams"];
@@ -713,7 +715,7 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
 				//if objects is null, svg is loaded from external server with cors disabled
 				var svgGroup = objects ? fabric.util.groupSVGElements(objects, options) : null;
 
-				fabricParams = _modifySVGFill(fabricParams, params);
+				fabricParams = _modifySVGFill(fabricParams, params, objects);
 				_fabricImageLoaded(svgGroup, fabricParams, true, { svgFill: params.svgFill });
 			});
 		}
