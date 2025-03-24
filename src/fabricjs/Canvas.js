@@ -617,6 +617,7 @@ fabric.Canvas.prototype.addElements = function (elements, callback) {
 fabric.Canvas.prototype.addElement = function (type, source, title, params = {}) {
 	if (type === undefined || source === undefined || title === undefined) return;
 
+	if (isEmpty(title)) title = Date.now().toString();
 	/**
 	 * Gets fired as soon as an element will be added (before its added to canvas).
 	 *
@@ -782,38 +783,40 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
 			return;
 		}
 
+		const _modifySVGFill = (fabricParams, params, objects) => {
+			//replace fill prop with svgFill
+			if (fabricParams.fill) {
+				if (!fabricParams.svgFill) {
+					fabricParams.svgFill = fabricParams.fill;
+				}
+			}
+			//if no default colors are set, use the initial path colors
+			else if (!fabricParams.fill && !fabricParams.svgFill) {
+				if (objects) {
+					params.colors = [];
+					for (var i = 0; i < objects.length; ++i) {
+						var color =
+							objects[i].fill.length > 0 ? tinycolor(objects[i].fill).toHexString() : "transparent";
+						params.colors.push(color);
+					}
+					params.svgFill = params.colors;
+				}
+
+				fabricParams.svgFill = params.svgFill;
+			}
+
+			return fabricParams;
+		};
+
 		//add SVG from string
 		if (source.search("<svg") !== -1) {
 			fabric.loadSVGFromString(source, (objects, options) => {
 				var svgGroup = fabric.util.groupSVGElements(objects, options);
 
-				//replace fill prop with svgFill
-				if (fabricParams.fill) {
-					if (!fabricParams.svgFill) {
-						fabricParams.svgFill = fabricParams.fill;
-					}
-
-					delete fabricParams["fill"];
-				}
-				//if no default colors are set, use the initial path colors
-				else if (!fabricParams.fill && !fabricParams.svgFill) {
-					if (objects) {
-						params.colors = [];
-						for (var i = 0; i < objects.length; ++i) {
-							var color =
-								objects[i].fill.length > 0 ? tinycolor(objects[i].fill).toHexString() : "transparent";
-							params.colors.push(color);
-						}
-						params.svgFill = params.colors;
-					}
-
-					fabricParams.svgFill = params.svgFill;
-				}
+				fabricParams = _modifySVGFill(fabricParams, params, objects);
 
 				delete fabricParams["boundingBox"];
 				delete fabricParams["originParams"];
-				delete fabricParams["colors"];
-				delete fabricParams["svgFill"];
 				delete fabricParams["width"];
 				delete fabricParams["height"];
 				delete fabricParams["originX"];
@@ -841,29 +844,7 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
 				//if objects is null, svg is loaded from external server with cors disabled
 				var svgGroup = objects ? fabric.util.groupSVGElements(objects, options) : null;
 
-				//replace fill prop with svgFill
-				if (fabricParams.fill) {
-					if (!fabricParams.svgFill) {
-						fabricParams.svgFill = fabricParams.fill;
-					}
-
-					delete fabricParams["fill"];
-				}
-				//if no default colors are set, use the initial path colors
-				else if (!fabricParams.fill && !fabricParams.svgFill) {
-					if (objects) {
-						params.colors = [];
-						for (var i = 0; i < objects.length; ++i) {
-							var color =
-								objects[i].fill.length > 0 ? tinycolor(objects[i].fill).toHexString() : "transparent";
-							params.colors.push(color);
-						}
-						params.svgFill = params.colors;
-					}
-
-					fabricParams.svgFill = params.svgFill;
-				}
-
+				fabricParams = _modifySVGFill(fabricParams, params, objects);
 				_fabricImageLoaded(svgGroup, fabricParams, true, { svgFill: params.svgFill });
 			});
 		}
