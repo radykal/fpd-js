@@ -1852,6 +1852,15 @@ export default class Options {
 			 */
 			resizable: true,
 		},
+		/**
+		 * The key used to store uploads in the browser localStorage.
+		 *
+		 * @property uploadsStorageKey
+		 * @memberof Options.defaults
+		 * @type {String}
+		 * @default 'fpd_uploaded_images'
+		 */
+		uploadsStorageKey: 'fpd_uploaded_images',
 	};
 
 	/**
