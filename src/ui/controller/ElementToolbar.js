@@ -501,8 +501,8 @@ export default class ElementToolbar extends EventTarget {
 
 					if (targetFontObj.variants) {
 						this.#toggleVariantStylesBtn(
-							Boolean(targetFontObj.variants.includes("bold")),
-							Boolean(targetFontObj.variants.includes("italic"))
+							Boolean(targetFontObj?.variants?.includes?.("bold")),
+							Boolean(targetFontObj?.variants?.includes?.("italic"))
 						);
 					}
 				}
