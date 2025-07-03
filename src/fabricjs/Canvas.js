@@ -898,7 +898,7 @@ fabric.Canvas.prototype.addElement = function (type, source, title, params = {})
 		}
 		//make text box
 		else if (params.textBox) {
-			fabricText = new fabric.Textbox(source, { ...fabricParams, ...{ splitByGrapheme: true } });
+			fabricText = new fabric.Textbox(source, { ...fabricParams, ...{ splitByGrapheme: false } });
 		}
 		//neon-text
 		else if (params.neonText) {
