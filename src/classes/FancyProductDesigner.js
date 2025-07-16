@@ -2288,7 +2288,7 @@ export default class FancyProductDesigner extends EventTarget {
 							fontObj.url = result.url;
 						}
 
-						if (result.variants) {
+						if (result.variants && result.type !== "google") {
 							Object.keys(result.variants).forEach((key) => {
 								var fontName = element.fontFamily;
 								//bold
@@ -2544,8 +2544,8 @@ export default class FancyProductDesigner extends EventTarget {
 			if (objectGet(this.viewInstances[0].options, "industry.opts.negative"))
 				fileServerURL.searchParams.set("filter", "threshold_negative");
 			else fileServerURL.searchParams.set("filter", "threshold");
-		
-			const industryOptions = objectGet(this.viewInstances[0].options, "industry.opts")
+
+			const industryOptions = objectGet(this.viewInstances[0].options, "industry.opts");
 
 			if (isPlainObject(industryOptions)) {
 				Object.keys(industryOptions).forEach((key) => {
