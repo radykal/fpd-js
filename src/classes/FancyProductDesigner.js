@@ -37,7 +37,7 @@ import { loadFonts } from "../helpers/fonts-loader.js";
  * @extends EventTarget
  */
 export default class FancyProductDesigner extends EventTarget {
-	static version = "6.3.5";
+	static version = "6.3.6";
 	static forbiddenTextChars = /<|>/g;
 	static proxyFileServer = "";
 	static uploadsToServer = true;

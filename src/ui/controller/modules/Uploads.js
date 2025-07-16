@@ -14,6 +14,7 @@ import {
 export default class UploadsModule extends EventTarget {
     
     #allowedFileTypes;
+    #uploadsStorageKey;
     #uploadCounter = 0;
     #firstUploadDone = false; //add first upload to canvas, when product is created
     #allUploadZones = [];
@@ -36,6 +37,8 @@ export default class UploadsModule extends EventTarget {
         if(this.#allowedFileTypes.includes('jpeg') && !this.#allowedFileTypes.includes('jpg')) {
             this.#allowedFileTypes.push('jpg');
         }
+
+        this.#uploadsStorageKey = fpdInstance.mainOptions.uploadsStorageKey;
         
         const uploadInput = this.container.querySelector('.fpd-upload-input');
         let acceptTypes = [];
@@ -114,11 +117,11 @@ export default class UploadsModule extends EventTarget {
             }
         ); 
         
-        //window.localStorage.removeItem('fpd_uploaded_images');
+        //window.localStorage.removeItem(this.#uploadsStorageKey);
         //get stored uploaded images from browser storage        
-        if(localStorageAvailable() && window.localStorage.getItem('fpd_uploaded_images')) {
+        if(localStorageAvailable() && window.localStorage.getItem(this.#uploadsStorageKey)) {
         
-            const storageImages = JSON.parse(window.localStorage.getItem('fpd_uploaded_images'));
+            const storageImages = JSON.parse(window.localStorage.getItem(this.#uploadsStorageKey));
         
             storageImages.forEach((storageImage) => {
                 
@@ -139,7 +142,7 @@ export default class UploadsModule extends EventTarget {
         
             });
 
-            window.localStorage.setItem('fpd_uploaded_images', JSON.stringify(storageImages));
+            window.localStorage.setItem(this.#uploadsStorageKey, JSON.stringify(storageImages));
         
         }
         
@@ -453,14 +456,14 @@ export default class UploadsModule extends EventTarget {
     
         if(localStorageAvailable()) {
     
-            var savedLocalFiles = window.localStorage.getItem('fpd_uploaded_images') ? JSON.parse(window.localStorage.getItem('fpd_uploaded_images')) : [],
+            var savedLocalFiles = window.localStorage.getItem(this.#uploadsStorageKey) ? JSON.parse(window.localStorage.getItem(this.#uploadsStorageKey)) : [],
                 imgObj = {
                     url: url,
                     title: title,
                 };
     
             savedLocalFiles.push(imgObj);
-            window.localStorage.setItem('fpd_uploaded_images', JSON.stringify(savedLocalFiles))
+            window.localStorage.setItem(this.#uploadsStorageKey, JSON.stringify(savedLocalFiles))
     
         }
     
@@ -511,10 +514,10 @@ export default class UploadsModule extends EventTarget {
                 
                 if(!thumbnail.classList.contains('fpd-loading')) {
                     
-                    var storageImages = JSON.parse(window.localStorage.getItem('fpd_uploaded_images'));
+                    var storageImages = JSON.parse(window.localStorage.getItem(this.#uploadsStorageKey));
     
                     storageImages.splice(index, 1);
-                    window.localStorage.setItem('fpd_uploaded_images', JSON.stringify(storageImages));
+                    window.localStorage.setItem(this.#uploadsStorageKey, JSON.stringify(storageImages));
                     
                     if(thumbnail.xhr) {
                         thumbnail.xhr.abort();
