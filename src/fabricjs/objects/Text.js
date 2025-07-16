@@ -35,10 +35,10 @@ fabric.Text.prototype.toImageSVG = function (args) {
 			// Store original fill and stroke to make text transparent for shadow-only rendering
 			let originalFill = this.fill;
 			let originalStroke = this.stroke;
-			
+
 			// Make text transparent but keep shadow
-			this.fill = 'transparent';
-			this.stroke = 'transparent';
+			this.fill = "transparent";
+			this.stroke = "transparent";
 
 			// Create shadow-only image
 			let shadowDataURL = ctx.toDataURL({
@@ -54,7 +54,9 @@ fabric.Text.prototype.toImageSVG = function (args) {
 
 			// Add shadow image element
 			svgElements.push(
-				`<image href="${shadowDataURL}" width="${shadowWidth}" height="${shadowHeight}" x="${-shadowWidth / 2}" y="${-shadowHeight / 2}" style="scale: ${1.0 / this.scaleX} ${1.0 / this.scaleY}"/>`
+				`<image href="${shadowDataURL}" width="${shadowWidth}" height="${shadowHeight}" x="${
+					-shadowWidth / 2
+				}" y="${-shadowHeight / 2}" style="scale: ${1.0 / this.scaleX} ${1.0 / this.scaleY}"/>`
 			);
 
 			// Store original shadow to temporarily remove it for text rendering
@@ -79,24 +81,23 @@ fabric.Text.prototype.toImageSVG = function (args) {
 			});
 
 			svgElements.push(
-				`<image href="${svgDataURL}" width="${ctxWidth}" height="${ctxHeight}" x="${-ctxWidth / 2}" y="${-ctxHeight / 2}" style="scale: ${1.0 / this.scaleX} ${1.0 / this.scaleY}"/>`
+				`<image href="${svgDataURL}" width="${ctxWidth}" height="${ctxHeight}" x="${-ctxWidth / 2}" y="${
+					-ctxHeight / 2
+				}" style="scale: ${1.0 / this.scaleX} ${1.0 / this.scaleY}"/>`
 			);
 		}
 
 		this.clipPath = tempCliPath;
 
-		const result = this._createBaseSVGMarkup(
-			svgElements,
-			{
-				reviver: args ? args[0] : undefined,
-				noStyle: true,
-				withShadow: false,
-			}
-		);
-		
+		const result = this._createBaseSVGMarkup(svgElements, {
+			reviver: args ? args[0] : undefined,
+			noStyle: true,
+			withShadow: false,
+		});
+
 		return result;
 	} catch (error) {
-		console.error('Error in toImageSVG:', error);
+		console.error("Error in toImageSVG:", error);
 		// Fallback to original behavior on error
 		return this._createBaseSVGMarkup(
 			[
@@ -105,7 +106,9 @@ fabric.Text.prototype.toImageSVG = function (args) {
 					withoutTransform: true,
 					multiplier: 1,
 					enableRetinaScaling: false,
-				})}" width="${this.width}" height="${this.height}" x="${-this.width / 2}" y="${-this.height / 2}" style="scale: ${1.0 / this.scaleX} ${1.0 / this.scaleY}"/>`,
+				})}" width="${this.width}" height="${this.height}" x="${-this.width / 2}" y="${
+					-this.height / 2
+				}" style="scale: ${1.0 / this.scaleX} ${1.0 / this.scaleY}"/>`,
 			],
 			{
 				reviver: args ? args[0] : undefined,
@@ -118,6 +121,8 @@ fabric.Text.prototype.toImageSVG = function (args) {
 
 fabric.Text.prototype.toSVG = (function (originalFn) {
 	return function (...args) {
+		console.log(this.canvas.printMode);
+
 		//convert text to image data uri in print mode for specific text options
 		if (this.canvas.printMode && (this.opacity != 1 || this.shadow?.color || this.pattern)) {
 			return this.toImageSVG(args);
@@ -293,21 +298,19 @@ fabric.Text.prototype._getSVGLeftTopOffsets = (function (originalFn) {
 
 		//Change the left offset if direction is "rtl".  Note for "ltr" the original function sets textLeft to "-this.width / 2".
 		//This is to fix a bug where the SVG is placed in the wrong position when using "rtl".
-		if (this.direction === "rtl")
-			offsets.textLeft = this.width / 2;
+		if (this.direction === "rtl") offsets.textLeft = this.width / 2;
 
 		return offsets;
-	}
+	};
 })(fabric.Text.prototype._getSVGLeftTopOffsets);
 
 fabric.Text.prototype._renderChars = (function (originalFn) {
 	return function (...args) {
-		//Change ctx direction to "rtl" if needed.  Fixes a bug where the text was drawn in the wrong position when 
+		//Change ctx direction to "rtl" if needed.  Fixes a bug where the text was drawn in the wrong position when
 		//usePrintingBoxAsBounding set to 1.
 		if (this.direction === "rtl") {
 			const ctx = args[1];
-			if (ctx)
-				ctx.direction = "rtl";
+			if (ctx) ctx.direction = "rtl";
 		}
 
 		originalFn.call(this, ...args);
