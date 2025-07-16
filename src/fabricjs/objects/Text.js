@@ -8,54 +8,121 @@ fabric.Text.prototype.initialize = (function (originalFn) {
 })(fabric.Text.prototype.initialize);
 
 fabric.Text.prototype.toImageSVG = function (args) {
-	//disable clippath otherwise shadow text is not working
-	let tempCliPath = this.clipPath;
-	this.clipPath = null;
+	try {
+		//disable clippath otherwise shadow text is not working
+		let tempCliPath = this.clipPath;
+		this.clipPath = null;
 
-	let multiplier = 1;
-	if (this?.canvas?.viewOptions?.printingBox && this?.canvas?.viewOptions?.output) {
-		const dpi = Math.ceil(
-			(this.canvas.viewOptions.printingBox.width * 25.4) / this.canvas.viewOptions.output.width
-		);
-		multiplier = parseInt(300 / dpi);
-	}
+		let multiplier = 1;
+		if (this?.canvas?.viewOptions?.printingBox && this?.canvas?.viewOptions?.output) {
+			const dpi = Math.ceil(
+				(this.canvas.viewOptions.printingBox.width * 25.4) / this.canvas.viewOptions.output.width
+			);
+			multiplier = parseInt(300 / dpi);
+		}
 
-	let ctx = this;
-	let ctxWidth = ctx.width;
-	let ctxHeight = ctx.height;
+		let ctx = this;
+		let ctxWidth = ctx.width;
+		let ctxHeight = ctx.height;
+		let svgElements = [];
 
-	if (this.shadow?.color) {
-		var shadow = this.shadow;
-		// Calculate shadow offset and blur
-		ctxWidth += (Math.abs(shadow.offsetX) + shadow.blur) * 2;
-		ctxHeight += (Math.abs(shadow.offsetY) + shadow.blur) * 2;
-	}
+		if (this.shadow?.color) {
+			var shadow = this.shadow;
+			// Calculate shadow offset and blur
+			let shadowWidth = ctxWidth + (Math.abs(shadow.offsetX) + shadow.blur) * 2;
+			let shadowHeight = ctxHeight + (Math.abs(shadow.offsetY) + shadow.blur) * 2;
 
-	let svgDataURL = ctx.toDataURL({
-		withoutShadow: false,
-		withoutTransform: true,
-		multiplier: multiplier,
-		enableRetinaScaling: false,
-	});
+			// Store original fill and stroke to make text transparent for shadow-only rendering
+			let originalFill = this.fill;
+			let originalStroke = this.stroke;
 
-	this.clipPath = tempCliPath;
+			// Make text transparent but keep shadow
+			this.fill = "transparent";
+			this.stroke = "transparent";
 
-	return this._createBaseSVGMarkup(
-		[
-			`<image href="${svgDataURL}" width = "${ctxWidth}" height = "${ctxHeight}" x = "${-ctxWidth / 2}" y="${
-				-ctxHeight / 2
-			}" style="scale: ${1.0 / this.scaleX} ${1.0 / this.scaleY}"/>`,
-		],
-		{
-			reviver: args[0],
+			// Create shadow-only image
+			let shadowDataURL = ctx.toDataURL({
+				withoutShadow: false,
+				withoutTransform: true,
+				multiplier: multiplier,
+				enableRetinaScaling: false,
+			});
+
+			// Restore original fill and stroke
+			this.fill = originalFill;
+			this.stroke = originalStroke;
+
+			// Add shadow image element
+			svgElements.push(
+				`<image href="${shadowDataURL}" width="${shadowWidth}" height="${shadowHeight}" x="${
+					-shadowWidth / 2
+				}" y="${-shadowHeight / 2}" style="scale: ${1.0 / this.scaleX} ${1.0 / this.scaleY}"/>`
+			);
+
+			// Store original shadow to temporarily remove it for text rendering
+			let originalShadow = this.shadow;
+			this.shadow = null;
+
+			// Create text-only SVG - use _toSVG method directly which generates the text content
+			let textContent = this._toSVG();
+			if (textContent) {
+				svgElements.push(textContent);
+			}
+
+			// Restore original shadow
+			this.shadow = originalShadow;
+		} else {
+			// No shadow - use original behavior
+			let svgDataURL = ctx.toDataURL({
+				withoutShadow: false,
+				withoutTransform: true,
+				multiplier: multiplier,
+				enableRetinaScaling: false,
+			});
+
+			svgElements.push(
+				`<image href="${svgDataURL}" width="${ctxWidth}" height="${ctxHeight}" x="${-ctxWidth / 2}" y="${
+					-ctxHeight / 2
+				}" style="scale: ${1.0 / this.scaleX} ${1.0 / this.scaleY}"/>`
+			);
+		}
+
+		this.clipPath = tempCliPath;
+
+		const result = this._createBaseSVGMarkup(svgElements, {
+			reviver: args ? args[0] : undefined,
 			noStyle: true,
 			withShadow: false,
-		}
-	);
+		});
+
+		return result;
+	} catch (error) {
+		console.error("Error in toImageSVG:", error);
+		// Fallback to original behavior on error
+		return this._createBaseSVGMarkup(
+			[
+				`<image href="${this.toDataURL({
+					withoutShadow: false,
+					withoutTransform: true,
+					multiplier: 1,
+					enableRetinaScaling: false,
+				})}" width="${this.width}" height="${this.height}" x="${-this.width / 2}" y="${
+					-this.height / 2
+				}" style="scale: ${1.0 / this.scaleX} ${1.0 / this.scaleY}"/>`,
+			],
+			{
+				reviver: args ? args[0] : undefined,
+				noStyle: true,
+				withShadow: false,
+			}
+		);
+	}
 };
 
 fabric.Text.prototype.toSVG = (function (originalFn) {
 	return function (...args) {
+		console.log(this.canvas.printMode);
+
 		//convert text to image data uri in print mode for specific text options
 		if (this.canvas.printMode && (this.opacity != 1 || this.shadow?.color || this.pattern)) {
 			return this.toImageSVG(args);
@@ -231,21 +298,19 @@ fabric.Text.prototype._getSVGLeftTopOffsets = (function (originalFn) {
 
 		//Change the left offset if direction is "rtl".  Note for "ltr" the original function sets textLeft to "-this.width / 2".
 		//This is to fix a bug where the SVG is placed in the wrong position when using "rtl".
-		if (this.direction === "rtl")
-			offsets.textLeft = this.width / 2;
+		if (this.direction === "rtl") offsets.textLeft = this.width / 2;
 
 		return offsets;
-	}
+	};
 })(fabric.Text.prototype._getSVGLeftTopOffsets);
 
 fabric.Text.prototype._renderChars = (function (originalFn) {
 	return function (...args) {
-		//Change ctx direction to "rtl" if needed.  Fixes a bug where the text was drawn in the wrong position when 
+		//Change ctx direction to "rtl" if needed.  Fixes a bug where the text was drawn in the wrong position when
 		//usePrintingBoxAsBounding set to 1.
 		if (this.direction === "rtl") {
 			const ctx = args[1];
-			if (ctx)
-				ctx.direction = "rtl";
+			if (ctx) ctx.direction = "rtl";
 		}
 
 		originalFn.call(this, ...args);
